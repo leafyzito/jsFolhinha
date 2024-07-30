@@ -81,20 +81,18 @@ async function createNewGist(content) {
 }
 
 
+function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
+function randomChoice(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+}
 
-    function randomInt(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    function randomChoice(arr) {
-        return arr[Math.floor(Math.random() * arr.length)];
-    }
-
-    module.exports = {
-        isValidUser: isValidUser,
-        shortenUrl: shortenUrl,
-        randomInt: randomInt,
-        randomChoice: randomChoice,
-        createNewGist: createNewGist,
-    };
+module.exports = {
+    isValidUser: isValidUser,
+    shortenUrl: shortenUrl,
+    randomInt: randomInt,
+    randomChoice: randomChoice,
+    createNewGist: createNewGist,
+};

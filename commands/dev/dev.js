@@ -58,9 +58,31 @@ const execCommand = async (client, message) => {
     }
 };
 
+const getUserIdCommand = async (client, message) => {
+    message.command = 'getuserid';
+
+    const authorId = message.senderUserID;
+    if (authorId !== '120209265') { return; }
+
+    const args = message.messageText.split(' ');
+    const targetUser = args[1];
+
+    if (targetUser == 'id') {
+        const targetID = args[2];
+        const targetUsername = await client.getUserByUserID(targetID);
+        logAndReply(client, message, `Username de ${targetID}: ${targetUsername}`);
+        return;
+    }
+
+    const targetUserId = await client.getUserID(targetUser);
+    logAndReply(client, message, `UserID de ${targetUser}: ${targetUserId}`);
+    return;
+}
+
 
 module.exports = {
     botSayCommand: botSayCommand,
     forceJoinCommand: forceJoinCommand,
-    execCommand: execCommand
+    execCommand: execCommand,
+    getUserIdCommand: getUserIdCommand
 };

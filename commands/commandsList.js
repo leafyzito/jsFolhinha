@@ -1,6 +1,6 @@
 const { testeCommand } = require ('./teste/teste.js');
 const { meCommand } = require ('./me/me.js');
-const { botSayCommand, forceJoinCommand, execCommand } = require ('./dev/dev.js');
+const { botSayCommand, forceJoinCommand, execCommand, getUserIdCommand } = require ('./dev/dev.js');
 const { EightBallCommand } = require ('./8ball/8ball.js');
 const { avatarCommand } = require ('./avatar/avatar.js');
 const { cachorroCommand } = require ('./cachorro/cachorro.js');
@@ -10,7 +10,12 @@ const { chattersCommand } = require ('./chatters/chatters.js');
 const { checkNickCommand } = require ('./checknick/checknick.js');
 const { coinflipCommand } = require ('./coinflip/coinflip.js');
 const { comandosCommand } = require ('./comandos/comandos.js');
-const { cookieCommand } = require ('./cookie/cookie.js');
+const { cookieCommand, cookieDiarioCommand } = require ('./cookie/cookie.js');
+const { copypastaCommand } = require ('./copypasta/copypasta.js');
+const { piadaCommand } = require ('./piada/piada.js');
+const { curiosidadeCommand } = require ('./curiosidade/curiosidade.js');
+const { corCommand } = require ('./cor/cor.js');
+const { countlineCommand } = require ('./countline/countline.js');
 
 const commandsList = {
     // teste
@@ -24,6 +29,7 @@ const commandsList = {
     bsay: botSayCommand,
     forcejoin: forceJoinCommand,
     exec: execCommand,
+    uid: getUserIdCommand,
     // 8ball
     "8ball": EightBallCommand,
     eightball: EightBallCommand,
@@ -58,6 +64,24 @@ const commandsList = {
     command: comandosCommand,
     // cookie
     cookie: cookieCommand,
+    cd: cookieDiarioCommand,
+    // copypasta
+    copypasta: copypastaCommand,
+    copy: copypastaCommand,
+    // piada
+    piada: piadaCommand,
+    joke: piadaCommand,
+    // curiosidade
+    curiosidade: curiosidadeCommand,
+    curiosidades: curiosidadeCommand,
+    // cor
+    cor: corCommand,
+    color: corCommand,
+    // countline
+    countline: countlineCommand,
+    cl: countlineCommand,
+    
+    
 };
 
 

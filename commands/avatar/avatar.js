@@ -1,7 +1,6 @@
-const { manageCooldown } = require("../../utils/cooldownManager.js");
+const { manageCooldown } = require("../../utils/manageCooldown.js");
 const { logAndReply } = require("../../utils/log.js");
 const { shortenUrl } = require("../../utils/utils.js");
-
 
 async function getAvatar(avatarTarget) {
     const api_url = `https://api.ivr.fi/v2/twitch/user?login=${avatarTarget}`;
@@ -12,7 +11,6 @@ async function getAvatar(avatarTarget) {
 
     return shortenUrl(data[0]["logo"]);
 }
-
 
 const avatarCommand = async (client, message) => {
     message.command = 'avatar';

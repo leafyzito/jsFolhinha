@@ -1,5 +1,3 @@
-// cooldownManager.js
-
 // Define variables to store the last execution time for each user and channel
 const userCooldowns = {};
 const channelCooldowns = {};
@@ -44,5 +42,5 @@ function manageCooldown(cooldownDuration, type, identifier, command) {
     return false;
 }
 
-// Export the manageCooldown function
-module.exports = { manageCooldown };
+module.exports = { manageCooldown: manageCooldown };
+

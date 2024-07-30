@@ -1,8 +1,8 @@
-const { manageCooldown } = require("../../utils/cooldownManager.js");
+const { manageCooldown } = require("../../utils/manageCooldown.js");
 const { logAndReply } = require("../../utils/log.js");
 const { randomInt, randomChoice } = require("../../utils/utils.js");
 
-var Cancelamentos = [
+const Cancelamentos = [
 	'ser atraente demais',
 	'ter charme demais',
     'ser uma pessoa horrível',
