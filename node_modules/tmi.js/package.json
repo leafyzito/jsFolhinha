@@ -1,0 +1,59 @@
+{
+  "name": "tmi.js",
+  "version": "1.9.0-pre.1",
+  "description": "JavaScript library for the Twitch Messaging Interface.",
+  "keywords": [
+    "tmi",
+    "tmijs",
+    "twitch",
+    "chat",
+    "message",
+    "messaging",
+    "interface",
+    "bot"
+  ],
+  "main": "index.js",
+  "types": "types.d.ts",
+  "files": [
+    "lib",
+    "dist",
+    "index.js",
+    "types.d.ts"
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "author": "Schmoopiie",
+  "scripts": {
+    "test": "npm run test:eslint && npm run test:mocha",
+    "test:eslint": "eslint index.js lib/* test/*",
+    "eslint-fix": "eslint --fix index.js lib/* test/*",
+    "test:mocha": "nyc mocha --require should --exit",
+    "build": "npm run build:esbuild && npm run build:sri",
+    "build:esbuild": "node ./scripts/esbuild.js && node ./scripts/esbuild.js minify",
+    "build:sri": "node scripts/sri.js dist/tmi.js && node scripts/sri.js dist/tmi.min.js"
+  },
+  "license": "MIT",
+  "repository": "tmijs/tmi.js",
+  "bugs": "https://github.com/tmijs/tmi.js/issues",
+  "dependencies": {
+    "ws": "8.8.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.14.47",
+    "eslint": "8.18.0",
+    "hook-std": "2.0.0",
+    "mocha": "10.0.0",
+    "nyc": "15.1.0",
+    "should": "13.2.3"
+  },
+  "browser": {
+    "ws": false
+  },
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/tmijs/tmi.js?sponsor=1"
+    }
+  ]
+}
