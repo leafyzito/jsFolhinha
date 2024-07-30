@@ -1,4 +1,4 @@
-const { manageCooldown } = require("../../utils/cooldownManager.js");
+const { manageCooldown } = require("../../utils/manageCooldown.js");
 const { logAndReply } = require("../../utils/log.js");
 const { shortenUrl, randomInt, randomChoice } = require("../../utils/utils.js");
 

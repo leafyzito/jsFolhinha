@@ -1,4 +1,4 @@
-const { manageCooldown } = require("../../utils/cooldownManager.js");
+const { manageCooldown } = require("../../utils/manageCooldown.js");
 const { logAndReply, logAndMeAction } = require("../../utils/log.js");
 
 const meCommand = async (client, message) => {

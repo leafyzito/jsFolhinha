@@ -1,4 +1,4 @@
-const { manageCooldown } = require("../../utils/cooldownManager.js");
+const { manageCooldown } = require("../../utils/manageCooldown.js");
 const { logAndReply } = require("../../utils/log.js");
 const { createNewGist } = require("../../utils/utils.js");
 const fetch = require('node-fetch');
