@@ -52,9 +52,10 @@ const execCommand = async (client, message) => {
 
     try {
         const res = eval(command);
+        console.log(res);
         logAndReply(client, message, `🤖 ${res}`);
     } catch (err) {
-        logAndReply(client, message, `Erro: ${err}`);
+        client.say(message.channelName, message.messageID, `🤖 Erro ao executar comando: ${err}`);
     }
 };
 
