@@ -1,5 +1,4 @@
 const { manageCooldown } = require("../../utils/manageCooldown.js");
-const { logAndReply } = require("../../utils/log.js");
 const { shortenUrl } = require("../../utils/utils.js");
 
 async function getAvatar(avatarTarget) {
@@ -20,11 +19,11 @@ const avatarCommand = async (client, message) => {
     const avatar = await getAvatar(avatarTarget);
 
     if (!avatar) {
-        logAndReply(client, message, `O usuário ${avatarTarget} não existe`);
+        client.log.logAndReply(message, `O usuário ${avatarTarget} não existe`);
         return;
     }
 
-    logAndReply(client, message,
+    client.log.logAndReply(message,
         `${avatarTarget == message.senderUsername ? `O seu avatar é: ${avatar}` : `O avatar de ${avatarTarget} é: ${avatar}`}`);
 
 };

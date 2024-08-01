@@ -1,5 +1,4 @@
 const { manageCooldown } = require("../../utils/manageCooldown.js");
-const { logAndReply } = require("../../utils/log.js");
 const { randomInt, randomChoice } = require("../../utils/utils.js");
 
 const Cancelamentos = [
@@ -43,13 +42,13 @@ const cancelarCommand = async (client, message) => {
     const cancelTarget = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
 
     if (['folhinha', 'folhinhabot'].includes(cancelTarget.toLowerCase())) {
-        logAndReply(client, message, `Stare ow`);
+        client.log.logAndReply(message, `Stare ow`);
         return;
     }
 
     const randomCancelamento = randomChoice(Cancelamentos);
 
-    logAndReply(client, message,
+    client.log.logAndReply(message,
         `${cancelTarget == message.senderUsername ? `${cancelTarget} se auto-cancelou por ${randomCancelamento}` : `${message.senderUsername} cancelou ${cancelTarget} por ${randomCancelamento}`}`);
 
 

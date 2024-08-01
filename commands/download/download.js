@@ -1,5 +1,4 @@
 const { manageCooldown } = require("../../utils/manageCooldown.js");
-const { logAndReply } = require("../../utils/log.js");
 const { shortenUrl } = require("../../utils/utils.js");
 
 async function getVideoDownload(urlToDownload) {
@@ -85,49 +84,49 @@ const downloadCommand = async (client, message) => {
 
     const args = message.messageText.split(' ');
     if (args.length < 2) {
-        logAndReply(client, message, `Use o formato ${message.commandPrefix}download (opcional: video/audio) <link para fazer download>`);
+        client.log.logAndReply(message, `Use o formato ${message.commandPrefix}download (opcional: video/audio) <link para fazer download>`);
         return;
     }
 
     if ((args.length === 2 || args[1].toLowerCase() === 'video') && args[1].toLowerCase() !== 'audio') {
         const urlToDownload = args[2] ? args[2] : args[1];
         if (urlToDownload === 'video' || urlToDownload === 'audio') {
-            logAndReply(client, message, `Use o formato ${message.commandPrefix}download video <link para fazer download>`);
+            client.log.logAndReply(message, `Use o formato ${message.commandPrefix}download video <link para fazer download>`);
             return;
         }
 
         let downloadUrl = await getVideoDownload(urlToDownload);
         if (downloadUrl === 'apiError') {
-            logAndReply(client, message, `Não foi possível fazer o download, o serviço para esse site não está funcionando no momento. Tente novamente mais tarde`);
+            client.log.logAndReply(message, `Não foi possível fazer o download, o serviço para esse site não está funcionando no momento. Tente novamente mais tarde`);
             return;
         } else if (!downloadUrl) {
-            logAndReply(client, message, `Não foi possível fazer o download desse link`);
+            client.log.logAndReply(message, `Não foi possível fazer o download desse link`);
             return;
         }
-        logAndReply(client, message, `Link do download: ${downloadUrl}`);
+        client.log.logAndReply(message, `Link do download: ${downloadUrl}`);
         return;
     }
 
     if (args[1].toLowerCase() === 'audio') {
         const urlToDownload = args[2];
         if (!urlToDownload) {
-            logAndReply(client, message, `Use o formato ${message.commandPrefix}download audio <link para fazer download>`);
+            client.log.logAndReply(message, `Use o formato ${message.commandPrefix}download audio <link para fazer download>`);
             return;
         }
 
         let downloadUrl = await getAudioDownload(urlToDownload);
         if (downloadUrl === 'apiError') {
-            logAndReply(client, message, `Não foi possível fazer o download, o serviço para esse site não está funcionando no momento. Tente novamente mais tarde`);
+            client.log.logAndReply(message, `Não foi possível fazer o download, o serviço para esse site não está funcionando no momento. Tente novamente mais tarde`);
             return;
         } else if (!downloadUrl) {
-            logAndReply(client, message, `Não foi possível fazer o download desse link`);
+            client.log.logAndReply(message, `Não foi possível fazer o download desse link`);
             return;
         }
-        logAndReply(client, message, `Link do download de audio: ${downloadUrl}`);
+        client.log.logAndReply(message, `Link do download de audio: ${downloadUrl}`);
         return;
     }
 
-    logAndReply(client, message, `Use o formato ${message.commandPrefix}download (opcional: video/audio) <link para fazer download>`);
+    client.log.logAndReply(message, `Use o formato ${message.commandPrefix}download (opcional: video/audio) <link para fazer download>`);
 };
 
 

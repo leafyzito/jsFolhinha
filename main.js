@@ -1,6 +1,5 @@
 require('dotenv').config();
 const { ChatClient } = require('@kararty/dank-twitch-irc');
-const { MongoUtils } = require('./utils/mongo.js');
 const { modifyClient, channelPrefixes } = require('./utils/startup.js');
 const { commandHandler } = require('./utils/handlers.js');
 const fs = require('fs');
@@ -53,18 +52,10 @@ function onJoinHandler(channel) {
 }
 
 // Called every time the bot connects to Twitch chat
-function onReadyHandler() {
+async function onReadyHandler() {
     console.log(`* Connected and ready!`);
     console.log(`* Joining ${channelsToJoin.length} channels`);
     console.log(`* Channels: ${channelsToJoin.join(', ')}`);
-
-    // get configs from 'config' mongo table
-    const mongoUtils = new MongoUtils();
-    mongoUtils.get('config', {}).then((result) => {
-        result.forEach((config) => {
-            channelPrefixes[config.channel] = config.prefix;
-        });
-    });
 }
 
 // Called every time a message comes in

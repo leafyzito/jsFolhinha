@@ -1,90 +1,78 @@
-const { MongoUtils } = require('./mongo');
+class Logger {
+    constructor(client) {
+        this.client = client;
+    }
 
+    async logAndReply(message, response) {
+        this.client.reply(message.channelName, message.messageID, response);
 
-async function logAndReply(client, message, response) {
-    client.reply(message.channelName, message.messageID, response);
+        const currentDate = new Date();
+        const formattedDate = currentDate.toISOString().replace('T', ' ').substr(0, 19);
 
-    const currentDate = new Date();
-    const formattedDate = currentDate.toISOString().replace('T', ' ').substr(0, 19);
-    // console.log(formattedDate);
+        const insertDoc = {
+            messageid: message.messageID,
+            sentDate: formattedDate,
+            channel: message.channelName,
+            channelId: message.channelID,
+            user: message.senderUsername,
+            userId: message.senderUserID,
+            command: message.command,
+            content: message.messageText,
+            response: response
+        };
 
-    // log into commandlog
-    const mongoUtils = new MongoUtils();
-    const insertDoc = {
-        messageid: message.messageID,
-        sentDate: formattedDate,
-        channel: message.channelName,
-        channelId: message.channelID,
-        user: message.senderUsername,
-        userId: message.senderUserID,
-        command: message.command,
-        content: message.messageText,
-        response: response
-    };
-    // await mongoUtils.insert('commandlog', insertDoc);
-    console.log(insertDoc);
-    console.log('command log is off');
-    console.log(`#${message.channelName}/${message.senderUsername} - ${message.command}`);
-    return;
+        console.log(insertDoc);
+        console.log('command log is off');
+        console.log(`#${message.channelName}/${message.senderUsername} - ${message.command}`);
+    }
+
+    async logAndSay(message, response) {
+        this.client.say(message.channelName, response);
+
+        const currentDate = new Date();
+        const formattedDate = currentDate.toISOString().replace('T', ' ').substr(0, 19);
+
+        const insertDoc = {
+            messageid: message.messageID,
+            sentDate: formattedDate,
+            channel: message.channelName,
+            channelId: message.channelID,
+            user: message.senderUsername,
+            userId: message.senderUserID,
+            command: message.command,
+            content: message.messageText,
+            response: response
+        };
+
+        console.log(insertDoc);
+        console.log('command log is off');
+        console.log(`#${message.channelName}/${message.senderUsername} - ${message.command}`);
+    }
+
+    async logAndMeAction(message, response) {
+        this.client.me(message.channelName, response);
+
+        const currentDate = new Date();
+        const formattedDate = currentDate.toISOString().replace('T', ' ').substr(0, 19);
+
+        const insertDoc = {
+            messageid: message.messageID,
+            sentDate: formattedDate,
+            channel: message.channelName,
+            channelId: message.channelID,
+            user: message.senderUsername,
+            userId: message.senderUserID,
+            command: message.command,
+            content: message.messageText,
+            response: `/me ${response}`
+        };
+
+        console.log(insertDoc);
+        console.log('command log is off');
+        console.log(`#${message.channelName}/${message.senderUsername} - ${message.command}`);
+    }
 }
-
-async function logAndSay(client, message, response) {
-    client.say(message.channelName, response);
-
-    const currentDate = new Date();
-    const formattedDate = currentDate.toISOString().replace('T', ' ').substr(0, 19);
-    // console.log(formattedDate);
-
-    // log into commandlog
-    const mongoUtils = new MongoUtils();
-    const insertDoc = {
-        messageid: message.messageID,
-        sentDate: formattedDate,
-        channel: message.channelName,
-        channelId: message.channelID,
-        user: message.senderUsername,
-        userId: message.senderUserID,
-        command: message.command,
-        content: message.messageText,
-        response: response
-    };
-    // await mongoUtils.insert('commandlog', insertDoc);
-    console.log(insertDoc);
-    console.log('command log is off');
-    console.log(`#${message.channelName}/${message.senderUsername} - ${message.command}`);
-    return;
-}
-
-async function logAndMeAction(client, message, response) {
-    client.me(message.channelName, response);
-
-    const currentDate = new Date();
-    const formattedDate = currentDate.toISOString().replace('T', ' ').substr(0, 19);
-    // console.log(formattedDate);
-
-    // log into commandlog
-    const mongoUtils = new MongoUtils();
-    const insertDoc = {
-        messageid: message.messageID,
-        sentDate: formattedDate,
-        channel: message.channelName,
-        channelId: message.channelID,
-        user: message.senderUsername,
-        userId: message.senderUserID,
-        command: message.command,
-        content: message.messageText,
-        response: `/me ${response}`
-    };
-    // await mongoUtils.insert('commandlog', insertDoc);
-    console.log(insertDoc);
-    console.log('command log is off');
-    console.log(`#${message.channelName}/${message.senderUsername} - ${message.command}`);
-    return;
-}
-
 
 module.exports = {
-    logAndReply: logAndReply,
-    logAndSay: logAndSay,
-    logAndMeAction: logAndMeAction
+    Logger: Logger
 };

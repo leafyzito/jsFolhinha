@@ -1,7 +1,5 @@
 const { manageCooldown } = require("../../utils/manageCooldown.js");
-const { logAndReply } = require("../../utils/log.js");
 const { shortenUrl, randomInt, randomChoice } = require("../../utils/utils.js");
-
 
 async function getDog() {
     const api_url = 'https://www.googleapis.com/customsearch/v1';
@@ -39,11 +37,11 @@ const cachorroCommand = async (client, message) => {
 
     const dog = await getDog();
     if (!dog) {
-        logAndReply(client, message, `Erro ao buscar imagem, tente novamente`);
+        client.log.logAndReply(message, `Erro ao buscar imagem, tente novamente`);
         return;
     }
 
-    logAndReply(client, message, `🐶 ${dog}`);
+    client.log.logAndReply(message, `🐶 ${dog}`);
 };
 
 

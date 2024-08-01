@@ -17,6 +17,7 @@ const { corCommand, corAliases } = require('./cor/cor.js');
 const { countlineCommand, countlineAliases } = require('./countline/countline.js');
 const { dneCommand, dneAliases } = require('./dne/dne.js');
 const { downloadCommand, downloadAliases } = require('./download/download.js');
+const { escolhaCommand, escolhaAliases } = require('./escolha/escolha.js');
 
 const { 
     botSayCommand, botSayAliases,
@@ -55,6 +56,7 @@ addAliases(corCommand, corAliases);
 addAliases(countlineCommand, countlineAliases);
 addAliases(dneCommand, dneAliases);
 addAliases(downloadCommand, downloadAliases);
+addAliases(escolhaCommand, escolhaAliases);
 
 // dev commands
 addAliases(botSayCommand, botSayAliases);

@@ -1,5 +1,4 @@
 const { manageCooldown } = require("../../utils/manageCooldown.js");
-const { logAndReply } = require("../../utils/log.js");
 
 async function checkNick(nick) {
     const api_url = `https://api.fuchsty.com/twitch/checkname?username=${nick}`;
@@ -25,7 +24,7 @@ const checkNickCommand = async (client, message) => {
     if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
 
     if (message.messageText.split(' ').length < 2) {
-        logAndReply(client, message, `Use o formato: ${prefix}checknick <nick>`);
+        client.log.logAndReply(message, `Use o formato: ${prefix}checknick <nick>`);
         return;
     }
 
@@ -35,16 +34,16 @@ const checkNickCommand = async (client, message) => {
 
     // TODO: getEmoteFromList
     if (checkNickRes === 'invalid') {
-        logAndReply(client, message, `O nick ${nick} é inválido`);
+        client.log.logAndReply(message, `O nick ${nick} é inválido`);
         return;
     }
 
     if (!checkNickRes) {
-        logAndReply(client, message, `O nick ${nick} não está disponível 👎`);
+        client.log.logAndReply(message, `O nick ${nick} não está disponível 👎`);
         return;
     }
 
-    logAndReply(client, message, `O nick ${nick} está disponível 👍`);
+    client.log.logAndReply(message, `O nick ${nick} está disponível 👍`);
 };
 
 

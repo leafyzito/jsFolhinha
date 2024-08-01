@@ -1,5 +1,4 @@
 const { manageCooldown } = require("../../utils/manageCooldown.js");
-const { logAndReply } = require("../../utils/log.js");
 const { shortenUrl } = require("../../utils/utils.js");
 
 async function getDne() {
@@ -23,11 +22,11 @@ const dneCommand = async (client, message) => {
     const dne = await getDne();
 
     if (!dne) {
-        logAndReply(client, message, `Erro ao obter imagem, tente novamente`);
+        client.log.logAndReply(message, `Erro ao obter imagem, tente novamente`);
         return;
     }
 
-    logAndReply(client, message, dne);
+    client.log.logAndReply(message, dne);
 
 };
 

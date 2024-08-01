@@ -1,5 +1,4 @@
 const { manageCooldown } = require("../../utils/manageCooldown.js");
-const { logAndReply } = require("../../utils/log.js");
 const { randomChoice } = require("../../utils/utils.js");
 const fs = require('fs');
 
@@ -24,7 +23,7 @@ const curiosidadeCommand = async (client, message) => {
     const curiosidadeIndex = specificCuriosidadeIndex ? specificCuriosidadeIndex : Curiosidades.split('\n').indexOf(curiosidadeRes) + 1;
     curiosidadeRes = `#${curiosidadeIndex}/${totalCuriosidades} - ${curiosidadeRes}`;
 
-    logAndReply(client, message, curiosidadeRes);
+    client.log.logAndReply(message, curiosidadeRes);
 
 };
 

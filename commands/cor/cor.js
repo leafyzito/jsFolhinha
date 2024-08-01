@@ -1,5 +1,4 @@
 const { manageCooldown } = require("../../utils/manageCooldown.js");
-const { logAndReply } = require("../../utils/log.js");
 
 async function getColor(userId) {
     const api_url = `https://api.twitch.tv/helix/chat/color?user_id=${userId}`;
@@ -29,19 +28,19 @@ const corCommand = async (client, message) => {
     const colorTargetID = (colorTarget !== message.senderUserID) ? await client.getUserID(colorTarget) : message.senderUserID;
 
     if (!colorTargetID) {
-        logAndReply(client, message, `O usuário ${colorTarget} não existe`);
+        client.log.logAndReply(message, `O usuário ${colorTarget} não existe`);
         return;
     }
 
     const color = await getColor(colorTargetID);
     if (!color) {
-        logAndReply(client, message, `${colorTarget} não tem uma cor definida`);
+        client.log.logAndReply(message, `${colorTarget} não tem uma cor definida`);
         return;
     }
 
     const colorName = await getColorName(color);
 
-    logAndReply(client, message,
+    client.log.logAndReply(message,
         `${colorTarget == message.senderUserID ? `A sua cor é: ${color} - ${colorName}` : `A cor de ${colorTarget} é: ${color} - ${colorName}`}`);
 };
 
