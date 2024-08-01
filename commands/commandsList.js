@@ -13,11 +13,15 @@ const { cookieCommand, cookieAliases, cookieDiarioCommand, cookieDiarioAliases }
 const { copypastaCommand, copypastaAliases } = require('./copypasta/copypasta.js');
 const { piadaCommand, piadaAliases } = require('./piada/piada.js');
 const { curiosidadeCommand, curiosidadeAliases } = require('./curiosidade/curiosidade.js');
+const { filosofiaCommand, filosofiaAliases } = require('./filosofia/filosofia.js');
 const { corCommand, corAliases } = require('./cor/cor.js');
 const { countlineCommand, countlineAliases } = require('./countline/countline.js');
 const { dneCommand, dneAliases } = require('./dne/dne.js');
 const { downloadCommand, downloadAliases } = require('./download/download.js');
 const { escolhaCommand, escolhaAliases } = require('./escolha/escolha.js');
+const { fillCommand, fillAliases } = require('./fill/fill.js');
+const { followageCommand, followageAliases } = require('./followage/followage.js');
+const { gptCommand, gptAliases } = require('./gpt/gpt.js');
 
 const { 
     botSayCommand, botSayAliases,
@@ -52,11 +56,15 @@ addAliases(cookieDiarioCommand, cookieDiarioAliases);
 addAliases(copypastaCommand, copypastaAliases);
 addAliases(piadaCommand, piadaAliases);
 addAliases(curiosidadeCommand, curiosidadeAliases);
+addAliases(filosofiaCommand, filosofiaAliases);
 addAliases(corCommand, corAliases);
 addAliases(countlineCommand, countlineAliases);
 addAliases(dneCommand, dneAliases);
 addAliases(downloadCommand, downloadAliases);
 addAliases(escolhaCommand, escolhaAliases);
+addAliases(fillCommand, fillAliases);
+addAliases(followageCommand, followageAliases);
+addAliases(gptCommand, gptAliases);
 
 // dev commands
 addAliases(botSayCommand, botSayAliases);

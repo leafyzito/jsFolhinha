@@ -84,14 +84,14 @@ const downloadCommand = async (client, message) => {
 
     const args = message.messageText.split(' ');
     if (args.length < 2) {
-        client.log.logAndReply(message, `Use o formato ${message.commandPrefix}download (opcional: video/audio) <link para fazer download>`);
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}download (opcional: video/audio) <link para fazer download>`);
         return;
     }
 
     if ((args.length === 2 || args[1].toLowerCase() === 'video') && args[1].toLowerCase() !== 'audio') {
         const urlToDownload = args[2] ? args[2] : args[1];
         if (urlToDownload === 'video' || urlToDownload === 'audio') {
-            client.log.logAndReply(message, `Use o formato ${message.commandPrefix}download video <link para fazer download>`);
+            client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}download video <link para fazer download>`);
             return;
         }
 
@@ -110,7 +110,7 @@ const downloadCommand = async (client, message) => {
     if (args[1].toLowerCase() === 'audio') {
         const urlToDownload = args[2];
         if (!urlToDownload) {
-            client.log.logAndReply(message, `Use o formato ${message.commandPrefix}download audio <link para fazer download>`);
+            client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}download audio <link para fazer download>`);
             return;
         }
 
@@ -126,7 +126,7 @@ const downloadCommand = async (client, message) => {
         return;
     }
 
-    client.log.logAndReply(message, `Use o formato ${message.commandPrefix}download (opcional: video/audio) <link para fazer download>`);
+    client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}download (opcional: video/audio) <link para fazer download>`);
 };
 
 
