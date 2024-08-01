@@ -25,7 +25,10 @@ const curiosidadeCommand = async (client, message) => {
     curiosidadeRes = `#${curiosidadeIndex}/${totalCuriosidades} - ${curiosidadeRes}`;
 
     logAndReply(client, message, curiosidadeRes);
-    
+
 };
 
-module.exports = { curiosidadeCommand: curiosidadeCommand };
+module.exports = {
+    curiosidadeCommand: curiosidadeCommand,
+    curiosidadeAliases: ['curiosidade', 'curiosidades']
+};

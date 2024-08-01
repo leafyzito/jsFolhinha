@@ -34,4 +34,8 @@ const EightBallCommand = async (client, message) => {
 
 };
 
-module.exports = { EightBallCommand: EightBallCommand };
+
+module.exports = {
+    EightBallCommand: EightBallCommand,
+    EightBallAliases: ['8ball', '8b', 'ball']
+};

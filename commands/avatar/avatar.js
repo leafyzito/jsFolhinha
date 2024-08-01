@@ -18,16 +18,19 @@ const avatarCommand = async (client, message) => {
 
     const avatarTarget = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
     const avatar = await getAvatar(avatarTarget);
-    
+
     if (!avatar) {
         logAndReply(client, message, `O usuário ${avatarTarget} não existe`);
         return;
     }
 
-    logAndReply(client, message, 
+    logAndReply(client, message,
         `${avatarTarget == message.senderUsername ? `O seu avatar é: ${avatar}` : `O avatar de ${avatarTarget} é: ${avatar}`}`);
-    
+
 };
 
 
-module.exports = { avatarCommand: avatarCommand};
+module.exports = {
+    avatarCommand: avatarCommand,
+    avatarAliases: ['avatar', 'pfp']
+};

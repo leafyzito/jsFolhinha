@@ -9,16 +9,16 @@ const countlineCommand = async (client, message) => {
     if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
 
     const clTarget = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
-    
+
     if (clTarget.toLowerCase() === 'folhinhabot') {
         logAndReply(client, message, `Para de tentar me contar Stare`);
         return;
     }
-    
+
     if (clTarget.toLowerCase() === 'top') {
         const clCurrChat = await mongoUtils.get('users', { [`msgCount.${message.channelName}`]: { "$exists": true } });
         clCurrChat.sort((a, b) => b.msgCount[message.channelName] - a.msgCount[message.channelName]);
-    
+
         // only top 5
         const top5 = clCurrChat.slice(0, 5);
         let reply = `Top 5 chatters desse chat: `;
@@ -30,7 +30,7 @@ const countlineCommand = async (client, message) => {
                 reply += ', ';
             }
         }
-    
+
         let userPlacing;
         let userIndex;
         for (let i = 0; i < top5.length; i++) {
@@ -40,20 +40,20 @@ const countlineCommand = async (client, message) => {
                 break;
             }
         }
-    
+
         if (!userPlacing) {
             reply += `. Você está em ${clCurrChat.findIndex(user => user.userid === message.senderUserID) + 1}º com ${clCurrChat.find(user => user.userid === message.senderUserID).msgCount[message.channelName]} mensagens`;
         }
-    
+
         logAndReply(client, message, `${reply}`);
         return;
     }
-    
+
     if (clTarget.toLowerCase() === 'folhinhabot') {
         logAndReply(client, message, `Para de tentar me contar Stare`);
         return;
-    }    
-    
+    }
+
     const clTargetID = (clTarget !== message.senderUserID) ? await client.getUserID(clTarget) : message.senderUserID;
     if (!clTargetID) {
         logAndReply(client, message, `O usuário ${clTarget} não existe`);
@@ -84,4 +84,7 @@ const countlineCommand = async (client, message) => {
 };
 
 
-module.exports = { countlineCommand: countlineCommand};
+module.exports = {
+    countlineCommand: countlineCommand,
+    countlineAliases: ['countline', 'cl']
+};

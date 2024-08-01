@@ -25,7 +25,10 @@ const copypastaCommand = async (client, message) => {
     copypastaRes = `#${copyIndex}/${totalCopys} - ${copypastaRes}`;
 
     logAndReply(client, message, copypastaRes);
-    
+
 };
 
-module.exports = { copypastaCommand: copypastaCommand };
+module.exports = {
+    copypastaCommand: copypastaCommand,
+    copypastaAliases: ['copypasta', 'copy']
+};

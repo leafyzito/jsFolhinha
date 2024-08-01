@@ -12,4 +12,7 @@ const comandosCommand = async (client, message) => {
 };
 
 
-module.exports = { comandosCommand: comandosCommand };
+module.exports = {
+    comandosCommand: comandosCommand,
+    comandosAliases: ['comandos', 'commands', 'comando', 'command']
+};

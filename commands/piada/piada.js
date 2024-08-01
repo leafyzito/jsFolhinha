@@ -25,7 +25,10 @@ const piadaCommand = async (client, message) => {
     piadaRes = `#${jokeIndex}/${totalJokes} - ${piadaRes}`;
 
     logAndReply(client, message, piadaRes);
-    
+
 };
 
-module.exports = { piadaCommand: piadaCommand };
+module.exports = {
+    piadaCommand: piadaCommand,
+    piadaAliases: ['piada', 'joke', 'piadas', 'jokes']
+};
