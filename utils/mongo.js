@@ -1,4 +1,5 @@
 const { MongoClient } = require('mongodb');
+
 const mongoUri = "mongodb+srv://folhinhabot:rafc123963@folhinha.oz5onxd.mongodb.net/?retryWrites=true&w=majority";
 const clientMongo = new MongoClient(mongoUri);
 const db = clientMongo.db("folhinha");

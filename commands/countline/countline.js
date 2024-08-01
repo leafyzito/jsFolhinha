@@ -1,8 +1,4 @@
 const { manageCooldown } = require("../../utils/manageCooldown.js");
-const { logAndReply } = require("../../utils/log.js");
-const { MongoUtils } = require("../../utils/mongo.js");
-
-const mongoUtils = new MongoUtils();
 
 const countlineCommand = async (client, message) => {
     message.command = 'countline';
@@ -11,12 +7,12 @@ const countlineCommand = async (client, message) => {
     const clTarget = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
 
     if (clTarget.toLowerCase() === 'folhinhabot') {
-        logAndReply(client, message, `Para de tentar me contar Stare`);
+        client.log.logAndReply(message, `Para de tentar me contar Stare`);
         return;
     }
 
     if (clTarget.toLowerCase() === 'top') {
-        const clCurrChat = await mongoUtils.get('users', { [`msgCount.${message.channelName}`]: { "$exists": true } });
+        const clCurrChat = await client.db.get('users', { [`msgCount.${message.channelName}`]: { "$exists": true } });
         clCurrChat.sort((a, b) => b.msgCount[message.channelName] - a.msgCount[message.channelName]);
 
         // only top 5
@@ -45,24 +41,24 @@ const countlineCommand = async (client, message) => {
             reply += `. Você está em ${clCurrChat.findIndex(user => user.userid === message.senderUserID) + 1}º com ${clCurrChat.find(user => user.userid === message.senderUserID).msgCount[message.channelName]} mensagens`;
         }
 
-        logAndReply(client, message, `${reply}`);
+        client.log.logAndReply(message, `${reply}`);
         return;
     }
 
     if (clTarget.toLowerCase() === 'folhinhabot') {
-        logAndReply(client, message, `Para de tentar me contar Stare`);
+        client.log.logAndReply(message, `Para de tentar me contar Stare`);
         return;
     }
 
     const clTargetID = (clTarget !== message.senderUserID) ? await client.getUserID(clTarget) : message.senderUserID;
     if (!clTargetID) {
-        logAndReply(client, message, `O usuário ${clTarget} não existe`);
+        client.log.logAndReply(message, `O usuário ${clTarget} não existe`);
         return;
     }
 
-    const clCount = await mongoUtils.get('users', { userid: clTargetID });
+    const clCount = await client.db.get('users', { userid: clTargetID });
     if (clCount.length === 0) {
-        logAndReply(client, message, `Nunca vi esse usuário`);
+        client.log.logAndReply(message, `Nunca vi esse usuário`);
         return;
     }
 
@@ -76,11 +72,11 @@ const countlineCommand = async (client, message) => {
     }
 
     if (userMsgCount === 0) {
-        logAndReply(client, message, `${clTarget} nunca falou neste chat`);
+        client.log.logAndReply(message, `${clTarget} nunca falou neste chat`);
         return;
     }
 
-    logAndReply(client, message, `${clTarget} mandou um total de ${userMsgCount} mensagens neste chat`);
+    client.log.logAndReply(message, `${clTarget} mandou um total de ${userMsgCount} mensagens neste chat`);
 };
 
 

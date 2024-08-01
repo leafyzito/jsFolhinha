@@ -1,5 +1,4 @@
 const { manageCooldown } = require("../../utils/manageCooldown.js");
-const { logAndReply } = require("../../utils/log.js");
 const { createNewGist } = require("../../utils/utils.js");
 const fetch = require('node-fetch');
 
@@ -34,12 +33,12 @@ const chattersCommand = async (client, message) => {
     const chattersRes = await getChatters(targetChannel);
 
     if (chattersRes === 'erro') {
-        logAndReply(client, message, `Esse usuário não existe`);
+        client.log.logAndReply(message, `Esse usuário não existe`);
         return;
     }
 
     if (!chattersRes) {
-        logAndReply(client, message, `Não há chatters em ${targetChannel}`);
+        client.log.logAndReply(message, `Não há chatters em ${targetChannel}`);
         return;
     }
 
@@ -64,11 +63,11 @@ const chattersCommand = async (client, message) => {
 
     // TODO: getEmoteFromList
     if (count > 99) {
-        logAndReply(client, message, `${count} chatters em #${targetChannel}: ${gistUrl} (devido a limitações do Twitch, esta lista contém apenas 100 chatters)`);
+        client.log.logAndReply(message, `${count} chatters em #${targetChannel}: ${gistUrl} (devido a limitações do Twitch, esta lista contém apenas 100 chatters)`);
         return;
     }
 
-    logAndReply(client, message, `${count} chatters em #${targetChannel}: ${gistUrl}`);
+    client.log.logAndReply(message, `${count} chatters em #${targetChannel}: ${gistUrl}`);
 
 };
 

@@ -1,5 +1,4 @@
 const { manageCooldown } = require("../../utils/manageCooldown.js");
-const { logAndReply } = require("../../utils/log.js");
 const { randomChoice } = require("../../utils/utils.js");
 const fs = require('fs');
 
@@ -24,7 +23,7 @@ const piadaCommand = async (client, message) => {
     const jokeIndex = specificPiadaIndex ? specificPiadaIndex : Piadas.split('\n').indexOf(piadaRes) + 1;
     piadaRes = `#${jokeIndex}/${totalJokes} - ${piadaRes}`;
 
-    logAndReply(client, message, piadaRes);
+    client.log.logAndReply(message, piadaRes);
 
 };
 

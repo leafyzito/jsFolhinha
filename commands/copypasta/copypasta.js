@@ -1,5 +1,4 @@
 const { manageCooldown } = require("../../utils/manageCooldown.js");
-const { logAndReply } = require("../../utils/log.js");
 const { randomChoice } = require("../../utils/utils.js");
 const fs = require('fs');
 
@@ -24,7 +23,7 @@ const copypastaCommand = async (client, message) => {
     const copyIndex = specificCopypastaIndex ? specificCopypastaIndex : Copypastas.split('\n').indexOf(copypastaRes) + 1;
     copypastaRes = `#${copyIndex}/${totalCopys} - ${copypastaRes}`;
 
-    logAndReply(client, message, copypastaRes);
+    client.log.logAndReply(message, copypastaRes);
 
 };
 
