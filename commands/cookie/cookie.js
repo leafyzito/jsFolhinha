@@ -144,11 +144,9 @@ const cookieCommand = async (client, message) => {
         }
 
         let userPlacing;
-        let userIndex;
         for (let i = 0; i < top5.length; i++) {
             if (top5[i].userId === message.senderUserID) {
                 userPlacing = i + 1;
-                userIndex = i;
                 break;
             }
         }
@@ -244,4 +242,6 @@ const cookieDiarioCommand = async (client, message) => {
 module.exports = {
     cookieCommand: cookieCommand,
     cookieDiarioCommand: cookieDiarioCommand,
+    cookieAliases: ['cookie'],
+    cookieDiarioAliases: ['cd']
 };

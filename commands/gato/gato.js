@@ -18,7 +18,7 @@ async function getCat() {
         // sort: sort_option,
     };
 
-    try{
+    try {
         const response = await fetch(`${api_url}?${new URLSearchParams(params)}`);
         const data = await response.json();
         if (data.items == null) { return null; }
@@ -29,7 +29,7 @@ async function getCat() {
         console.error('Error fetching dog image:', error);
         return null;
     }
-    
+
 }
 
 
@@ -47,4 +47,7 @@ const gatoCommand = async (client, message) => {
 };
 
 
-module.exports = { gatoCommand: gatoCommand};
+module.exports = {
+    gatoCommand: gatoCommand,
+    gatoAliases: ['gato', 'cat']
+};

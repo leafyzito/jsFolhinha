@@ -41,9 +41,12 @@ const corCommand = async (client, message) => {
 
     const colorName = await getColorName(color);
 
-    logAndReply(client, message, 
+    logAndReply(client, message,
         `${colorTarget == message.senderUserID ? `A sua cor é: ${color} - ${colorName}` : `A cor de ${colorTarget} é: ${color} - ${colorName}`}`);
 };
 
 
-module.exports = { corCommand: corCommand};
+module.exports = {
+    corCommand: corCommand,
+    corAliases: ['cor', 'color']
+};

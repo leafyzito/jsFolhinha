@@ -52,7 +52,7 @@ const chattersCommand = async (client, message) => {
     var modsLen = mods.length;
     var vipsLen = vips.length;
     var viewersLen = viewers.length;
-    
+
     var streamer = streamer.join("\n");
     var mods = mods.sort().join("\n");
     var vips = vips.sort().join("\n");
@@ -61,7 +61,7 @@ const chattersCommand = async (client, message) => {
     var finalList = `Total de chatters em #${targetChannel}: ${count}\n\nStreamer:\n${streamer}\n\nModeradores: (${modsLen})\n${mods}\n\nVips: (${vipsLen})\n${vips}\n\nChatters: (${viewersLen})\n${viewers}`;
 
     const gistUrl = await createNewGist(finalList);
-    
+
     // TODO: getEmoteFromList
     if (count > 99) {
         logAndReply(client, message, `${count} chatters em #${targetChannel}: ${gistUrl} (devido a limitações do Twitch, esta lista contém apenas 100 chatters)`);
@@ -73,4 +73,7 @@ const chattersCommand = async (client, message) => {
 };
 
 
-module.exports = { chattersCommand: chattersCommand };
+module.exports = {
+    chattersCommand: chattersCommand,
+    chattersAliases: ['chatters']
+};

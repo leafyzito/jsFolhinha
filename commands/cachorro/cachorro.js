@@ -18,7 +18,7 @@ async function getDog() {
         // sort: sort_option,
     };
 
-    try{
+    try {
         const response = await fetch(`${api_url}?${new URLSearchParams(params)}`);
         const data = await response.json();
         if (data.items == null) { return null; }
@@ -29,7 +29,7 @@ async function getDog() {
         console.error('Error fetching dog image:', error);
         return null;
     }
-    
+
 }
 
 
@@ -47,4 +47,7 @@ const cachorroCommand = async (client, message) => {
 };
 
 
-module.exports = { cachorroCommand: cachorroCommand};
+module.exports = {
+    cachorroCommand: cachorroCommand,
+    cachorroAliases: ['cachorro', 'dog', 'doggo', 'cao']
+};

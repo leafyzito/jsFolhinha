@@ -2,8 +2,8 @@ const { manageCooldown } = require("../../utils/manageCooldown.js");
 const { logAndReply } = require("../../utils/log.js");
 
 
-const testeCommand = async (client, message) => {
-    message.command = 'teste';
+const escolhaCommand = async (client, message) => {
+    message.command = 'escolha';
     if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
 
     const invoked_by = message.messageText.split(" ", 1)[0].slice(message.commandPrefix.length).toLowerCase();
@@ -15,7 +15,4 @@ const testeCommand = async (client, message) => {
 };
 
 
-module.exports = {
-    testeCommand,
-    testeAliases: ['teste', 'test', 'testing']
-};
+module.exports = { escolhaCommand: escolhaCommand};

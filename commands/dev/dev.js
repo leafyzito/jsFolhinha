@@ -83,7 +83,11 @@ const getUserIdCommand = async (client, message) => {
 
 module.exports = {
     botSayCommand: botSayCommand,
+    botSayAliases: ['botsay', 'bsay'],
     forceJoinCommand: forceJoinCommand,
+    forceJoinAliases: ['forcejoin', 'fjoin'],
     execCommand: execCommand,
-    getUserIdCommand: getUserIdCommand
+    execAliases: ['exec', 'eval'],
+    getUserIdCommand: getUserIdCommand,
+    getUserIdAliases: ['getuserid', 'uid']
 };

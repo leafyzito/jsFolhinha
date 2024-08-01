@@ -15,4 +15,7 @@ const meCommand = async (client, message) => {
 };
 
 
-module.exports = { meCommand: meCommand };
+module.exports = {
+    meCommand: meCommand,
+    meAliases: ['me']
+};
