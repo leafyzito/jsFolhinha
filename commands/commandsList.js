@@ -8,7 +8,7 @@ const { cancelarCommand, cancelarAliases } = require('./cancelar/cancelar.js');
 const { chattersCommand, chattersAliases } = require('./chatters/chatters.js');
 const { checkNickCommand, checkNickAliases } = require('./checknick/checknick.js');
 const { coinflipCommand, coinflipAliases } = require('./coinflip/coinflip.js');
-const { comandosCommand, comandosAliases } = require('./comandos/comandos.js');
+const { comandosCommand, comandosAliases, helpCommand, helpAliases } = require('./help/help.js');
 const { cookieCommand, cookieAliases, cookieDiarioCommand, cookieDiarioAliases } = require('./cookie/cookie.js');
 const { copypastaCommand, copypastaAliases } = require('./copypasta/copypasta.js');
 const { piadaCommand, piadaAliases } = require('./piada/piada.js');
@@ -21,7 +21,9 @@ const { downloadCommand, downloadAliases } = require('./download/download.js');
 const { escolhaCommand, escolhaAliases } = require('./escolha/escolha.js');
 const { fillCommand, fillAliases } = require('./fill/fill.js');
 const { followageCommand, followageAliases } = require('./followage/followage.js');
-const { gptCommand, gptAliases } = require('./gpt/gpt.js');
+const { gptCommand, gptAliases, gptSerioCommand, gptSerioAliases } = require('./gpt/gpt.js');
+const { howLongToBeatCommand, howLongToBeatAliases } = require('./howlongtobeat/howlongtobeat.js');
+const { abracoCommand, abracoAliases, beijoCommand, beijoAliases, bonkCommand, bonkAliases, tuckCommand, tuckAliases, slapCommand, slapAliases, explodeCommand, explodeAliases } = require('./interacoes/interacoes.js');
 
 const { 
     botSayCommand, botSayAliases,
@@ -51,6 +53,7 @@ addAliases(chattersCommand, chattersAliases);
 addAliases(checkNickCommand, checkNickAliases);
 addAliases(coinflipCommand, coinflipAliases);
 addAliases(comandosCommand, comandosAliases);
+addAliases(helpCommand, helpAliases);
 addAliases(cookieCommand, cookieAliases);
 addAliases(cookieDiarioCommand, cookieDiarioAliases);
 addAliases(copypastaCommand, copypastaAliases);
@@ -65,6 +68,14 @@ addAliases(escolhaCommand, escolhaAliases);
 addAliases(fillCommand, fillAliases);
 addAliases(followageCommand, followageAliases);
 addAliases(gptCommand, gptAliases);
+addAliases(gptSerioCommand, gptSerioAliases);
+addAliases(howLongToBeatCommand, howLongToBeatAliases);
+addAliases(abracoCommand, abracoAliases);
+addAliases(beijoCommand, beijoAliases);
+addAliases(bonkCommand, bonkAliases);
+addAliases(tuckCommand, tuckAliases);
+addAliases(slapCommand, slapAliases);
+addAliases(explodeCommand, explodeAliases);
 
 // dev commands
 addAliases(botSayCommand, botSayAliases);

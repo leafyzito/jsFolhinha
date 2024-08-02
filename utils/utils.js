@@ -74,10 +74,23 @@ async function createNewGist(content) {
     if (jsonRes != null) {
         const gist_url = jsonRes['html_url'];
         const raw_url = jsonRes['files']['file.txt']['raw_url'];
-        return (!shortenUrl(raw_url) ? raw_url : shortenUrl(raw_url));
+        const shortenedUrl = shortenUrl(raw_url);
+        return (!shortenedUrl ? raw_url : shortenedUrl);
     }
 
     return null;
+}
+
+async function manageLongResponse(content){
+    const gist = await createNewGist(content);
+    const lenOfGist = gist.length;
+    const maxContentLength = 480 - lenOfGist - 10;
+    // limit the response to 500 characters, including the gist, add gist link to end of it
+    const truncatedContent = content.substring(0, maxContentLength);
+    const response = `${truncatedContent}... ${gist}`;
+    console.log(gist);
+
+    return response;
 }
 
 
@@ -95,4 +108,5 @@ module.exports = {
     randomInt: randomInt,
     randomChoice: randomChoice,
     createNewGist: createNewGist,
+    manageLongResponse: manageLongResponse,
 };

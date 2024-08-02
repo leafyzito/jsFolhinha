@@ -2,7 +2,7 @@ const botSayCommand = async (client, message) => {
     message.command = 'botsay';
 
     const authorId = message.senderUserID;
-    if (authorId !== '120209265') { return; }
+    if (authorId !== process.env.DEV_USERID) { return; }
 
     const args = message.messageText.split(' ');
     const targetChannel = args[1];
@@ -25,7 +25,7 @@ const forceJoinCommand = async (client, message) => {
     message.command = 'forcejoin';
 
     const authorId = message.senderUserID;
-    if (authorId !== '120209265') { return; }
+    if (authorId !== process.env.DEV_USERID) { return; }
 
     const args = message.messageText.split(' ');
     const targetChannel = args[1];
@@ -43,7 +43,7 @@ const execCommand = async (client, message) => {
     message.command = 'exec';
 
     const authorId = message.senderUserID;
-    if (authorId !== '120209265') { return; }
+    if (authorId !== process.env.DEV_USERID) { return; }
 
     const args = message.messageText.split(' ');
     const command = args.slice(1).join(' ');
@@ -61,7 +61,7 @@ const getUserIdCommand = async (client, message) => {
     message.command = 'getuserid';
 
     const authorId = message.senderUserID;
-    if (authorId !== '120209265') { return; }
+    if (authorId !== process.env.DEV_USERID) { return; }
 
     const args = message.messageText.split(' ');
     const targetUser = args[1];
