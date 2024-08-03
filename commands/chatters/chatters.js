@@ -1,4 +1,4 @@
-const { manageCooldown } = require("../../utils/manageCooldown.js");
+const { processCommand } = require("../../utils/processCommand.js");
 const { createNewGist } = require("../../utils/utils.js");
 const fetch = require('node-fetch');
 
@@ -27,7 +27,7 @@ async function getChatters(channel) {
 
 const chattersCommand = async (client, message) => {
     message.command = 'chatters';
-    if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
+    if (!await processCommand(5000, 'channel', message, client)) return;
 
     const targetChannel = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.channelName;
     const chattersRes = await getChatters(targetChannel);

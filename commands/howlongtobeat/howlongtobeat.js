@@ -1,11 +1,11 @@
 // let hltb = require('howlongtobeat');
-const { manageCooldown } = require("../../utils/manageCooldown.js");
+const { processCommand } = require("../../utils/processCommand.js");
 
 // let hltbService = new hltb.HowLongToBeatService();
 
 const howLongToBeatCommand = async (client, message) => {
     message.command = 'howlongtobeat';
-    if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
+    if (!await processCommand(5000, 'channel', message, client)) return;
     
     client.log.logAndReply(message, 'Não consegui refazer esse comando no folhinha 3.0 :( tentarei de novo recentemente');
 }

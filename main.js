@@ -62,8 +62,10 @@ async function onReadyHandler() {
 function onMessageHandler(message) {
     if (message.senderUsername == 'folhinhabot') { return; }
 
-    message.commandPrefix = channelPrefixes[message.channelName] || "!";
-    if (message.channelName == 'gocrazybh') {message.commandPrefix = '!!';}
+    // message.commandPrefix = channelPrefixes[message.channelName] || "!";
+    // if (message.channelName == 'gocrazybh') {message.commandPrefix = '!!';}
+
+    message.commandPrefix = '!!';
 
     commandHandler(client, message);
 }

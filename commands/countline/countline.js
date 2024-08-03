@@ -1,8 +1,8 @@
-const { manageCooldown } = require("../../utils/manageCooldown.js");
+const { processCommand } = require("../../utils/processCommand.js");
 
 const countlineCommand = async (client, message) => {
     message.command = 'countline';
-    if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
+    if (!await processCommand(5000, 'channel', message, client)) return;
 
     const clTarget = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
 

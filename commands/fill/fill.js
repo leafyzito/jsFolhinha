@@ -1,8 +1,8 @@
-const { manageCooldown } = require("../../utils/manageCooldown.js");
+const { processCommand } = require("../../utils/processCommand.js");
 
 const fillCommand = async (client, message) => {
     message.command = 'fill';
-    if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
+    if (!await processCommand(5000, 'channel', message, client)) return;
 
     if (message.messageText.split(' ').length < 2) {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}me <mensagem>`);

@@ -1,4 +1,4 @@
-const { manageCooldown } = require("../../utils/manageCooldown.js");
+const { processCommand } = require("../../utils/processCommand.js");
 const { shortenUrl } = require("../../utils/utils.js");
 
 async function getAvatar(avatarTarget) {
@@ -13,7 +13,7 @@ async function getAvatar(avatarTarget) {
 
 const avatarCommand = async (client, message) => {
     message.command = 'avatar';
-    if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
+    if (!await processCommand(5000, 'channel', message, client)) return;
 
     const avatarTarget = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
     const avatar = await getAvatar(avatarTarget);

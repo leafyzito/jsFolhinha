@@ -1,4 +1,4 @@
-const { manageCooldown } = require("../../utils/manageCooldown.js");
+const { processCommand } = require("../../utils/processCommand.js");
 const { randomChoice } = require("../../utils/utils.js");
 const fs = require('fs');
 
@@ -6,7 +6,7 @@ const Curiosidades = fs.readFileSync('data/curiosidades.txt', 'utf8');
 
 const curiosidadeCommand = async (client, message) => {
     message.command = 'curiosidade';
-    if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
+    if (!await processCommand(5000, 'channel', message, client)) return;
 
     const totalCuriosidades = Curiosidades.split('\n').length - 1;
     const specificCuriosidadeIndex = message.messageText.split(' ')[1] ? parseInt(message.messageText.split(' ')[1]) : null;

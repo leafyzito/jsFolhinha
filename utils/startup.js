@@ -31,22 +31,27 @@ async function modifyClient(client) {
         return data.data[0].login;
     }
     
+    // load clients
     client.db = new MongoUtils();
+    client.log = new Logger(client);
 
+    // load prefixes
     await client.db.get('config', {}).then((result) => {
         result.forEach((config) => {
             channelPrefixes[config.channel] = config.prefix;
         });
     });
-    // console.log(channelPrefixes);
 
-    client.log = new Logger(client);
+    // load channel configs
+    client.channelConfigs = await client.db.get('config', {});
+    client.reloadChannelConfigs = async function () {
+        client.channelConfigs = await client.db.get('config', {});
+    }
 }
-
 
 
 
 module.exports = {
     modifyClient: modifyClient,
-    channelPrefixes: channelPrefixes
+    channelPrefixes: channelPrefixes,
 };

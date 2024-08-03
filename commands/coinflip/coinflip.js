@@ -1,9 +1,9 @@
-const { manageCooldown } = require("../../utils/manageCooldown.js");
+const { processCommand } = require("../../utils/processCommand.js");
 const { randomInt } = require("../../utils/utils.js");
 
 const coinflipCommand = async (client, message) => {
     message.command = 'coinflip';
-    if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
+    if (!await processCommand(5000, 'channel', message, client)) return;
 
     const standingCoin = randomInt(0, 1000); // 0.1% chance of standing coin
 

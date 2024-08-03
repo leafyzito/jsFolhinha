@@ -1,4 +1,4 @@
-const { manageCooldown } = require("../../utils/manageCooldown.js");
+const { processCommand } = require("../../utils/processCommand.js");
 const { randomInt, randomChoice } = require("../../utils/utils.js");
 const fs = require('fs');
 
@@ -33,7 +33,7 @@ async function loadUserCookieStats(message) {
 
 const cookieCommand = async (client, message) => {
     message.command = 'cookie';
-    if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
+    if (!await processCommand(5000, 'channel', message, client)) return;
 
     if (message.messageText.split(' ').length < 2) {
         client.log.logAndReply(message, `Está com dúvidas sobre os comandos de cookie? Acesse https://folhinhabot.github.io/comandos 😁`);
@@ -206,7 +206,7 @@ const cookieCommand = async (client, message) => {
 
 const cookieDiarioCommand = async (client, message) => {
     message.command = 'cookie';
-    if (!manageCooldown(5000, 'user', message.senderUsername, message.command)) return;
+    if (!await processCommand(5000, 'user', message, client)) return;
 
     const userCookieStats = await loadUserCookieStats(message);
     if (!userCookieStats) {

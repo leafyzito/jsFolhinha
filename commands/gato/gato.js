@@ -1,4 +1,4 @@
-const { manageCooldown } = require("../../utils/manageCooldown.js");
+const { processCommand } = require("../../utils/processCommand.js");
 const { shortenUrl, randomInt, randomChoice } = require("../../utils/utils.js");
 
 async function getCat() {
@@ -33,7 +33,7 @@ async function getCat() {
 
 const gatoCommand = async (client, message) => {
     message.command = 'gato';
-    if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
+    if (!await processCommand(5000, 'channel', message, client)) return;
 
     const cat = await getCat();
     if (!cat) {
