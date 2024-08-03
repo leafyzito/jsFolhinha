@@ -1,4 +1,4 @@
-const { manageCooldown } = require("../../utils/manageCooldown.js");
+const { processCommand } = require("../../utils/processCommand.js");
 
 async function checkNick(nick) {
     const api_url = `https://api.fuchsty.com/twitch/checkname?username=${nick}`;
@@ -21,7 +21,7 @@ async function checkNick(nick) {
 
 const checkNickCommand = async (client, message) => {
     message.command = 'checknick';
-    if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
+    if (!await processCommand(5000, 'channel', message, client)) return;
 
     if (message.messageText.split(' ').length < 2) {
         client.log.logAndReply(message, `Use o formato: ${prefix}checknick <nick>`);

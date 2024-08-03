@@ -1,6 +1,8 @@
+const { isStreamOnline } = require('../utils/utils.js');
+
 // Define variables to store the last execution time for each user and channel
-const userCooldowns = {};
-const channelCooldowns = {};
+var userCooldowns = {};
+var channelCooldowns = {};
 
 // Function to manage the cooldown
 function manageCooldown(cooldownDuration, type, identifier, command) {
@@ -42,5 +44,26 @@ function manageCooldown(cooldownDuration, type, identifier, command) {
     return false;
 }
 
-module.exports = { manageCooldown: manageCooldown };
+async function processCommand(cooldownDuration, type, message, client) {
+    // check perms to execute
+    var currChannelConfigs = client.channelConfigs;
+    currChannelConfigs.forEach((channelConfig) => {
+        if (channelConfig.channelId === message.channelID) {
+            currChannelConfigs = channelConfig;
+        }
+    });
+
+    if (currChannelConfigs.isPaused) { return false; }
+    if (currChannelConfigs.disabledCommands.includes(message.command)) { return false; }
+    if (currChannelConfigs.devBanCommands.includes(message.command)) { return false; }
+    if (currChannelConfigs.offlineOnly && await isStreamOnline(message.channelName)) { return false; }
+
+    // if all good to go, manage cooldown
+    return manageCooldown(cooldownDuration, type, message.senderUsername, message.command);
+}
+
+module.exports = {
+    processCommand: processCommand,
+    manageCooldown: manageCooldown
+};
 

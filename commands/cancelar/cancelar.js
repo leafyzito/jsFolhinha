@@ -1,4 +1,4 @@
-const { manageCooldown } = require("../../utils/manageCooldown.js");
+const { processCommand } = require("../../utils/processCommand.js");
 const { randomInt, randomChoice } = require("../../utils/utils.js");
 
 const Cancelamentos = [
@@ -37,7 +37,7 @@ const Cancelamentos = [
 
 const cancelarCommand = async (client, message) => {
     message.command = 'cancelar';
-    if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
+    if (!await processCommand(5000, 'channel', message, client)) return;
 
     const cancelTarget = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
 

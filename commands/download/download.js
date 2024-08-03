@@ -1,4 +1,4 @@
-const { manageCooldown } = require("../../utils/manageCooldown.js");
+const { processCommand } = require("../../utils/processCommand.js");
 const { shortenUrl } = require("../../utils/utils.js");
 
 async function getVideoDownload(urlToDownload) {
@@ -80,7 +80,7 @@ async function getAudioDownload(urlToDownload) {
 
 const downloadCommand = async (client, message) => {
     message.command = 'download';
-    if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
+    if (!await processCommand(5000, 'channel', message, client)) return;
 
     const args = message.messageText.split(' ');
     if (args.length < 2) {

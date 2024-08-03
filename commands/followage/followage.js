@@ -1,37 +1,5 @@
-const { manageCooldown } = require("../../utils/manageCooldown.js");
-
-function formatDateTime(followedDate) {
-    // Parse the given date and time string
-    const given_datetime = new Date(followedDate);
-
-    // Get the current date and time
-    const current_datetime = new Date();
-
-    // Calculate the difference in years, months, and days
-    let years = current_datetime.getFullYear() - given_datetime.getFullYear();
-    let months = current_datetime.getMonth() - given_datetime.getMonth();
-    let days = current_datetime.getDate() - given_datetime.getDate();
-
-    // Adjust for when the current day is before the given day
-    if (days < 0) {
-        months--;
-        days += new Date(current_datetime.getFullYear(), current_datetime.getMonth(), 0).getDate();
-    }
-
-    // Adjust for when the current month is before the given month
-    if (months < 0) {
-        years--;
-        months += 12;
-    }
-
-    // Format the follow age string
-    let formatted_FollowAge = `${years}y ${months}m ${days}d`;
-
-    // Format the follow date string as "dd-mm-yyyy"
-    let followDate = given_datetime.toLocaleDateString("en-GB").replace(/\//g, '-');
-
-    return [formatted_FollowAge, followDate];
-}
+const { processCommand } = require("../../utils/processCommand.js");
+const { timeSinceDT } = require("../../utils/utils.js");
 
 async function getFA(user, channel) {
     const api_url = `https://api.ivr.fi/v2/twitch/subage/${user}/${channel}`;
@@ -48,15 +16,15 @@ async function getFA(user, channel) {
         return `${user} não segue ${channel}`;
     }
 
-    const formattedTime = formatDateTime(followDate)[0];
-    const followDateFormatted = formatDateTime(followDate)[1];
+    const formattedTime = timeSinceDT(followDate)[0];
+    const followDateFormatted = timeSinceDT(followDate)[1];
 
     return [formattedTime, followDateFormatted];
 }
 
 const followageCommand = async (client, message) => {
     message.command = 'followage';
-    if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
+    if (!await processCommand(5000, 'channel', message, client)) return;
 
     let faTarget = message.senderUsername;
     let faChannelTarget = message.channelName;

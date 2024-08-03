@@ -1,5 +1,5 @@
 const { OpenAI } = require('openai');
-const { manageCooldown } = require("../../utils/manageCooldown.js");
+const { processCommand } = require("../../utils/processCommand.js");
 const { manageLongResponse } = require("../../utils/utils.js"); 
 
 const gptClient = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -39,7 +39,7 @@ async function askGptSerio(message, prompt) {
 
 const gptCommand = async (client, message) => {
     message.command = 'gpt';
-    if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
+    if (!await processCommand(15000, 'channel', message, client)) return;
 
     const prompt = message.messageText.split(' ').slice(1).join(' ');
 
@@ -56,7 +56,7 @@ const gptCommand = async (client, message) => {
 
 const gptSerioCommand = async (client, message) => {
     message.command = 'gpt';
-    if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
+    if (!await processCommand(15000, 'channel', message, client)) return;
 
     const prompt = message.messageText.split(' ').slice(1).join(' ');
 

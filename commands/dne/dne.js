@@ -1,4 +1,4 @@
-const { manageCooldown } = require("../../utils/manageCooldown.js");
+const { processCommand } = require("../../utils/processCommand.js");
 const { shortenUrl } = require("../../utils/utils.js");
 
 async function getDne() {
@@ -17,7 +17,7 @@ async function getDne() {
 
 const dneCommand = async (client, message) => {
     message.command = 'dne';
-    if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
+    if (!await processCommand(5000, 'channel', message, client)) return;
 
     const dne = await getDne();
 

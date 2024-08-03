@@ -1,10 +1,10 @@
-const { manageCooldown } = require("../../utils/manageCooldown.js");
+const { processCommand } = require("../../utils/processCommand.js");
 const { randomInt, randomChoice } = require("../../utils/utils.js");
 // TODO: getEmoteFromList
 
 const abracoCommand = async (client, message) => {
     message.command = 'abraco';
-    if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
+    if (!await processCommand(5000, 'channel', message, client)) return;
 
     if (message.messageText.split(' ').length === 1) {
         client.sendMessage(message.senderId, `Use o formato: ${message.commandPrefix}abraço <pessoa pra abraçar>`);
@@ -37,7 +37,7 @@ const abracoCommand = async (client, message) => {
 
 const beijoCommand = async (client, message) => {
     message.command = 'beijo';
-    if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
+    if (!await processCommand(5000, 'channel', message, client)) return;
 
     if (message.messageText.split(' ').length === 1) {
         client.sendMessage(message.senderId, `Use o formato: ${message.commandPrefix}beijo <pessoa pra beijar>`);
@@ -66,7 +66,7 @@ const beijoCommand = async (client, message) => {
 
 const bonkCommand = async (client, message) => {
     message.command = 'bonk';
-    if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
+    if (!await processCommand(5000, 'channel', message, client)) return;
 
     if (message.messageText.split(' ').length === 1) {
         client.sendMessage(message.senderId, `Use o formato: ${message.commandPrefix}bonk <pessoa pra bonkar>`);
@@ -112,7 +112,7 @@ const bonkCommand = async (client, message) => {
 
 const tuckCommand = async (client, message) => {
     message.command = 'tuck';
-    if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
+    if (!await processCommand(5000, 'channel', message, client)) return;
 
     if (message.messageText.split(' ').length === 1) {
         client.sendMessage(message.senderId, `Use o formato: ${message.commandPrefix}tuck <pessoa pra tuckar>`);
@@ -144,7 +144,7 @@ const tuckCommand = async (client, message) => {
 
 const slapCommand = async (client, message) => {
     message.command = 'slap';
-    if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
+    if (!await processCommand(5000, 'channel', message, client)) return;
 
     if (message.messageText.split(' ').length === 1) {
         client.sendMessage(message.senderId, `Use o formato: ${message.commandPrefix}slap <pessoa pra dar um tapa>`);
@@ -174,7 +174,7 @@ const slapCommand = async (client, message) => {
 
 const explodeCommand = async (client, message) => {
     message.command = 'explode';
-    if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
+    if (!await processCommand(5000, 'channel', message, client)) return;
 
     if (message.messageText.split(' ').length === 1) {
         client.sendMessage(message.senderId, `Use o formato: ${message.commandPrefix}explode <pessoa pra explodir>`);

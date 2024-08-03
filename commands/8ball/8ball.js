@@ -1,4 +1,4 @@
-const { manageCooldown } = require("../../utils/manageCooldown.js");
+const { processCommand } = require("../../utils/processCommand.js");
 const { randomInt } = require("../../utils/utils.js");
 
 const ball_responses = [
@@ -26,7 +26,7 @@ const ball_responses = [
 
 const EightBallCommand = async (client, message) => {
     message.command = '8ball';
-    if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
+    if (!await processCommand(5000, 'channel', message, client)) return;
 
     randomResponse = randomInt(0, ball_responses.length - 1);
     client.log.logAndReply(message, `${ball_responses[randomResponse]}`);

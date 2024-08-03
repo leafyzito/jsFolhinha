@@ -1,4 +1,4 @@
-const { manageCooldown } = require("../../utils/manageCooldown.js");
+const { processCommand } = require("../../utils/processCommand.js");
 const { randomChoice } = require("../../utils/utils.js");
 const fs = require('fs');
 
@@ -6,7 +6,7 @@ const Piadas = fs.readFileSync('data/piadas.txt', 'utf8');
 
 const piadaCommand = async (client, message) => {
     message.command = 'piada';
-    if (!manageCooldown(5000, 'channel', message.senderUsername, message.command)) return;
+    if (!await processCommand(5000, 'channel', message, client)) return;
 
     const totalJokes = Piadas.split('\n').length - 1;
     const specificPiadaIndex = message.messageText.split(' ')[1] ? parseInt(message.messageText.split(' ')[1]) : null;

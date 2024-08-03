@@ -24,12 +24,22 @@ const { followageCommand, followageAliases } = require('./followage/followage.js
 const { gptCommand, gptAliases, gptSerioCommand, gptSerioAliases } = require('./gpt/gpt.js');
 const { howLongToBeatCommand, howLongToBeatAliases } = require('./howlongtobeat/howlongtobeat.js');
 const { abracoCommand, abracoAliases, beijoCommand, beijoAliases, bonkCommand, bonkAliases, tuckCommand, tuckAliases, slapCommand, slapAliases, explodeCommand, explodeAliases } = require('./interacoes/interacoes.js');
+const { lastSeenCommand, lastSeenAliases } = require('./lastseen/lastseen.js');
+const { stalkCommand, stalkAliases } = require('./stalk/stalk.js');
+const { liveCommand, liveAliases } = require('./live/live.js');
+const { mathCommand, mathAliases } = require('./math/math.js');
+const { nicksCommand, nicksAliases } = require('./nicks/nicks.js');
+const { optoutCommand, optoutAliases } = require('./optout/optout.js');
+const { pauseCommand, pauseAliases } = require('./pause/pause.js');
+const { unpauseCommand, unpauseAliases } = require('./pause/pause.js');
 
 const { 
     botSayCommand, botSayAliases,
     forceJoinCommand, forceJoinAliases,
+    forcePartCommand, forcePartAliases,
     execCommand, execAliases,
     getUserIdCommand, getUserIdAliases, 
+    restartCommand, restartAliases,
 } = require('./dev/dev.js');
 
 
@@ -76,12 +86,22 @@ addAliases(bonkCommand, bonkAliases);
 addAliases(tuckCommand, tuckAliases);
 addAliases(slapCommand, slapAliases);
 addAliases(explodeCommand, explodeAliases);
+addAliases(lastSeenCommand, lastSeenAliases);
+addAliases(stalkCommand, stalkAliases);
+addAliases(liveCommand, liveAliases);
+addAliases(mathCommand, mathAliases);
+addAliases(nicksCommand, nicksAliases);
+addAliases(optoutCommand, optoutAliases);
+addAliases(pauseCommand, pauseAliases);
+addAliases(unpauseCommand, unpauseAliases);
 
 // dev commands
 addAliases(botSayCommand, botSayAliases);
 addAliases(forceJoinCommand, forceJoinAliases);
+addAliases(forcePartCommand, forcePartAliases);
 addAliases(execCommand, execAliases);
 addAliases(getUserIdCommand, getUserIdAliases);
+addAliases(restartCommand, restartAliases);
 
 
 module.exports = {
