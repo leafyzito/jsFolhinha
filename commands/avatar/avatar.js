@@ -28,8 +28,8 @@ const avatarCommand = async (client, message) => {
 
 };
 
+avatarCommand.aliases = ['avatar', 'pfp'];
 
 module.exports = {
-    avatarCommand: avatarCommand,
-    avatarAliases: ['avatar', 'pfp']
+    avatarCommand,
 };

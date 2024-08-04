@@ -79,8 +79,8 @@ const countlineCommand = async (client, message) => {
     client.log.logAndReply(message, `${clTarget} mandou um total de ${userMsgCount} mensagens neste chat`);
 };
 
+countlineCommand.aliases = ['countline', 'cl'];
 
 module.exports = {
-    countlineCommand: countlineCommand,
-    countlineAliases: ['countline', 'cl']
+    countlineCommand,
 };

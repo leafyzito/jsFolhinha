@@ -46,12 +46,7 @@ function manageCooldown(cooldownDuration, type, identifier, command) {
 
 async function processCommand(cooldownDuration, type, message, client) {
     // check perms to execute
-    var currChannelConfigs = client.channelConfigs;
-    currChannelConfigs.forEach((channelConfig) => {
-        if (channelConfig.channelId === message.channelID) {
-            currChannelConfigs = channelConfig;
-        }
-    });
+    var currChannelConfigs = client.channelConfigs[message.channelName];
 
     if (currChannelConfigs.isPaused) { return false; }
     if (currChannelConfigs.disabledCommands.includes(message.command)) { return false; }

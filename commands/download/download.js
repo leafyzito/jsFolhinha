@@ -129,8 +129,8 @@ const downloadCommand = async (client, message) => {
     client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}download (opcional: video/audio) <link para fazer download>`);
 };
 
+downloadCommand.aliases = ['download', 'dl'];
 
 module.exports = {
-    downloadCommand: downloadCommand,
-    downloadAliases: ['download', 'dl']
+    downloadCommand,
 };

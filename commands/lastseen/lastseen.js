@@ -45,8 +45,8 @@ const lastSeenCommand = async (client, message) => {
     client.log.logAndReply(message, `${targetUser} foi visto pela última vez num chat há ${timeSinceLs}`);
 };
 
+lastSeenCommand.aliases = ['lastseen', 'ls'];
 
 module.exports = {
     lastSeenCommand,
-    lastSeenAliases: ['lastseen', 'ls']
 };

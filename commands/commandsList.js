@@ -1,109 +1,117 @@
-const { testeCommand, testeAliases } = require('./teste/teste.js');
-const { meCommand, meAliases } = require('./me/me.js');
-const { EightBallCommand, EightBallAliases } = require('./8ball/8ball.js');
-const { avatarCommand, avatarAliases } = require('./avatar/avatar.js');
-const { cachorroCommand, cachorroAliases } = require('./cachorro/cachorro.js');
-const { gatoCommand, gatoAliases } = require('./gato/gato.js');
-const { cancelarCommand, cancelarAliases } = require('./cancelar/cancelar.js');
-const { chattersCommand, chattersAliases } = require('./chatters/chatters.js');
-const { checkNickCommand, checkNickAliases } = require('./checknick/checknick.js');
-const { coinflipCommand, coinflipAliases } = require('./coinflip/coinflip.js');
-const { comandosCommand, comandosAliases, helpCommand, helpAliases } = require('./help/help.js');
-const { cookieCommand, cookieAliases, cookieDiarioCommand, cookieDiarioAliases } = require('./cookie/cookie.js');
-const { copypastaCommand, copypastaAliases } = require('./copypasta/copypasta.js');
-const { piadaCommand, piadaAliases } = require('./piada/piada.js');
-const { curiosidadeCommand, curiosidadeAliases } = require('./curiosidade/curiosidade.js');
-const { filosofiaCommand, filosofiaAliases } = require('./filosofia/filosofia.js');
-const { corCommand, corAliases } = require('./cor/cor.js');
-const { countlineCommand, countlineAliases } = require('./countline/countline.js');
-const { dneCommand, dneAliases } = require('./dne/dne.js');
-const { downloadCommand, downloadAliases } = require('./download/download.js');
-const { escolhaCommand, escolhaAliases } = require('./escolha/escolha.js');
-const { fillCommand, fillAliases } = require('./fill/fill.js');
-const { followageCommand, followageAliases } = require('./followage/followage.js');
-const { gptCommand, gptAliases, gptSerioCommand, gptSerioAliases } = require('./gpt/gpt.js');
-const { howLongToBeatCommand, howLongToBeatAliases } = require('./howlongtobeat/howlongtobeat.js');
-const { abracoCommand, abracoAliases, beijoCommand, beijoAliases, bonkCommand, bonkAliases, tuckCommand, tuckAliases, slapCommand, slapAliases, explodeCommand, explodeAliases } = require('./interacoes/interacoes.js');
-const { lastSeenCommand, lastSeenAliases } = require('./lastseen/lastseen.js');
-const { stalkCommand, stalkAliases } = require('./stalk/stalk.js');
-const { liveCommand, liveAliases } = require('./live/live.js');
-const { mathCommand, mathAliases } = require('./math/math.js');
-const { nicksCommand, nicksAliases } = require('./nicks/nicks.js');
-const { optoutCommand, optoutAliases } = require('./optout/optout.js');
-const { pauseCommand, pauseAliases } = require('./pause/pause.js');
-const { unpauseCommand, unpauseAliases } = require('./pause/pause.js');
+const { testeCommand } = require('./teste/teste.js');
+const { meCommand } = require('./me/me.js');
+const { EightBallCommand } = require('./8ball/8ball.js');
+const { avatarCommand } = require('./avatar/avatar.js');
+const { cachorroCommand } = require('./cachorro/cachorro.js');
+const { gatoCommand } = require('./gato/gato.js');
+const { cancelarCommand } = require('./cancelar/cancelar.js');
+const { chattersCommand } = require('./chatters/chatters.js');
+const { checkNickCommand } = require('./checknick/checknick.js');
+const { coinflipCommand } = require('./coinflip/coinflip.js');
+const { comandosCommand, helpCommand } = require('./help/help.js');
+const { cookieCommand, cookieDiarioCommand } = require('./cookie/cookie.js');
+const { copypastaCommand } = require('./copypasta/copypasta.js');
+const { piadaCommand } = require('./piada/piada.js');
+const { curiosidadeCommand } = require('./curiosidade/curiosidade.js');
+const { filosofiaCommand } = require('./filosofia/filosofia.js');
+const { corCommand } = require('./cor/cor.js');
+const { countlineCommand } = require('./countline/countline.js');
+const { dneCommand } = require('./dne/dne.js');
+const { downloadCommand } = require('./download/download.js');
+const { escolhaCommand } = require('./escolha/escolha.js');
+const { fillCommand } = require('./fill/fill.js');
+const { followageCommand } = require('./followage/followage.js');
+const { gptCommand, gptSerioCommand } = require('./gpt/gpt.js');
+const { howLongToBeatCommand } = require('./howlongtobeat/howlongtobeat.js');
+const { abracoCommand, beijoCommand, bonkCommand, tuckCommand, slapCommand, explodeCommand } = require('./interacoes/interacoes.js');
+const { lastSeenCommand } = require('./lastseen/lastseen.js');
+const { stalkCommand } = require('./stalk/stalk.js');
+const { liveCommand } = require('./live/live.js');
+const { mathCommand } = require('./math/math.js');
+const { nicksCommand } = require('./nicks/nicks.js');
+const { optoutCommand } = require('./optout/optout.js');
+const { pauseCommand } = require('./pause/pause.js');
+const { unpauseCommand } = require('./pause/pause.js');
+const { configCommand } = require('./config/config.js');
+const { percentagemCommand } = require('./percentagem/percentagem.js');
+const { previewCommand } = require('./preview/preview.js');
+const { roletaCommand } = require('./roleta/roleta.js');
 
 const { 
-    botSayCommand, botSayAliases,
-    forceJoinCommand, forceJoinAliases,
-    forcePartCommand, forcePartAliases,
-    execCommand, execAliases,
-    getUserIdCommand, getUserIdAliases, 
-    restartCommand, restartAliases,
+    botSayCommand,
+    forceJoinCommand,
+    forcePartCommand,
+    execCommand,
+    getUserIdCommand,
+    restartCommand,
 } = require('./dev/dev.js');
 
 
 const commandsList = {};
-// Function to add aliases to commandsList
-const addAliases = (command, aliases) => {
-    aliases.forEach(alias => {
-        commandsList[alias] = command;
-    });
-};
+// Add aliases to commandsList
+const addAliases = (command) => {
+    for (let i = 0; i < command.aliases.length; i++) {
+        commandsList[command.aliases[i]] = command;
+    }
+}
 
 // Add aliases for each command
-addAliases(testeCommand, testeAliases);
-addAliases(meCommand, meAliases);
-addAliases(EightBallCommand, EightBallAliases);
-addAliases(avatarCommand, avatarAliases);
-addAliases(cachorroCommand, cachorroAliases);
-addAliases(gatoCommand, gatoAliases);
-addAliases(cancelarCommand, cancelarAliases);
-addAliases(chattersCommand, chattersAliases);
-addAliases(checkNickCommand, checkNickAliases);
-addAliases(coinflipCommand, coinflipAliases);
-addAliases(comandosCommand, comandosAliases);
-addAliases(helpCommand, helpAliases);
-addAliases(cookieCommand, cookieAliases);
-addAliases(cookieDiarioCommand, cookieDiarioAliases);
-addAliases(copypastaCommand, copypastaAliases);
-addAliases(piadaCommand, piadaAliases);
-addAliases(curiosidadeCommand, curiosidadeAliases);
-addAliases(filosofiaCommand, filosofiaAliases);
-addAliases(corCommand, corAliases);
-addAliases(countlineCommand, countlineAliases);
-addAliases(dneCommand, dneAliases);
-addAliases(downloadCommand, downloadAliases);
-addAliases(escolhaCommand, escolhaAliases);
-addAliases(fillCommand, fillAliases);
-addAliases(followageCommand, followageAliases);
-addAliases(gptCommand, gptAliases);
-addAliases(gptSerioCommand, gptSerioAliases);
-addAliases(howLongToBeatCommand, howLongToBeatAliases);
-addAliases(abracoCommand, abracoAliases);
-addAliases(beijoCommand, beijoAliases);
-addAliases(bonkCommand, bonkAliases);
-addAliases(tuckCommand, tuckAliases);
-addAliases(slapCommand, slapAliases);
-addAliases(explodeCommand, explodeAliases);
-addAliases(lastSeenCommand, lastSeenAliases);
-addAliases(stalkCommand, stalkAliases);
-addAliases(liveCommand, liveAliases);
-addAliases(mathCommand, mathAliases);
-addAliases(nicksCommand, nicksAliases);
-addAliases(optoutCommand, optoutAliases);
-addAliases(pauseCommand, pauseAliases);
-addAliases(unpauseCommand, unpauseAliases);
+addAliases(testeCommand);
+addAliases(meCommand);
+addAliases(EightBallCommand);
+addAliases(avatarCommand);
+addAliases(cachorroCommand);
+addAliases(gatoCommand);
+addAliases(cancelarCommand);
+addAliases(chattersCommand);
+addAliases(checkNickCommand);
+addAliases(coinflipCommand);
+addAliases(comandosCommand);
+addAliases(helpCommand);
+addAliases(cookieCommand);
+addAliases(cookieDiarioCommand);
+addAliases(copypastaCommand);
+addAliases(piadaCommand);
+addAliases(curiosidadeCommand);
+addAliases(filosofiaCommand);
+addAliases(corCommand);
+addAliases(countlineCommand);
+addAliases(dneCommand);
+addAliases(downloadCommand);
+addAliases(escolhaCommand);
+addAliases(fillCommand);
+addAliases(followageCommand);
+addAliases(gptCommand);
+addAliases(gptSerioCommand);
+addAliases(howLongToBeatCommand);
+addAliases(abracoCommand);
+addAliases(beijoCommand);
+addAliases(bonkCommand);
+addAliases(tuckCommand);
+addAliases(slapCommand);
+addAliases(explodeCommand);
+addAliases(lastSeenCommand);
+addAliases(stalkCommand);
+addAliases(liveCommand);
+addAliases(mathCommand);
+addAliases(nicksCommand);
+addAliases(optoutCommand);
+addAliases(pauseCommand);
+addAliases(unpauseCommand);
+addAliases(configCommand);
+addAliases(percentagemCommand);
+addAliases(previewCommand);
+addAliases(roletaCommand);
 
-// dev commands
-addAliases(botSayCommand, botSayAliases);
-addAliases(forceJoinCommand, forceJoinAliases);
-addAliases(forcePartCommand, forcePartAliases);
-addAliases(execCommand, execAliases);
-addAliases(getUserIdCommand, getUserIdAliases);
-addAliases(restartCommand, restartAliases);
+// // dev commands
+addAliases(botSayCommand);
+addAliases(forceJoinCommand);
+addAliases(forcePartCommand);
+addAliases(execCommand);
+addAliases(getUserIdCommand);
+addAliases(restartCommand);
 
 
 module.exports = {
-    commandsList: commandsList,
+    commandsList,
 };

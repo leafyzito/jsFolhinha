@@ -27,7 +27,8 @@ const copypastaCommand = async (client, message) => {
 
 };
 
+copypastaCommand.aliases = ['copypasta', 'copy'];
+
 module.exports = {
-    copypastaCommand: copypastaCommand,
-    copypastaAliases: ['copypasta', 'copy']
+    copypastaCommand,
 };

@@ -1,6 +1,7 @@
 require('dotenv').config();
 const { ChatClient } = require('@kararty/dank-twitch-irc');
-const { modifyClient, channelPrefixes } = require('./utils/startup.js');
+const { modifyClient } = require('./utils/startup.js');
+const { commandsList } = require('./commands/commandsList');
 const { commandHandler } = require('./utils/handlers.js');
 const fs = require('fs');
 
@@ -33,7 +34,7 @@ const client = new ChatClient({
 });
 
 // Modify the client with custom functions
-modifyClient(client);
+modifyClient(client, commandsList);
 
 // Connect to Twitch
 client.connect();
@@ -42,6 +43,7 @@ client.connect();
 client.on('ready', () => { onReadyHandler(); });
 client.on('JOIN', (channel) => { onJoinHandler(channel); });
 client.on("PRIVMSG", (msg) => { onMessageHandler(msg); });
+// client.on('error', (error) => { console.log('Error:', error); });
 
 // Join the channels
 // client.joinAll(channelsToJoin);
@@ -62,7 +64,7 @@ async function onReadyHandler() {
 function onMessageHandler(message) {
     if (message.senderUsername == 'folhinhabot') { return; }
 
-    // message.commandPrefix = channelPrefixes[message.channelName] || "!";
+    // message.commandPrefix = client.channelPrefixes[message.channelName] || "!";
     // if (message.channelName == 'gocrazybh') {message.commandPrefix = '!!';}
 
     message.commandPrefix = '!!';

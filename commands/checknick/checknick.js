@@ -46,8 +46,8 @@ const checkNickCommand = async (client, message) => {
     client.log.logAndReply(message, `O nick ${nick} está disponível 👍`);
 };
 
+checkNickCommand.aliases = ['checknick', 'nickcheck', 'namecheck', 'checkname'];
 
 module.exports = {
-    checkNickCommand: checkNickCommand,
-    checkNickAliases: ['checknick', 'nickcheck', 'namecheck', 'checkname']
+    checkNickCommand,
 };

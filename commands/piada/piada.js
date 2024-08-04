@@ -27,7 +27,8 @@ const piadaCommand = async (client, message) => {
 
 };
 
+piadaCommand.aliases = ['piada', 'joke', 'piadas', 'jokes'];
+
 module.exports = {
-    piadaCommand: piadaCommand,
-    piadaAliases: ['piada', 'joke', 'piadas', 'jokes']
+    piadaCommand,
 };

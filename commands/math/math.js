@@ -25,8 +25,8 @@ const mathCommand = async (client, message) => {
     client.log.logAndReply(message, `🤓 ${mathResult}`);
 };
 
+mathCommand.aliases = ['math', 'maths', 'matematica', 'matemática'];
 
 module.exports = {
-    mathCommand: mathCommand,
-    mathAliases: ['math', 'maths', 'matematica', 'matemática']
+    mathCommand,
 };

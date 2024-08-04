@@ -33,7 +33,7 @@ async function loadUserCookieStats(message) {
 
 const cookieCommand = async (client, message) => {
     message.command = 'cookie';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!await processCommand(5000, 'user', message, client)) return;
 
     if (message.messageText.split(' ').length < 2) {
         client.log.logAndReply(message, `Está com dúvidas sobre os comandos de cookie? Acesse https://folhinhabot.github.io/comandos 😁`);
@@ -235,10 +235,10 @@ const cookieDiarioCommand = async (client, message) => {
     return;
 };
 
+cookieCommand.aliases = ['cookie', 'cookies'];
+cookieDiarioCommand.aliases = ['cd'];
 
 module.exports = {
-    cookieCommand: cookieCommand,
-    cookieDiarioCommand: cookieDiarioCommand,
-    cookieAliases: ['cookie'],
-    cookieDiarioAliases: ['cd']
+    cookieCommand,
+    cookieDiarioCommand,
 };

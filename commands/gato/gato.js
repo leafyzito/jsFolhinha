@@ -44,8 +44,8 @@ const gatoCommand = async (client, message) => {
     client.log.logAndReply(message, `🐱 ${cat}`);
 };
 
+gatoCommand.aliases = ['gato', 'cat'];
 
 module.exports = {
-    gatoCommand: gatoCommand,
-    gatoAliases: ['gato', 'cat']
+    gatoCommand,
 };

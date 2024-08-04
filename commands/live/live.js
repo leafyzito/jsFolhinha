@@ -64,8 +64,8 @@ const liveCommand = async (client, message) => {
     }
 };
 
+liveCommand.aliases = ['live'];
 
 module.exports = {
-    liveCommand: liveCommand,
-    liveAliases: ['live']
+    liveCommand,
 };

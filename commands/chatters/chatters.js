@@ -71,8 +71,8 @@ const chattersCommand = async (client, message) => {
 
 };
 
+chattersCommand.aliases = ['chatters'];
 
 module.exports = {
-    chattersCommand: chattersCommand,
-    chattersAliases: ['chatters']
+    chattersCommand,
 };

@@ -54,7 +54,8 @@ const cancelarCommand = async (client, message) => {
 
 };
 
+cancelarCommand.aliases = ['cancelar', 'cancel'];
+
 module.exports = {
-    cancelarCommand: cancelarCommand,
-    cancelarAliases: ['cancelar', 'cancel']
+    cancelarCommand,
 };
