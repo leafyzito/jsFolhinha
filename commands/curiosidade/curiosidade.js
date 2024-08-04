@@ -27,7 +27,8 @@ const curiosidadeCommand = async (client, message) => {
 
 };
 
+curiosidadeCommand.aliases = ['curiosidade', 'curiosidades'];
+
 module.exports = {
-    curiosidadeCommand: curiosidadeCommand,
-    curiosidadeAliases: ['curiosidade', 'curiosidades']
+    curiosidadeCommand,
 };

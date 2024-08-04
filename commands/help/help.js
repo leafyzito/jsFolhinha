@@ -16,10 +16,10 @@ const helpCommand = async (client, message) => {
     client.log.logAndReply(message, `Para informações sobre o bot, acesse https://folhinhabot.github.io peepoHappy Se tiver qualquer dúvida, pode contactar o ${process.env.DEV_NICK}`);
 };
 
+comandosCommand.aliases = ['comandos', 'commands', 'comando', 'command'];
+helpCommand.aliases = ['help', 'ajuda', 'info'];
 
 module.exports = {
-    comandosCommand: comandosCommand,
-    comandosAliases: ['comandos', 'commands', 'comando', 'command'],
-    helpCommand: helpCommand,
-    helpAliases: ['help', 'ajuda', 'info'],
+    comandosCommand,
+    helpCommand,
 };

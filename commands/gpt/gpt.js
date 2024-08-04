@@ -71,10 +71,10 @@ const gptSerioCommand = async (client, message) => {
     client.log.logAndReply(message, `🤖 ${gptRes.replace(/(\r\n|\n|\r)/gm, " ")}`);
 }
 
+gptCommand.aliases = ['gpt'];
+gptSerioCommand.aliases = ['gptserio', 'gptsério'];
 
 module.exports = {
     gptCommand,
-    gptAliases: ['gpt'],
     gptSerioCommand,
-    gptSerioAliases: ['gptserio', 'gptsério']
 };

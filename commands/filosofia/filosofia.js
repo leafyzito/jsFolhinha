@@ -27,7 +27,8 @@ const filosofiaCommand = async (client, message) => {
 
 };
 
+filosofiaCommand.aliases = ['filosofia', 'filosofias'];
+
 module.exports = {
-    filosofiaCommand: filosofiaCommand,
-    filosofiaAliases: ['filosofia']
+    filosofiaCommand,
 };

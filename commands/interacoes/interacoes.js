@@ -7,19 +7,19 @@ const abracoCommand = async (client, message) => {
     if (!await processCommand(5000, 'channel', message, client)) return;
 
     if (message.messageText.split(' ').length === 1) {
-        client.sendMessage(message.senderId, `Use o formato: ${message.commandPrefix}abraço <pessoa pra abraçar>`);
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}abraço <pessoa pra abraçar>`);
         return;
     }
 
     const hugTarget = message.messageText.split(' ')[1].replace(/^@/, '');
 
     if (hugTarget.toLowerCase() === message.senderUsername) {
-        client.sendMessage(message.senderId, `Você estava se sentido carente e resolveu se abraçar a si mesmo 🤗`);
+        client.log.logAndReply(message, `Você estava se sentido carente e resolveu se abraçar a si mesmo 🤗`);
         return;
     }
     
     if (['folhinha', 'folhinhabot'].includes(hugTarget.toLowerCase())) {
-        client.sendMessage(message.senderId, `peepoHappy 🌹`);
+        client.log.logAndReply(message, `peepoHappy 🌹`);
         return;
     }
 
@@ -40,19 +40,19 @@ const beijoCommand = async (client, message) => {
     if (!await processCommand(5000, 'channel', message, client)) return;
 
     if (message.messageText.split(' ').length === 1) {
-        client.sendMessage(message.senderId, `Use o formato: ${message.commandPrefix}beijo <pessoa pra beijar>`);
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}beijo <pessoa pra beijar>`);
         return;
     }
 
     const kissTarget = message.messageText.split(' ')[1].replace(/^@/, '');
 
     if (kissTarget.toLowerCase() === message.senderUsername) {
-        client.sendMessage(message.senderId, `Você estava se sentido carente e se beijou no espelho 😘`);
+        client.log.logAndReply(message, `Você estava se sentido carente e se beijou no espelho 😘`);
         return;
     }
     
     if (['folhinha', 'folhinhabot'].includes(kissTarget.toLowerCase())) {
-        client.sendMessage(message.senderId, `peepoHappy 🌹`);
+        client.log.logAndReply(message, `peepoHappy 🌹`);
         return;
     }
 
@@ -69,19 +69,19 @@ const bonkCommand = async (client, message) => {
     if (!await processCommand(5000, 'channel', message, client)) return;
 
     if (message.messageText.split(' ').length === 1) {
-        client.sendMessage(message.senderId, `Use o formato: ${message.commandPrefix}bonk <pessoa pra bonkar>`);
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}bonk <pessoa pra bonkar>`);
         return;
     }
 
     const bonkTarget = message.messageText.split(' ')[1].replace(/^@/, '');
 
     if (bonkTarget.toLowerCase() === message.senderUsername) {
-        client.sendMessage(message.senderId, `Você estava bobinho e resolveu se bonkar na cabeça`);
+        client.log.logAndReply(message, `Você estava bobinho e resolveu se bonkar na cabeça`);
         return;
     }
     
     if (['folhinha', 'folhinhabot'].includes(bonkTarget.toLowerCase())) {
-        client.sendMessage(message.senderId, `Não me bate ow Stare`);
+        client.log.logAndReply(message, `Não me bate ow Stare`);
         return;
     }
 
@@ -115,19 +115,19 @@ const tuckCommand = async (client, message) => {
     if (!await processCommand(5000, 'channel', message, client)) return;
 
     if (message.messageText.split(' ').length === 1) {
-        client.sendMessage(message.senderId, `Use o formato: ${message.commandPrefix}tuck <pessoa pra tuckar>`);
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}tuck <pessoa pra tuckar>`);
         return;
     }
 
     const tuckTarget = message.messageText.split(' ')[1].replace(/^@/, '');
 
     if (tuckTarget.toLowerCase() === message.senderUsername) {
-        client.sendMessage(message.senderId, `Você não tinha ninguém para te pôr pra dormir, então você se auto-colocou pra dormir 💤`);
+        client.log.logAndReply(message, `Você não tinha ninguém para te pôr pra dormir, então você se auto-colocou pra dormir 💤`);
         return;
     }
     
     if (['folhinha', 'folhinhabot'].includes(tuckTarget.toLowerCase())) {
-        client.sendMessage(message.senderId, `Valeu por me colocar pra dormir, mas preciso me manter acordado 😮‍💨`);
+        client.log.logAndReply(message, `Valeu por me colocar pra dormir, mas preciso me manter acordado 😮‍💨`);
         return;
     }
 
@@ -147,19 +147,19 @@ const slapCommand = async (client, message) => {
     if (!await processCommand(5000, 'channel', message, client)) return;
 
     if (message.messageText.split(' ').length === 1) {
-        client.sendMessage(message.senderId, `Use o formato: ${message.commandPrefix}slap <pessoa pra dar um tapa>`);
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}slap <pessoa pra dar um tapa>`);
         return;
     }
 
     const slapTarget = message.messageText.split(' ')[1].replace(/^@/, '');
 
     if (slapTarget.toLowerCase() === message.senderUsername) {
-        client.sendMessage(message.senderId, `Você deu um tapa em si mesmo 🤨`);
+        client.log.logAndReply(message, `Você deu um tapa em si mesmo 🤨`);
         return;
     }
     
     if (['folhinha', 'folhinhabot'].includes(slapTarget.toLowerCase())) {
-        client.sendMessage(message.senderId, `MrDestructoid Por que você me bateu? Isso terá volta. Dorme de olho aberto, fique atento.`);
+        client.log.logAndReply(message, `MrDestructoid Por que você me bateu? Isso terá volta. Dorme de olho aberto, fique atento.`);
         return;
     }
 
@@ -177,19 +177,19 @@ const explodeCommand = async (client, message) => {
     if (!await processCommand(5000, 'channel', message, client)) return;
 
     if (message.messageText.split(' ').length === 1) {
-        client.sendMessage(message.senderId, `Use o formato: ${message.commandPrefix}explode <pessoa pra explodir>`);
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}explode <pessoa pra explodir>`);
         return;
     }
 
     const explodeTarget = message.messageText.split(' ')[1].replace(/^@/, '');
 
     if (explodeTarget.toLowerCase() === message.senderUsername) {
-        client.sendMessage(message.senderId, `Você explodiu a si mesmo 💥🤨`);
+        client.log.logAndReply(message, `Você explodiu a si mesmo 💥🤨`);
         return;
     }
     
     if (['folhinha', 'folhinhabot'].includes(explodeTarget.toLowerCase())) {
-        client.sendMessage(message.senderId, `MrDestructoid Boa tentativa, mas eu sou indestrutível`);
+        client.log.logAndReply(message, `MrDestructoid Boa tentativa, mas eu sou indestrutível`);
         return;
     }
 
@@ -203,17 +203,18 @@ const explodeCommand = async (client, message) => {
     client.log.logAndReply(message, randomChoice(explosions));
 };
 
+abracoCommand.aliases = ['abraco', 'abraço', 'abracar', 'abraçar', 'hug'];
+beijoCommand.aliases = ['beijo', 'beijar', 'kiss'];
+bonkCommand.aliases = ['bonk'];
+tuckCommand.aliases = ['tuck'];
+slapCommand.aliases = ['slap', 'tapa'];
+explodeCommand.aliases = ['explode', 'explodir', 'bomb'];
+
 module.exports = {
     abracoCommand,
-    abracoAliases: ['abraco', 'abraço', 'abracar', 'abraçar', 'hug'],
     beijoCommand,
-    beijoAliases: ['beijo', 'beijar', 'kiss'],
     bonkCommand,
-    bonkAliases: ['bonk'],
     tuckCommand,
-    tuckAliases: ['tuck'],
     slapCommand,
-    slapAliases: ['slap', 'tapa'],
     explodeCommand,
-    explodeAliases: ['explodir', 'explode', 'bomb'],
 };

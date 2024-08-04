@@ -28,8 +28,8 @@ const fillCommand = async (client, message) => {
     client.log.logAndReply(message, finalText);
 };
 
+fillCommand.aliases = ['fill'];
 
 module.exports = {
-    fillCommand: fillCommand,
-    fillAliases: ['fill']
+    fillCommand,
 };

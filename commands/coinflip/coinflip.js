@@ -24,8 +24,8 @@ const coinflipCommand = async (client, message) => {
 
 };
 
+coinflipCommand.aliases = ['coinflip', 'cf'];
 
 module.exports = {
-    coinflipCommand: coinflipCommand,
-    coinflipAliases: ['coinflip', 'cf']
+    coinflipCommand,
 };

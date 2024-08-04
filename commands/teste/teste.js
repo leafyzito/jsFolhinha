@@ -11,8 +11,8 @@ const testeCommand = async (client, message) => {
     return;
 };
 
+testeCommand.aliases = ['teste', 'test', 'testing'];
 
 module.exports = {
     testeCommand,
-    testeAliases: ['teste', 'test', 'testing']
 };

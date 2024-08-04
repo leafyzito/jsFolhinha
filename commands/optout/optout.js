@@ -50,8 +50,8 @@ const optoutCommand = async (client, message) => {
 
 };
 
+optoutCommand.aliases = ['optout'];
 
 module.exports = {
     optoutCommand,
-    optoutAliases: ['optout']
 };

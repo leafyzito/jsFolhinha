@@ -12,13 +12,13 @@ const botSayCommand = async (client, message) => {
 
     if (targetChannel == 'all') {
         for (const channel of client.joinedChannels) {
-            client.say(channel, msgContent);
+            client.log.send(channel, msgContent);
         }
         client.log.logAndReply(message, `foi`);
         return;
     }
 
-    client.say(targetChannel, msgContent);
+    client.log.send(targetChannel, msgContent);
     client.log.logAndReply(message, `foi`);
     return;
 };
@@ -31,17 +31,18 @@ const forceJoinCommand = async (client, message) => {
 
     const args = message.messageText.split(' ');
     const targetChannel = args[1];
-    const announce = args[2] === 'announce' ? true : false;
+    const announce = args[2] === 'true' ? true : false;
     
     client.join(targetChannel)
         .then(() => {
             client.log.logAndReply(message, `Joined ${targetChannel}`);
             if (announce) {
-                client.say(targetChannel, `👀`);
+                client.log.send(targetChannel, `👀`);
             }
         })
         .catch((err) => {
-            client.log.logAndReply(message, `Erro ao dar join em ${targetChannel}: ${err}`);
+            client.log.logAndReply(message, `Não foi, check logs`);
+            console.log(err);
         });
 };
 
@@ -59,7 +60,7 @@ const forcePartCommand = async (client, message) => {
         .then(() => {
             client.log.logAndReply(message, `Parted ${targetChannel}`);
             if (announce) {
-                client.say(targetChannel, `👋`);
+                client.log.send(targetChannel, `👋`);
             }
         })
         .catch((err) => {
@@ -81,7 +82,7 @@ const execCommand = async (client, message) => {
         console.log(res);
         client.log.logAndReply(message, `🤖 ${res}`);
     } catch (err) {
-        client.say(message.channelName, message.messageID, `🤖 Erro ao executar comando: ${err}`);
+        client.log.send(message.channelName, message.messageID, `🤖 Erro ao executar comando: ${err}`);
     }
 };
 
@@ -117,17 +118,18 @@ const restartCommand = async (client, message) => {
     exec('node restart.js');
 }
 
+botSayCommand.aliases = ['botsay', 'bsay'];
+forceJoinCommand.aliases = ['forcejoin', 'fjoin'];
+forcePartCommand.aliases = ['forcepart', 'fpart'];
+execCommand.aliases = ['exec', 'eval'];
+getUserIdCommand.aliases = ['getuserid', 'uid'];
+restartCommand.aliases = ['restart'];
+
 module.exports = {
-    botSayCommand: botSayCommand,
-    botSayAliases: ['botsay', 'bsay'],
-    forceJoinCommand: forceJoinCommand,
-    forceJoinAliases: ['forcejoin', 'fjoin'],
-    forcePartCommand: forcePartCommand,
-    forcePartAliases: ['forcepart', 'fpart'],
-    execCommand: execCommand,
-    execAliases: ['exec', 'eval'],
-    getUserIdCommand: getUserIdCommand,
-    getUserIdAliases: ['getuserid', 'uid'],
-    restartCommand: restartCommand,
-    restartAliases: ['restart']
+    botSayCommand,
+    forceJoinCommand,
+    forcePartCommand,
+    execCommand,
+    getUserIdCommand,
+    restartCommand,
 };

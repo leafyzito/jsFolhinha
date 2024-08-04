@@ -30,8 +30,8 @@ const dneCommand = async (client, message) => {
 
 };
 
+dneCommand.aliases = ['dne', 'thispersondoesnotexist', 'doesnotexist'];
 
 module.exports = {
-    dneCommand: dneCommand,
-    dneAliases: ['dne', 'thispersondoesnotexist', 'doesnotexist']
+    dneCommand,
 };

@@ -18,8 +18,8 @@ const nicksCommand = async (client, message) => {
             : `O histórico de nicks de ${nicksTarget} é:`} ${aliases}`);
 };
 
+nicksCommand.aliases = ['nick', 'nicks', 'nicknames'];
 
 module.exports = {
-    nicksCommand: nicksCommand,
-    nicksAliases: ['nick', 'nicks', 'nicknames']
+    nicksCommand,
 };

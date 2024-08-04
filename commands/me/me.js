@@ -24,8 +24,8 @@ const meCommand = async (client, message) => {
     client.log.logAndMeAction(message, msgContent);
 };
 
+meCommand.aliases = ['me'];
 
 module.exports = {
-    meCommand: meCommand,
-    meAliases: ['me']
+    meCommand,
 };

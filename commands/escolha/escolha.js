@@ -5,12 +5,12 @@ const escolhaCommand = async (client, message) => {
     message.command = 'escolha';
     if (!await processCommand(5000, 'channel', message, client)) return;
 
-    const args = message.messageText.split(' ').splice(1);
+    const args = message.messageText.split(' ').slice(1);
 
     // remove all 'ou' and 'or' from the list of options
     args.forEach((arg, index) => {
         if (arg.toLowerCase() === 'ou' || arg.toLowerCase() === 'or') {
-            args.splice(index, 1);
+            args.slice(index, 1);
         }
     });
 
@@ -19,12 +19,12 @@ const escolhaCommand = async (client, message) => {
         return;
     }
 
-    const choice = randomChoice(args.splice(0, args.length));
-    client.log.logAndReply(message, `Eu escolho ${choice}`);
+    const choice = randomChoice(args.slice(0, args.length));
+    client.log.logAndReply(message, `🤖 ${choice}`);
 };
 
+escolhaCommand.aliases = ['escolha', 'escolher', 'choose', 'choice', 'pick'];
 
 module.exports = {
-    escolhaCommand: escolhaCommand,
-    escolhaAliases: ['escolha', 'escolher', 'choose', 'choice', 'pick']
+    escolhaCommand,
 };

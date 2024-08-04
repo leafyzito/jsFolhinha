@@ -33,8 +33,8 @@ const EightBallCommand = async (client, message) => {
 
 };
 
+EightBallCommand.aliases = ['8ball', '8b', 'ball'];
 
 module.exports = {
-    EightBallCommand: EightBallCommand,
-    EightBallAliases: ['8ball', '8b', 'ball']
+    EightBallCommand,
 };

@@ -44,8 +44,8 @@ const cachorroCommand = async (client, message) => {
     client.log.logAndReply(message, `🐶 ${dog}`);
 };
 
+cachorroCommand.aliases = ['cachorro', 'dog', 'doggo', 'cao'];
 
 module.exports = {
-    cachorroCommand: cachorroCommand,
-    cachorroAliases: ['cachorro', 'dog', 'doggo', 'cao']
+    cachorroCommand,
 };

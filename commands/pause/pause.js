@@ -24,9 +24,10 @@ const unpauseCommand = async (client, message) => {
     }
 };
 
+pauseCommand.aliases = ['pause', 'pausar'];
+unpauseCommand.aliases = ['unpause', 'despausar'];
+
 module.exports = {
     pauseCommand,
-    pauseAliases: ['pause', 'pausar'],
     unpauseCommand,
-    unpauseAliases: ['unpause', 'despausar'],
 };

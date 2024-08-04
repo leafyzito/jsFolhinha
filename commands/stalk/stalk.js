@@ -53,8 +53,8 @@ const stalkCommand = async (client, message) => {
     client.log.logAndReply(message, `${targetUser} foi visto pela última vez há ${timeSinceLs} no #${lsChannel} - ${lsMessage}`);
 };
 
+stalkCommand.aliases = ['stalk'];
 
 module.exports = {
     stalkCommand,
-    stalkAliases: ['stalk']
 };

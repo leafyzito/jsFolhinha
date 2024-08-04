@@ -61,8 +61,8 @@ const followageCommand = async (client, message) => {
     return;
 };
 
+followageCommand.aliases = ['followage', 'fa'];
 
 module.exports = {
-    followageCommand: followageCommand,
-    followageAliases: ['followage', 'fa']
+    followageCommand,
 };

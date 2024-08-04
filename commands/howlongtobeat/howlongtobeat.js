@@ -10,8 +10,8 @@ const howLongToBeatCommand = async (client, message) => {
     client.log.logAndReply(message, 'Não consegui refazer esse comando no folhinha 3.0 :( tentarei de novo recentemente');
 }
 
+howLongToBeatCommand.aliases = ['howlongtobeat', 'hltb'];
 
 module.exports = {
     howLongToBeatCommand,
-    howLongToBeatAliases: ['howlongtobeat', 'hltb']
 };
