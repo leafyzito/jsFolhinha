@@ -5,9 +5,11 @@ var userCooldowns = {};
 var channelCooldowns = {};
 
 // Function to manage the cooldown
-function manageCooldown(cooldownDuration, type, identifier, command) {
+function manageCooldown(cooldownDuration, type, message) {
     // Get the current time
     const currentTime = Date.now();
+    var identifier = message.senderUsername;
+    var command = message.command;
 
     // Determine the cooldown object based on the type
     let cooldowns;
@@ -15,7 +17,7 @@ function manageCooldown(cooldownDuration, type, identifier, command) {
         cooldowns = userCooldowns;
     } else if (type === 'channel') {
         cooldowns = channelCooldowns;
-        identifier = 'channel'; // Set identifier to 'channel' for channel cooldown
+        identifier = message.channelName;
     } else {
         throw new Error('Invalid cooldown type');
     }
@@ -40,7 +42,7 @@ function manageCooldown(cooldownDuration, type, identifier, command) {
     }
 
     // Return false to indicate that the cooldown is not over
-    console.log('Cooldown not over');
+    console.log(`CD: #${message.channelName}/${message.senderUsername} - ${message.command} (${Math.ceil((cooldownDuration - timeElapsed) / 1000)}s)`);
     return false;
 }
 
@@ -54,7 +56,7 @@ async function processCommand(cooldownDuration, type, message, client) {
     if (currChannelConfigs.offlineOnly && await isStreamOnline(message.channelName)) { return false; }
 
     // if all good to go, manage cooldown
-    return manageCooldown(cooldownDuration, type, message.senderUsername, message.command);
+    return manageCooldown(cooldownDuration, type, message);
 }
 
 module.exports = {

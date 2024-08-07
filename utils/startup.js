@@ -1,8 +1,10 @@
 const fetch = require('node-fetch');
 const { MongoUtils } = require('./mongo.js');
 const { Logger } = require('./log.js');
+const { commandsList } = require('../commands/commandsList.js');
 
-async function modifyClient(client, commandsList) {
+async function modifyClient(client) {
+    client.ready = false;
     client.getUserID = async function (username) {
         // Construct API URL
         const api_url = `https://api.twitch.tv/helix/users?login=${username}`;
@@ -73,10 +75,59 @@ async function modifyClient(client, commandsList) {
     }
     
     await client.reloadChannelConfigs();
+
+    client.startTime = Math.floor(Date.now() / 1000);
+
+    // load afk users
+    client.afkUsers = {};
+    client.reloadAfkUsers = async function () {
+        client.afkUsers = {};
+        await client.db.get('afk', { is_afk: true }).then((result) => {
+            result.forEach((afk) => {
+                if (!client.afkUsers[afk.channel]) {
+                    client.afkUsers[afk.channel] = [];
+                }
+                client.afkUsers[afk.channel].push(afk.user);
+            });
+        });
+    }
+
+    await client.reloadAfkUsers();
+
+    // load reminders
+    client.usersWithPendingReminders = [];
+    client.notifiedUsers = [];
+    client.reloadReminders = async function () {
+        client.usersWithPendingReminders = [];
+        await client.db.get('remind', { beenRead: false }).then((result) => {
+            result.forEach((reminder) => {
+                if (!client.usersWithPendingReminders.includes(reminder.receiverId)) {
+                    client.usersWithPendingReminders.push(reminder.receiverId);
+                }
+            });
+        });
+    }
+
+    await client.reloadReminders();
+
+    // load known users
+    client.knownUserAliases = [];
+    client.reloadKnownUsers = async function () {
+        client.knownUserAliases = [];
+        await client.db.get('users', {}).then((result) => {
+            result.forEach((user) => {
+                client.knownUserAliases.push(user.currAlias);
+            });
+        });
+    }
+
+    await client.reloadKnownUsers();
+    console.log('* Loaded users');
+    client.ready = true;
 }
 
 
 
 module.exports = {
-    modifyClient: modifyClient,
+    modifyClient,
 };

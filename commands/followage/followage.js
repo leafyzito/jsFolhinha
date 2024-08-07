@@ -22,7 +22,7 @@ async function getFA(user, channel) {
     return [formattedTime, followDateFormatted];
 }
 
-const followageCommand = async (client, message) => {
+const followAgeCommand = async (client, message) => {
     message.command = 'followage';
     if (!await processCommand(5000, 'channel', message, client)) return;
 
@@ -45,7 +45,6 @@ const followageCommand = async (client, message) => {
 
     const faResult = await getFA(faTarget, faChannelTarget);
     
-    // if (['abrir', 'open'].includes(targetCommand)) {
     if (faResult.includes("não existe")) {
         client.log.logAndReply(message, faResult);
         return;
@@ -61,8 +60,8 @@ const followageCommand = async (client, message) => {
     return;
 };
 
-followageCommand.aliases = ['followage', 'fa'];
+followAgeCommand.aliases = ['followage', 'fa'];
 
 module.exports = {
-    followageCommand,
+    followAgeCommand,
 };
