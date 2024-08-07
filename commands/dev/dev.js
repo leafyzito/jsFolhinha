@@ -30,9 +30,9 @@ const forceJoinCommand = async (client, message) => {
     if (authorId !== process.env.DEV_USERID) { return; }
 
     const args = message.messageText.split(' ');
-    const targetChannel = args[1];
+    const targetChannel = args[1].toLowerCase();
     const announce = args[2] === 'true' ? true : false;
-    
+
     client.join(targetChannel)
         .then(() => {
             client.log.logAndReply(message, `Joined ${targetChannel}`);
@@ -55,7 +55,7 @@ const forcePartCommand = async (client, message) => {
     const args = message.messageText.split(' ');
     const targetChannel = args[1];
     const announce = args[2] === 'announce' ? true : false;
-    
+
     client.part(targetChannel)
         .then(() => {
             client.log.logAndReply(message, `Parted ${targetChannel}`);
@@ -78,9 +78,18 @@ const execCommand = async (client, message) => {
     const command = args.slice(1).join(' ');
 
     try {
+        if (command.includes('await')) {
+            const res = await eval(command);
+            console.log(res);
+            client.log.logAndReply(message, `🤖 ${res}`);
+            return;
+        }
+
         const res = eval(command);
         console.log(res);
-        client.log.logAndReply(message, `🤖 ${res}`);
+        client.log.logAndReply(message, `🤖 ${res}`)
+        return;
+        
     } catch (err) {
         client.log.send(message.channelName, message.messageID, `🤖 Erro ao executar comando: ${err}`);
     }
@@ -114,8 +123,20 @@ const restartCommand = async (client, message) => {
     if (authorId !== process.env.DEV_USERID) { return; }
 
     client.log.logAndReply(message, `Reiniciando...`);
-    
+
     exec('node restart.js');
+}
+
+const resetPet = async (client, message) => {
+    message.command = 'resetpet';
+
+    const authorId = message.senderUserID;
+    if (authorId !== process.env.DEV_USERID) { return; }
+
+    const currentTime = Math.floor(Date.now() / 1000);
+    await client.db.updateMany('pet', {}, { $set: { last_interaction: currentTime } });
+
+    client.log.logAndReply(message, `feito 👍`);
 }
 
 botSayCommand.aliases = ['botsay', 'bsay'];
@@ -124,6 +145,7 @@ forcePartCommand.aliases = ['forcepart', 'fpart'];
 execCommand.aliases = ['exec', 'eval'];
 getUserIdCommand.aliases = ['getuserid', 'uid'];
 restartCommand.aliases = ['restart'];
+resetPet.aliases = ['resetpet', 'resetpat'];
 
 module.exports = {
     botSayCommand,
@@ -132,4 +154,5 @@ module.exports = {
     execCommand,
     getUserIdCommand,
     restartCommand,
+    resetPet
 };

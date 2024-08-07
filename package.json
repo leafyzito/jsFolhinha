@@ -12,6 +12,7 @@
     "@kararty/dank-twitch-irc": "^6.2.0",
     "dotenv": "^16.4.5",
     "mongodb": "6.8",
+    "node-cron": "^3.0.3",
     "openai": "^4.53.2"
   },
   "description": "https://folhinhabot.github.io/"

@@ -8,7 +8,7 @@ const { cancelarCommand } = require('./cancelar/cancelar.js');
 const { chattersCommand } = require('./chatters/chatters.js');
 const { checkNickCommand } = require('./checknick/checknick.js');
 const { coinflipCommand } = require('./coinflip/coinflip.js');
-const { comandosCommand, helpCommand } = require('./help/help.js');
+const { comandosCommand, helpCommand, statsCommand, botStatsCommand } = require('./help/help.js');
 const { cookieCommand, cookieDiarioCommand } = require('./cookie/cookie.js');
 const { copypastaCommand } = require('./copypasta/copypasta.js');
 const { piadaCommand } = require('./piada/piada.js');
@@ -20,7 +20,7 @@ const { dneCommand } = require('./dne/dne.js');
 const { downloadCommand } = require('./download/download.js');
 const { escolhaCommand } = require('./escolha/escolha.js');
 const { fillCommand } = require('./fill/fill.js');
-const { followageCommand } = require('./followage/followage.js');
+const { followAgeCommand } = require('./followage/followage.js');
 const { gptCommand, gptSerioCommand } = require('./gpt/gpt.js');
 const { howLongToBeatCommand } = require('./howlongtobeat/howlongtobeat.js');
 const { abracoCommand, beijoCommand, bonkCommand, tuckCommand, slapCommand, explodeCommand } = require('./interacoes/interacoes.js');
@@ -36,6 +36,19 @@ const { configCommand } = require('./config/config.js');
 const { percentagemCommand } = require('./percentagem/percentagem.js');
 const { previewCommand } = require('./preview/preview.js');
 const { roletaCommand } = require('./roleta/roleta.js');
+const { rolarCommand } = require('./rolar/rolar.js');
+const { subAgeCommand } = require('./subage/subage.js');
+const { sugerirCommand } = require('./sugerir/sugerir.js');
+const { talkieCommand } = require('./talkie/talkie.js');
+const { ttsCommand } = require('./tts/tts.js');
+const { petCommand, carinhoCommand, brincarCommand } = require('./pet/pet.js');
+const { afkCommand, rafkCommand } = require('./afk/afk.js');
+const { remindCommand } = require('./remind/remind.js');
+const { userCommand } = require('./user/user.js');
+const { vanishCommand } = require('./vanish/vanish.js');
+const { wikiCommand } = require('./wiki/wiki.js');
+const { joinCommand } = require('./join/join.js');
+const { translateCommand } = require('./translate/translate.js');
 
 const { 
     botSayCommand,
@@ -44,6 +57,7 @@ const {
     execCommand,
     getUserIdCommand,
     restartCommand,
+    resetPet,
 } = require('./dev/dev.js');
 
 
@@ -68,6 +82,8 @@ addAliases(checkNickCommand);
 addAliases(coinflipCommand);
 addAliases(comandosCommand);
 addAliases(helpCommand);
+addAliases(statsCommand);
+addAliases(botStatsCommand);
 addAliases(cookieCommand);
 addAliases(cookieDiarioCommand);
 addAliases(copypastaCommand);
@@ -80,7 +96,7 @@ addAliases(dneCommand);
 addAliases(downloadCommand);
 addAliases(escolhaCommand);
 addAliases(fillCommand);
-addAliases(followageCommand);
+addAliases(followAgeCommand);
 addAliases(gptCommand);
 addAliases(gptSerioCommand);
 addAliases(howLongToBeatCommand);
@@ -102,6 +118,22 @@ addAliases(configCommand);
 addAliases(percentagemCommand);
 addAliases(previewCommand);
 addAliases(roletaCommand);
+addAliases(rolarCommand);
+addAliases(subAgeCommand);
+addAliases(sugerirCommand);
+addAliases(talkieCommand);
+addAliases(ttsCommand);
+addAliases(petCommand);
+addAliases(carinhoCommand);
+addAliases(brincarCommand);
+addAliases(afkCommand);
+addAliases(rafkCommand);
+addAliases(remindCommand);
+addAliases(userCommand);
+addAliases(vanishCommand);
+addAliases(wikiCommand);
+addAliases(joinCommand);
+addAliases(translateCommand);
 
 // // dev commands
 addAliases(botSayCommand);
@@ -110,6 +142,7 @@ addAliases(forcePartCommand);
 addAliases(execCommand);
 addAliases(getUserIdCommand);
 addAliases(restartCommand);
+addAliases(resetPet);
 
 
 module.exports = {

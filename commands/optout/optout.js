@@ -17,7 +17,7 @@ const optoutCommand = async (client, message) => {
     }
 
     if (['channel', 'canal'].includes(optoutTarget)) {
-        if (message.senderUsername !== message.channelName) {
+        if (!message.isStreamer) {
             client.log.logAndReply(message, `Apenas o streamer pode usar este comando`);
             return;
         }

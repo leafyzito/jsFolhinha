@@ -5,8 +5,8 @@ const configCommand = async (client, message) => {
     if (!await processCommand(5000, 'channel', message, client)) return;
 
     if (message.senderUsername !== process.env.DEV_NICK) {
-        if (message.senderUsername !== message.channelName || !message.isMod ) {
-            client.log.logAndReply(message, `Apenas moderadores podem usar este comando`);
+        if (!message.isMod) {
+            client.log.logAndReply(message, `Apenas o streamer e moderadores podem usar este comando`);
             return;
         }
     }

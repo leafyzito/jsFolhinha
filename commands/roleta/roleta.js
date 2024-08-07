@@ -16,7 +16,7 @@ const roletaCommand = async (client, message) => {
         return;
     }
 
-    var timeoutDuration = message.messageText.split(' ')[1] || 1;
+    var timeoutDuration = message.messageText.split(' ')[1] || 10;
     timeoutDuration = parseInt(timeoutDuration) * 60;
 
     const randomChance = 1; // randomInt(1, 6);

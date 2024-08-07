@@ -36,10 +36,22 @@ class MongoUtils {
         await collection.updateOne(query, update);
     }
 
+    async updateMany(collectionName, query, update) {
+        await this.client.connect();
+        const collection = this.db.collection(collectionName);
+        await collection.updateMany(query, update);
+    }
+
     async delete(collectionName, query) {
         await this.client.connect();
         const collection = this.db.collection(collectionName);
         await collection.deleteOne(query);
+    }
+
+    async count(collectionName, query) {
+        await this.client.connect();
+        const collection = this.db.collection(collectionName);
+        return await collection.countDocuments(query);
     }
 }
 

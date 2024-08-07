@@ -1,3 +1,0 @@
-handlecommands, passar client e tags e tudo
-processCommand - ver se pode correr (em stream ou não/banido e tals)
-já dentro do código do comando, processTimeout - passando o tipo de timeout que é (user/channel)

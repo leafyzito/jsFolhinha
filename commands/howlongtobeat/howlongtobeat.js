@@ -5,9 +5,10 @@ const { processCommand } = require("../../utils/processCommand.js");
 
 const howLongToBeatCommand = async (client, message) => {
     message.command = 'howlongtobeat';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!await processCommand(30_000, 'channel', message, client)) return; // trocar cooldown de volta, caso consiga fazer funcionar
     
-    client.log.logAndReply(message, 'Não consegui refazer esse comando no folhinha 3.0 :( tentarei de novo recentemente');
+    client.log.logAndReply(message, 'Não consegui refazer esse comando no Folhinha 3.0 :( tentarei de novo recentemente');
+    return;
 }
 
 howLongToBeatCommand.aliases = ['howlongtobeat', 'hltb'];

@@ -104,7 +104,9 @@ const timeSince = (lsDate) => {
     };
 
     let formattedDeltaTime;
-    if (tdAFK.days < 1 && tdAFK.hours < 1) {
+    if (tdAFK.days < 1 && tdAFK.hours < 1 && tdAFK.minutes < 1) {
+        formattedDeltaTime = `${tdAFK.seconds}s`;
+    } else if (tdAFK.days < 1 && tdAFK.hours < 1) {
         formattedDeltaTime = `${tdAFK.minutes}m ${tdAFK.seconds}s`;
     } else if (tdAFK.days < 1) {
         formattedDeltaTime = `${tdAFK.hours}h ${tdAFK.minutes}m ${tdAFK.seconds}s`;
@@ -201,10 +203,10 @@ async function isStreamOnline(canal, cache_timeout = 60) {
     };
 
     if (streamer_status_cache[canal]['status'] === "live") {
-        console.log('returning true');
+        console.log('returning true, live on');
         return true;
     }
-    console.log('returning false');
+    console.log('returning false, live off');
     return false;
 }
 
