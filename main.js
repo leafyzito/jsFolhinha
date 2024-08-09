@@ -44,8 +44,7 @@ client.on("PRIVMSG", (msg) => { onMessageHandler(msg); });
 // client.on('error', (error) => { console.log('Error:', error); });
 
 // Join the channels
-// client.joinAll(channelsToJoin);
-client.join('gocrazybh');
+client.joinAll(channelsToJoin);
 
 // Schedule tasks
 cron.schedule('0 9 * * *', async () => { await dailyCookieResetTask(client); });
