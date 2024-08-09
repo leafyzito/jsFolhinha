@@ -13,6 +13,8 @@ function commandHandler(client, message) {
 }
 
 function listenerHandler(client, message) {
+    if ([...client.knownUserAliases].length === 0) { return console.log('still loading users'); }
+
     afkUserListener(client, message)
         .catch(err => { console.log(`Error in afk listener: ${err}`); });
 

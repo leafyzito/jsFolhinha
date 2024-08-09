@@ -63,11 +63,9 @@ async function onReadyHandler() {
 }
 
 function onMessageHandler(message) {
-    if ([...client.knownUserAliases].length === 0) { return console.log('still loading users'); }
     if (message.senderUsername == 'folhinhabot') { return; }
 
     message.commandPrefix = client.channelPrefixes[message.channelName] || "!";
-    
     // message.commandPrefix = '!!'; // for testing
 
     if (message.senderUsername === message.channelName) {
