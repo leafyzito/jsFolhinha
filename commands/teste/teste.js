@@ -7,7 +7,7 @@ const testeCommand = async (client, message) => {
     const invoked_by = message.messageText.split(" ", 1)[0].slice(message.commandPrefix.length).toLowerCase();
     console.log(invoked_by);
 
-    client.log.logAndReply(message, 'testado 3444');
+    client.log.logAndReply(message, 'testado 3');
     return;
 };
 

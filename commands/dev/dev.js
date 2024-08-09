@@ -164,20 +164,30 @@ const reloadCommand = async (client, message) => {
     const authorId = message.senderUserID;
     if (authorId !== process.env.DEV_USERID) { return; }
 
-    // Clear require cache for all command files
-    Object.keys(require.cache).forEach((key) => {
-        // console.log(`hmm: ${key}`);
-        if (key.includes('\\commands\\') || key.includes('/commands/')) {
-            console.log(`deleting ${key}`);
-            delete require.cache[key];
+    // Pull changes from Git
+    exec('git pull', (err, stdout, stderr) => {
+        if (err) {
+            console.log(`* Erro ao puxar mudanças do Git: ${err}`);
+            client.log.logAndReply(message, `Deu não, check logs`);
+            return;
         }
+
+        console.log(`* Mudanças puxadas do Git: ${stdout}`);
+
+        // Clear require cache for all command files
+        Object.keys(require.cache).forEach((key) => {
+            if (key.includes('\\commands\\') || key.includes('/commands/')) {
+                console.log(`deleting ${key}`);
+                delete require.cache[key];
+            }
+        });
+
+        // Reload the commands
+        client.loadCommands();
+
+        client.log.logAndReply(message, `Comandos recarregados, supostamente 👍`);
     });
-
-    // Reload the commands
-    client.loadCommands();
-
-    client.log.logAndReply(message, `comandos recarregados, supostamente 👍`);
-}
+};
 
 botSayCommand.aliases = ['botsay', 'bsay'];
 forceJoinCommand.aliases = ['forcejoin', 'fjoin'];
