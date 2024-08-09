@@ -1,5 +1,17 @@
 require('dotenv').config();
+const fs = require('fs');
 const fetch = require('node-fetch');
+
+// Load the channels to join from the channels.txt
+const channelsFile = fs.readFileSync('channels.txt', 'utf-8');
+const channelsLines = channelsFile.split('\n');
+const channelIds = [];
+channelsLines.forEach((line) => {
+    const cId = line.split(' ')[0];
+    if (cId) {
+        channelIds.push(cId.replace('\r', ''));
+    }
+});
 
 async function getUserByUserIDMany(userIds) {
     // Construct API URL
@@ -27,7 +39,7 @@ async function getUserByUserIDMany(userIds) {
 }
 
 async function main() {
-    var teste = await getUserByUserIDMany(['120209265', '467739611']);
+    var teste = await getUserByUserIDMany(channelIds);
     console.log(teste);
 }
 
