@@ -189,6 +189,26 @@ const reloadCommand = async (client, message) => {
     });
 };
 
+const gitPullCommand = async (client, message) => {
+    message.command = 'dev gitpull';
+
+    const authorId = message.senderUserID;
+    if (authorId !== process.env.DEV_USERID) { return; }
+
+    exec('git pull', (err, stdout, stderr) => {
+        if (err) {
+            console.log(`* Erro ao puxar mudanças do Git: ${err}`);
+            client.log.logAndReply(message, `Deu não, check logs`);
+            return;
+        }
+
+        console.log(`* Mudanças puxadas do Git: ${stdout}`);
+        
+        const cleanOutput = stdout.replace(/[\n\r]/g, '');
+        client.log.logAndReply(message, `Mudanças puxadas do Git: ${cleanOutput}`);
+    });
+};
+
 botSayCommand.aliases = ['botsay', 'bsay'];
 forceJoinCommand.aliases = ['forcejoin', 'fjoin'];
 forcePartCommand.aliases = ['forcepart', 'fpart'];
@@ -198,6 +218,7 @@ restartCommand.aliases = ['restart'];
 resetPet.aliases = ['resetpet', 'resetpat'];
 resetCdCommand.aliases = ['resetcd'];
 reloadCommand.aliases = ['reload'];
+gitPullCommand.aliases = ['gitpull', 'gpull'];
 
 module.exports = {
     botSayCommand,
@@ -208,5 +229,6 @@ module.exports = {
     restartCommand,
     resetPet,
     resetCdCommand,
-    reloadCommand
+    reloadCommand,
+    gitPullCommand
 };
