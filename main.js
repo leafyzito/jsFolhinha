@@ -49,7 +49,7 @@ client.join('gocrazybh');
 
 // Schedule tasks
 cron.schedule('0 9 * * *', async () => { await dailyCookieResetTask(client); });
-// startPetTask(client);
+startPetTask(client);
 
 
 // handlers
@@ -67,10 +67,9 @@ function onMessageHandler(message) {
     if ([...client.knownUserAliases].length === 0) { return console.log('still loading users'); }
     if (message.senderUsername == 'folhinhabot') { return; }
 
-    // message.commandPrefix = client.channelPrefixes[message.channelName] || "!";
-    // if (message.channelName == 'gocrazybh') {message.commandPrefix = '!!';}
-
-    message.commandPrefix = '!!'; // for testing
+    message.commandPrefix = client.channelPrefixes[message.channelName] || "!";
+    
+    // message.commandPrefix = '!!'; // for testing
 
     if (message.senderUsername === message.channelName) {
         message.isMod = true;

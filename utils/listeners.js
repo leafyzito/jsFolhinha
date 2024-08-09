@@ -37,7 +37,7 @@ const reminderListener = async (client, message) => {
         for (const reminder of firstThreeReminders) {
             var remindSender = await client.getUserByUserID(reminder.senderId);
             var remindTimeSince = timeSince(reminder.remindTime);
-            replyMsg += ` @${remindSender} (${remindTimeSince}): ${reminder.remindMessage};`;
+            replyMsg += ` @${remindSender} (${remindTimeSince}): ${reminder.remindMessage}` + (reminder._id === firstThreeReminders[firstThreeReminders.length - 1]._id ? '' : ';');
         }
 
         if (replyMsg.length > 480) {

@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 const { MongoUtils } = require('./mongo.js');
 const { Logger } = require('./log.js');
-const { commandsList } = require('../commands/commandsList.js');
+const { loadCommands } = require('../commands/commandsList.js');
 
 async function modifyClient(client) {
     client.ready = false;
@@ -43,8 +43,11 @@ async function modifyClient(client) {
         return true;
     }
     
-    // load commands
-    client.commandsList = commandsList;
+    client.loadCommands = function () {
+        client.commandsList = loadCommands();
+    }
+
+    client.loadCommands();
 
     // load clients
     client.db = new MongoUtils();

@@ -21,8 +21,8 @@ async function createUserCookieBase(message) { // isto é só para o cd, acho eu
     return insert_doc;
 };
 
-async function loadUserCookieStats(message) {
-    const findFilter = { userId: message.senderUserID };
+async function loadUserCookieStats(client, targetId) {
+    const findFilter = { userId: targetId };
     const userCookieStats = await client.db.get('cookie', findFilter);
     if (userCookieStats.length === 0) {
         return null;
@@ -43,7 +43,7 @@ const cookieCommand = async (client, message) => {
     const targetCommand = message.messageText.split(' ')[1].toLowerCase();
 
     if (['abrir', 'open'].includes(targetCommand)) {
-        const userCookieStats = await loadUserCookieStats(message);
+        const userCookieStats = await loadUserCookieStats(client, message.senderUserID);
 
         if (!userCookieStats || userCookieStats.total <= 0) {
             client.log.logAndReply(message, `Você não tem cookies para abrir. Use ${message.commandPrefix}cd para resgatar o cookie diário`);
@@ -58,7 +58,7 @@ const cookieCommand = async (client, message) => {
     }
 
     if (['oferecer', 'gift', 'give', 'oferta', 'offer'].includes(targetCommand)) {
-        const userCookieStats = await loadUserCookieStats(message);
+        const userCookieStats = await loadUserCookieStats(client, message.senderUserID);
         if (userCookieStats.total <= 0) {
             client.log.logAndReply(message, `Você não tem cookies para oferecer. Use ${message.commandPrefix}cd para resgatar o seu cookie diário`);
             return;
@@ -69,7 +69,7 @@ const cookieCommand = async (client, message) => {
             return;
         }
 
-        const targetUser = message.messageText.split(' ')[2].replace(/^@/, '')
+        const targetUser = message.messageText.split(' ')[2]?.replace(/^@/, '');
         if (!targetUser) {
             client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}cookie gift <usuário>`);
             return;
@@ -86,7 +86,7 @@ const cookieCommand = async (client, message) => {
             return;
         }
 
-        const targetUserCookieStats = await loadUserCookieStats({ senderUserID: targetUserID });
+        const targetUserCookieStats = await loadUserCookieStats(client, targetUserID);
         if (!targetUserCookieStats) {
             client.log.logAndReply(message, `${targetUser} ainda não foi registrado (nunca usou ${message.commandPrefix}cd)`);
             return;
@@ -109,7 +109,7 @@ const cookieCommand = async (client, message) => {
             return;
         }
 
-        const userCookieStats = await loadUserCookieStats({ senderUserID: targetUserID });
+        const userCookieStats = await loadUserCookieStats(client, targetUserID);
         if (!userCookieStats) {
             client.log.logAndReply(message, `${targetUser} ainda não foi registrado (nunca usou ${message.commandPrefix}cd)`);
             return;
@@ -157,7 +157,7 @@ const cookieCommand = async (client, message) => {
     }
 
     if (['apostar', 'slot', 'slotmachine'].includes(targetCommand)) {
-        const userCookieStats = await loadUserCookieStats(message);
+        const userCookieStats = await loadUserCookieStats(client, message.senderUserID);
         if (!userCookieStats || userCookieStats.total <= 0) {
             client.log.logAndReply(message, `Você não tem cookies para apostar. Use ${message.commandPrefix}cd para resgatar o seu cookie diário`);
             return;
@@ -208,7 +208,7 @@ const cookieDiarioCommand = async (client, message) => {
     message.command = 'cookie';
     if (!await processCommand(5000, 'user', message, client)) return;
 
-    const userCookieStats = await loadUserCookieStats(message);
+    const userCookieStats = await loadUserCookieStats(client, message.senderUserID);
     if (!userCookieStats) {
         await createUserCookieBase(message);
         client.log.logAndReply(message, `Você resgatou seu cookie diário e agora tem 1 cookie! 🍪`);
@@ -216,15 +216,20 @@ const cookieDiarioCommand = async (client, message) => {
     }
 
     if (userCookieStats.claimedToday) {
-        // calcular tempo restante até as 9am
+        // Calculate the time remaining until the next 9 AM
         const now = new Date();
-        const tomorrow = new Date(now);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        tomorrow.setHours(9, 0, 0, 0);
-        const timeLeft = tomorrow - now;
+        let nextNineAM = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0);
+    
+        // If it's already past 9 AM today, calculate time until 9 AM tomorrow
+        if (now >= nextNineAM) {
+            nextNineAM.setDate(nextNineAM.getDate() + 1);
+        }
+    
+        const timeLeft = nextNineAM - now;
         const hours = Math.floor(timeLeft / (1000 * 60 * 60));
         const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-        client.log.logAndReply(message, `Você já resgatou seu cookie diário hoje. Volte em ${hours}h ${minutes}m para resgatar o seu cookie diário de novo ⌛ (possível de este timer estar errado, avisar o dev caso for o caso)`);
+    
+        client.log.logAndReply(message, `Você já resgatou seu cookie diário hoje. Volte em ${hours}h ${minutes}m para resgatar o seu cookie diário de novo ⌛`);
         return;
     }
 

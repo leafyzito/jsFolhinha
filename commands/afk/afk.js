@@ -12,13 +12,10 @@ const afkCommand = async (client, message) => {
     message.command = 'afk';
     if (!await processCommand(5000, 'user', message, client)) return;
 
-    const commandInvoker = message.messageText.split(' ')[0].split(`${message.commandPrefix}`)[1].trim();
-    console.log(commandInvoker);
-
+    const commandInvoker = message.messageText.split(' ')[0].split(`${message.commandPrefix}`)[1].trim().toLowerCase();
     const afkInfoObject = afkInfoObjects.find(afk => afk.alias.includes(commandInvoker));
-
     const afkStats = await client.db.get('afk', { channel: message.channelName, user: message.senderUsername });
-
+    
     if (afkStats.length === 0) {
         const insert_base_afk_doc = {
             channel: message.channelName,
@@ -86,7 +83,7 @@ const rafkCommand = async (client, message) => {
         return;
     }
 
-    const afkInfoObject = afkInfoObjects.find(afk => afk.alias.includes(afkStats.afk_type[0]));
+    const afkInfoObject = afkInfoObjects.find(afk => afk.alias.includes(afkStats.afk_type));
     const afkAction = afkInfoObject.rafk;
     const afkEmoji = afkInfoObject.emoji;
 

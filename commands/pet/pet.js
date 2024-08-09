@@ -79,7 +79,7 @@ const petCommand = async (client, message) => {
         }
 
         if (!petEmojis.includes(petEmoji)) {
-            client.log.logAndReply(message, `Esse emoji não é válido. Para uma lista de emomjis válidos, acesse https://folhinhabot.github.io/emojis.txt`);
+            client.log.logAndReply(message, `Esse emoji não é válido. Para uma lista de emojis válidos, acesse https://folhinhabot.github.io/emojis.txt`);
             return;
         }
 
@@ -201,7 +201,7 @@ const brincarCommand = async (client, message) => {
         `a minha vontade de viver`,
         `uma chave secreta`,
         `um mapa do tesouro`,
-        `um mapa misterioro`,
+        `um mapa misterioso`,
         `R$ ${randomInt(100, 1000000)} enterrados`,
     ];
     

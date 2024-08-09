@@ -11,6 +11,9 @@ class Logger {
                 } else if (err.message.includes('too quickly')) {
                     console.log('sending messages too quickly error, retrying');
                     setTimeout(() => { this.send(message.channelName, response); }, 1500);
+                } else if (err.message.includes('waiting for response')) {
+                    console.log('waiting for response error, retrying');
+                    setTimeout(() => { this.send(channel, content); }, 1500);
                 } else {
                     console.log('logAndReply error: ', err);
                 }
@@ -31,8 +34,9 @@ class Logger {
             response: response
         };
 
-        console.log(insertDoc);
-        console.log('command log is off');
+        // console.log(insertDoc);
+        // console.log('command log is off');
+        if (!message.command.includes('dev')) { await this.client.db.insert('commandlog', insertDoc); }
         console.log(`#${message.channelName}/${message.senderUsername} - ${message.command}`);
     }
 
@@ -44,6 +48,9 @@ class Logger {
                 } else if (err.message.includes('too quickly')) {
                     console.log('sending messages too quickly error, retrying');
                     setTimeout(() => { this.logAndSay(message, response); }, 1500);
+                } else if (err.message.includes('waiting for response')) {
+                    console.log('waiting for response error, retrying');
+                    setTimeout(() => { this.send(channel, content); }, 1500);
                 } else {
                     console.log('logAndSay error: ', err);
                 }
@@ -64,8 +71,9 @@ class Logger {
             response: response
         };
 
-        console.log(insertDoc);
-        console.log('command log is off');
+        // console.log(insertDoc);
+        // console.log('command log is off');
+        if (!message.command.includes('dev')) { await this.client.db.insert('commandlog', insertDoc); }
         console.log(`#${message.channelName}/${message.senderUsername} - ${message.command}`);
     }
 
@@ -77,6 +85,9 @@ class Logger {
                 } else if (err.message.includes('too quickly')) {
                     console.log('sending messages too quickly error, retrying');
                     setTimeout(() => { this.logAndMeAction(message, response); }, 1500);
+                } else if (err.message.includes('waiting for response')) {
+                    console.log('waiting for response error, retrying');
+                    setTimeout(() => { this.send(channel, content); }, 1500);
                 } else {
                     console.log('logAndMeAction error: ', err);
                 }
@@ -97,8 +108,9 @@ class Logger {
             response: `/me ${response}`
         };
 
-        console.log(insertDoc);
-        console.log('command log is off');
+        // console.log(insertDoc);
+        // console.log('command log is off');
+        if (!message.command.includes('dev')) { await this.client.db.insert('commandlog', insertDoc); }
         console.log(`#${message.channelName}/${message.senderUsername} - ${message.command}`);
     }
 
@@ -110,6 +122,9 @@ class Logger {
                 }
                 else if (err.message.includes('too quickly')) {
                     console.log('sending messages too quickly error, retrying');
+                    setTimeout(() => { this.send(channel, content); }, 1500);
+                } else if (err.message.includes('waiting for response')) {
+                    console.log('waiting for response error, retrying');
                     setTimeout(() => { this.send(channel, content); }, 1500);
                 } else {
                     console.log('send error: ', err);

@@ -155,7 +155,7 @@ const remindCommand = async (client, message) => {
 
     const newRemindId = await newRemind(client, message, targetId, remindMessage);
 
-    client.log.logAndReply(message, `@${targetUser} vai ser lembrado disso assim que falar no chat (ID: ${newRemindId})`);
+    client.log.logAndReply(message, `@${targetUser} vai ser lembrado disso assim que falar no chat (ID ${newRemindId})`);
     await client.reloadReminders();
     client.notifiedUsers = client.notifiedUsers.filter(id => id !== targetId); // Remove user from notifiedUsers
     return;

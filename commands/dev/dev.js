@@ -1,7 +1,7 @@
 const { exec } = require('child_process');
 
 const botSayCommand = async (client, message) => {
-    message.command = 'botsay';
+    message.command = 'dev botsay';
 
     const authorId = message.senderUserID;
     if (authorId !== process.env.DEV_USERID) { return; }
@@ -12,7 +12,9 @@ const botSayCommand = async (client, message) => {
 
     if (targetChannel == 'all') {
         for (const channel of client.joinedChannels) {
-            client.log.send(channel, msgContent);
+            setTimeout(() => {
+                client.log.send(channel, msgContent);
+            }, 1500);
         }
         client.log.logAndReply(message, `foi`);
         return;
@@ -24,7 +26,7 @@ const botSayCommand = async (client, message) => {
 };
 
 const forceJoinCommand = async (client, message) => {
-    message.command = 'forcejoin';
+    message.command = 'dev forcejoin';
 
     const authorId = message.senderUserID;
     if (authorId !== process.env.DEV_USERID) { return; }
@@ -47,7 +49,7 @@ const forceJoinCommand = async (client, message) => {
 };
 
 const forcePartCommand = async (client, message) => {
-    message.command = 'forcepart';
+    message.command = 'dev forcepart';
 
     const authorId = message.senderUserID;
     if (authorId !== process.env.DEV_USERID) { return; }
@@ -69,7 +71,7 @@ const forcePartCommand = async (client, message) => {
 }
 
 const execCommand = async (client, message) => {
-    message.command = 'exec';
+    message.command = 'dev exec';
 
     const authorId = message.senderUserID;
     if (authorId !== process.env.DEV_USERID) { return; }
@@ -89,14 +91,14 @@ const execCommand = async (client, message) => {
         console.log(res);
         client.log.logAndReply(message, `🤖 ${res}`)
         return;
-        
+
     } catch (err) {
         client.log.send(message.channelName, message.messageID, `🤖 Erro ao executar comando: ${err}`);
     }
 };
 
 const getUserIdCommand = async (client, message) => {
-    message.command = 'getuserid';
+    message.command = 'dev getuserid';
 
     const authorId = message.senderUserID;
     if (authorId !== process.env.DEV_USERID) { return; }
@@ -117,18 +119,18 @@ const getUserIdCommand = async (client, message) => {
 }
 
 const restartCommand = async (client, message) => {
-    message.command = 'restart';
+    message.command = 'dev restart';
 
     const authorId = message.senderUserID;
     if (authorId !== process.env.DEV_USERID) { return; }
 
     client.log.logAndReply(message, `Reiniciando...`);
 
-    exec('node restart.js');
+    exec('pm2 restart folhinhajs');
 }
 
 const resetPet = async (client, message) => {
-    message.command = 'resetpet';
+    message.command = 'dev resetpet';
 
     const authorId = message.senderUserID;
     if (authorId !== process.env.DEV_USERID) { return; }
@@ -139,6 +141,44 @@ const resetPet = async (client, message) => {
     client.log.logAndReply(message, `feito 👍`);
 }
 
+const resetCdCommand = async (client, message) => {
+    message.command = 'dev resetcd';
+
+    const authorId = message.senderUserID;
+    if (authorId !== process.env.DEV_USERID) { return; }
+
+    await client.db.updateMany('cookie', {}, {
+        $set: {
+            claimedToday: false,
+            giftedToday: false,
+            usedSlot: false
+        }
+    });
+
+    client.log.logAndReply(message, `cookies resetados 👍`);
+}
+
+const reloadCommand = async (client, message) => {
+    message.command = 'dev reload';
+
+    const authorId = message.senderUserID;
+    if (authorId !== process.env.DEV_USERID) { return; }
+
+    // Clear require cache for all command files
+    Object.keys(require.cache).forEach((key) => {
+        // console.log(`hmm: ${key}`);
+        if (key.includes('\\commands\\') || key.includes('/commands/')) {
+            console.log(`deleting ${key}`);
+            delete require.cache[key];
+        }
+    });
+
+    // Reload the commands
+    client.loadCommands();
+
+    client.log.logAndReply(message, `comandos recarregados, supostamente 👍`);
+}
+
 botSayCommand.aliases = ['botsay', 'bsay'];
 forceJoinCommand.aliases = ['forcejoin', 'fjoin'];
 forcePartCommand.aliases = ['forcepart', 'fpart'];
@@ -146,6 +186,8 @@ execCommand.aliases = ['exec', 'eval'];
 getUserIdCommand.aliases = ['getuserid', 'uid'];
 restartCommand.aliases = ['restart'];
 resetPet.aliases = ['resetpet', 'resetpat'];
+resetCdCommand.aliases = ['resetcd'];
+reloadCommand.aliases = ['reload'];
 
 module.exports = {
     botSayCommand,
@@ -154,5 +196,7 @@ module.exports = {
     execCommand,
     getUserIdCommand,
     restartCommand,
-    resetPet
+    resetPet,
+    resetCdCommand,
+    reloadCommand
 };
