@@ -48,7 +48,7 @@ const talkieCommand = async (client, message) => {
     } while (true);
 
     console.log(`talkie ${message.channelName} > ${targetChannel}`);
-    client.log.send(targetChannel, msgContent);
+    client.log.send(targetChannel, `🤖 ${msgContent}`);
     client.log.logAndReply(message, `Mensagem enviada 🤭`);
 };
 
