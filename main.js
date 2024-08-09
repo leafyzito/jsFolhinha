@@ -10,11 +10,11 @@ const cron = require('node-cron');
 // Load the channels to join from the channels.txt
 const channelsFile = fs.readFileSync('channels.txt', 'utf-8');
 const channelsLines = channelsFile.split('\n');
-const channelsToJoin = [];
+const channelIds = [];
 channelsLines.forEach((line) => {
-    const channelName = line.split(' ')[1];
-    if (channelName) {
-        channelsToJoin.push(channelName.replace('\r', ''));
+    const cId = line.split(' ')[0];
+    if (cId) {
+        channelIds.push(cId.replace('\r', ''));
     }
 });
 
@@ -44,7 +44,12 @@ client.on("PRIVMSG", (msg) => { onMessageHandler(msg); });
 // client.on('error', (error) => { console.log('Error:', error); });
 
 // Join the channels
-client.joinAll(channelsToJoin);
+const channelsToJoin = client.getManyUsersByUserIDs(channelIds);
+channelsToJoin.then((channels) => {
+    client.joinAll(channels);
+}).catch((error) => {
+    console.log('Error on getting channelsToJoin:', error);
+});
 
 // Schedule tasks
 cron.schedule('0 9 * * *', async () => { await dailyCookieResetTask(client); });
@@ -57,9 +62,7 @@ function onJoinHandler(channel) {
 }
 
 async function onReadyHandler() {
-    console.log(`* Connected and ready!`);
-    console.log(`* Joining ${channelsToJoin.length} channels`);
-    console.log(`* Channels: ${channelsToJoin.join(', ')}`);
+    console.log(`* Connected and ready! Joining channels...`);
 }
 
 function onMessageHandler(message) {
