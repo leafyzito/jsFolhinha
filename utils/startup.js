@@ -31,6 +31,27 @@ async function modifyClient(client) {
         return data.data[0].login;
     }
 
+    client.getManyUsersByUserIDs = async function (userIds) {
+        var userIdsToUrl = userIds.join('&id=');
+
+        const api_url = `https://api.twitch.tv/helix/users?id=${userIdsToUrl}`;
+        // Set headers with API credentials
+        const headers = { "Client-ID": process.env.BOT_CLIENT_ID, "Authorization": `Bearer ${process.env.BOT_OAUTH_TOKEN}` };
+        // Make API request to fetch clips
+        const response = await fetch(api_url, { headers });
+        const data = await response.json();
+        // console.log(data);
+
+        if (data.data.length === 0) { return null; }
+
+        var listOfUsers = [];
+        data.data.forEach((user) => {
+            listOfUsers.push(user.login);
+        });
+        return listOfUsers;
+    } 
+
+
     client.timeoutUser = async function (message, duration, reason) {
         const api_url = `https://api.twitch.tv/helix/moderation/bans?broadcaster_id=${message.channelID}&moderator_id=${process.env.BOT_USERID}`;
         const headers = { "Client-ID": process.env.BOT_CLIENT_ID, "Authorization": `Bearer ${process.env.BOT_OAUTH_TOKEN}`, "Content-Type": "application/json" };
