@@ -202,10 +202,10 @@ async function isStreamOnline(canal, cache_timeout = 60) {
     };
 
     if (streamer_status_cache[canal]['status'] === "live") {
-        console.log('returning true, live on');
+        // console.log('returning true, live on');
         return true;
     }
-    console.log('returning false, live off');
+    // console.log('returning false, live off');
     return false;
 }
 
