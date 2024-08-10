@@ -34,7 +34,7 @@ const afkCommand = async (client, message) => {
 
     var afkMessage = message.messageText.split(' ').slice(1).join(' ');
     if (afkMessage.length > 400) {
-        afkMessage = afkMessage.slice(0, 400);
+        afkMessage = afkMessage.slice(0, 400) + '...';
     }
 
     const afkType = afkInfoObject.alias[0];
