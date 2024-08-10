@@ -32,7 +32,7 @@ const afkCommand = async (client, message) => {
         await client.db.insert('afk', insert_base_afk_doc);
     }
 
-    const afkMessage = message.messageText.split(' ').slice(1).join(' ');
+    var afkMessage = message.messageText.split(' ').slice(1).join(' ');
     if (afkMessage.length > 400) {
         afkMessage = afkMessage.slice(0, 400);
     }
