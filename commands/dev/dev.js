@@ -209,6 +209,21 @@ const gitPullCommand = async (client, message) => {
     });
 };
 
+const reloadEmotesCommand = async (client, message) => {
+    message.command = 'dev reloademotes';
+
+    const authorId = message.senderUserID;
+    if (authorId !== process.env.DEV_USERID) { return; }
+
+    const targetChannel = message.messageText.split(' ')[1]?.toLowerCase() || message.channelName;
+
+    client.emotes.cachedEmotes[targetChannel] = null;
+    await client.emotes.getChannelEmotes(targetChannel);
+
+    client.log.logAndReply(message, `Emotes recarregados 👍`);
+}
+
+
 botSayCommand.aliases = ['botsay', 'bsay'];
 forceJoinCommand.aliases = ['forcejoin', 'fjoin'];
 forcePartCommand.aliases = ['forcepart', 'fpart'];
@@ -219,6 +234,7 @@ resetPet.aliases = ['resetpet', 'resetpat'];
 resetCdCommand.aliases = ['resetcd'];
 reloadCommand.aliases = ['reload'];
 gitPullCommand.aliases = ['gitpull', 'gpull'];
+reloadEmotesCommand.aliases = ['reloademotes'];
 
 module.exports = {
     botSayCommand,
@@ -230,5 +246,6 @@ module.exports = {
     resetPet,
     resetCdCommand,
     reloadCommand,
-    gitPullCommand
+    gitPullCommand,
+    reloadEmotesCommand
 };

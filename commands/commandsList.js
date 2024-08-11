@@ -73,6 +73,7 @@ const loadCommands = () => {
         restartCommand,
         reloadCommand,
         gitPullCommand,
+        reloadEmotesCommand,
     } = require('./dev/dev.js');
 
     // Add aliases for each command
@@ -150,6 +151,7 @@ const loadCommands = () => {
     addAliases(restartCommand);
     addAliases(reloadCommand);
     addAliases(gitPullCommand);
+    addAliases(reloadEmotesCommand);
 
     return commandsList;
 };
