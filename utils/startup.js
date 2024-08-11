@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 const { MongoUtils } = require('./mongo.js');
 const { Logger } = require('./log.js');
+const { Emotes } = require('./emotes.js');
 const { loadCommands } = require('../commands/commandsList.js');
 
 async function modifyClient(client) {
@@ -67,9 +68,12 @@ async function modifyClient(client) {
     client.loadCommands = function () {
         client.commandsList = loadCommands();
     }
-
+    
     client.loadCommands();
 
+    // load emotes
+    client.emotes = new Emotes(client);
+    
     // load clients
     client.db = new MongoUtils();
     client.log = new Logger(client);
