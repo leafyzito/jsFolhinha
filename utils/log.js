@@ -13,7 +13,7 @@ class Logger {
                     setTimeout(() => { this.send(message.channelName, response); }, 1500);
                 } else if (err.message.includes('waiting for response')) {
                     console.log('waiting for response error, retrying');
-                    setTimeout(() => { this.send(channel, content); }, 1500);
+                    setTimeout(() => { this.send(message.channelName, content); }, 1500);
                 } else {
                     console.log('logAndReply error: ', err);
                 }
@@ -50,7 +50,7 @@ class Logger {
                     setTimeout(() => { this.logAndSay(message, response); }, 1500);
                 } else if (err.message.includes('waiting for response')) {
                     console.log('waiting for response error, retrying');
-                    setTimeout(() => { this.send(channel, content); }, 1500);
+                    setTimeout(() => { this.send(message.channelName, content); }, 1500);
                 } else {
                     console.log('logAndSay error: ', err);
                 }
@@ -87,7 +87,7 @@ class Logger {
                     setTimeout(() => { this.logAndMeAction(message, response); }, 1500);
                 } else if (err.message.includes('waiting for response')) {
                     console.log('waiting for response error, retrying');
-                    setTimeout(() => { this.send(channel, content); }, 1500);
+                    setTimeout(() => { this.send(message.channelName, content); }, 1500);
                 } else {
                     console.log('logAndMeAction error: ', err);
                 }
