@@ -1,5 +1,33 @@
-const { timeSince } = require('../utils/utils.js');
+const { timeSince, randomChoice } = require('../utils/utils.js');
 const { afkInfoObjects } = require('../commands/afk/afk_info_model.js');
+
+var lastReplyTime = {};
+const replyMentionListener = async (client, message) => {
+    const currentTime = Date.now();
+    const timeDifference = currentTime - lastReplyTime[message.channelName];
+    if (timeDifference < 15000) { return; }
+
+    const msgContent = message.messageText.split(' ');
+    if (msgContent.length === 2 && ['folhinha', 'folhinhabot'].some(word => msgContent.some(msg => msg.toLowerCase() === word.toLowerCase()))) {
+        var otherWord = msgContent.find(msg => msg.toLowerCase() !== 'folhinha' && msg.toLowerCase() !== 'folhinhabot');
+
+        if (['oi', 'ola', 'olá', 'opa'].some(word => word === otherWord.toLowerCase())) {
+            const emote = await client.emotes.getEmoteFromList(message.channelName, ['peepohey', 'peeposhy', 'eba', 'ola'], 'KonCha');
+            client.log.send(message.channelName, `Oioi ${message.senderUsername} ${emote}`);
+            lastReplyTime[message.channelName] = currentTime;
+            return;
+        }
+
+        const channelEmotes = await client.emotes.getChannelEmotes(message.channelName);
+        if (!channelEmotes.some(emote => emote === otherWord)) {
+            otherWord = randomChoice(channelEmotes);
+        }
+
+        client.log.send(message.channelName, `${message.senderUsername} ${otherWord}`);
+        lastReplyTime[message.channelName] = currentTime;
+        return;
+    }
+}
 
 const afkUserListener = async (client, message) => {
     if (!client.afkUsers[message.channelName]) { return; }
@@ -128,6 +156,7 @@ const updateUserListener = async (client, message) => {
 
 
 module.exports = { 
+    replyMentionListener,
     afkUserListener,
     reminderListener,
     updateUserListener,
