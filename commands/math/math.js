@@ -22,7 +22,8 @@ const mathCommand = async (client, message) => {
     const mathExpression = message.messageText.split(' ').slice(1).join(' ');
     const mathResult = await getMath(mathExpression);
 
-    client.log.logAndReply(message, `🤓 ${mathResult}`);
+    const emote = await client.emotes.getEmoteFromList(message.channelName, ['nerd', 'nerdge', 'catnerd','dognerd', 'giganerd'], '🤓');
+    client.log.logAndReply(message, `${emote} ${mathResult}`);
 };
 
 mathCommand.aliases = ['math', 'maths', 'matematica', 'matemática'];

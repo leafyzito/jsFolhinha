@@ -41,7 +41,8 @@ const countlineCommand = async (client, message) => {
             reply += `. Você está em ${clCurrChat.findIndex(user => user.userid === message.senderUserID) + 1}º com ${clCurrChat.find(user => user.userid === message.senderUserID).msgCount[message.channelName]} mensagens`;
         }
 
-        client.log.logAndReply(message, `${reply}`);
+        const emote = await client.emotes.getEmoteFromList(message.channelName, ['falamuito', 'talkk', 'peepotalk']);
+        client.log.logAndReply(message, `${reply} ${emote}`);
         return;
     }
 

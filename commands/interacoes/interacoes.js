@@ -1,6 +1,5 @@
 const { processCommand } = require("../../utils/processCommand.js");
 const { randomInt, randomChoice } = require("../../utils/utils.js");
-// TODO: getEmoteFromList
 
 const abracoCommand = async (client, message) => {
     message.command = 'abraco';
@@ -19,17 +18,19 @@ const abracoCommand = async (client, message) => {
     }
     
     if (['folhinha', 'folhinhabot'].includes(hugTarget.toLowerCase())) {
-        client.log.logAndReply(message, `peepoHappy 🌹`);
+        const emote = await client.emotes.getEmoteFromList(message.channelName, ['cathug', 'dankhug', 'hugs'], 'peepoHappy 🌹');
+        client.log.logAndReply(message, emote);
         return;
     }
 
+    const emote = await client.emotes.getEmoteFromList(message.channelName, ['cathug', 'dankhug', 'hugs'], '🤗');
     const hugs = [
-        `${message.senderUsername} abraçou ${hugTarget} bem forte 🤗`,
-        `${message.senderUsername} deu um abraço bem apertado em ${hugTarget} 🤗`,
-        `${message.senderUsername} abraçou e quase explodiu ${hugTarget} 🤗`,
-        `${message.senderUsername} abraçou ${hugTarget} bem forte 🤗`,
-        `${message.senderUsername} abraçou e esmagou ${hugTarget} 🤗`,
-        `${message.senderUsername} abraçou ${hugTarget} tão forte que foi parar ao espaço 🤗`,
+        `${message.senderUsername} abraçou ${hugTarget} bem forte ${emote}`,
+        `${message.senderUsername} deu um abraço bem apertado em ${hugTarget} ${emote}`,
+        `${message.senderUsername} abraçou e quase explodiu ${hugTarget} ${emote}`,
+        `${message.senderUsername} abraçou ${hugTarget} bem forte ${emote}`,
+        `${message.senderUsername} abraçou e esmagou ${hugTarget} ${emote}`,
+        `${message.senderUsername} abraçou ${hugTarget} tão forte que foi parar ao espaço ${emote}`,
     ];
 
     client.log.logAndReply(message, randomChoice(hugs));
@@ -56,9 +57,10 @@ const beijoCommand = async (client, message) => {
         return;
     }
 
+    const emote = await client.emotes.getEmoteFromList(message.channelName, ['kiss', 'kissahomie', 'catkiss', 'beijao'], '😘');
     const kisses = [
-        `${message.senderUsername} deu um beijo em ${kissTarget} 😘`,
-        `${message.senderUsername} deu um beijo bem molhado em ${kissTarget} 😘`,
+        `${message.senderUsername} deu um beijo em ${kissTarget} ${emote}`,
+        `${message.senderUsername} deu um beijo bem molhado em ${kissTarget} ${emote}`,
     ];
 
     client.log.logAndReply(message, randomChoice(kisses));
@@ -76,7 +78,8 @@ const bonkCommand = async (client, message) => {
     const bonkTarget = message.messageText.split(' ')[1].replace(/^@/, '');
 
     if (bonkTarget.toLowerCase() === message.senderUsername) {
-        client.log.logAndReply(message, `Você estava bobinho e resolveu se bonkar na cabeça`);
+        const emote = await client.emotes.getEmoteFromList(message.channelName, ['leledacuca', 'biruta']);
+        client.log.logAndReply(message, `Você estava se sentindo bobinho e resolveu se bonkar na cabeça ${emote}`);
         return;
     }
     
@@ -85,29 +88,32 @@ const bonkCommand = async (client, message) => {
         return;
     }
 
-    const bonk_strengh = randomInt(0, 100);
+    const bonkStrengh = randomInt(0, 100);
 
-    if (bonk_strengh === 0) {
-        client.log.logAndReply(message, `${message.senderUsername} tentou bonkar ${bonkTarget} mas acabou se auto-nocauteando (impacto de ${bonk_strengh}%) 🤕`);
+    if (bonkStrengh === 0) {
+        const emote = await client.emotes.getEmoteFromList(message.channelName, ['pfff', 'pffff', 'porvalo', 'mock', 'pointandlaugh'], '🤭');
+        client.log.logAndReply(message, `${message.senderUsername} tentou bonkar ${bonkTarget} mas acabou se auto-nocauteando (impacto de ${bonkStrengh}%) ${emote}`);
         return;
     }
 
-    else if (bonk_strengh <= 25) {
-        client.log.logAndReply(message, `${message.senderUsername} deu um bonk com impacto de ${bonk_strengh}% em ${bonkTarget}, bem fraco 🤭`);
+    else if (bonkStrengh <= 25) {
+        client.log.logAndReply(message, `${message.senderUsername} deu um bonk com impacto de ${bonkStrengh}% em ${bonkTarget}, bem fraco 🤭`);
         return;
     }
 
-    else if (bonk_strengh >= 80) {
-        client.log.logAndReply(message, `${message.senderUsername} deu um bonk com impacto de ${bonk_strengh}% e nocauteou ${bonkTarget} 💫`);
+    else if (bonkStrengh >= 80) {
+        client.log.logAndReply(message, `${message.senderUsername} deu um bonk com impacto de ${bonkStrengh}% e nocauteou ${bonkTarget} 💫`);
         return;
     }
 
-    else if (bonk_strengh === 100) {
-        client.log.logAndReply(message, `${message.senderUsername} deu um bonk com impacto de ${bonk_strengh}% em ${bonkTarget}, sendo apagado da existência 💨`);
+    else if (bonkStrengh === 100) {
+        const emote = await client.emotes.getEmoteFromList(message.channelName, ['peepopoof', 'pppoof', 'pepepoof'], '💨');
+        client.log.logAndReply(message, `${message.senderUsername} deu um bonk com impacto de ${bonkStrengh}% em ${bonkTarget}, sendo apagado da existência ${emote}`);
         return;
     }
 
-    client.log.logAndReply(message, `${message.senderUsername} deu um bonk com impacto de ${bonk_strengh}% em ${bonkTarget} BOP`);
+    const emote = await client.emotes.getEmoteFromList(message.channelName, ['bonking', 'yaebonk', 'bonked', 'bonkcat', 'donkbonk'], 'BOP')
+    client.log.logAndReply(message, `${message.senderUsername} deu um bonk com impacto de ${bonkStrengh}% em ${bonkTarget} ${emote}`);
 };
 
 const tuckCommand = async (client, message) => {
@@ -127,16 +133,18 @@ const tuckCommand = async (client, message) => {
     }
     
     if (['folhinha', 'folhinhabot'].includes(tuckTarget.toLowerCase())) {
-        client.log.logAndReply(message, `Valeu por me colocar pra dormir, mas preciso me manter acordado 😮‍💨`);
+        const emote = await client.emotes.getEmoteFromList(message.channelName, ['wokege'], '😮‍💨');
+        client.log.logAndReply(message, `Valeu por me colocar pra dormir, mas preciso me manter acordado ${emote}`);
         return;
     }
 
+    const emote = await client.emotes.getEmoteFromList(message.channelName, ['tuckk', 'tuckahomie', 'tuck', 'banoit'], '💤');
     const tucks = [
-        `${message.senderUsername} colocou ${tuckTarget} pra dormir peepoHappy 👉 🛏`,
-        `${message.senderUsername} colocou ${tuckTarget} pra dormir com um cobertor bem quentinho 😴`,
-        `${message.senderUsername} colocou ${tuckTarget} pra dormir e deu um beijinho na testa 💤`,
-        `${message.senderUsername} colocou ${tuckTarget} pra dormir e cantou uma canção de ninar 🎶`,
-        `${message.senderUsername} colocou ${tuckTarget} pra dormir e contou uma história de ninar 📖`,
+        `${message.senderUsername} colocou ${tuckTarget} pra dormir ${emote}`,
+        `${message.senderUsername} colocou ${tuckTarget} pra dormir com um cobertor bem quentinho ${emote}`,
+        `${message.senderUsername} colocou ${tuckTarget} pra dormir e deu um beijinho na testa ${emote}`,
+        `${message.senderUsername} colocou ${tuckTarget} pra dormir e cantou uma canção de ninar ${emote}`,
+        `${message.senderUsername} colocou ${tuckTarget} pra dormir e contou uma história de ninar ${emote}`,
     ];
 
     client.log.logAndReply(message, randomChoice(tucks));
@@ -154,7 +162,8 @@ const slapCommand = async (client, message) => {
     const slapTarget = message.messageText.split(' ')[1].replace(/^@/, '');
 
     if (slapTarget.toLowerCase() === message.senderUsername) {
-        client.log.logAndReply(message, `Você deu um tapa em si mesmo 🤨`);
+        const emote = await client.emotes.getEmoteFromList(message.channelName, ['leledacuca', 'biruta', 'eeeh', 'peepopiolho'], '🤨');
+        client.log.logAndReply(message, `Você deu um tapa em si mesmo ${emote}`);
         return;
     }
     
@@ -163,10 +172,11 @@ const slapCommand = async (client, message) => {
         return;
     }
 
+    const emote = await client.emotes.getEmoteFromList(message.channelName, ['catslap', 'elisslap'], '💢😡');
     const slaps = [
-        `${message.senderUsername} deu um tapa em ${slapTarget} 💢 😡`,
-        `${message.senderUsername} deu um tapa bem forte em ${slapTarget} 💢 😡`,
-        `${message.senderUsername} deu um tapa com as costas em ${slapTarget} 💢 😡`,
+        `${message.senderUsername} deu um tapa em ${slapTarget} ${emote}`,
+        `${message.senderUsername} deu um tapa bem forte em ${slapTarget} ${emote}`,
+        `${message.senderUsername} deu um tapa com as costas em ${slapTarget} ${emote}`,
     ];
 
     client.log.logAndReply(message, randomChoice(slaps));
@@ -184,7 +194,8 @@ const explodeCommand = async (client, message) => {
     const explodeTarget = message.messageText.split(' ')[1].replace(/^@/, '');
 
     if (explodeTarget.toLowerCase() === message.senderUsername) {
-        client.log.logAndReply(message, `Você explodiu a si mesmo 💥🤨`);
+        const emote = await client.emotes.getEmoteFromList(message.channelName, ['leledacuca', 'biruta', 'eeeh', 'peepopiolho'], '💥🤨');
+        client.log.logAndReply(message, `Você explodiu a si mesmo ${emote}`);
         return;
     }
     

@@ -49,7 +49,9 @@ const talkieCommand = async (client, message) => {
 
     console.log(`talkie ${message.channelName} > ${targetChannel}`);
     client.log.send(targetChannel, `🤖 ${msgContent}`);
-    client.log.logAndReply(message, `Mensagem enviada 🤭`);
+
+    const emote = await client.emotes.getEmoteFromList(message.channelName, ['peepogiggle', 'peepogiggles'], '🤭');
+    client.log.logAndReply(message, `Mensagem enviada ${emote}`);
 };
 
 talkieCommand.aliases = ['talkie'];
