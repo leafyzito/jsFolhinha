@@ -97,7 +97,8 @@ const cookieCommand = async (client, message) => {
         userCookieStats.gifted += 1;
         await client.db.update('cookie', { userId: message.senderUserID }, { $set: { total: userCookieStats.total, gifted: userCookieStats.gifted } });
         await client.db.update('cookie', { userId: targetUserID }, { $set: { beenGifted: targetUserCookieStats.beenGifted, total: targetUserCookieStats.total + 1 } });
-        client.log.logAndReply(message, `Você ofereceu um cookie para ${targetUser} 🍪`);
+        const emote = await client.emotes.getEmoteFromList(message.channelName, ['peepoCookie'], '🎁🍪')
+        client.log.logAndReply(message, `Você ofereceu um cookie para ${targetUser} ${emote}`);
         return;
     }
 
@@ -172,7 +173,8 @@ const cookieCommand = async (client, message) => {
         let reply = `[${slotResults[0]}${slotResults[1]}${slotResults[2]}] `;
 
         if (slotResults[0] === slotResults[1] && slotResults[0] === slotResults[2]) {
-            reply += `você apostou 1 cookie e ganhou 10 cookies! PogChamp`;
+            const emote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.pogEmotes, 'PogChamp');
+            reply += `você apostou 1 cookie e ganhou 10 cookies! ${emote}`;
             userCookieStats.total += 9;
             userCookieStats.sloted += 1;
             userCookieStats.usedSlot = true;
@@ -185,7 +187,8 @@ const cookieCommand = async (client, message) => {
             userCookieStats.usedSlot = true;
             await client.db.update('cookie', { userId: message.senderUserID }, { $set: { total: userCookieStats.total, sloted: userCookieStats.sloted, usedSlot: userCookieStats.usedSlot } });
         } else {
-            reply += `você apostou 1 cookie e ficou sem ele...`;
+            const emote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.sadEmotes, ':(');
+            reply += `você apostou 1 cookie e ficou sem ele... ${emote}`;
             userCookieStats.total -= 1;
             userCookieStats.sloted += 1;
             userCookieStats.usedSlot = true;

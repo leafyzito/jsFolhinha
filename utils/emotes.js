@@ -5,6 +5,9 @@ class Emotes {
     constructor(client) {
         this.client = client;
         this.cachedEmotes = {};
+        this.sadEmotes = ['sadge', 'sadgecry', 'sadcat', 'sadchamp'];
+        this.happyEmotes = ['peepoglad', 'gladge', 'peepohappy', 'peepohappyu', 'happycat'];
+        this.pogEmotes = ['pog', 'pogu', 'pagbounce', 'pogg', 'pogs', 'noway', 'nowaying', 'nowaycat', 'eba'];
     }
 
     async getTtv(channelId) {

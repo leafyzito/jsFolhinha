@@ -7,9 +7,9 @@ const coinflipCommand = async (client, message) => {
 
     const standingCoin = randomInt(0, 1000); // 0.1% chance of standing coin
 
-    // #TODO: getEmoteFromList
     if (standingCoin === 0) {
-        client.log.logAndReply(message, `A moeda ficou em pé (0.1% de chance de acontecer) PogChamp`);
+        const emote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.pogEmotes, 'PogChamp')
+        client.log.logAndReply(message, `A moeda ficou em pé (0.1% de chance de acontecer) ${emote}`);
         return;
     }
 

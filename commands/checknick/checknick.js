@@ -39,11 +39,13 @@ const checkNickCommand = async (client, message) => {
     }
 
     if (!checkNickRes) {
-        client.log.logAndReply(message, `O nick ${nick} não está disponível 👎`);
+        const emote = await client.emotes.getEmoteFromList(message.channelName, ['paia'], '👎');
+        client.log.logAndReply(message, `O nick ${nick} não está disponível ${emote}`);
         return;
     }
 
-    client.log.logAndReply(message, `O nick ${nick} está disponível 👍`);
+    const emote = await client.emotes.getEmoteFromList(message.channelName, ['joia', 'jumilhao'], '👍');
+    client.log.logAndReply(message, `O nick ${nick} está disponível ${emote}`);
 };
 
 checkNickCommand.aliases = ['checknick', 'nickcheck', 'namecheck', 'checkname'];

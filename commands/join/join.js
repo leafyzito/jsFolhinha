@@ -41,7 +41,7 @@ const joinCommand = async (client, message) => {
     const alreadyJoinedChannels = [...client.joinedChannels];
 
     if (alreadyJoinedChannels.includes(channelToJoin)) {
-        client.log.logAndReply(message, `Já estou no chat ${channelToJoin}`);
+        client.log.logAndReply(message, `Eu já estou no chat ${channelToJoin}`);
         return;
     }
 
@@ -51,9 +51,11 @@ const joinCommand = async (client, message) => {
         return;
     });
 
-    client.log.send(channelToJoin, `KonCha Oioi! Fui convidado para me juntar aqui! Para saber mais sobre mim, pode usar !ajuda ou !comandos`);
+    const emote = await client.emotes.getEmoteFromList(channelToJoin, ['peepohey', 'heyge'], 'KonCha');
+    client.log.send(channelToJoin, `${emote} Oioi! Fui convidado para me juntar aqui! Para saber mais sobre mim, pode usar !ajuda ou !comandos`);
 
-    client.log.logAndReply(message, `Entrei no chat ${message.senderUsername} com sucesso! Tô lá te esperando!`);
+    const happyEmote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.happyEmotes);
+    client.log.logAndReply(message, `Entrei no chat ${message.senderUsername} com sucesso! Tô lá te esperando! ${happyEmote}`);
     return;
 };
 

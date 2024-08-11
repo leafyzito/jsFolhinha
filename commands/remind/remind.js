@@ -52,7 +52,8 @@ const remindCommand = async (client, message) => {
             return;
         }
 
-        client.log.logAndReply(message, `Lembrete apagado 👍`);
+        const emote = await client.emotes.getEmoteFromList(message.channelName, ['joia', 'jumilhao'], '👍');
+        client.log.logAndReply(message, `Lembrete apagado ${emote}`);
         await client.db.update('remind', { _id: parseInt(reminderId) }, { beenRead: true });
         await client.reloadReminders();
         return;
@@ -155,7 +156,8 @@ const remindCommand = async (client, message) => {
 
     const newRemindId = await newRemind(client, message, targetId, remindMessage);
 
-    client.log.logAndReply(message, `@${targetUser} vai ser lembrado disso assim que falar no chat (ID ${newRemindId})`);
+    const emote = await client.emotes.getEmoteFromList(message.channelName, ['noted'], '📝');
+    client.log.logAndReply(message, `@${targetUser} vai ser lembrado disso assim que falar no chat ${emote} (ID ${newRemindId})`);
     await client.reloadReminders();
     client.notifiedUsers = client.notifiedUsers.filter(id => id !== targetId); // Remove user from notifiedUsers
     return;
