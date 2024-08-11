@@ -1,4 +1,4 @@
-const { afkUserListener, reminderListener, updateUserListener } = require('./listeners.js');
+const { replyMentionListener, afkUserListener, reminderListener, updateUserListener } = require('./listeners.js');
 
 function commandHandler(client, message) {
     if (message.messageText.startsWith(message.commandPrefix)) {
@@ -14,6 +14,9 @@ function commandHandler(client, message) {
 
 function listenerHandler(client, message) {
     if ([...client.knownUserAliases].length === 0) { return console.log('still loading users'); }
+
+    replyMentionListener(client, message)
+        .catch(err => { console.log(`Error in reply mention listener: ${err}`); });
 
     afkUserListener(client, message)
         .catch(err => { console.log(`Error in afk listener: ${err}`); });
