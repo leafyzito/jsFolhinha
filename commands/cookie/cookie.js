@@ -121,7 +121,7 @@ const cookieCommand = async (client, message) => {
         const gifted = userCookieStats.gifted;
         const beenGifted = userCookieStats.beenGifted;
         const sloted = userCookieStats.sloted;
-        client.log.logAndReply(message, `${targetUser} tem ${total} cookies, 🥠 abriu ${opened}, 🎁 ofereceu ${gifted}, 🎁 foi presentiado com ${beenGifted} e 🎰 apostou ${sloted}`);
+        client.log.logAndReply(message, `${targetUser} tem ${total} cookies, 🥠 abriu ${opened}, 🎁 ofereceu ${gifted}, 🎁 foi presenteado com ${beenGifted} e 🎰 apostou ${sloted}`);
         return;
     }
 
