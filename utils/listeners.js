@@ -67,7 +67,7 @@ const reminderListener = async (client, message) => {
     if (reminders.length === 0) { return; } // should never happen but just in case
 
     if (reminders.length <= 3) {
-        var replyMsg = `${message.senderUsername}, você tem ${reminders.length} lembrete${reminders.length > 1 ? 's' : ''} pendente${reminders.length > 1 ? 's' : ''} pendente${reminders.length > 1 ? 's' : ''}:`;
+        var replyMsg = `${message.senderUsername}, você tem ${reminders.length} lembrete${reminders.length > 1 ? 's' : ''} pendente${reminders.length > 1 ? 's' : ''}: `;
         const firstThreeReminders = reminders.slice(0, 3);
         for (const reminder of firstThreeReminders) {
             var remindSender = await client.getUserByUserID(reminder.senderId);
