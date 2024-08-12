@@ -208,7 +208,7 @@ const cookieCommand = async (client, message) => {
 
 
 const cookieDiarioCommand = async (client, message) => {
-    message.command = 'cookie';
+    message.command = 'cd';
     if (!await processCommand(5000, 'user', message, client)) return;
 
     const userCookieStats = await loadUserCookieStats(client, message.senderUserID);
