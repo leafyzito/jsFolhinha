@@ -213,7 +213,7 @@ const cookieDiarioCommand = async (client, message) => {
 
     const userCookieStats = await loadUserCookieStats(client, message.senderUserID);
     if (!userCookieStats) {
-        await createUserCookieBase(message);
+        await createUserCookieBase(client, message);
         client.log.logAndReply(message, `Você resgatou seu cookie diário e agora tem 1 cookie! 🍪`);
         return;
     }
