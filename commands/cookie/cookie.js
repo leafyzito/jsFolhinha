@@ -4,7 +4,7 @@ const fs = require('fs');
 
 const cookieFrases = fs.readFileSync('data/cookie_frases.txt', 'utf8');
 
-async function createUserCookieBase(message) { // isto é só para o cd, acho eu
+async function createUserCookieBase(client, message) { // isto é só para o cd, acho eu
     const insert_doc = {
         userId: message.senderUserID,
         user: message.senderUsername,
