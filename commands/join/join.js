@@ -36,7 +36,7 @@ const joinCommand = async (client, message) => {
     const alreadyJoinedChannels = [...client.joinedChannels];
 
     if (alreadyJoinedChannels.includes(channelToJoin)) {
-        client.log.logAndReply(message, `Eu já estou no seu chat! O meu prefixo lá é ${client.channalPrefixes[channelToJoin] || '!'}`);
+        client.log.logAndReply(message, `Eu já estou no seu chat! O meu prefixo lá é ${client.channelPrefixes[channelToJoin] || '!'}`);
         return;
     }
 
