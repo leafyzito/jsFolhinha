@@ -76,7 +76,7 @@ function onMessageHandler(message) {
         message.isStreamer = true;
     } else { message.isStreamer = false; }
 
-    commandHandler(client, message);
     listenerHandler(client, message);
+    commandHandler(client, message);
 }
 
