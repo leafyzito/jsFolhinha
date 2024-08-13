@@ -32,16 +32,11 @@ const joinCommand = async (client, message) => {
     message.command = 'join';
     if (!await processCommand(5000, 'user', message, client)) return;
 
-    if (message.channelName !== 'folhinhabot' && message.channelName !== process.env.DEV_NICK) {
-        client.log.logAndReply(message, `Se quiser me convidar para o seu chat, use o comando ${message.commandPrefix}join no meu chat ou do dev (@${process.env.DEV_NICK})`);
-        return;
-    }
-
     const channelToJoin = message.senderUsername;
     const alreadyJoinedChannels = [...client.joinedChannels];
 
     if (alreadyJoinedChannels.includes(channelToJoin)) {
-        client.log.logAndReply(message, `Eu já estou no chat ${channelToJoin}`);
+        client.log.logAndReply(message, `Eu já estou no seu chat! O meu prefixo lá é ${client.channalPrefixes[channelToJoin] || '!'}`);
         return;
     }
 
