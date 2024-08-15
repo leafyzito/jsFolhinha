@@ -216,7 +216,17 @@ const reloadEmotesCommand = async (client, message) => {
     if (authorId !== process.env.DEV_USERID) { return; }
 
     const targetChannel = message.messageText.split(' ')[1]?.toLowerCase() || message.channelName;
+    
+    if (targetChannel === 'all') {
+        const channelsToReload = Object.keys(client.emotes.cachedEmotes);
+        for (const channel of channelsToReload) {
+            client.emotes.cachedEmotes[channel] = null;
+            await client.emotes.getChannelEmotes(channel);
+        }
 
+        client.log.logAndReply(message, `Emotes recarregados em ${channelsToReload.length} canais 👍`);
+        return;
+    }
     client.emotes.cachedEmotes[targetChannel] = null;
     await client.emotes.getChannelEmotes(targetChannel);
 
