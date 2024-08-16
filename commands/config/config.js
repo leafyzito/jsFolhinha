@@ -19,7 +19,7 @@ const configCommand = async (client, message) => {
     const args = message.messageText.split(" ");
     const configTarget = args[1].toLowerCase();
     
-    if (configTarget === 'prefixo') {
+    if (['prefixo', 'prefix'].includes(configTarget)) {
         const possiblePrefixes = ['!', '?', '&', '%', '+', '*', '-', '=', '|', '@', '#', '$', '~', '\\', '_', ',', ';', '<', '>'];
         if (args.length < 3) {
             client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}config prefixo <prefixo>. Prefixos possíveis: ${possiblePrefixes.join('')}`);
