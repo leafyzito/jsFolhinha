@@ -100,7 +100,7 @@ const petCommand = async (client, message) => {
         }
 
         if (!petStats || !petStats.is_alive) {
-            client.log.logAndReply(message, `Não existe um pet para este chat`);
+            client.log.logAndReply(message, `Não existe um pet para este chat. Para criar um pet, use ${message.commandPrefix}pet criar`);
             return;
         }
 
@@ -119,7 +119,7 @@ const petCommand = async (client, message) => {
 
     if (['stats', 'status'].includes(args[0])) {
         if (!petStats || !petStats.is_alive) {
-            client.log.logAndReply(message, `Não existe um pet para este chat`);
+            client.log.logAndReply(message, `Não existe um pet para este chat. Para criar um pet, use ${message.commandPrefix}pet criar`);
             return;
         }
 
@@ -144,7 +144,7 @@ const carinhoCommand = async (client, message) => {
     var petStats = await client.db.get('pet', { channel : message.channelName });
     petStats = petStats[0];
     if (!petStats || !petStats.is_alive) {
-        client.log.logAndReply(message, `Não existe um pet para este chat`);
+        client.log.logAndReply(message, `Não existe um pet para este chat. Para criar um pet, use ${message.commandPrefix}pet criar`);
         return;
     }
 
@@ -174,7 +174,7 @@ const brincarCommand = async (client, message) => {
     var petStats = await client.db.get('pet', { channel : message.channelName });
     petStats = petStats[0];
     if (!petStats || !petStats.is_alive) {
-        client.log.logAndReply(message, `Não existe um pet para este chat`);
+        client.log.logAndReply(message, `Não existe um pet para este chat. Para criar um pet, use ${message.commandPrefix}pet criar`);
         return;
     }
 
