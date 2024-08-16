@@ -42,6 +42,7 @@ const joinCommand = async (client, message) => {
 
     await createNewConfig(client, message);
     client.join(channelToJoin).catch((err) => {
+        console.error(`Erro ao entrar no chat ${channelToJoin}: ${err}`);
         client.log.logAndReply(message, `Erro ao entrar no chat ${channelToJoin}. Contacte o @${process.env.DEV_NICK}`);
         return;
     });

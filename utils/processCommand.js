@@ -49,7 +49,9 @@ function manageCooldown(cooldownDuration, type, message) {
 async function processCommand(cooldownDuration, type, message, client) {
     // check perms to execute
     var currChannelConfigs = client.channelConfigs[message.channelName];
+    var currUserBans = client.bans[message.senderUserID];
 
+    if (currUserBans && (currUserBans.includes('all') || currUserBans.includes(message.command))) { return false; }
     if (currChannelConfigs.isPaused) { return false; }
     if (currChannelConfigs.disabledCommands.includes(message.command)) { return false; }
     if (currChannelConfigs.devBanCommands.includes(message.command)) { return false; }

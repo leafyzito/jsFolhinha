@@ -138,6 +138,19 @@ async function modifyClient(client) {
 
     await client.reloadReminders();
 
+    // load bans
+    client.bans = {};
+    client.reloadBans = async function () {
+        client.bans = {};
+        await client.db.get('bans', {}).then((result) => {
+            result.forEach((ban) => {
+                client.bans[ban.userId] = ban.bannedCommands;
+            });
+        });
+    }
+
+    await client.reloadBans();
+
     // load known users
     client.knownUserAliases = [];
     client.reloadKnownUsers = async function () {

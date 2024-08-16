@@ -233,6 +233,73 @@ const reloadEmotesCommand = async (client, message) => {
     client.log.logAndReply(message, `Emotes recarregados 👍`);
 }
 
+const devBanCommand = async (client, message) => {
+    message.command = 'dev ban';
+
+    const authorId = message.senderUserID;
+    if (authorId !== process.env.DEV_USERID) { return; }
+
+    const targetUser = message.messageText.split(' ')[1];
+    const targetUserId = await client.getUserID(targetUser);
+
+    if (!targetUserId) {
+        client.log.logAndReply(message, `Esse usuário não existe`);
+        return;
+    }
+
+    const targetCommand = message.messageText.split(' ')[2];
+
+    if (!targetCommand) {
+        client.log.logAndReply(message, `Comando não especificado`);
+        return;
+    }
+
+    const hasBanRecord = await client.db.get('bans', { userId : targetUserId });
+    if (hasBanRecord.length === 0) {
+        await client.db.insert('bans', { userId: targetUserId, bannedCommands: [] });
+    }
+
+    await client.db.update('bans', { userId: targetUserId }, { $push: { bannedCommands: targetCommand } });
+    await client.reloadBans();
+
+    client.log.logAndReply(message, `👍`);
+    return;
+}
+
+const unbanDevCommand = async (client, message) => {
+    message.command = 'dev unban';
+
+    const authorId = message.senderUserID;
+    if (authorId !== process.env.DEV_USERID) { return; }
+
+    const targetUser = message.messageText.split(' ')[1];
+    const targetUserId = await client.getUserID(targetUser);
+
+    if (!targetUserId) {
+        client.log.logAndReply(message, `Esse usuário não existe`);
+        return;
+    }
+
+    const targetCommand = message.messageText.split(' ')[2];
+
+    if (!targetCommand) {
+        client.log.logAndReply(message, `Comando não especificado`);
+        return;
+    }
+
+    const hasBanRecord = await client.db.get('bans', { userId : targetUserId });
+    if (hasBanRecord.length === 0) {
+        client.log.logAndReply(message, `Esse usuário não tem bans`);
+        return;
+    }
+
+    await client.db.update('bans', { userId: targetUserId }, { $pull: { bannedCommands: targetCommand } });
+    await client.reloadBans();
+
+    client.log.logAndReply(message, `👍`);
+    return;
+}
+
 
 botSayCommand.aliases = ['botsay', 'bsay'];
 forceJoinCommand.aliases = ['forcejoin', 'fjoin'];
@@ -245,6 +312,8 @@ resetCdCommand.aliases = ['resetcd'];
 reloadCommand.aliases = ['reload'];
 gitPullCommand.aliases = ['gitpull', 'gpull'];
 reloadEmotesCommand.aliases = ['reloademotes'];
+devBanCommand.aliases = ['devban', 'dban'];
+unbanDevCommand.aliases = ['devunban', 'dunban'];
 
 module.exports = {
     botSayCommand,
@@ -257,5 +326,7 @@ module.exports = {
     resetCdCommand,
     reloadCommand,
     gitPullCommand,
-    reloadEmotesCommand
+    reloadEmotesCommand,
+    devBanCommand,
+    unbanDevCommand,
 };
