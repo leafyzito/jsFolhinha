@@ -38,4 +38,21 @@ discordClient.logCommand = async function (message, response) {
     logChannel.send({ embeds: [embed] });
 }
 
+discordClient.logSend = async function (channel, content) {
+    const embed = new discordClient.EmbedBuilder()
+        .setTitle(`Enviado para #${channel}`)
+        .addFields(
+            {
+                name: "Conteúdo:",
+                value: content,
+                inline: false
+            },
+        )
+        .setColor('#008000')
+        .setTimestamp();
+
+    const logChannel = await discordClient.channels.fetch(process.env.DISCORD_LOG_CHANNEL);
+    logChannel.send({ embeds: [embed] });
+}
+
 module.exports = { discordClient };
