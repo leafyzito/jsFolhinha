@@ -37,6 +37,7 @@ class Logger {
         // console.log(insertDoc);
         // console.log('command log is off');
         if (!message.command.includes('dev')) { await this.client.db.insert('commandlog', insertDoc); }
+        this.client.discord.logCommand(message, response);
         console.log(`#${message.channelName}/${message.senderUsername} - ${message.command}`);
     }
 
