@@ -217,7 +217,6 @@ const brincarCommand = async (client, message) => {
         `${message.senderUsername} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de pular corda mas você tropeçou e caiu! 🏆`,
         `${message.senderUsername} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de olhar seriamente 👀 e você ganhou! 🏆`,
         `${message.senderUsername} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de olhar seriamente 👀 mas o pet é muito sério e ganhou! 🏆`,
-        `${message.senderUsername} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de caça ao tesouro 🏴‍☠️ e vocês encontraram um tesouro! 💰`,
         `${message.senderUsername} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de caça ao tesouro 🗺 e acharam ${randomChoice(tesouros)}`
     
     ];
