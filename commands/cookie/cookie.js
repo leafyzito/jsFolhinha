@@ -40,7 +40,8 @@ const cookieCommand = async (client, message) => {
         return;
     }
 
-    const targetCommand = message.messageText.split(' ')[1].toLowerCase();
+    const args = message.messageText.split(' ');
+    const targetCommand = args[1].toLowerCase();
 
     if (['abrir', 'open'].includes(targetCommand)) {
         const userCookieStats = await loadUserCookieStats(client, message.senderUserID);
@@ -126,6 +127,39 @@ const cookieCommand = async (client, message) => {
     }
 
     if (['top', 'ranking', 'rank', 'leaderboard', 'lb'].includes(targetCommand)) {
+
+        if (['gift', 'gifts', 'oferta'].includes(args[2])) {
+            const topUsers = await client.db.get('cookie', { userId: { "$ne": "925782584" } });
+            topUsers.sort((a, b) => b.gifted - a.gifted);
+
+            // only top 5
+            const top5 = topUsers.slice(0, 5);
+            let reply = `Top 5 mais cookies oferecidos: `;
+            for (let i = 0; i < top5.length; i++) {
+                const user = top5[i];
+                const username = await client.getUserByUserID(user.userId);
+                reply += `${i + 1}º ${username}: (${user.gifted})`;
+                if (i !== top5.length - 1) {
+                    reply += ', ';
+                }
+            }
+
+            let userPlacing;
+            for (let i = 0; i < top5.length; i++) {
+                if (top5[i].userId === message.senderUserID) {
+                    userPlacing = i + 1;
+                    break;
+                }
+            }
+
+            if (!userPlacing) {
+                reply += `. Você está em ${topUsers.findIndex(user => user.userId === message.senderUserID) + 1}º com ${topUsers.find(user => user.userId === message.senderUserID).gifted} cookies oferecidos`;
+            }
+
+            client.log.logAndReply(message, `${reply} 🎁`);
+            return;
+        }
+
         const topUsers = await client.db.get('cookie', { userId: { "$ne": "925782584" } });
         topUsers.sort((a, b) => b.total - a.total);
 
