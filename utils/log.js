@@ -4,6 +4,7 @@ class Logger {
     }
 
     async logAndReply(message, response) {
+        message.responseTime = new Date().getTime() - message.serverTimestampRaw;
         this.client.reply(message.channelName, message.messageID, response)
             .catch((err) => {
                 if (err.message.includes('identical to the previous one')) {
@@ -36,12 +37,13 @@ class Logger {
 
         // console.log(insertDoc);
         // console.log('command log is off');
-        if (!message.command.includes('dev')) { await this.client.db.insert('commandlog', insertDoc); }
         this.client.discord.logCommand(message, response);
+        if (!message.command.includes('dev')) { await this.client.db.insert('commandlog', insertDoc); }
         console.log(`#${message.channelName}/${message.senderUsername} - ${message.command}`);
     }
 
     async logAndSay(message, response) {
+        message.responseTime = new Date().getTime() - message.serverTimestampRaw;
         this.client.say(message.channelName, response)
             .catch((err) => {
                 if (err.message.includes('identical to the previous one')) {
@@ -74,12 +76,13 @@ class Logger {
 
         // console.log(insertDoc);
         // console.log('command log is off');
-        if (!message.command.includes('dev')) { await this.client.db.insert('commandlog', insertDoc); }
         this.client.discord.logCommand(message, response);
+        if (!message.command.includes('dev')) { await this.client.db.insert('commandlog', insertDoc); }
         console.log(`#${message.channelName}/${message.senderUsername} - ${message.command}`);
     }
 
     async logAndMeAction(message, response) {
+        message.responseTime = new Date().getTime() - message.serverTimestampRaw;
         this.client.me(message.channelName, response)
             .catch((err) => {
                 if (err.message.includes('identical to the previous one')) {
@@ -112,8 +115,8 @@ class Logger {
 
         // console.log(insertDoc);
         // console.log('command log is off');
-        if (!message.command.includes('dev')) { await this.client.db.insert('commandlog', insertDoc); }
         this.client.discord.logCommand(message, response);
+        if (!message.command.includes('dev')) { await this.client.db.insert('commandlog', insertDoc); }
         console.log(`#${message.channelName}/${message.senderUsername} - ${message.command}`);
     }
 
