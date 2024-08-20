@@ -14,6 +14,7 @@ discordClient.on('ready', () => {
 
 
 discordClient.logCommand = async function (message, response) {
+    const responseTime = new Date().getTime() - message.serverTimestampRaw;
     const embed = new discordClient.EmbedBuilder()
         .setTitle(`#${message.channelName}/${message.displayName} - ${message.command}`)
         .addFields(
@@ -30,7 +31,7 @@ discordClient.logCommand = async function (message, response) {
         )
         .setColor(message.color ? colorToHexString(message.color) : '#008000')
         .setFooter({
-            text: `User ID: ${message.senderUserID}`,
+            text: `${responseTime}ms`,
         })
         .setTimestamp();
 
