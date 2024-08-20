@@ -1,6 +1,7 @@
 const { isStreamOnline } = require('./utils.js');
 
 async function dailyCookieResetTask(client) {
+    client.discord.log('* Resetting daily cookies');
     console.log('* Resetting daily cookies');
 
     await client.db.updateMany('cookie', {}, {

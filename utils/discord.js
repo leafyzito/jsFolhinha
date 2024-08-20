@@ -55,4 +55,9 @@ discordClient.logSend = async function (channel, content) {
     logChannel.send({ embeds: [embed] });
 }
 
+discordClient.log = async function (content) {
+    const logChannel = await discordClient.channels.fetch(process.env.DISCORD_LOG_CHANNEL);
+    logChannel.send(content);
+}
+
 module.exports = { discordClient };
