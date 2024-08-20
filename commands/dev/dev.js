@@ -172,6 +172,7 @@ const reloadCommand = async (client, message) => {
             return;
         }
 
+        client.discord.log(`* Mudanças puxadas do Git: ${stdout}`);
         console.log(`* Mudanças puxadas do Git: ${stdout}`);
 
         // Clear require cache for all command files
@@ -202,6 +203,7 @@ const gitPullCommand = async (client, message) => {
             return;
         }
 
+        client.discord.log(`* Mudanças puxadas do Git: ${stdout}`);
         console.log(`* Mudanças puxadas do Git: ${stdout}`);
         
         const cleanOutput = stdout.replace(/[\n\r]/g, '');
