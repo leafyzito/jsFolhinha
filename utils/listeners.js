@@ -3,6 +3,8 @@ const { afkInfoObjects } = require('../commands/afk/afk_info_model.js');
 
 var lastReplyTime = {};
 const replyMentionListener = async (client, message) => {
+    if (message.messageText.startsWith(message.commandPrefix)) { return; }
+
     const currentTime = Date.now();
     const timeDifference = currentTime - lastReplyTime[message.channelName];
     if (timeDifference < 15000) { return; }
