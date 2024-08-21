@@ -122,6 +122,7 @@ const updateUserListener = async (client, message) => {
 
     const knownUsersDB = await client.db.get('users', { userid: message.senderUserID });
     if (knownUsersDB.length > 0) {
+        client.discord.log(`* Updating user aliases: ${knownUsersDB[0].currAlias} -> ${message.senderUsername}`);
         console.log(`User found in DB. updating aliases: ${knownUsersDB[0].currAlias} -> ${message.senderUsername}`);
         
         await client.db.update('users', { userid: message.senderUserID }, { $set: { currAlias: message.senderUsername }, $push: { aliases: message.senderUsername } });
@@ -129,6 +130,7 @@ const updateUserListener = async (client, message) => {
         client.knownUserAliases.push(message.senderUsername);
 
         if (client.channelConfigs[knownUsersDB[0].currAlias]) {
+            client.discord.log(`* Updating channel config for ${knownUsersDB[0].currAlias} -> ${message.senderUsername}`);
             console.log(`Updating channel config for ${knownUsersDB[0].currAlias} -> ${message.senderUsername}`);
             await client.db.update('config', { channel: knownUsersDB[0].currAlias.toLowerCase() }, { $set: { channel: message.senderUsername} });
             client.part(knownUsersDB[0].currAlias);
@@ -142,7 +144,8 @@ const updateUserListener = async (client, message) => {
         return;
     }
 
-    console.log(`NEW USER: ${message.channelName}/${message.senderUsername}`);
+    client.discord.log(`* NEW USER: #${message.channelName}/${message.senderUsername}`);
+    console.log(`NEW USER: #${message.channelName}/${message.senderUsername}`);
 
     await client.db.insert('users', {
         userid: message.senderUserID,
