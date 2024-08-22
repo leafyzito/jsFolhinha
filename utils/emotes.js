@@ -63,6 +63,7 @@ class Emotes {
     async getChannelEmotes(channelName) {
         if (!this.cachedEmotes[channelName]) {
             console.log(`* Fetching emotes for ${channelName}`);
+            this.client.discord.log(`* Fetching emotes for ${channelName}`);
             const channelId = await this.client.getUserID(channelName);
             if (!channelId) { return []; }
             return this.getEmotes(channelId, channelName);
