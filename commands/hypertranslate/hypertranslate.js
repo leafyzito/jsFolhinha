@@ -1,5 +1,3 @@
-// TODO hypertranslate
-
 const { processCommand } = require("../../utils/processCommand.js");
 const { translate, isLanguageSupported } = require("google-translate-api-browser");
 const langs = require('../translate/langs.json');
@@ -17,7 +15,6 @@ async function hypertranslateText(textToTranslate, numTranslations) {
     let currentText = textToTranslate;
 
     for (let i = 0; i < numTranslations; i++) {
-        // Pick a random language except the original language (assuming it's always starting from 'en')
         const randomLangCode = Object.keys(langs)[Math.floor(Math.random() * Object.keys(langs).length)];
         console.log(randomLangCode);
         const translation = await translateText(currentText, randomLangCode);
