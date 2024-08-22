@@ -63,6 +63,7 @@ const loadCommands = () => {
     const { wikiCommand } = require('./wiki/wiki.js');
     const { joinCommand } = require('./join/join.js');
     const { translateCommand } = require('./translate/translate.js');
+    const { hypertranslateCommand } = require('./hypertranslate/hypertranslate.js');
 
     const {
         botSayCommand,
@@ -143,6 +144,7 @@ const loadCommands = () => {
     addAliases(wikiCommand);
     addAliases(joinCommand);
     addAliases(translateCommand);
+    addAliases(hypertranslateCommand);
 
     // // dev commands
     addAliases(botSayCommand);
