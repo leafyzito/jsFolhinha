@@ -28,7 +28,7 @@ async function hypertranslateText(textToTranslate, numTranslations) {
 
 const hypertranslateCommand = async (client, message) => {
     message.command = 'hypertranslate';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!await processCommand(20_000, 'channel', message, client)) return;
 
     const args = message.messageText.split(' ');
     if (args.length < 2) {
