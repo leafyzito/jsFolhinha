@@ -147,6 +147,7 @@ async function modifyClient(client) {
                     client.scheduledReminders.push(reminder._id);
 
                     const reminderDate = new Date(reminder.remindAt * 1000);
+                    client.discord.log(`* Setting timed reminder for ${reminderDate.toLocaleString()}`);
                     console.log('* Setting timed reminder for ' + reminderDate.toLocaleString());
 
                     schedule.scheduleJob(new Date(reminder.remindAt * 1000), async function() {
