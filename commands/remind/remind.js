@@ -155,7 +155,7 @@ const remindCommand = async (client, message) => {
     
     const timeRegex = /in (\d+d)?\s*(\d+h)?\s*(\d+m)?\s*(\d+s)?/;
     let totalSeconds = 0;
-    var timeMatch = message.messageText.tolowerCase().match(timeRegex);
+    var timeMatch = message.messageText.toLowerCase().match(timeRegex);
     
     if (timeMatch) {
         if (timeMatch[1]) totalSeconds += parseTime(timeMatch[1], 'd');
