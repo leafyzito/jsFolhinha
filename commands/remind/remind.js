@@ -171,7 +171,7 @@ const remindCommand = async (client, message) => {
     console.log(remindAt);
     
     if (!remindMessage) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind <usuário> <mensagem>`);
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind <usuário> in <tempo> <mesnsagem> (ex: in 10s/10m/10h/10d)`);
         return;
     }
     
