@@ -145,6 +145,10 @@ async function modifyClient(client) {
                 if (reminder.remindAt > Math.floor(Date.now() / 1000)) {
                     if (client.scheduledReminders.includes(reminder._id)) { continue; }
                     client.scheduledReminders.push(reminder._id);
+
+                    const reminderDate = new Date(reminder.remindAt * 1000);
+                    console.log('* Setting timed reminder for ' + reminderDate.toLocaleString());
+
                     schedule.scheduleJob(new Date(reminder.remindAt * 1000), async function() {
                         const reminderSender = await client.getUserByUserID(reminder.senderId) || 'Usuário deletado';
                         const receiverName = await client.getUserByUserID(reminder.receiverId) || 'Usuário deletado 2';
