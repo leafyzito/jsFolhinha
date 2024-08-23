@@ -176,7 +176,7 @@ const remindCommand = async (client, message) => {
     }
     
     if (timeMatch && (remindAt === null || remindAt === Math.floor(Date.now() / 1000))) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind <usuário> in <tempo> <mensagem> (ex: in 10s/10m/10h/10d)`);
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind <usuário> in <tempo> <mensagem> (ex: in 10s/10m/10h/10d). O tempo mínimo em lembretes cronometrados é de 1 minuto`);
         return;
     }
     
