@@ -14,7 +14,7 @@ class Logger {
                     setTimeout(() => { this.send(message.channelName, response); }, 1500);
                 } else if (err.message.includes('waiting for response')) {
                     console.log('waiting for response error, retrying');
-                    setTimeout(() => { this.send(message.channelName, content); }, 1500);
+                    setTimeout(() => { this.send(message.channelName, response); }, 1500);
                 } else {
                     console.log('logAndReply error: ', err);
                 }
