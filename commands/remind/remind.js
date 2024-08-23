@@ -1,14 +1,16 @@
 const { processCommand } = require("../../utils/processCommand.js");
-const { manageLongResponse, createNewGist, timeSince } = require("../../utils/utils.js"); 
+const { manageLongResponse, createNewGist, timeSince, parseTime } = require("../../utils/utils.js");
 
-async function newRemind(client, message, targetId, remindMessage) {
+async function newRemind(client, message, targetId, remindMessage, remindAt) {
     const newRemindId = await client.db.count('remind') + 1;
     const remindInfo = {
         _id: newRemindId,
         senderId: message.senderUserID,
         receiverId: targetId,
+        fromChannelId: message.channelID,
         remindMessage: remindMessage,
         remindTime: Math.floor(Date.now() / 1000),
+        remindAt: remindAt,
         beenRead: false,
     };
 
@@ -25,7 +27,7 @@ const remindCommand = async (client, message) => {
         return;
     }
     
-    const targetUser = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase()
+    var targetUser = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase()
 
     if (['del', 'delete', 'apagar'].includes(targetUser)) {
         const reminderId = message.messageText.split(' ')[2];
@@ -131,15 +133,13 @@ const remindCommand = async (client, message) => {
         return;
     }
 
-
     if (['folhinha', 'folhinhabot'].includes(targetUser)) {
         client.log.logAndReply(message, `Stare que foi ow`);
         return;
     }
 
     if (['me', message.senderUsername].includes(targetUser)) {
-        client.log.logAndReply(message, `Ainda não tem remind me, um dia tem`);
-        return;
+        targetUser = message.senderUsername;
     }
 
     const targetId = await client.getUserID(targetUser);
@@ -147,22 +147,54 @@ const remindCommand = async (client, message) => {
         client.log.logAndReply(message, `Esse usuário não existe`);
         return;
     }
+
+    // const timeRegex = /in (\d+)([smhd])/;
+    // var timeMatch = message.messageText.match(timeRegex);
+    // const remindMessage = message.messageText.split(' ').slice(2).join(' ').replace(timeRegex, '');
     
-    const remindMessage = message.messageText.split(' ').slice(2).join(' ');
+    
+    const timeRegex = /in (\d+d)?\s*(\d+h)?\s*(\d+m)?\s*(\d+s)?/;
+    let totalSeconds = 0;
+    var timeMatch = message.messageText.match(timeRegex);
+    
+    if (timeMatch) {
+        if (timeMatch[1]) totalSeconds += parseTime(timeMatch[1], 'd');
+        if (timeMatch[2]) totalSeconds += parseTime(timeMatch[2], 'h');
+        if (timeMatch[3]) totalSeconds += parseTime(timeMatch[3], 'm');
+        if (timeMatch[4]) totalSeconds += parseTime(timeMatch[4], 's');
+    }
+    
+    const remindMessage = message.messageText.split(' ').slice(2).join(' ').replace(timeRegex, '').trim();
+    
+    const remindAt = totalSeconds ? Math.floor(Date.now() / 1000) + totalSeconds : null;
+    console.log(Math.floor(Date.now() / 1000));
+    console.log(remindAt);
+    
     if (!remindMessage) {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind <usuário> <mensagem>`);
         return;
     }
-
-    const newRemindId = await newRemind(client, message, targetId, remindMessage);
-
+    
+    if (timeMatch && (remindAt === null || remindAt === Math.floor(Date.now() / 1000))) {
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind <usuário> in <tempo> <mensagem> (ex: in 10s/10m/10h/10d)`);
+        return;
+    }
+    
+    if (timeMatch && remindAt - Math.floor(Date.now() / 1000) < 60) {
+        client.log.logAndReply(message, `O tempo mínimo em lembretes cronometrados é de 1 minuto`);
+        return;
+    }
+    
+    
+    const newRemindId = await newRemind(client, message, targetId, remindMessage, remindAt);
+    
     const emote = await client.emotes.getEmoteFromList(message.channelName, ['noted'], '📝');
-    client.log.logAndReply(message, `@${targetUser} vai ser lembrado disso assim que falar no chat ${emote} (ID ${newRemindId})`);
+    client.log.logAndReply(message, `${targetUser !== message.senderUsername ? `@${targetUser}` : 'Você'} vai ser lembrado disso ${timeMatch ? timeMatch[0].replace('in', 'em') : 'assim que falar no chat'} ${emote} (ID ${newRemindId})`);
+    // client.log.logAndReply(message, `@${targetUser} vai ser lembrado disso ${timeMatch ? timeMatch[0].replace('in', 'em') : 'assim que falar no chat'} ${emote} (ID ${newRemindId})`);
     await client.reloadReminders();
     client.notifiedUsers = client.notifiedUsers.filter(id => id !== targetId); // Remove user from notifiedUsers
     return;
 };
-
 
 remindCommand.aliases = ['remind', 'lembrete'];
 

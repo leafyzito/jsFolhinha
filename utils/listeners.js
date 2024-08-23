@@ -65,7 +65,7 @@ const reminderListener = async (client, message) => {
     if (!client.usersWithPendingReminders.includes(message.senderUserID)) { return; }
     if (client.notifiedUsers.includes(message.senderUserID)) { return; }
 
-    var reminders = await client.db.get('remind', { receiverId: message.senderUserID, beenRead: false });
+    var reminders = await client.db.get('remind', { receiverId: message.senderUserID, beenRead: false, remindAt: null });
     if (reminders.length === 0) { return; } // should never happen but just in case
 
     if (reminders.length <= 3) {
