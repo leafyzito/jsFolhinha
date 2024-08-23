@@ -132,14 +132,19 @@ async function modifyClient(client) {
     // load reminders
     client.usersWithPendingReminders = [];
     client.notifiedUsers = [];
+    client.scheduledReminders = [];
     client.reloadReminders = async function () {
         client.usersWithPendingReminders = [];
         await client.db.get('remind', { beenRead: false }).then(async (result) => {
             for (const reminder of result) {
                 if (!client.usersWithPendingReminders.includes(reminder.receiverId)) {
-                    if (reminder.remindAt === null) { client.usersWithPendingReminders.push(reminder.receiverId); }
+                    if (reminder.remindAt === null || reminder.remindAt === 0) { 
+                            client.usersWithPendingReminders.push(reminder.receiverId); 
+                    }
                 }
                 if (reminder.remindAt > Math.floor(Date.now() / 1000)) {
+                    if (client.scheduledReminders.includes(reminder._id)) { continue; }
+                    client.scheduledReminders.push(reminder._id);
                     schedule.scheduleJob(new Date(reminder.remindAt * 1000), async function() {
                         const reminderSender = await client.getUserByUserID(reminder.senderId) || 'Usuário deletado';
                         const receiverName = await client.getUserByUserID(reminder.receiverId) || 'Usuário deletado 2';
@@ -153,7 +158,7 @@ async function modifyClient(client) {
                         const channelName = await client.getUserByUserID(reminder.fromChannelId);
                         await client.log.send(channelName, finalRes);
                         await client.db.update('remind', { _id: reminder._id }, { $set : { beenRead: true } });
-                        await client.reloadReminders();
+                        // await client.reloadReminders();
                     });
                 }
             }
