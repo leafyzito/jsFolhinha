@@ -1,9 +1,11 @@
 const fetch = require('node-fetch');
+const schedule = require('node-schedule');
 const { MongoUtils } = require('./mongo.js');
 const { Logger } = require('./log.js');
 const { Emotes } = require('./emotes.js');
 const { discordClient } = require('./discord.js');
 const { loadCommands } = require('../commands/commandsList.js');
+const { timeSince, manageLongResponse } = require('./utils.js');
 
 async function modifyClient(client) {
     client.ready = false;
@@ -132,12 +134,29 @@ async function modifyClient(client) {
     client.notifiedUsers = [];
     client.reloadReminders = async function () {
         client.usersWithPendingReminders = [];
-        await client.db.get('remind', { beenRead: false }).then((result) => {
-            result.forEach((reminder) => {
+        await client.db.get('remind', { beenRead: false }).then(async (result) => {
+            for (const reminder of result) {
                 if (!client.usersWithPendingReminders.includes(reminder.receiverId)) {
-                    client.usersWithPendingReminders.push(reminder.receiverId);
+                    if (reminder.remindAt === null) { client.usersWithPendingReminders.push(reminder.receiverId); }
                 }
-            });
+                if (reminder.remindAt > Math.floor(Date.now() / 1000)) {
+                    schedule.scheduleJob(new Date(reminder.remindAt * 1000), async function() {
+                        const reminderSender = await client.getUserByUserID(reminder.senderId) || 'Usuário deletado';
+                        const receiverName = await client.getUserByUserID(reminder.receiverId) || 'Usuário deletado 2';
+                        const reminderMessage = timeSince(reminder.remindTime);
+                        finalRes = reminderSender === receiverName
+                            ? `@${receiverName}, lembrete de você mesmo há ${reminderMessage}: ${reminder.remindMessage}`
+                            : `@${receiverName}, lembrete de @${reminderSender} há ${reminderMessage}: ${reminder.remindMessage}`;
+
+                        if (finalRes.length > 480) { finalRes = await manageLongResponse(finalRes); }
+                        
+                        const channelName = await client.getUserByUserID(reminder.fromChannelId);
+                        await client.log.send(channelName, finalRes);
+                        await client.db.update('remind', { _id: reminder._id }, { $set : { beenRead: true } });
+                        await client.reloadReminders();
+                    });
+                }
+            }
         });
     }
 
