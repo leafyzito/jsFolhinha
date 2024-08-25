@@ -159,8 +159,9 @@ const remindCommand = async (client, message) => {
         if (timeMatch[4]) totalSeconds += parseTime(timeMatch[4], 's');
     }
 
-    const remindMessage = message.messageText.replace(timeRegex, '').split(' ').slice(3).join(' ').trim();
-    
+    var remindMessage = message.messageText.replace(timeRegex, '').split(' ').slice(3).join(' ').trim();
+    if (!remindMessage) { remindMessage = message.messageText.replace(timeRegex, '').split(' ').slice(2).join(' ').trim(); } // ew but it works ??
+
     const remindAt = totalSeconds ? Math.floor(Date.now() / 1000) + totalSeconds : null;
     console.log(Math.floor(Date.now() / 1000));
     console.log(remindAt);
