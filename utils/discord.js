@@ -35,7 +35,10 @@ discordClient.logCommand = async function (message, response) {
         .setTimestamp();
 
     const logChannel = await discordClient.channels.fetch(process.env.DISCORD_LOG_CHANNEL);
-    logChannel.send({ embeds: [embed] });
+    logChannel.send({ embeds: [embed] })
+    .catch((err) => {
+        console.error(`Erro ao enviar mensagem no discord logCommand: ${err}`);
+    });
 }
 
 discordClient.logSend = async function (channel, content) {
@@ -52,12 +55,18 @@ discordClient.logSend = async function (channel, content) {
         .setTimestamp();
 
     const logChannel = await discordClient.channels.fetch(process.env.DISCORD_LOG_CHANNEL);
-    logChannel.send({ embeds: [embed] });
+    logChannel.send({ embeds: [embed] })
+    .catch((err) => {
+        console.error(`Erro ao enviar mensagem no discord logSend: ${err}`);
+    });
 }
 
 discordClient.log = async function (content) {
     const logChannel = await discordClient.channels.fetch(process.env.DISCORD_LOG_CHANNEL);
-    logChannel.send(content);
+    logChannel.send(content)
+    .catch((err) => {
+        console.error(`Erro ao enviar mensagem no discord log: ${err}`);
+    });
 }
 
 module.exports = { discordClient };
