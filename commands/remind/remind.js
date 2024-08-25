@@ -156,22 +156,22 @@ const remindCommand = async (client, message) => {
     const timeRegex = /in (\d+d)?\s*(\d+h)?\s*(\d+m)?\s*(\d+s)?/;
     let totalSeconds = 0;
     var timeMatch = message.messageText.toLowerCase().match(timeRegex);
-    
+
     if (timeMatch) {
         if (timeMatch[1]) totalSeconds += parseTime(timeMatch[1], 'd');
         if (timeMatch[2]) totalSeconds += parseTime(timeMatch[2], 'h');
         if (timeMatch[3]) totalSeconds += parseTime(timeMatch[3], 'm');
         if (timeMatch[4]) totalSeconds += parseTime(timeMatch[4], 's');
     }
-    
-    const remindMessage = message.messageText.toLowerCase().split(' ').slice(2).join(' ').replace(timeRegex, '').trim();
+
+    const remindMessage = message.messageText.split(' ').slice(2).join(' ').replace(timeRegex, '').trim();
     
     const remindAt = totalSeconds ? Math.floor(Date.now() / 1000) + totalSeconds : null;
     console.log(Math.floor(Date.now() / 1000));
     console.log(remindAt);
     
     if (!remindMessage) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind <usuário> in <tempo> <mesnsagem> (ex: in 10s/10m/10h/10d)`);
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind <usuário> in <tempo> <mensagem> (ex: in 10s/10m/10h/10d)`);
         return;
     }
     
@@ -180,10 +180,10 @@ const remindCommand = async (client, message) => {
         return;
     }
     
-    if (timeMatch && remindAt - Math.floor(Date.now() / 1000) < 60) {
-        client.log.logAndReply(message, `O tempo mínimo em lembretes cronometrados é de 1 minuto`);
-        return;
-    }
+    // if (timeMatch && remindAt - Math.floor(Date.now() / 1000) < 60) {
+    //     client.log.logAndReply(message, `O tempo mínimo em lembretes cronometrados é de 1 minuto`);
+    //     return;
+    // }
     
     
     const newRemindId = await newRemind(client, message, targetId, remindMessage, remindAt);
