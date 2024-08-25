@@ -180,10 +180,10 @@ const remindCommand = async (client, message) => {
         return;
     }
     
-    // if (timeMatch && remindAt - Math.floor(Date.now() / 1000) < 60) {
-    //     client.log.logAndReply(message, `O tempo mínimo em lembretes cronometrados é de 1 minuto`);
-    //     return;
-    // }
+    if (timeMatch && remindAt - Math.floor(Date.now() / 1000) < 60) {
+        client.log.logAndReply(message, `O tempo mínimo em lembretes cronometrados é de 1 minuto`);
+        return;
+    }
     
     
     const newRemindId = await newRemind(client, message, targetId, remindMessage, remindAt);
