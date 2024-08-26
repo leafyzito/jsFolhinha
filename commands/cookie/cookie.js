@@ -76,7 +76,7 @@ const cookieCommand = async (client, message) => {
             return;
         }
 
-        if (targetUser === message.senderUsername) {
+        if (targetUser.toLowerCase() === message.senderUsername.toLowerCase()) {
             client.log.logAndReply(message, `Você não pode oferecer cookies para si mesmo Stare`);
             return;
         }
