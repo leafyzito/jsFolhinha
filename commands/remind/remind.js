@@ -56,7 +56,7 @@ const remindCommand = async (client, message) => {
 
         const emote = await client.emotes.getEmoteFromList(message.channelName, ['joia', 'jumilhao'], '👍');
         client.log.logAndReply(message, `Lembrete apagado ${emote}`);
-        await client.db.update('remind', { _id: parseInt(reminderId) }, { beenRead: true });
+        await client.db.update('remind', { _id: parseInt(reminderId) }, { $set: { beenRead: true } });
         await client.reloadReminders();
         return;
     }
@@ -128,7 +128,7 @@ const remindCommand = async (client, message) => {
         if (finalRes.length > 480) { finalRes = await manageLongResponse(finalRes); }
 
         client.log.logAndReply(message, finalRes);
-        await client.db.update('remind', { _id: parseInt(reminderId) }, { beenRead: true });
+        await client.db.update('remind', { _id: parseInt(reminderId) }, { $set: { beenRead: true } });
         await client.reloadReminders();
         return;
     }
