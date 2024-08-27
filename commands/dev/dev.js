@@ -1,4 +1,5 @@
 const { exec } = require('child_process');
+const { shortenUrl } = require('../../utils/utils.js');
 
 const botSayCommand = async (client, message) => {
     message.command = 'dev botsay';
@@ -302,6 +303,23 @@ const unbanDevCommand = async (client, message) => {
     return;
 }
 
+const shortenCommand = async (client, message) => {
+    message.command = 'dev shorten';
+    
+    const authorId = message.senderUserID;
+    if (authorId !== process.env.DEV_USERID) { return; } 
+    
+    const targetUrl = message.messageText.split(' ')[1];
+    if (!targetUrl) {
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}shorten <url>`);
+        return;
+    }
+    
+    const shortenedUrl = await shortenUrl(targetUrl);
+    client.log.logAndReply(message, `🤖  ${shortenedUrl}`);
+    return;
+}
+
 
 botSayCommand.aliases = ['botsay', 'bsay'];
 forceJoinCommand.aliases = ['forcejoin', 'fjoin'];
@@ -316,6 +334,7 @@ gitPullCommand.aliases = ['gitpull', 'gpull'];
 reloadEmotesCommand.aliases = ['reloademotes'];
 devBanCommand.aliases = ['devban', 'dban'];
 unbanDevCommand.aliases = ['devunban', 'dunban'];
+shortenCommand.aliases = ['shorten'];
 
 module.exports = {
     botSayCommand,
@@ -331,4 +350,5 @@ module.exports = {
     reloadEmotesCommand,
     devBanCommand,
     unbanDevCommand,
+    shortenCommand,
 };
