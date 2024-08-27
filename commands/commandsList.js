@@ -77,6 +77,7 @@ const loadCommands = () => {
         reloadEmotesCommand,
         devBanCommand,
         unbanDevCommand,
+        shortenCommand,
     } = require('./dev/dev.js');
 
     // Add aliases for each command
@@ -145,6 +146,7 @@ const loadCommands = () => {
     addAliases(joinCommand);
     addAliases(translateCommand);
     addAliases(hypertranslateCommand);
+    addAliases(shortenCommand);
 
     // // dev commands
     addAliases(botSayCommand);
