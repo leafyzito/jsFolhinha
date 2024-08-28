@@ -151,13 +151,13 @@ const remindCommand = async (client, message) => {
     let totalSeconds = 0;
     let timeParts = message.messageText.split(' ');
     let timeIndex = timeParts.findIndex(part => part === 'in') + 1;
-    let days = timeParts[timeIndex] && ['d', 'day', 'days'].some(suffix => timeParts[timeIndex].endsWith(suffix)) ? timeParts[timeIndex] : null;
+    let days = timeParts[timeIndex] && ['d', 'day', 'days'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
     if (days && !isNaN(parseInt(days))) timeIndex++;
-    let hours = timeParts[timeIndex] && ['h', 'hrs', 'hour', 'hours'].some(suffix => timeParts[timeIndex].endsWith(suffix)) ? timeParts[timeIndex] : null;
+    let hours = timeParts[timeIndex] && ['h', 'hrs', 'hour', 'hours'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
     if (hours && !isNaN(parseInt(hours))) timeIndex++;
-    let minutes = timeParts[timeIndex] && ['m', 'mins', 'minute', 'minutes'].some(suffix => timeParts[timeIndex].endsWith(suffix)) ? timeParts[timeIndex] : null;
+    let minutes = timeParts[timeIndex] && ['m', 'mins', 'minute', 'minutes'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
     if (minutes && !isNaN(parseInt(minutes))) timeIndex++;
-    let seconds = timeParts[timeIndex] && ['s', 'secs', 'second', 'seconds'].some(suffix => timeParts[timeIndex].endsWith(suffix)) ? timeParts[timeIndex] : null;
+    let seconds = timeParts[timeIndex] && ['s', 'secs', 'second', 'seconds'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
     if (seconds && !isNaN(parseInt(seconds))) timeIndex++;
 
     if (days && !isNaN(parseInt(days))) totalSeconds += parseTime(days, 'd');
