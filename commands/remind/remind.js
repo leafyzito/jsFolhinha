@@ -206,7 +206,7 @@ const remindCommand = async (client, message) => {
     return;
 };
 
-remindCommand.aliases = ['remind', 'lembrete'];
+remindCommand.aliases = ['remind', 'lembrar'];
 
 module.exports = {
     remindCommand,
