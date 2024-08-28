@@ -212,20 +212,23 @@ async function isStreamOnline(canal, cache_timeout = 60) {
 function parseTime(value, unit) {
     value = parseInt(value, 10);
     switch(unit) {
-        case 'second':
         case 'seconds':
+        case 'second':
+        case 'secs':
         case 's':
             return value;
-        case 'minute':
         case 'minutes':
+        case 'minute':
+        case 'mins':
         case 'm':
             return value * 60;
-        case 'hour':
         case 'hours':
+        case 'hour':
+        case 'hrs':
         case 'h':
             return value * 60 * 60;
-        case 'day':
         case 'days':
+        case 'day':
         case 'd':
             return value * 60 * 60 * 24;
         default:

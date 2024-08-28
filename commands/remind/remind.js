@@ -148,20 +148,30 @@ const remindCommand = async (client, message) => {
         return;
     }    
     
-    const timeRegex = /in (\d+d)?\s*(\d+h)?\s*(\d+m)?\s*(\d+s)?/i;
     let totalSeconds = 0;
-    var timeMatch = message.messageText.match(timeRegex);
+    let timeParts = message.messageText.split(' ');
+    let timeIndex = timeParts.findIndex(part => part === 'in') + 1;
+    let days = timeParts[timeIndex] && ['d', 'day', 'days'].some(suffix => timeParts[timeIndex].endsWith(suffix)) ? timeParts[timeIndex] : null;
+    if (days && !isNaN(parseInt(days))) timeIndex++;
+    let hours = timeParts[timeIndex] && ['h', 'hrs', 'hour', 'hours'].some(suffix => timeParts[timeIndex].endsWith(suffix)) ? timeParts[timeIndex] : null;
+    if (hours && !isNaN(parseInt(hours))) timeIndex++;
+    let minutes = timeParts[timeIndex] && ['m', 'mins', 'minute', 'minutes'].some(suffix => timeParts[timeIndex].endsWith(suffix)) ? timeParts[timeIndex] : null;
+    if (minutes && !isNaN(parseInt(minutes))) timeIndex++;
+    let seconds = timeParts[timeIndex] && ['s', 'secs', 'second', 'seconds'].some(suffix => timeParts[timeIndex].endsWith(suffix)) ? timeParts[timeIndex] : null;
+    if (seconds && !isNaN(parseInt(seconds))) timeIndex++;
 
-    if (timeMatch) {
-        if (timeMatch[1]) totalSeconds += parseTime(timeMatch[1], 'd');
-        if (timeMatch[2]) totalSeconds += parseTime(timeMatch[2], 'h');
-        if (timeMatch[3]) totalSeconds += parseTime(timeMatch[3], 'm');
-        if (timeMatch[4]) totalSeconds += parseTime(timeMatch[4], 's');
+    if (days && !isNaN(parseInt(days))) totalSeconds += parseTime(days, 'd');
+    if (hours && !isNaN(parseInt(hours))) totalSeconds += parseTime(hours, 'h');
+    if (minutes && !isNaN(parseInt(minutes))) totalSeconds += parseTime(minutes, 'm');
+    if (seconds && !isNaN(parseInt(seconds))) totalSeconds += parseTime(seconds, 's');
+
+    if (totalSeconds === NaN) {
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind <usuário> in <tempo> <mensagem> (ex: in 10s/10m/10h/10d). Se o erro persistir, contacte o @${process.env.DEV_NICK}`);
+        return;
     }
-
-    var remindMessage = message.messageText.replace(timeRegex, '').split(' ').slice(3).join(' ').trim();
-    if (!remindMessage) { remindMessage = message.messageText.replace(timeRegex, '').split(' ').slice(2).join(' ').trim(); } // ew but it works ??
-
+    
+    var remindMessage = message.messageText.split(' ').slice(timeIndex).join(' ').trim();
+    
     const remindAt = totalSeconds ? Math.floor(Date.now() / 1000) + totalSeconds : null;
     console.log(Math.floor(Date.now() / 1000));
     console.log(remindAt);
@@ -171,21 +181,26 @@ const remindCommand = async (client, message) => {
         return;
     }
     
-    if (timeMatch && (remindAt === null || remindAt === Math.floor(Date.now() / 1000))) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind <usuário> in <tempo> <mensagem> (ex: in 10s/10m/10h/10d). O tempo mínimo em lembretes cronometrados é de 1 minuto`);
+    if (timeParts.includes('in') && !totalSeconds) {
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind <usuário> in <tempo> <mensagem> (ex: in 10s/10m/10h/10d).`);
         return;
     }
     
-    if (timeMatch && remindAt - Math.floor(Date.now() / 1000) < 60) {
+    if (totalSeconds && totalSeconds < 60) {
         client.log.logAndReply(message, `O tempo mínimo em lembretes cronometrados é de 1 minuto`);
         return;
     }
+
+    if (targetUser === message.senderUsername && !totalSeconds) {
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind me in <tempo> <mensagem> (ex: in 10s/10m/10h/10d)`);
+        return;
+    }
     
-    
+    console.log(totalSeconds);
     const newRemindId = await newRemind(client, message, targetId, remindMessage, remindAt);
     
     const emote = await client.emotes.getEmoteFromList(message.channelName, ['noted'], '📝');
-    client.log.logAndReply(message, `${targetUser !== message.senderUsername ? `@${targetUser}` : 'Você'} vai ser lembrado disso ${timeMatch ? timeMatch[0].replace('in', 'em').toLowerCase() : 'assim que falar no chat'} ${emote} (ID ${newRemindId})`);
+    client.log.logAndReply(message, `${targetUser !== message.senderUsername ? `@${targetUser}` : 'Você'} vai ser lembrado disso ${totalSeconds ? `em ${days ? `${days} ` : ''}${hours ? `${hours} ` : ''}${minutes ? `${minutes} ` : ''}${seconds ? `${seconds} ` : ''}` : 'assim que falar no chat'} ${emote} (ID ${newRemindId})`);
     await client.reloadReminders();
     client.notifiedUsers = client.notifiedUsers.filter(id => id !== targetId); // Remove user from notifiedUsers
     return;
