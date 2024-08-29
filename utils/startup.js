@@ -217,7 +217,8 @@ async function modifyClient(client) {
     }
 
     await client.reloadKnownUsers();
-    console.log('* Loaded users');
+    console.log(`* Loaded ${client.knownUserAliases.length} users`);
+    client.discord.log(`* Loaded ${client.knownUserAliases.length} users`);
     client.ready = true;
 }
 

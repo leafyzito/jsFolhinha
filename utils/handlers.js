@@ -16,19 +16,31 @@ function listenerHandler(client, message) {
     if ([...client.knownUserAliases].length === 0) { return console.log('still loading users'); }
 
     replyMentionListener(client, message)
-        .catch(err => { console.log(`Error in reply mention listener: ${err}`); });
+        .catch(err => {
+            console.log(`Error in reply mention listener: ${err}`);
+            client.discord.log(`* Error in reply mention listener: ${err}`);
+        });
 
     afkUserListener(client, message)
-        .catch(err => { console.log(`Error in afk listener: ${err}`); });
+        .catch(err => {
+            console.log(`Error in afk listener: ${err}`);
+            client.discord.log(`* Error in afk listener: ${err}`);
+        });
 
     reminderListener(client, message)
-        .catch(err => { console.log(`Error in reminder listener: ${err}`); });
+        .catch(err => {
+            console.log(`Error in reminder listener: ${err}`);
+            client.discord.log(`* Error in reminder listener: ${err}`);
+        });
 
     updateUserListener(client, message)
-        .catch(err => { console.log(`Error in update user listener: ${err}`); });
+        .catch(err => {
+            console.log(`Error in update user listener: ${err}`);
+            client.discord.log(`* Error in update user listener: ${err}`);
+        });
 }
 
-module.exports = { 
+module.exports = {
     commandHandler,
     listenerHandler
 };
