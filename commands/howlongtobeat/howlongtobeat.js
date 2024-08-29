@@ -1,5 +1,6 @@
 const { processCommand } = require("../../utils/processCommand.js");
 
+// Solution from Supinic - https://github.com/Supinic/supibot/blob/master/commands/howlongtobeat/index.js
 var HLTB_JS_FILE_HASH_KEY = "hltb-file-hash";
 var HLTB_ENDPOINT_HASH_KEY = "hltb-endpoint-hash";
 
@@ -7,12 +8,7 @@ const FILE_PREFIX = "_next/static/chunks/pages";
 const FILE_HASH_REGEX = /static\/chunks\/pages\/(_app-\w+?\.js)/;
 const ENDPOINT_HASH_REGEX = /\/api\/search\/".concat\("(\w+)"\)/;
 
-async function fetchFileHash(force = false) {
-    const existing = HLTB_JS_FILE_HASH_KEY;
-    if (!force && existing) {
-        return existing;
-    }
-
+async function fetchFileHash() {
     const headers = { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36" };
     const response = await fetch("https://howlongtobeat.com/", { headers })
         .catch(err => console.error(`Error in HLTB fetching file hash: ${err}`));
@@ -29,12 +25,7 @@ async function fetchFileHash(force = false) {
     return match[1];
 }
 
-async function fetchEndpointHash(fileHash, force = false) {
-    const existing = HLTB_ENDPOINT_HASH_KEY;
-    if (!force && existing) {
-        return existing;
-    }
-
+async function fetchEndpointHash(fileHash) {
     const headers = { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36" };
     const response = await fetch(`https://howlongtobeat.com/${FILE_PREFIX}/${fileHash}`, { headers })
         .catch(err => console.error(`Error in HLTB fetching endpoint hash: ${err}`));
@@ -51,12 +42,12 @@ async function fetchEndpointHash(fileHash, force = false) {
 }
 
 async function hltbSearch(query) {
-    const fileHash = await fetchFileHash(true);
+    const fileHash = await fetchFileHash();
     if (!fileHash) {
         return 'file error';
     }
 
-    const endpointHash = await fetchEndpointHash(fileHash, true);
+    const endpointHash = await fetchEndpointHash(fileHash);
     if (!endpointHash) {
         return 'endpoint error';
     }
@@ -113,7 +104,6 @@ async function hltbSearch(query) {
 }
 
 function convertToHours(time) {
-    // yoiked xdd
     return (Math['round'](time / 3600 * (10 ** 1))) / (10 ** 1);
 }
 
@@ -131,27 +121,27 @@ const howLongToBeatCommand = async (client, message) => {
     }
 
     const result = await hltbSearch(query);
-    if (result === 'file error') {
+    if (result === 'file error') { // hopefully never happens
         client.log.logAndReply(message, `Erro ao buscar buscar o jogo. @${process.env.DEV_NICK} check logs - file hash error`);
         return;
     }
 
-    if (result === 'endpoint error') {
+    if (result === 'endpoint error') { // hopefully never happens
         client.log.logAndReply(message, `Erro ao buscar buscar o jogo. @${process.env.DEV_NICK} check logs - endpoint hash error`);
         return;
     }
 
-    if (result === 'HTTP request failed') {
+    if (result === 'HTTP request failed') { // hopefully never happens
         client.log.logAndReply(message, `Erro ao buscar buscar o jogo. @${process.env.DEV_NICK} check logs - HTTP request failed`);
         return;
     }
 
-    if (result === 'HTTP error response') {
+    if (result === 'HTTP error response') { // hopefully never happens
         client.log.logAndReply(message, `Erro ao buscar buscar o jogo. @${process.env.DEV_NICK} check logs - HTTP error response`);
         return;
     }
 
-    if (result === 'error parsing JSON') {
+    if (result === 'error parsing JSON') { // hopefully never happens
         client.log.logAndReply(message, `Erro ao buscar buscar o jogo. @${process.env.DEV_NICK} check logs - error parsing JSON`);
         return;
     }
