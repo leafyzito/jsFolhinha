@@ -58,7 +58,7 @@ const ttsCommand = async (client, message) => {
         return;
     }
 
-    client.log.send(message.channelName, tts);
+    client.log.logAndReply(message, tts);
 };
 
 ttsCommand.aliases = ['tts'];
