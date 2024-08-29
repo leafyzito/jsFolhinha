@@ -236,6 +236,30 @@ const reloadEmotesCommand = async (client, message) => {
     client.log.logAndReply(message, `Emotes recarregados 👍`);
 }
 
+const allEmotesCommand = async (client, message) => {
+    message.command = 'dev allemotes';
+
+    const authorId = message.senderUserID;
+    if (authorId !== process.env.DEV_USERID) { return; }
+
+    const targetChannel = message.messageText.split(' ')[1] || message.channelName;
+    const channelEmotes = await client.emotes.getChannelEmotes(targetChannel);
+    client.log.logAndReply(message, `${channelEmotes.length} emotes no total`);
+
+    // send all emotes in chunks of 490 characters
+    let emoteMessage = "";
+    for (let i = 0; i < channelEmotes.length; i++) {
+        if ((emoteMessage + ` ${channelEmotes[i]}`).length > 490) {
+            client.log.logAndSay(message, emoteMessage);
+            emoteMessage = "";
+        }
+        emoteMessage += ` ${channelEmotes[i]}`;
+    }
+    if (emoteMessage.length > 0) {
+        client.log.logAndSay(message, emoteMessage);
+    }
+}
+
 const devBanCommand = async (client, message) => {
     message.command = 'dev ban';
 
@@ -332,6 +356,7 @@ resetCdCommand.aliases = ['resetcd'];
 reloadCommand.aliases = ['reload'];
 gitPullCommand.aliases = ['gitpull', 'gpull'];
 reloadEmotesCommand.aliases = ['reloademotes'];
+allEmotesCommand.aliases = ['allemotes'];
 devBanCommand.aliases = ['devban', 'dban'];
 unbanDevCommand.aliases = ['devunban', 'dunban'];
 shortenCommand.aliases = ['shorten'];
@@ -348,6 +373,7 @@ module.exports = {
     reloadCommand,
     gitPullCommand,
     reloadEmotesCommand,
+    allEmotesCommand,
     devBanCommand,
     unbanDevCommand,
     shortenCommand,

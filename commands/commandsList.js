@@ -76,6 +76,7 @@ const loadCommands = () => {
         reloadCommand,
         gitPullCommand,
         reloadEmotesCommand,
+        allEmotesCommand,
         devBanCommand,
         unbanDevCommand,
         shortenCommand,
@@ -160,6 +161,7 @@ const loadCommands = () => {
     addAliases(reloadCommand);
     addAliases(gitPullCommand);
     addAliases(reloadEmotesCommand);
+    addAliases(allEmotesCommand);
     addAliases(devBanCommand);
     addAliases(unbanDevCommand);
 
