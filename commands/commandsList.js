@@ -64,6 +64,7 @@ const loadCommands = () => {
     const { joinCommand } = require('./join/join.js');
     const { translateCommand } = require('./translate/translate.js');
     const { hypertranslateCommand } = require('./hypertranslate/hypertranslate.js');
+    const { randomEmoteCommand } = require('./randomemote/randomemote.js');
 
     const {
         botSayCommand,
@@ -147,6 +148,7 @@ const loadCommands = () => {
     addAliases(translateCommand);
     addAliases(hypertranslateCommand);
     addAliases(shortenCommand);
+    addAliases(randomEmoteCommand);
 
     // // dev commands
     addAliases(botSayCommand);
