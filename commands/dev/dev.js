@@ -90,7 +90,7 @@ const execCommand = async (client, message) => {
 
         const res = eval(command);
         console.log(res);
-        client.log.logAndReply(message, `🤖 ${res}`)
+        client.log.logAndReply(message, `🤖 ${res}`);
         return;
 
     } catch (err) {
@@ -130,7 +130,7 @@ const restartCommand = async (client, message) => {
     exec('pm2 restart folhinhajs');
 }
 
-const resetPet = async (client, message) => {
+const resetPetCommand = async (client, message) => {
     message.command = 'dev resetpet';
 
     const authorId = message.senderUserID;
@@ -351,7 +351,7 @@ forcePartCommand.aliases = ['forcepart', 'fpart'];
 execCommand.aliases = ['exec', 'eval'];
 getUserIdCommand.aliases = ['getuserid', 'uid'];
 restartCommand.aliases = ['restart'];
-resetPet.aliases = ['resetpet', 'resetpat'];
+resetPetCommand.aliases = ['resetpet', 'resetpat'];
 resetCdCommand.aliases = ['resetcd'];
 reloadCommand.aliases = ['reload'];
 gitPullCommand.aliases = ['gitpull', 'gpull'];
@@ -368,7 +368,7 @@ module.exports = {
     execCommand,
     getUserIdCommand,
     restartCommand,
-    resetPet,
+    resetPetCommand,
     resetCdCommand,
     reloadCommand,
     gitPullCommand,
