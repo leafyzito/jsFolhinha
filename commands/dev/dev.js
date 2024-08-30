@@ -94,7 +94,7 @@ const execCommand = async (client, message) => {
         return;
 
     } catch (err) {
-        client.log.send(message.channelName, message.messageID, `🤖 Erro ao executar comando: ${err}`);
+        client.log.logAndReply(message, `🤖 Erro ao executar comando: ${err}`);
     }
 };
 
@@ -206,7 +206,7 @@ const gitPullCommand = async (client, message) => {
 
         client.discord.log(`* Mudanças puxadas do Git: ${stdout}`);
         console.log(`* Mudanças puxadas do Git: ${stdout}`);
-        
+
         const cleanOutput = stdout.replace(/[\n\r]/g, '');
         client.log.logAndReply(message, `Mudanças puxadas do Git: ${cleanOutput}`);
     });
@@ -219,7 +219,7 @@ const reloadEmotesCommand = async (client, message) => {
     if (authorId !== process.env.DEV_USERID) { return; }
 
     const targetChannel = message.messageText.split(' ')[1]?.toLowerCase() || message.channelName;
-    
+
     if (targetChannel === 'all') {
         const channelsToReload = Object.keys(client.emotes.cachedEmotes);
         for (const channel of channelsToReload) {
@@ -281,7 +281,7 @@ const devBanCommand = async (client, message) => {
         return;
     }
 
-    const hasBanRecord = await client.db.get('bans', { userId : targetUserId });
+    const hasBanRecord = await client.db.get('bans', { userId: targetUserId });
     if (hasBanRecord.length === 0) {
         await client.db.insert('bans', { userId: targetUserId, bannedCommands: [] });
     }
@@ -314,7 +314,7 @@ const unbanDevCommand = async (client, message) => {
         return;
     }
 
-    const hasBanRecord = await client.db.get('bans', { userId : targetUserId });
+    const hasBanRecord = await client.db.get('bans', { userId: targetUserId });
     if (hasBanRecord.length === 0) {
         client.log.logAndReply(message, `Esse usuário não tem bans`);
         return;
@@ -329,16 +329,16 @@ const unbanDevCommand = async (client, message) => {
 
 const shortenCommand = async (client, message) => {
     message.command = 'dev shorten';
-    
+
     const authorId = message.senderUserID;
-    if (authorId !== process.env.DEV_USERID) { return; } 
-    
+    if (authorId !== process.env.DEV_USERID) { return; }
+
     const targetUrl = message.messageText.split(' ')[1];
     if (!targetUrl) {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}shorten <url>`);
         return;
     }
-    
+
     const shortenedUrl = await shortenUrl(targetUrl);
     client.log.logAndReply(message, `🤖  ${shortenedUrl}`);
     return;
