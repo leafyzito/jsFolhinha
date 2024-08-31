@@ -150,7 +150,7 @@ const remindCommand = async (client, message) => {
 
     let totalSeconds = 0;
     let timeParts = message.messageText.split(' ');
-    let timeIndex = timeParts.findIndex(part => part === 'in') + 1;
+    let timeIndex = timeParts[2].toLowerCase() === 'in' ? 3 : null;
     let days = timeParts[timeIndex] && ['d', 'day', 'days'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
     if (days && !isNaN(parseInt(days))) timeIndex++;
     let hours = timeParts[timeIndex] && ['h', 'hrs', 'hour', 'hours'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
@@ -170,7 +170,7 @@ const remindCommand = async (client, message) => {
         return;
     }
 
-    if (timeIndex === 0) { timeIndex = 2; }
+    if (timeIndex === null) { timeIndex = 2; }
     var remindMessage = message.messageText.split(' ').slice(timeIndex).join(' ').trim();
 
     const remindAt = totalSeconds ? Math.floor(Date.now() / 1000) + totalSeconds : null;
