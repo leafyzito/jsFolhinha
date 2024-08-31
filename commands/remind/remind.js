@@ -26,12 +26,12 @@ const remindCommand = async (client, message) => {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind <usuário> <mensagem>`);
         return;
     }
-    
+
     var targetUser = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase()
 
     if (['del', 'delete', 'apagar'].includes(targetUser)) {
         const reminderId = message.messageText.split(' ')[2];
-        
+
         if (isNaN(reminderId)) {
             client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind delete <ID do lembrete>`);
             return;
@@ -77,7 +77,7 @@ const remindCommand = async (client, message) => {
 
             var finalRes = `Você tem estes lembretes pendentes: ${pendingReminders}`;
             if (finalRes.length > 480) { finalRes = await manageLongResponse(finalRes); }
-            
+
             client.log.logAndReply(message, finalRes);
             return;
         }
@@ -98,7 +98,7 @@ const remindCommand = async (client, message) => {
 
                 pendingReminders += `ID: ${reminder._id} de @${reminderSenders[reminder.senderId]} há ${timeSince(reminder.remindTime)}:\n${reminder.remindMessage}\n\n`;
             }
-            
+
             pendingReminders = await createNewGist(pendingReminders);
             client.log.logAndReply(message, `Para ver todos os seus lembretes, acesse: ${pendingReminders}`);
             await client.db.updateMany('remind', { receiverId: message.senderUserID }, { $set: { beenRead: true } });
@@ -146,8 +146,8 @@ const remindCommand = async (client, message) => {
     if (!targetId) {
         client.log.logAndReply(message, `Esse usuário não existe`);
         return;
-    }    
-    
+    }
+
     let totalSeconds = 0;
     let timeParts = message.messageText.split(' ');
     let timeIndex = timeParts.findIndex(part => part === 'in') + 1;
@@ -169,23 +169,24 @@ const remindCommand = async (client, message) => {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind <usuário> in <tempo> <mensagem> (ex: in 10s/10m/10h/10d). Se o erro persistir, contacte o @${process.env.DEV_NICK}`);
         return;
     }
-    
+
+    if (timeIndex === 0) { timeIndex = 2; }
     var remindMessage = message.messageText.split(' ').slice(timeIndex).join(' ').trim();
-    
+
     const remindAt = totalSeconds ? Math.floor(Date.now() / 1000) + totalSeconds : null;
     console.log(Math.floor(Date.now() / 1000));
     console.log(remindAt);
-    
+
     if (!remindMessage) {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind <usuário> in <tempo> <mensagem> (ex: in 10s/10m/10h/10d)`);
         return;
     }
-    
+
     if (timeParts.includes('in') && !totalSeconds) {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind <usuário> in <tempo> <mensagem> (ex: in 10s/10m/10h/10d).`);
         return;
     }
-    
+
     if (totalSeconds && totalSeconds < 60) {
         client.log.logAndReply(message, `O tempo mínimo em lembretes cronometrados é de 1 minuto`);
         return;
@@ -195,10 +196,10 @@ const remindCommand = async (client, message) => {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind me in <tempo> <mensagem> (ex: in 10s/10m/10h/10d)`);
         return;
     }
-    
+
     console.log(totalSeconds);
     const newRemindId = await newRemind(client, message, targetId, remindMessage, remindAt);
-    
+
     const emote = await client.emotes.getEmoteFromList(message.channelName, ['noted'], '📝');
     client.log.logAndReply(message, `${targetUser !== message.senderUsername ? `@${targetUser}` : 'Você'} vai ser lembrado disso ${totalSeconds ? `em ${days ? `${days} ` : ''}${hours ? `${hours} ` : ''}${minutes ? `${minutes} ` : ''}${seconds ? `${seconds} ` : ''}` : 'assim que falar no chat'} ${emote} (ID ${newRemindId})`);
     await client.reloadReminders();
