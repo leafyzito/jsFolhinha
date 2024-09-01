@@ -8,12 +8,12 @@ async function createUserCookieBase(client, message) { // isto é só para o cd,
     const insert_doc = {
         userId: message.senderUserID,
         user: message.senderUsername,
-        total: 0,
+        total: 1,
         gifted: 0,
         beenGifted: 0,
         opened: 0,
         sloted: 0,
-        claimedToday: false,
+        claimedToday: true,
         giftedToday: false,
         usedSlot: false,
     };
@@ -256,16 +256,16 @@ const cookieDiarioCommand = async (client, message) => {
         // Calculate the time remaining until the next 9 AM
         const now = new Date();
         let nextNineAM = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0);
-    
+
         // If it's already past 9 AM today, calculate time until 9 AM tomorrow
         if (now >= nextNineAM) {
             nextNineAM.setDate(nextNineAM.getDate() + 1);
         }
-    
+
         const timeLeft = nextNineAM - now;
         const hours = Math.floor(timeLeft / (1000 * 60 * 60));
         const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-    
+
         client.log.logAndReply(message, `Você já resgatou seu cookie diário hoje. Volte em ${hours}h ${minutes}m para resgatar o seu cookie diário de novo ⌛`);
         return;
     }
