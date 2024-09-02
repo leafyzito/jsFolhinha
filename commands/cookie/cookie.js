@@ -160,7 +160,7 @@ const cookieCommand = async (client, message) => {
             return;
         }
 
-        if (['aposta', 'slot', 'slots'].includes(args[2])) {
+        if (['aposta', 'apostas', 'slot', 'slots'].includes(args[2])) {
             const topUsers = await client.db.get('cookie', { userId: { "$ne": "925782584" } });
             topUsers.sort((a, b) => b.sloted - a.sloted);
 
