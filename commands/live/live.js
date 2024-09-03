@@ -53,7 +53,7 @@ const liveCommand = async (client, message) => {
 
     if (!live.isLive) {
         const timeSinceLastStream = timeSinceDT(live.lastStreamDate)[0];
-        client.log.logAndReply(message, `Não tem live no ${liveTarget} há ${timeSinceLastStream} - título: ${live.lastStreamTitle}`);
+        client.log.logAndReply(message, `Não tem live ${liveTarget.toLowerCase() === message.channelName ? 'aqui' : 'no ' + liveTarget} há ${timeSinceLastStream} - título: ${live.lastStreamTitle}`);
         return;
     }
 
