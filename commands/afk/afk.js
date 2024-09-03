@@ -1,4 +1,5 @@
 const { processCommand } = require("../../utils/processCommand.js");
+const { timeSince } = require("../../utils/utils.js");
 const { afkInfoObjects } = require('./afk_info_model.js');
 
 var afkAliasList = [];
@@ -15,7 +16,7 @@ const afkCommand = async (client, message) => {
     const commandInvoker = message.messageText.split(' ')[0].split(`${message.commandPrefix}`)[1].trim().toLowerCase();
     const afkInfoObject = afkInfoObjects.find(afk => afk.alias.includes(commandInvoker));
     const afkStats = await client.db.get('afk', { channel: message.channelName, user: message.senderUsername });
-    
+
     if (afkStats.length === 0) {
         const insert_base_afk_doc = {
             channel: message.channelName,
@@ -61,13 +62,13 @@ const rafkCommand = async (client, message) => {
     if (!await processCommand(5000, 'channel', message, client)) return;
 
     var afkStats = await client.db.get('afk', { channel: message.channelName, user: message.senderUsername });
-    
+
     if (afkStats.length === 0) {
         client.log.logAndReply(message, `Você nunca esteve afk aqui antes`);
         return;
     }
     afkStats = afkStats[0];
-    
+
     if (afkStats.rafk_counter >= 4) { return; }
     if (afkStats.rafk_counter >= 3) {
         client.log.logAndReply(message, `Você só pode usar o comando ${message.commandPrefix}rafk 3 vezes seguidas`);
@@ -93,11 +94,45 @@ const rafkCommand = async (client, message) => {
     return;
 };
 
+const isAfkCommand = async (client, message) => {
+    message.command = 'isafk';
+    if (!await processCommand(5000, 'channel', message, client)) return;
+
+    if (message.messageText.split(' ').length === 1) {
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}isafk <usuário>`);
+        return;
+    }
+
+    const isAfkTarger = message.messageText.split(' ')[1]?.replace(/^@/, '');
+
+    var afkStats = await client.db.get('afk', { channel: message.channelName, user: isAfkTarger });
+    if (afkStats.length === 0) {
+        client.log.logAndReply(message, `${isAfkTarger} nunca esteve afk aqui antes`);
+        return;
+    }
+
+    afkStats = afkStats[0];
+    if (!afkStats.is_afk) {
+        client.log.logAndReply(message, `${isAfkTarger} não está afk`);
+        return;
+    }
+
+    const afkInfoObject = afkInfoObjects.find(afk => afk.alias.includes(afkStats.afk_type));
+    const afkAction = afkInfoObject.isafk;
+    const afkEmoji = afkInfoObject.emoji;
+    const afkMessage = afkStats.afk_message;
+    var afkSince = timeSince(afkStats.afk_since);
+
+    client.log.logAndReply(message, `${isAfkTarger} está ${afkAction} ${afkEmoji} há ${afkSince} ⌛ ${afkMessage ? `: ${afkMessage}` : ''}`);
+    return;
+};
 
 afkCommand.aliases = [...afkAliasList];
 rafkCommand.aliases = ['rafk'];
+isAfkCommand.aliases = ['isafk'];
 
 module.exports = {
     afkCommand,
-    rafkCommand
+    rafkCommand,
+    isAfkCommand,
 };
