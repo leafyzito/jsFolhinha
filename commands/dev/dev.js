@@ -267,6 +267,12 @@ const devBanCommand = async (client, message) => {
     if (authorId !== process.env.DEV_USERID) { return; }
 
     const targetUser = message.messageText.split(' ')[1];
+
+    if (!targetUser) {
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}devban <usuário> <all/comando>`);
+        return;
+    }
+
     const targetUserId = await client.getUserID(targetUser);
 
     if (!targetUserId) {
