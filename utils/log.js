@@ -1,9 +1,19 @@
+const { CreateRegex } = require('./Regex.js');
+
+const regex = new CreateRegex();
+
 class Logger {
     constructor(client) {
         this.client = client;
     }
 
     async logAndReply(message, response) {
+        if (regex.check(response, response.split(' '), message.channelName)) {
+            console.log(`* Caught by regex - original response: ${response}`);
+            this.send(process.env.DEV_TEST_CHANNEL, 'Regex apanhado, check logs @leafyzito');
+            return;
+        }
+
         message.responseTime = new Date().getTime() - message.serverTimestampRaw;
         this.client.reply(message.channelName, message.messageID, response)
             .catch((err) => {
@@ -43,6 +53,12 @@ class Logger {
     }
 
     async logAndSay(message, response) {
+        if (regex.check(response, response.split(' '), message.channelName)) {
+            console.log(`* Caught by regex - original response: ${response}`);
+            this.send(process.env.DEV_TEST_CHANNEL, 'Regex apanhado, check logs @leafyzito');
+            return;
+        }
+
         message.responseTime = new Date().getTime() - message.serverTimestampRaw;
         this.client.say(message.channelName, response)
             .catch((err) => {
@@ -82,6 +98,12 @@ class Logger {
     }
 
     async logAndMeAction(message, response) {
+        if (regex.check(response, response.split(' '), message.channelName)) {
+            console.log(`* Caught by regex - original response: ${response}`);
+            this.send(process.env.DEV_TEST_CHANNEL, 'Regex apanhado, check logs @leafyzito');
+            return;
+        }
+
         message.responseTime = new Date().getTime() - message.serverTimestampRaw;
         this.client.me(message.channelName, response)
             .catch((err) => {
@@ -121,6 +143,12 @@ class Logger {
     }
 
     async send(channel, content) {
+        if (regex.check(content, content.split(' '), 'sent by Folhinha')) {
+            console.log(`* Caught by regex - original content: ${content}`);
+            this.send(process.env.DEV_TEST_CHANNEL, 'Regex apanhado, check logs @leafyzito');
+            return;
+        }
+
         this.client.say(channel, content)
             .catch((err) => {
                 if (err.message.includes('identical to the previous one')) {
