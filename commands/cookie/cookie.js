@@ -261,7 +261,7 @@ const cookieCommand = async (client, message) => {
             await client.db.update('cookie', { userId: message.senderUserID }, { $set: { total: userCookieStats.total, sloted: userCookieStats.sloted, usedSlot: userCookieStats.usedSlot } });
 
             // increase jackpot by adding 1 cookie to folhinhabot
-            await client.db.update('cookie', { userId: "925782584" }, { $inc: { total: 1 } });
+            await client.db.update('cookie', { userId: process.env.BOT_USERID }, { $inc: { total: 1 } });
         }
 
         client.log.logAndReply(message, reply);

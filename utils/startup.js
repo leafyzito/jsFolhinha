@@ -17,11 +17,11 @@ async function modifyClient(client) {
         // Make API request to fetch clips
         const response = await fetch(api_url, { headers });
         const data = await response.json();
-        
+
         if (data.data.length === 0) { return null; }
         return data.data[0].id;
     }
-    
+
     client.getUserByUserID = async function (userId) {
         // Construct API URL
         const api_url = `https://api.twitch.tv/helix/users?id=${userId}`;
@@ -30,7 +30,7 @@ async function modifyClient(client) {
         // Make API request to fetch clips
         const response = await fetch(api_url, { headers });
         const data = await response.json();
-            
+
         if (data.data.length === 0) { return null; }
         return data.data[0].login;
     }
@@ -53,7 +53,7 @@ async function modifyClient(client) {
             listOfUsers.push(user.login);
         });
         return listOfUsers;
-    } 
+    }
 
 
     client.timeoutUser = async function (message, duration, reason) {
@@ -67,11 +67,38 @@ async function modifyClient(client) {
 
         return true;
     }
-    
+
+    // handmade whisper function, i think this works?
+    client.whisper = async function (whisperTarget, message) {
+        const whisperTargetId = await client.getUserID(whisperTarget);
+
+        const api_url = `https://api.twitch.tv/helix/whispers?from_user_id=${process.env.BOT_USERID}&to_user_id=${whisperTargetId}`;
+        const headers = {
+            'Authorization': 'Bearer ' + process.env.BOT_OAUTH_TOKEN,
+            'Client-ID': process.env.BOT_CLIENT_ID,
+            'Content-Type': 'application/json'
+        };
+        const data = {
+            'message': message,
+        };
+
+        const response = await fetch(api_url, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(data)
+        }).catch(err => { console.log(`Error in whisper: ${err}`); });
+
+        if (response.status === 429) {
+            console.log(`* Whisper rate limit reached`);
+            client.discord.log(`* Whisper rate limit reached`);
+            return;
+        }
+    }
+
     client.loadCommands = function () {
         client.commandsList = loadCommands();
     }
-    
+
     client.loadCommands();
 
 
@@ -80,11 +107,11 @@ async function modifyClient(client) {
 
     // load emotes
     client.emotes = new Emotes(client);
-    
+
     // load clients
     client.db = new MongoUtils();
     client.log = new Logger(client);
-    
+
     // load prefixes
     client.channelPrefixes = {};
     client.reloadChannelPrefixes = async function () {
@@ -95,7 +122,7 @@ async function modifyClient(client) {
             });
         });
     }
-    
+
     await client.reloadChannelPrefixes();
 
     // load channel configs
@@ -108,7 +135,7 @@ async function modifyClient(client) {
             });
         });
     }
-    
+
     await client.reloadChannelConfigs();
 
     client.startTime = Math.floor(Date.now() / 1000);
@@ -139,8 +166,8 @@ async function modifyClient(client) {
         await client.db.get('remind', { beenRead: false }).then(async (result) => {
             for (const reminder of result) {
                 if (!client.usersWithPendingReminders.includes(reminder.receiverId)) {
-                    if (reminder.remindAt === null || reminder.remindAt === 0) { 
-                        client.usersWithPendingReminders.push(reminder.receiverId); 
+                    if (reminder.remindAt === null || reminder.remindAt === 0) {
+                        client.usersWithPendingReminders.push(reminder.receiverId);
                     }
                 }
                 if (reminder.remindAt <= currentTime || reminder.remindAt > currentTime) {
