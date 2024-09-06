@@ -44,7 +44,13 @@ const gatoCommand = async (client, message) => {
     client.log.logAndReply(message, `🐱 ${cat}`);
 };
 
+gatoCommand.commandName = 'gato';
 gatoCommand.aliases = ['gato', 'cat'];
+gatoCommand.shortDescription = 'Mostra uma imagem aleatória de gato';
+gatoCommand.cooldown = 5000;
+gatoCommand.whisperable = true;
+gatoCommand.description = 'Uso: !gato; Resposta esperada: 🐱 {imagem}';
+gatoCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${gatoCommand.commandName}/${gatoCommand.commandName}.js`;
 
 module.exports = {
     gatoCommand,

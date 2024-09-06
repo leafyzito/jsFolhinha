@@ -11,7 +11,13 @@ const testeCommand = async (client, message) => {
     return;
 };
 
+testeCommand.commandName = 'teste';
 testeCommand.aliases = ['teste', 'test', 'testing'];
+testeCommand.shortDescription = 'Este é apenas um comando para verificar se o bot está vivo, nada de especial';
+testeCommand.cooldown = 5000;
+testeCommand.whisperable = true;
+testeCommand.description = 'Uso: !teste; Resposta esperada: testado 3';
+testeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${testeCommand.commandName}/${testeCommand.commandName}.js`;
 
 module.exports = {
     testeCommand,

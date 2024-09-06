@@ -10,7 +10,7 @@ const fillCommand = async (client, message) => {
     }
 
     var textToRepeat = message.messageText.split(' ').slice(1).join(' ');
-    
+
     const otherPrefixes = ['$', '*', '!', '|', '+', '?', '%', '=', '&', '/', '#', '.', ',', '<', '>', '@', '⠀', '-', '\\', '\\'];
     while (otherPrefixes.some(char => textToRepeat.startsWith(char))) {
         textToRepeat = '' + textToRepeat.slice(1).trim();
@@ -18,7 +18,7 @@ const fillCommand = async (client, message) => {
 
     const maxLength = 500;
     var finalText = '';
-    
+
     while (finalText.length < maxLength) {
         finalText += textToRepeat + ' ';
     }
@@ -28,7 +28,13 @@ const fillCommand = async (client, message) => {
     client.log.logAndReply(message, finalText);
 };
 
+fillCommand.commandName = 'fill';
 fillCommand.aliases = ['fill'];
+fillCommand.shortDescription = 'Faça o bot enviar uma mensagem cheia do que você quiser';
+fillCommand.cooldown = 5000;
+fillCommand.whisperable = true;
+fillCommand.description = 'Uso: !fill <qualquer coisa>; Resposta esperada: {mensagem repetindo o padrão do que foi pedido}';
+fillCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${fillCommand.commandName}/${fillCommand.commandName}.js`;
 
 module.exports = {
     fillCommand,

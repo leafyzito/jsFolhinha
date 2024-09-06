@@ -18,7 +18,7 @@ const configCommand = async (client, message) => {
 
     const args = message.messageText.split(" ");
     const configTarget = args[1].toLowerCase();
-    
+
     if (['prefixo', 'prefix'].includes(configTarget)) {
         const possiblePrefixes = ['!', '?', '&', '%', '+', '*', '-', '=', '|', '@', '#', '$', '~', '\\', '_', ',', ';', '<', '>'];
         if (args.length < 3) {
@@ -44,11 +44,11 @@ const configCommand = async (client, message) => {
             client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}config ban <comando>.`);
             return;
         }
-        
+
         const commandsList = client.commandsList;
         const command = args[2].toLowerCase();
         if (!(command in commandsList)) {
-            client.log.logAndReply(message, `O comando ${command} não é válido. Se estiver com dúvidas, contacte o @${process.env.DEV_NICK}`);	
+            client.log.logAndReply(message, `O comando ${command} não é válido. Se estiver com dúvidas, contacte o @${process.env.DEV_NICK}`);
             return;
         }
 
@@ -69,7 +69,7 @@ const configCommand = async (client, message) => {
         const commandsList = client.commandsList;
         const command = args[2].toLowerCase();
         if (!(command in commandsList)) {
-            client.log.logAndReply(message, `O comando ${command} não é válido. Se estiver com dúvidas, contacte o @${process.env.DEV_NICK}`);	
+            client.log.logAndReply(message, `O comando ${command} não é válido. Se estiver com dúvidas, contacte o @${process.env.DEV_NICK}`);
             return;
         }
 
@@ -95,7 +95,13 @@ const configCommand = async (client, message) => {
     }
 };
 
+configCommand.commandName = 'config';
 configCommand.aliases = ['config'];
+configCommand.shortDescription = 'Muda as configurações do bot para o canal atual';
+configCommand.cooldown = 5000;
+configCommand.whisperable = false;
+configCommand.description = 'Uso: !config <prefixo/ban/unban/offline>; Prefixo: para alterar o prefixo do bot no canal atual; Ban: para banir/desabilitar algum comando no chat atual; Unban: para desbanir/reabilitar algum comando no chat atual; Offline: para habilitar/desabilitar o modo offline no canal atual';
+configCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${configCommand.commandName}/${configCommand.commandName}.js`;
 
 module.exports = {
     configCommand,

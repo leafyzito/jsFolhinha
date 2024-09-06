@@ -18,7 +18,13 @@ const nicksCommand = async (client, message) => {
             : `O histórico de nicks de ${nicksTarget} é:`} ${aliases}`);
 };
 
+nicksCommand.commandName = 'nicks';
 nicksCommand.aliases = ['nick', 'nicks', 'nicknames'];
+nicksCommand.shortDescription = 'Mostra o histórico de nicks de algum usuário';
+nicksCommand.cooldown = 5000;
+nicksCommand.whisperable = false;
+nicksCommand.description = 'Uso: !nicks <usuário>; Resposta esperada: O histórico de nicks de {usuário} é: {histórico de nicks}';
+nicksCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${nicksCommand.commandName}/${nicksCommand.commandName}.js`;
 
 module.exports = {
     nicksCommand,

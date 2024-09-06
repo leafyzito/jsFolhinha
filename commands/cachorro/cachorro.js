@@ -44,7 +44,13 @@ const cachorroCommand = async (client, message) => {
     client.log.logAndReply(message, `🐶 ${dog}`);
 };
 
+cachorroCommand.commandName = 'cachorro';
 cachorroCommand.aliases = ['cachorro', 'dog', 'doggo', 'cao'];
+cachorroCommand.shortDescription = 'Mostra uma imagem aleatória de cachorro';
+cachorroCommand.cooldown = 5000;
+cachorroCommand.whisperable = true;
+cachorroCommand.description = 'Uso: !cachorro; Resposta esperada: 🐶 {imagem}';
+cachorroCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${cachorroCommand.commandName}/${cachorroCommand.commandName}.js`;
 
 module.exports = {
     cachorroCommand,

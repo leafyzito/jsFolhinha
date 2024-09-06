@@ -3,7 +3,7 @@ const { randomChoice, isStreamOnline } = require("../../utils/utils.js");
 
 const talkieCommand = async (client, message) => {
     message.command = 'talkie';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!await processCommand(15_000, 'channel', message, client)) return;
 
     if (message.messageText.split(' ').length === 1) {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}talkie <mensagem>`);
@@ -55,7 +55,13 @@ const talkieCommand = async (client, message) => {
     client.log.logAndReply(message, `Mensagem enviada ${emote}`);
 };
 
+talkieCommand.commandName = 'talkie';
 talkieCommand.aliases = ['talkie'];
+talkieCommand.shortDescription = 'Envia uma mensagem para um canal aleatório que o bot esteja conectado';
+talkieCommand.cooldown = 15000;
+talkieCommand.whisperable = false;
+talkieCommand.description = 'Uso: !talkie <mensagem>; Resposta esperada: Mensagem enviada 🤭';
+talkieCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${talkieCommand.commandName}/${talkieCommand.commandName}.js`;
 
 module.exports = {
     talkieCommand,

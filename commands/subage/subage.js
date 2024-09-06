@@ -62,7 +62,7 @@ const subAgeCommand = async (client, message) => {
     }
 
     const saResult = await getSubAge(saTarget, saChannelTarget);
-    
+
     if (saResult.includes("não existe")) {
         client.log.logAndReply(message, saResult);
         return;
@@ -71,7 +71,13 @@ const subAgeCommand = async (client, message) => {
     client.log.logAndReply(message, saResult);
 };
 
+subAgeCommand.commandName = 'subage';
 subAgeCommand.aliases = ['subage', 'sa'];
+subAgeCommand.shortDescription = 'Mostra há quanto tempo um usuário é sub de algum canal';
+subAgeCommand.cooldown = 5000;
+subAgeCommand.whisperable = false;
+subAgeCommand.description = 'Uso: !subage <usuário> <canal>; Resposta esperada: {usuário} é sub de {canal} há {tempo}';
+subAgeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${subAgeCommand.commandName}/${subAgeCommand.commandName}.js`;
 
 module.exports = {
     subAgeCommand,

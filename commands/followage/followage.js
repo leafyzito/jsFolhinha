@@ -44,7 +44,7 @@ const followAgeCommand = async (client, message) => {
     }
 
     const faResult = await getFA(faTarget, faChannelTarget);
-    
+
     if (faResult.includes("não existe")) {
         client.log.logAndReply(message, faResult);
         return;
@@ -60,7 +60,13 @@ const followAgeCommand = async (client, message) => {
     return;
 };
 
+followAgeCommand.commandName = 'followage';
 followAgeCommand.aliases = ['followage', 'fa'];
+followAgeCommand.shortDescription = 'Mostra há quanto tempo um usuário segue um canal';
+followAgeCommand.cooldown = 5000;
+followAgeCommand.whisperable = false;
+followAgeCommand.description = 'Uso: !followage <usuário>; Resposta esperada: {usuário} segue {canal} há {tempo}';
+followAgeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${followAgeCommand.commandName}/${followAgeCommand.commandName}.js`;
 
 module.exports = {
     followAgeCommand,

@@ -11,7 +11,7 @@ const stalkCommand = async (client, message) => {
     }
 
     const targetUser = message.messageText.split(' ')[1].toLowerCase().replace(/^@/, '')
-    
+
     if (targetUser === message.senderUsername) {
         client.log.logAndReply(message, `Você tá aqui mesmo Stare`);
         return;
@@ -53,7 +53,13 @@ const stalkCommand = async (client, message) => {
     client.log.logAndReply(message, `${targetUser} foi visto pela última vez há ${timeSinceLs} no #${lsChannel} - ${lsMessage}`);
 };
 
+stalkCommand.commandName = 'stalk';
 stalkCommand.aliases = ['stalk'];
+stalkCommand.shortDescription = 'Veja onde um usuário falou pela última vez e o que ele disse';
+stalkCommand.cooldown = 5000;
+stalkCommand.whisperable = false;
+stalkCommand.description = 'Uso: !stalk <usuário>; Resposta esperada: {usuário} foi visto pela última vez há {tempo} no #{canal} - {mensagem}';
+stalkCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${stalkCommand.commandName}/${stalkCommand.commandName}.js`;
 
 module.exports = {
     stalkCommand,

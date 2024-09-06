@@ -64,7 +64,13 @@ const liveCommand = async (client, message) => {
     }
 };
 
+liveCommand.commandName = 'live';
 liveCommand.aliases = ['live'];
+liveCommand.shortDescription = 'Mostra se um canal está fazendo live';
+liveCommand.cooldown = 5000;
+liveCommand.whisperable = true;
+liveCommand.description = 'Uso: !live <canal>; Resposta esperada: {canal} está agora fazendo live de {jogo} com {número de viewers} - {título}';
+liveCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${liveCommand.commandName}/${liveCommand.commandName}.js`;
 
 module.exports = {
     liveCommand,

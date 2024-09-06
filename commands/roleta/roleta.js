@@ -24,7 +24,7 @@ const roletaCommand = async (client, message) => {
         client.log.logAndReply(message, `Click! Não foi dessa vez ${emote}`);
         return;
     }
-    
+
     const timeout = await client.timeoutUser(message, timeoutDuration, 'foi de roleta russa');
 
     if (!timeout) {
@@ -36,7 +36,13 @@ const roletaCommand = async (client, message) => {
     client.log.logAndSay(message, `BANG! Foi de arrasta pra cima ${emote}`);
 };
 
+roletaCommand.commandName = 'roleta';
 roletaCommand.aliases = ['roleta', 'rr'];
+roletaCommand.shortDescription = 'Teste a sua sorte com a roleta-russa do timeout';
+roletaCommand.cooldown = 5000;
+roletaCommand.whisperable = false;
+roletaCommand.description = 'Uso: !roleta; Resposta esperada: BANG! Foi de arrasta pra cima 🤫; É necessário o bot ser moderador para este comando ter efeito';
+roletaCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${roletaCommand.commandName}/${roletaCommand.commandName}.js`;
 
 module.exports = {
     roletaCommand,

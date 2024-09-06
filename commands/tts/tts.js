@@ -61,7 +61,13 @@ const ttsCommand = async (client, message) => {
     client.log.logAndReply(message, tts);
 };
 
+ttsCommand.commandName = 'tts';
 ttsCommand.aliases = ['tts'];
+ttsCommand.shortDescription = 'Crie um TTS com algum texto';
+ttsCommand.cooldown = 5000;
+ttsCommand.whisperable = true;
+ttsCommand.description = 'Uso: !tts <texto>; Resposta esperada: {link do TTS}';
+ttsCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${ttsCommand.commandName}/${ttsCommand.commandName}.js`;
 
 module.exports = {
     ttsCommand,

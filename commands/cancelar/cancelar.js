@@ -54,7 +54,13 @@ const cancelarCommand = async (client, message) => {
 
 };
 
+cancelarCommand.commandName = 'cancelar';
 cancelarCommand.aliases = ['cancelar', 'cancel'];
+cancelarCommand.shortDescription = 'Cancela alguém por algum motivo aleatório';
+cancelarCommand.cooldown = 5000;
+cancelarCommand.whisperable = true;
+cancelarCommand.description = 'Uso: !cancelar <usuário>; Resposta esperada: {usuário} foi cancelado por {motivo aleatório}';
+cancelarCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${cancelarCommand.commandName}/${cancelarCommand.commandName}.js`;
 
 module.exports = {
     cancelarCommand,

@@ -34,11 +34,16 @@ const randomEmoteCommand = async (client, message) => {
     }
 
     var finalRes = emotesList.join(' ').substring(0, 490);
-    client.log.logAndReply(message,`🤖 ${finalRes}`);
+    client.log.logAndReply(message, `🤖 ${finalRes}`);
 }
 
+randomEmoteCommand.commandName = 'randomemote';
 randomEmoteCommand.aliases = ['randomemote', 'rem', 'emote', 'emotes'];
-
+randomEmoteCommand.shortDescription = 'Mostra um emote aleatório do canal atual';
+randomEmoteCommand.cooldown = 5000;
+randomEmoteCommand.whisperable = false;
+randomEmoteCommand.description = 'Uso: !randomemote (opcional: <quantidade> default: 1); Resposta esperada: 🤖 {emotes aleatório}';
+randomEmoteCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${randomEmoteCommand.commandName}/${randomEmoteCommand.commandName}.js`;
 module.exports = {
     randomEmoteCommand,
 };

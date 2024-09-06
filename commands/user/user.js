@@ -5,7 +5,7 @@ async function getUserInfo(targetUser) {
     const api_url = `https://api.ivr.fi/v2/twitch/user?login=${targetUser}`;
     const response = await fetch(api_url);
     const data = await response.json();
-    
+
     if (data === null || data == []) { return null; }
 
     const displayName = data[0].displayName;
@@ -34,10 +34,16 @@ const userCommand = async (client, message) => {
     }
 
     client.log.logAndReply(message, `${userInfo.displayName} || ID: ${userInfo.userId} || Cor: ${userInfo.chatColor} || Badge: ${userInfo.badge} || Chatters: ${userInfo.chatterCount} || Seguidores: ${userInfo.followers} || Criado há ${userInfo.howLongAgo} (${userInfo.createdAt}) ${userInfo.isLive ? '|| 🔴 Em live agora' : ''}`);
-    return;  
+    return;
 };
 
+userCommand.commandName = 'user';
 userCommand.aliases = ['user', 'u'];
+userCommand.shortDescription = 'Mostra informações gerais sobre um usuário';
+userCommand.cooldown = 5000;
+userCommand.whisperable = false;
+userCommand.description = 'Uso: !user <usuário>; Resposta esperada: Nome: {nome do usuário} || ID: {ID do usuário} || Cor: {cor do usuário} || Badge: {badge do usuário} || Chatters: {quantidade de chatters} || Seguidores: {quantidade de seguidores} || Criado há {tempo} ({data de criação de conta})';
+userCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${userCommand.commandName}/${userCommand.commandName}.js`;
 
 module.exports = {
     userCommand,

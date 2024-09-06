@@ -27,7 +27,13 @@ const piadaCommand = async (client, message) => {
 
 };
 
+piadaCommand.commandName = 'piada';
 piadaCommand.aliases = ['piada', 'joke', 'piadas', 'jokes'];
+piadaCommand.shortDescription = 'Mostra uma piada aleatória';
+piadaCommand.cooldown = 5000;
+piadaCommand.whisperable = true;
+piadaCommand.description = 'Uso: !piada; Resposta esperada: {piada aleatória}';
+piadaCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${piadaCommand.commandName}/${piadaCommand.commandName}.js`;
 
 module.exports = {
     piadaCommand,

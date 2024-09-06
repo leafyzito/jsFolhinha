@@ -17,7 +17,7 @@ async function getPreview(previewTarget) {
 
     const thumbPreviewRaw = data.data[0].thumbnail_url;
     const thumbPreview = thumbPreviewRaw.replace("{width}x{height}", "1280x720");
-    
+
     return await shortenUrl(thumbPreview);
 }
 
@@ -41,7 +41,13 @@ const previewCommand = async (client, message) => {
     client.log.logAndReply(message, `Preview da live de ${previewTarget}: ${preview}`);
 };
 
+previewCommand.commandName = 'preview';
 previewCommand.aliases = ['preview', 'thumb'];
+previewCommand.shortDescription = 'Mostra uma imagem do momento atual de uma live';
+previewCommand.cooldown = 5000;
+previewCommand.whisperable = false;
+previewCommand.description = 'Uso: !preview <canal>; Resposta esperada: Preview da live de {canal}';
+previewCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${previewCommand.commandName}/${previewCommand.commandName}.js`;
 
 module.exports = {
     previewCommand,
