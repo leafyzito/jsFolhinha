@@ -50,7 +50,7 @@ comandosCommand.aliases = ['comandos', 'commands', 'comando', 'command'];
 comandosCommand.shortDescription = 'Mostra um link para uma lista de comandos do bot';
 comandosCommand.cooldown = 5000;
 comandosCommand.whisperable = true;
-comandosCommand.description = 'Uso: !comandos; Resposta esperada: Para uma lista de comandos acesse https://folhinhabot.github.io/comandos';
+comandosCommand.description = 'Uso: !comandos; Resposta esperada: Para uma lista de comandos acesse {link}';
 comandosCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/help/help.js`;
 
 helpCommand.commandName = 'help';
@@ -58,7 +58,7 @@ helpCommand.aliases = ['help', 'ajuda', 'info'];
 helpCommand.shortDescription = 'Mostra um link para o site do bot';
 helpCommand.cooldown = 5000;
 helpCommand.whisperable = true;
-helpCommand.description = 'Uso: !help; Resposta esperada: Para informações sobre o bot, acesse https://folhinhabot.github.io';
+helpCommand.description = 'Uso: !help; Resposta esperada: Para informações sobre o bot, acesse {link}';
 helpCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/help/help.js`;
 
 statsCommand.commandName = 'stats';
