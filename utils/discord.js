@@ -36,9 +36,9 @@ discordClient.logCommand = async function (message, response) {
 
     const logChannel = await discordClient.channels.fetch(process.env.DISCORD_LOG_CHANNEL);
     logChannel.send({ embeds: [embed] })
-    .catch((err) => {
-        console.error(`Erro ao enviar mensagem no discord logCommand: ${err}`);
-    });
+        .catch((err) => {
+            console.error(`Erro ao enviar mensagem no discord logCommand: ${err}`);
+        });
 }
 
 discordClient.logSend = async function (channel, content) {
@@ -56,17 +56,37 @@ discordClient.logSend = async function (channel, content) {
 
     const logChannel = await discordClient.channels.fetch(process.env.DISCORD_LOG_CHANNEL);
     logChannel.send({ embeds: [embed] })
-    .catch((err) => {
-        console.error(`Erro ao enviar mensagem no discord logSend: ${err}`);
-    });
+        .catch((err) => {
+            console.error(`Erro ao enviar mensagem no discord logSend: ${err}`);
+        });
 }
 
 discordClient.log = async function (content) {
     const logChannel = await discordClient.channels.fetch(process.env.DISCORD_LOG_CHANNEL);
     logChannel.send(content)
-    .catch((err) => {
-        console.error(`Erro ao enviar mensagem no discord log: ${err}`);
-    });
+        .catch((err) => {
+            console.error(`Erro ao enviar mensagem no discord log: ${err}`);
+        });
+}
+
+discordClient.logWhisper = async function (recipient, content) {
+    const embed = new discordClient.EmbedBuilder()
+        .setTitle(`Whisper para #${recipient}`)
+        .addFields(
+            {
+                name: "Conteúdo:",
+                value: content,
+                inline: false
+            },
+        )
+        .setColor('#008000')
+        .setTimestamp();
+
+    const logChannel = await discordClient.channels.fetch(process.env.DISCORD_LOG_CHANNEL);
+    logChannel.send({ embeds: [embed] })
+        .catch((err) => {
+            console.error(`Erro ao enviar mensagem no discord logWhisper: ${err}`);
+        });
 }
 
 module.exports = { discordClient };

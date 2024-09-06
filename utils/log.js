@@ -145,6 +145,17 @@ class Logger {
         console.log(`#${message.channelName}/${message.senderUsername} - ${message.command}`);
     }
 
+    async logAndWhisper(message, response) {
+        if (regex.check(response, response.split(' '), message.senderUsername)) {
+            console.log(`* Caught by regex - original response: ${response}`);
+            this.client.discord.log(`* Caught by regex - original response: ${response}`);
+            return;
+        }
+
+        this.client.whisper(message.senderUsername, response);
+        this.client.discord.logWhisper(message.senderUsername, response);
+    }
+
     async send(channel, content) {
         if (regex.check(content, content.split(' '), `By Folhinha to ${channel}`)) {
             console.log(`* Caught by regex - original content: ${content}`);
