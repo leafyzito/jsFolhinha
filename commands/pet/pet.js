@@ -42,7 +42,7 @@ async function updatePet(client, message, petEmoji, petName) {
         }
     };
 
-    await client.db.update('pet', { channel: message.channelName }, update_doc);
+    await client.db.update('pet', { channelId: message.channelID }, update_doc);
 }
 
 const petCommand = async (client, message) => {
@@ -111,7 +111,7 @@ const petCommand = async (client, message) => {
             }
         };
 
-        await client.db.update('pet', { channel: message.channelName }, update_doc);
+        await client.db.update('pet', { channelId: message.channelID }, update_doc);
 
         client.log.logAndReply(message, `${petStats.pet_emoji} ${petStats.pet_name} foi morto`);
         return;
@@ -162,7 +162,7 @@ const carinhoCommand = async (client, message) => {
         }
     };
 
-    await client.db.update('pet', { channel: message.channelName }, update_doc);
+    await client.db.update('pet', { channelId: message.channelID }, update_doc);
 
     client.log.logAndReply(message, `${petStats.pet_emoji} PETPET ${message.senderUsername} fez carinho em ${petStats.pet_emoji} ${petStats.pet_name}`);
 }
@@ -192,7 +192,7 @@ const brincarCommand = async (client, message) => {
         }
     };
 
-    await client.db.update('pet', { channel: message.channelName }, update_doc);
+    await client.db.update('pet', { channelId: message.channelID }, update_doc);
 
     const tesouros = [
         `um osso de ouro`,
