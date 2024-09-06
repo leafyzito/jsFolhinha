@@ -1,9 +1,9 @@
 const { processCommand } = require("../../utils/processCommand.js");
 const { randomInt, randomChoice } = require("../../utils/utils.js");
 
-const petEmojis = ["🦝","🐴","🐶","🦊","🐯","🐸","🐱","🐻","🦁","🐵","🐭","🐼","🐮","🐹","🐻‍❄️","🐷","🐰","🐨","🐥",
-    "🐔","🐧","🐦","🐤","🦅","🦉","🐴","🦆","🐺","🦄","🐝","🪱","🐛","🦋","🐌","🐞","🪰","🪲","🕷️","🦎","🦂",
-    "🐢","🐍","🦑","🐙","🦕","🦖","🐬","🐋","🦭","🐀","🦇", "🐈‍⬛"]
+const petEmojis = ["🦝", "🐴", "🐶", "🦊", "🐯", "🐸", "🐱", "🐻", "🦁", "🐵", "🐭", "🐼", "🐮", "🐹", "🐻‍❄️", "🐷", "🐰", "🐨", "🐥",
+    "🐔", "🐧", "🐦", "🐤", "🦅", "🦉", "🐴", "🦆", "🐺", "🦄", "🐝", "🪱", "🐛", "🦋", "🐌", "🐞", "🪰", "🪲", "🕷️", "🦎", "🦂",
+    "🐢", "🐍", "🦑", "🐙", "🦕", "🦖", "🐬", "🐋", "🦭", "🐀", "🦇", "🐈‍⬛"]
 
 
 
@@ -56,7 +56,7 @@ const petCommand = async (client, message) => {
 
     const args = message.messageText.split(' ').slice(1);
 
-    var petStats = await client.db.get('pet', { channel : message.channelName });
+    var petStats = await client.db.get('pet', { channelId: message.channelID });
     petStats = petStats[0];
 
     if (['criar', 'create'].includes(args[0])) {
@@ -87,7 +87,7 @@ const petCommand = async (client, message) => {
             await createPetBase(client, message);
         }
 
-       await updatePet(client, message, petEmoji, petName);
+        await updatePet(client, message, petEmoji, petName);
 
         client.log.logAndReply(message, `Novo pet criado! Oioi ${petEmoji} ${petName}`);
         return;
@@ -141,7 +141,7 @@ const carinhoCommand = async (client, message) => {
     message.command = 'carinho';
     if (!await processCommand(5000, 'channel', message, client)) return;
 
-    var petStats = await client.db.get('pet', { channel : message.channelName });
+    var petStats = await client.db.get('pet', { channelId: message.channelID });
     petStats = petStats[0];
     if (!petStats || !petStats.is_alive) {
         client.log.logAndReply(message, `Não existe um pet para este chat. Para criar um pet, use ${message.commandPrefix}pet criar`);
@@ -171,7 +171,7 @@ const brincarCommand = async (client, message) => {
     message.command = 'brincar';
     if (!await processCommand(5000, 'channel', message, client)) return;
 
-    var petStats = await client.db.get('pet', { channel : message.channelName });
+    var petStats = await client.db.get('pet', { channelId: message.channelID });
     petStats = petStats[0];
     if (!petStats || !petStats.is_alive) {
         client.log.logAndReply(message, `Não existe um pet para este chat. Para criar um pet, use ${message.commandPrefix}pet criar`);
@@ -204,7 +204,7 @@ const brincarCommand = async (client, message) => {
         `um mapa misterioso`,
         `R$ ${randomInt(100, 1000000)} enterrados`,
     ];
-    
+
     const brincadeiras = [
         `${message.senderUsername} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de apanhar a bola ⚽ mas o pet ficou só olhando`,
         `${message.senderUsername} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de esconde-esconde 🙈 e você conseguiu encontrar o pet em ${randomInt(3, 15)} minutos! 🏆`,
@@ -218,7 +218,7 @@ const brincarCommand = async (client, message) => {
         `${message.senderUsername} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de olhar seriamente 👀 e você ganhou! 🏆`,
         `${message.senderUsername} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de olhar seriamente 👀 mas o pet é muito sério e ganhou! 🏆`,
         `${message.senderUsername} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de caça ao tesouro 🗺 e acharam ${randomChoice(tesouros)}`
-    
+
     ];
 
     const brincadeira = randomChoice(brincadeiras);
