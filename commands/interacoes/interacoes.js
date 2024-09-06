@@ -228,7 +228,7 @@ beijoCommand.shortDescription = 'Dá um beijo em alguém no chat';
 beijoCommand.cooldown = 5000;
 beijoCommand.whisperable = false;
 beijoCommand.description = 'Uso: !beijo <pessoa>; Resposta esperada: uma mensagem de beijo direcionada à pessoa mencionada';
-beijoCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${beijoCommand.commandName}/${beijoCommand.commandName}.js`;
+beijoCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/interacoes/interacoes.js`;
 
 bonkCommand.commandName = 'bonk';
 bonkCommand.aliases = ['bonk'];

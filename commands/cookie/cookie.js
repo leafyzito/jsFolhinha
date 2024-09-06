@@ -96,7 +96,7 @@ const cookieCommand = async (client, message) => {
         targetUserCookieStats.beenGifted += 1;
         userCookieStats.total -= 1;
         userCookieStats.gifted += 1;
-        await client.db.update('cookie', { userId: message.senderUserID }, { $set: { total: userCookieStats.total, gifted: userCookieStats.gifted } });
+        await client.db.update('cookie', { userId: message.senderUserID }, { $set: { total: userCookieStats.total, gifted: userCookieStats.gifted, giftedToday: true } });
         await client.db.update('cookie', { userId: targetUserID }, { $set: { beenGifted: targetUserCookieStats.beenGifted, total: targetUserCookieStats.total + 1 } });
         const emote = await client.emotes.getEmoteFromList(message.channelName, ['peepoCookie'], '🎁🍪')
         client.log.logAndReply(message, `Você ofereceu um cookie para ${targetUser} ${emote}`);
@@ -128,7 +128,7 @@ const cookieCommand = async (client, message) => {
 
     if (['top', 'ranking', 'rank', 'leaderboard', 'lb'].includes(targetCommand)) {
 
-        if (['gift', 'gifts', 'oferta'].includes(args[2])) {
+        if (['gift', 'gifts', 'oferta', 'gifted'].includes(args[2])) {
             const topUsers = await client.db.get('cookie', { userId: { "$ne": "925782584" } });
             topUsers.sort((a, b) => b.gifted - a.gifted);
 
@@ -317,7 +317,7 @@ cookieCommand.whisperable = true;
 cookieCommand.description = 'Uso: !cookie <open/show/give/top/slot>; Open: Abra um dos seus cookies para receber uma frase inspiradora; Show: mostra as estatísticas de cookie de algum usuário; Give: Ofereça um cookie para algum usuário; Top: Mostra os 5 usuários de quantidade de cookies; Slot: Aposte um cookie para a chance de receber mais em troca';
 cookieCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${cookieCommand.commandName}/${cookieCommand.commandName}.js`;
 
-cookieDiarioCommand.commandName = 'cookie diário';
+cookieDiarioCommand.commandName = 'cookie diário (cd)';
 cookieDiarioCommand.aliases = ['cd'];
 cookieDiarioCommand.shortDescription = 'Resgate o seu cookie diário';
 cookieDiarioCommand.cooldown = 5000;
