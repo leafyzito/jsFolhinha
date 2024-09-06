@@ -24,7 +24,13 @@ const coinflipCommand = async (client, message) => {
 
 };
 
+coinflipCommand.commandName = 'coinflip';
 coinflipCommand.aliases = ['coinflip', 'cf'];
+coinflipCommand.shortDescription = 'Lança uma moeda ao ar e receba um resultado aleatório';
+coinflipCommand.cooldown = 5000;
+coinflipCommand.whisperable = true;
+coinflipCommand.description = 'Uso: !coinflip; Resposta esperada: Cara (sim)/Coroa (não)';
+coinflipCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${coinflipCommand.commandName}/${coinflipCommand.commandName}.js`;
 
 module.exports = {
     coinflipCommand,

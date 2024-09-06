@@ -27,7 +27,13 @@ const curiosidadeCommand = async (client, message) => {
 
 };
 
+curiosidadeCommand.commandName = 'curiosidade';
 curiosidadeCommand.aliases = ['curiosidade', 'curiosidades'];
+curiosidadeCommand.shortDescription = 'Mostra uma curiosidade aleatória';
+curiosidadeCommand.cooldown = 5000;
+curiosidadeCommand.whisperable = true;
+curiosidadeCommand.description = 'Uso: !curiosidade; Resposta esperada: {curiosidade}';
+curiosidadeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${curiosidadeCommand.commandName}/${curiosidadeCommand.commandName}.js`;
 
 module.exports = {
     curiosidadeCommand,

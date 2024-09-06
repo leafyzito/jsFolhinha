@@ -71,7 +71,13 @@ const chattersCommand = async (client, message) => {
 
 };
 
+chattersCommand.commandName = 'chatters';
 chattersCommand.aliases = ['chatters'];
+chattersCommand.shortDescription = 'Mostra a lista de chatters de algum canal';
+chattersCommand.cooldown = 5000;
+chattersCommand.whisperable = false;
+chattersCommand.description = 'Uso: !chatters <canal>; Resposta esperada: Lista de chatters de {canal}';
+chattersCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${chattersCommand.commandName}/${chattersCommand.commandName}.js`;
 
 module.exports = {
     chattersCommand,

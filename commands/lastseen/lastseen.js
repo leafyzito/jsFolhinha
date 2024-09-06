@@ -11,7 +11,7 @@ const lastSeenCommand = async (client, message) => {
     }
 
     const targetUser = message.messageText.split(' ')[1].toLowerCase().replace(/^@/, '')
-    
+
     if (targetUser === message.senderUsername) {
         client.log.logAndReply(message, `Você tá aqui mesmo Stare`);
         return;
@@ -45,7 +45,13 @@ const lastSeenCommand = async (client, message) => {
     client.log.logAndReply(message, `${targetUser} foi visto pela última vez num chat há ${timeSinceLs}`);
 };
 
+lastSeenCommand.commandName = 'lastseen';
 lastSeenCommand.aliases = ['lastseen', 'ls'];
+lastSeenCommand.shortDescription = 'Mostra quando alguém foi visto em algum chat pela última vez';
+lastSeenCommand.cooldown = 5000;
+lastSeenCommand.whisperable = false;
+lastSeenCommand.description = 'Uso: !lastseen <usuário>; Resposta esperada: {usuário} foi visto pela última vez num chat há {tempo}';
+lastSeenCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${lastSeenCommand.commandName}/${lastSeenCommand.commandName}.js`;
 
 module.exports = {
     lastSeenCommand,

@@ -309,8 +309,21 @@ const cookieDiarioCommand = async (client, message) => {
     return;
 };
 
+cookieCommand.commandName = 'cookie';
 cookieCommand.aliases = ['cookie', 'cookies'];
+cookieCommand.shortDescription = 'Faça várias coisas com os seus cookies';
+cookieCommand.cooldown = 5000;
+cookieCommand.whisperable = true;
+cookieCommand.description = 'Uso: !cookie <open/show/give/top/slot>; Open: Abra um dos seus cookies para receber uma frase inspiradora; Show: mostra as estatísticas de cookie de algum usuário; Give: Ofereça um cookie para algum usuário; Top: Mostra os 5 usuários de quantidade de cookies; Slot: Aposte um cookie para a chance de receber mais em troca';
+cookieCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${cookieCommand.commandName}/${cookieCommand.commandName}.js`;
+
+cookieDiarioCommand.commandName = 'cookie diário';
 cookieDiarioCommand.aliases = ['cd'];
+cookieDiarioCommand.shortDescription = 'Resgate o seu cookie diário';
+cookieDiarioCommand.cooldown = 5000;
+cookieDiarioCommand.whisperable = true;
+cookieDiarioCommand.description = 'Uso: !cd; Resposta esperada: Você resgatou seu cookie diário e agora tem {cookies}';
+cookieDiarioCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${cookieCommand.commandName}/${cookieCommand.commandName}.js`;
 
 module.exports = {
     cookieCommand,

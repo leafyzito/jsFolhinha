@@ -27,7 +27,13 @@ const copypastaCommand = async (client, message) => {
 
 };
 
+copypastaCommand.commandName = 'copypasta';
 copypastaCommand.aliases = ['copypasta', 'copy'];
+copypastaCommand.shortDescription = 'Mostra uma copypasta aleatória';
+copypastaCommand.cooldown = 5000;
+copypastaCommand.whisperable = true;
+copypastaCommand.description = 'Uso: !copypasta; Resposta esperada: {copypasta}';
+copypastaCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${copypastaCommand.commandName}/${copypastaCommand.commandName}.js`;
 
 module.exports = {
     copypastaCommand,

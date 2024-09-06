@@ -169,9 +169,15 @@ const howLongToBeatCommand = async (client, message) => {
         Todos os estilos: ${hours.all} hrs.
         ${url}
     `.replace(/\n/g, ' '));
-}   
+}
 
+howLongToBeatCommand.commandName = 'howlongtobeat';
 howLongToBeatCommand.aliases = ['howlongtobeat', 'hltb'];
+howLongToBeatCommand.shortDescription = 'Mostra o tempo que leva para um jogo ser completado';
+howLongToBeatCommand.cooldown = 5000;
+howLongToBeatCommand.whisperable = true;
+howLongToBeatCommand.description = 'Uso: !howlongtobeat <jogo>; Resposta esperada: {informações sobre tempo geral para completar o jogo}';
+howLongToBeatCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${howLongToBeatCommand.commandName}/${howLongToBeatCommand.commandName}.js`;
 
 module.exports = {
     howLongToBeatCommand,

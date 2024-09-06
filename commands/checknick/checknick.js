@@ -48,7 +48,13 @@ const checkNickCommand = async (client, message) => {
     client.log.logAndReply(message, `O nick ${nick} está disponível ${emote}`);
 };
 
+checkNickCommand.commandName = 'checknick';
 checkNickCommand.aliases = ['checknick', 'nickcheck', 'namecheck', 'checkname'];
+checkNickCommand.shortDescription = 'Verifica se um nick específico está disponível';
+checkNickCommand.cooldown = 5000;
+checkNickCommand.whisperable = true;
+checkNickCommand.description = 'Uso: !checknick <nick>; Resposta esperada: O nick {nick} está disponível/indisponível';
+checkNickCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${checkNickCommand.commandName}/${checkNickCommand.commandName}.js`;
 
 module.exports = {
     checkNickCommand,

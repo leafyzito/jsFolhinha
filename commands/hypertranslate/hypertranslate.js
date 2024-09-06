@@ -4,8 +4,8 @@ const langs = require('../translate/langs.json');
 
 async function translateText(textToTranslate, targetLanguage) {
     const translatedText = await translate(textToTranslate, { to: targetLanguage });
-    
-    return { 
+
+    return {
         fromLanguage: translatedText.from.language.iso,
         translatedText: translatedText.text,
     };
@@ -60,7 +60,13 @@ const hypertranslateCommand = async (client, message) => {
     client.log.logAndReply(message, `${hyperTranslatedText}`);
 };
 
+hypertranslateCommand.commandName = 'hypertranslate';
 hypertranslateCommand.aliases = ['hypertranslate', 'htranslate', 'ht'];
+hypertranslateCommand.shortDescription = 'Traduz um texto várias vezes';
+hypertranslateCommand.cooldown = 20000;
+hypertranslateCommand.whisperable = false;
+hypertranslateCommand.description = 'Uso: !hypertranslate <texto para traduzir> (opcional: número de traduções default: 10); Resposta esperada: {texto traduzido várias vezes}';
+hypertranslateCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${hypertranslateCommand.commandName}/${hypertranslateCommand.commandName}.js`;
 
 module.exports = {
     hypertranslateCommand,

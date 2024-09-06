@@ -50,7 +50,13 @@ const optoutCommand = async (client, message) => {
 
 };
 
+optoutCommand.commandName = 'optout';
 optoutCommand.aliases = ['optout'];
+optoutCommand.shortDescription = 'Opte fora de alguns comandos do bot';
+optoutCommand.cooldown = 5000;
+optoutCommand.whisperable = false;
+optoutCommand.description = 'Uso: !optout <lastseen/stalk>; Resposta esperada: A partir de agora você {optou/não optou} por {lastseen/stalk}';
+optoutCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${optoutCommand.commandName}/${optoutCommand.commandName}.js`;
 
 module.exports = {
     optoutCommand,

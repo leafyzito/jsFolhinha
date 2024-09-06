@@ -129,7 +129,13 @@ const downloadCommand = async (client, message) => {
     client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}download (opcional: video/audio) <link para fazer download>`);
 };
 
+downloadCommand.commandName = 'download';
 downloadCommand.aliases = ['download', 'dl'];
+downloadCommand.shortDescription = 'Faz o download de algum vídeo/audio';
+downloadCommand.cooldown = 5000;
+downloadCommand.whisperable = true;
+downloadCommand.description = 'Uso: !download (opcional: video/audio default: video) <link para fazer download>';
+downloadCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${downloadCommand.commandName}/${downloadCommand.commandName}.js`;
 
 module.exports = {
     downloadCommand,

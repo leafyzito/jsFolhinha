@@ -207,7 +207,13 @@ const remindCommand = async (client, message) => {
     return;
 };
 
+remindCommand.commandName = 'remind';
 remindCommand.aliases = ['remind', 'lembrar'];
+remindCommand.shortDescription = 'Deixe um lembrete para a próxima vez que algum usuário falar no chat';
+remindCommand.cooldown = 5000;
+remindCommand.whisperable = false;
+remindCommand.description = 'Uso: !remind <usuário> <mensagem> ; Resposta esperada: {usuário} vai ser lembrado disso em assim que falar no chat (ID: {ID do lembrete})';
+remindCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${remindCommand.commandName}/${remindCommand.commandName}.js`;
 
 module.exports = {
     remindCommand,

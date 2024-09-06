@@ -127,9 +127,29 @@ const isAfkCommand = async (client, message) => {
     return;
 };
 
+afkCommand.commandName = 'afk';
 afkCommand.aliases = [...afkAliasList];
-rafkCommand.aliases = ['rafk'];
+afkCommand.shortDescription = 'Fique com status afk para contar quanto tempo esteve fora no canal atual';
+afkCommand.cooldown = 5000;
+afkCommand.whisperable = false;
+afkCommand.description = 'Uso: !afk <usuário>; Resposta esperada: {usuário} ficou afk';
+afkCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${afkCommand.commandName}/${afkCommand.commandName}.js`;
+
+rafkCommand.commandName = 'resumeafk';
+rafkCommand.aliases = ['rafk', 'resumeafk'];
+rafkCommand.shortDescription = 'Retome o seu status afk anterior no canal atual';
+rafkCommand.cooldown = 5000;
+rafkCommand.whisperable = false;
+rafkCommand.description = 'Uso: !rafk <usuário>; Resposta esperada: {usuário} voltou a ficar afk';
+rafkCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${afkCommand.commandName}/${afkCommand.commandName}.js`;
+
+isAfkCommand.commandName = 'isafk';
 isAfkCommand.aliases = ['isafk'];
+isAfkCommand.shortDescription = 'Verifica o status de afk de algum usuário no canal atual';
+isAfkCommand.cooldown = 5000;
+isAfkCommand.whisperable = false;
+isAfkCommand.description = 'Uso: !isafk <usuário>; Resposta esperada: Usuário {usuário} está afk há {tempo}';
+isAfkCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${afkCommand.commandName}/${afkCommand.commandName}.js`;
 
 module.exports = {
     afkCommand,

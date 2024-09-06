@@ -26,8 +26,21 @@ const unpauseCommand = async (client, message) => {
     }
 };
 
+pauseCommand.commandName = 'pause';
 pauseCommand.aliases = ['pause', 'pausar'];
+pauseCommand.shortDescription = 'Pausa o bot no chat atual';
+pauseCommand.cooldown = 0;
+pauseCommand.whisperable = false;
+pauseCommand.description = 'Uso: !pause; Resposta esperada: pausado. O bot não irá voltar a responder até !unpause ser usado';
+pauseCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${pauseCommand.commandName}/${pauseCommand.commandName}.js`;
+
+unpauseCommand.commandName = 'unpause';
 unpauseCommand.aliases = ['unpause', 'despausar'];
+unpauseCommand.shortDescription = 'Despausa o bot no chat atual';
+unpauseCommand.cooldown = 0;
+unpauseCommand.whisperable = false;
+unpauseCommand.description = 'Uso: !unpause; Resposta esperada: despausado. O bot irá voltar a responder';
+unpauseCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${pauseCommand.commandName}/${pauseCommand.commandName}.js`;
 
 module.exports = {
     pauseCommand,

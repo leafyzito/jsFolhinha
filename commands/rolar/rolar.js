@@ -1,6 +1,6 @@
 const { processCommand } = require("../../utils/processCommand.js");
 const { randomInt } = require("../../utils/utils.js");
- 
+
 const rolarCommand = async (client, message) => {
     message.command = 'rolar';
     if (!await processCommand(5000, 'channel', message, client)) return;
@@ -11,7 +11,7 @@ const rolarCommand = async (client, message) => {
     }
 
     const args = message.messageText.split(' ').slice(1);
-    
+
     var dice = args[0];
     var sides = args[1];
 
@@ -45,7 +45,13 @@ const rolarCommand = async (client, message) => {
     client.log.logAndReply(message, `As suas roladas foram: ${roladas.join(', ')} (soma: ${sum}) 🎲`);
 };
 
+rolarCommand.commandName = 'rolar';
 rolarCommand.aliases = ['rolar', 'roll'];
+rolarCommand.shortDescription = 'Lance um ou mais dados';
+rolarCommand.cooldown = 5000;
+rolarCommand.whisperable = true;
+rolarCommand.description = 'Uso: !rolar <quantidade de lados> (opcional: quantidade de dados default: 1); Resposta esperada: As suas roladas foram: {dados da rolada} (soma: {soma da rolada}) 🎲';
+rolarCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${rolarCommand.commandName}/${rolarCommand.commandName}.js`;
 
 module.exports = {
     rolarCommand,

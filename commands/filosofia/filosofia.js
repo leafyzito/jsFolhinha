@@ -27,7 +27,13 @@ const filosofiaCommand = async (client, message) => {
 
 };
 
+filosofiaCommand.commandName = 'filosofia';
 filosofiaCommand.aliases = ['filosofia', 'filosofias'];
+filosofiaCommand.shortDescription = 'Mostra uma filosofia aleatória';
+filosofiaCommand.cooldown = 5000;
+filosofiaCommand.whisperable = true;
+filosofiaCommand.description = 'Uso: !filosofia; Resposta esperada: {filosofia}';
+filosofiaCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${filosofiaCommand.commandName}/${filosofiaCommand.commandName}.js`;
 
 module.exports = {
     filosofiaCommand,

@@ -10,7 +10,7 @@ const sugerirCommand = async (client, message) => {
     }
 
     var sugestao = message.messageText.split(' ').slice(1).join(' ');
-    
+
     const currentDate = new Date();
     const formattedDate = currentDate.toISOString().replace('T', ' ').substr(0, 19);
 
@@ -25,7 +25,13 @@ const sugerirCommand = async (client, message) => {
     client.log.logAndReply(message, `Obrigado pela sugestão ${emote}`);
 };
 
+sugerirCommand.commandName = 'sugerir';
 sugerirCommand.aliases = ['sugerir', 'sugestao', 'sugestão'];
+sugerirCommand.shortDescription = 'Envia uma sugestão para o bot';
+sugerirCommand.cooldown = 5000;
+sugerirCommand.whisperable = true;
+sugerirCommand.description = 'Uso: !sugerir <sugestão>; Resposta esperada: Obrigado pela sugestão 👍';
+sugerirCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${sugerirCommand.commandName}/${sugerirCommand.commandName}.js`;
 
 module.exports = {
     sugerirCommand,

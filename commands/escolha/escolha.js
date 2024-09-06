@@ -23,7 +23,13 @@ const escolhaCommand = async (client, message) => {
     client.log.logAndReply(message, `🤖 ${choice}`);
 };
 
+escolhaCommand.commandName = 'escolha';
 escolhaCommand.aliases = ['escolha', 'escolher', 'choose', 'choice', 'pick'];
+escolhaCommand.shortDescription = 'Faça o bot escolher um elemento aleatório de uma lista';
+escolhaCommand.cooldown = 5000;
+escolhaCommand.whisperable = true;
+escolhaCommand.description = 'Uso: !escolha <opções>; Resposta esperada: {opção escolhida aleatoriamente da lista de opções}';
+escolhaCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${escolhaCommand.commandName}/${escolhaCommand.commandName}.js`;
 
 module.exports = {
     escolhaCommand,

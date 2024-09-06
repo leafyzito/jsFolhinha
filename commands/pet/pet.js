@@ -225,8 +225,17 @@ const brincarCommand = async (client, message) => {
     client.log.logAndReply(message, brincadeira);
 }
 
+petCommand.commandName = 'pet';
 petCommand.aliases = ['pet'];
+petCommand.shortDescription = 'Veja várias opções do que pode fazer com o pet do chat';
+petCommand.cooldown = 5000;
+petCommand.whisperable = false;
+petCommand.description = 'descrição longa estou com preguiça agora';
+petCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${petCommand.commandName}/${petCommand.commandName}.js`;
+
 carinhoCommand.aliases = ['carinho', 'pat'];
+
+
 brincarCommand.aliases = ['brincar', 'play'];
 
 module.exports = {

@@ -1,3 +1,4 @@
+const { join } = require("path");
 const { processCommand } = require("../../utils/processCommand.js");
 const fs = require('fs');
 
@@ -55,7 +56,13 @@ const joinCommand = async (client, message) => {
     return;
 };
 
+joinCommand.commandName = 'join';
 joinCommand.aliases = ['join', 'entrar'];
+joinCommand.shortDescription = 'Convide o bot para entrar no seu chat';
+joinCommand.cooldown = 5000;
+joinCommand.whisperable = true;
+joinCommand.description = 'Uso: !join; Resposta esperada: Entrei no chat {usuário} com sucesso! Tô lá te esperando! {emoji de felicidade}';
+joinCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${joinCommand.commandName}/${joinCommand.commandName}.js`;
 
 module.exports = {
     joinCommand,
