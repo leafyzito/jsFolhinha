@@ -36,7 +36,7 @@ const cookieCommand = async (client, message) => {
     if (!await processCommand(5000, 'user', message, client)) return;
 
     if (message.messageText.split(' ').length < 2) {
-        client.log.logAndReply(message, `Está com dúvidas sobre os comandos de cookie? Acesse https://folhinhabot.github.io/comandos 😁`);
+        client.log.logAndReply(message, `Está com dúvidas sobre os comandos de cookie? Acesse https://folhinhabot.com/comandos/cookie 😁`);
         return;
     }
 
@@ -268,7 +268,7 @@ const cookieCommand = async (client, message) => {
         return;
     }
 
-    client.log.logAndReply(message, `Está com dúvidas sobre os comandos de cookie? Acesse https://folhinhabot.github.io/comandos 😁`);
+    client.log.logAndReply(message, `Está com dúvidas sobre os comandos de cookie? Acesse https://folhinhabot.com/comandos/cookie 😁`);
     return;
 };
 
