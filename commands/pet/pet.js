@@ -50,7 +50,7 @@ const petCommand = async (client, message) => {
     if (!await processCommand(5000, 'channel', message, client)) return;
 
     if (message.messageText.split(' ').length === 1) {
-        client.log.logAndReply(message, `Para saber mais sobre os comando de pet, acesse https://folhinhabot.github.io/comandos/pet 😁 `);
+        client.log.logAndReply(message, `Para saber mais sobre os comando de pet, acesse https://folhinhabot.com/comandos/pet 😁 `);
         return;
     }
 
@@ -79,7 +79,7 @@ const petCommand = async (client, message) => {
         }
 
         if (!petEmojis.includes(petEmoji)) {
-            client.log.logAndReply(message, `Esse emoji não é válido. Para uma lista de emojis válidos, acesse https://folhinhabot.github.io/emojis.txt`);
+            client.log.logAndReply(message, `Esse emoji não é válido. Para uma lista de emojis válidos, acesse https://folhinhabot.com/emojis`);
             return;
         }
 
