@@ -1,15 +1,46 @@
+const fs = require('fs');
 const { isStreamOnline } = require('./utils.js');
+
+async function createNewChannelConfig(client, userid) {
+    const username = await client.getUserByUserID(userid);
+    const newConfig = {
+        channel: username,
+        channelId: userid,
+        prefix: '!',
+        offlineOnly: false,
+        isPaused: false,
+        disabledCommands: [],
+        devBanCommands: []
+    };
+
+    await client.db.insert('config', newConfig);
+    await client.reloadChannelConfigs();
+    await client.reloadChannelPrefixes();
+
+    fs.appendFile('channels.txt',
+        `${userid} ${username}\n`,
+        (err) => {
+            if (err) {
+                console.error(`Erro ao adicionar ${username} ao channels.txt: ${err}`);
+                return;
+            }
+            console.log('Data appended to channels.txt');
+        });
+
+    return;
+}
+
 
 async function dailyCookieResetTask(client) {
     client.discord.log('* Resetting daily cookies');
     console.log('* Resetting daily cookies');
 
     await client.db.updateMany('cookie', {}, {
-        $set: { 
+        $set: {
             claimedToday: false,
             giftedToday: false,
             usedSlot: false
-         }
+        }
     });
 }
 
@@ -37,7 +68,7 @@ async function petAttencionTask(client) {
             }
 
             client.log.send(channel, `${pet.pet_emoji} ${pet.pet_name} tá pedindo atenção! Se não interagir com ele, ele vai ficar rabugento!`);
-            await client.db.update('pet', { channelId: pet.channelId }, { $set : { warns: 1 } });
+            await client.db.update('pet', { channelId: pet.channelId }, { $set: { warns: 1 } });
             continue;
         }
 
@@ -53,7 +84,7 @@ async function petAttencionTask(client) {
             }
 
             client.log.send(channel, `${pet.pet_emoji} ${pet.pet_name} ficou rabugento! Já se passaram mais de 24 horas desde a última interação!`);
-            await client.db.update('pet', { channelId: pet.channelId }, { $set : { warns: 2 } });
+            await client.db.update('pet', { channelId: pet.channelId }, { $set: { warns: 2 } });
             continue;
         }
 
@@ -69,12 +100,55 @@ async function petAttencionTask(client) {
             }
 
             client.log.send(channel, `${pet.pet_emoji} ${pet.pet_name} foi embora! Ningúem deu atenção a ele e ele se foi...`);
-            await client.db.update('pet', { channelId: pet.channelId }, { $set : { is_alive: false, time_of_death: currentTime } });
+            await client.db.update('pet', { channelId: pet.channelId }, { $set: { is_alive: false, time_of_death: currentTime } });
             continue;
         }
-        
+
         // console.log('all good for ' + channel);
     }
+}
+
+async function fetchPendingJoins(client) {
+    const pendingJoins = await client.db.get('pendingjoin', { status: 'pending' });
+    for (const channelToJoin of pendingJoins) {
+        const userid = channelToJoin.userid;
+        const username = await client.getUserByUserID(userid);
+        if (username) {
+            // this should never happen, but let's test it    
+            const alreadyJoinedChannels = [...client.joinedChannels];
+            if (alreadyJoinedChannels.includes(username)) {
+                console.log(`* ${username} is already joined`);
+                await client.db.update('pendingjoin', { _id: channelToJoin._id }, { $set: { status: 'joined' } });
+                continue;
+            }
+
+            console.log(`* Joining ${username} to ${username}`);
+            client.discord.log(`* Joining to ${username} from website`);
+
+            client.join(username).catch((err) => {
+                console.error(`Erro ao entrar no chat ${username}: ${err}`);
+                client.discord.log(`* Error joining ${username} from website: ${err}`);
+                client.log.send(username, `Erro ao entrar no chat ${username}. Contacte o @${process.env.DEV_NICK}`);
+                return;
+            });
+
+            // create config
+            createNewChannelConfig(client, userid);
+
+            const emote = await client.emotes.getEmoteFromList(username, ['peepohey', 'heyge'], 'KonCha');
+            client.log.send(username, `${emote} Oioi! Fui convidado para me juntar aqui! Para saber mais sobre mim, pode usar !ajuda ou !comandos`);
+
+            client.db.update('pendingjoin', { _id: channelToJoin._id }, { $set: { status: 'joined' } });
+        }
+        else {
+            console.log(`* ${channelToJoin.userid} not found from website`);
+            client.discord.log(`* ${channelToJoin.userid} not found from website`);
+            await client.db.update('pendingjoin', { _id: channelToJoin._id }, { $set: { status: 'user not found' } });
+        }
+
+        // console.log('all good dentro do for loop');
+    }
+    // console.log('all good já FORA do for loop');
 }
 
 function startPetTask(client) {
@@ -82,8 +156,14 @@ function startPetTask(client) {
     setInterval(() => petAttencionTask(client), 60_000); // 1 minute
 }
 
+function startFetchPendingJoinsTask(client) {
+    // run every X time
+    setInterval(() => fetchPendingJoins(client), 10_000); // 10 seconds
+}
+
 
 module.exports = {
     dailyCookieResetTask,
-    startPetTask
+    startPetTask,
+    startFetchPendingJoinsTask
 };
