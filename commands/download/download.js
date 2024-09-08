@@ -2,12 +2,12 @@ const { processCommand } = require("../../utils/processCommand.js");
 const { shortenUrl } = require("../../utils/utils.js");
 
 async function getVideoDownload(urlToDownload) {
-    const apiUrl = 'https://co.wuk.sh/api/json'; // https://cobalt.tools/
+    const apiUrl = 'https://api.cobalt.tools/api/json'; // https://cobalt.tools/
     const headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
     };
-    const data = {
+    const payload = {
         'url': urlToDownload
     };
 
@@ -15,7 +15,7 @@ async function getVideoDownload(urlToDownload) {
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: headers,
-            body: JSON.stringify(data)
+            body: JSON.stringify(payload)
         });
         const resData = await response.json();
         let resUrl = resData.url;
