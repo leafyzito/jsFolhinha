@@ -2,9 +2,10 @@ require('dotenv').config();
 const { ChatClient } = require('@kararty/dank-twitch-irc');
 const { modifyClient } = require('./utils/startup.js');
 const { commandHandler, listenerHandler } = require('./utils/handlers.js');
-const { dailyCookieResetTask, startPetTask } = require('./utils/tasks.js');
+const { dailyCookieResetTask, startPetTask, startFetchPendingJoinsTask } = require('./utils/tasks.js');
 const fs = require('fs');
 const cron = require('node-cron');
+const { start } = require('repl');
 
 
 // Load the channels to join from the channels.txt
@@ -54,6 +55,7 @@ channelsToJoin.then((channels) => {
 // Schedule tasks
 cron.schedule('0 9 * * *', async () => { await dailyCookieResetTask(client); });
 startPetTask(client);
+startFetchPendingJoinsTask(client);
 
 
 // handlers
