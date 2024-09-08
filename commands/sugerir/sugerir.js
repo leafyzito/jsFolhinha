@@ -21,8 +21,8 @@ const sugerirCommand = async (client, message) => {
         'date': formattedDate
     });
 
-    const emote = await client.emotes.getEmoteFromList(message.channelName, ['joia', 'jumilhao'], '👍');
-    client.log.logAndReply(message, `Obrigado pela sugestão ${emote}`);
+    const emote = await client.emotes.getEmoteFromList(message.channelName, ['joia', 'jumilhao'], 'FeelsOkayMan 👍');
+    client.log.logAndReply(message, `Obrigado pela sugestão. Assim que possível, o @${process.env.DEV_NICK} dará uma olhada ${emote}`);
 };
 
 sugerirCommand.commandName = 'sugerir';
