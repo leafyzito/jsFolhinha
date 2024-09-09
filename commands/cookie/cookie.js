@@ -66,9 +66,15 @@ const cookieCommand = async (client, message) => {
             const hours = Math.floor(timeLeft / (1000 * 60 * 60));
             const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
 
-            client.log.logAndReply(message, `Você resgatou seu cookie diário e agora tem ${userCookieStats.total} cookies! 🍪`);
+            client.log.logAndReply(message, `Você já resgatou seu cookie diário hoje. Volte em ${hours}h ${minutes}m para resgatar o seu cookie diário de novo ⌛`);
             return;
         }
+
+        userCookieStats.total += 1;
+        userCookieStats.claimedToday = true;
+        await client.db.update('cookie', { userId: message.senderUserID }, { $set: { total: userCookieStats.total, claimedToday: userCookieStats.claimedToday } });
+        client.log.logAndReply(message, `Você resgatou seu cookie diário e agora tem ${userCookieStats.total} cookies! 🍪`);
+        return;
     }
 
     if (['abrir', 'open'].includes(targetCommand)) {
