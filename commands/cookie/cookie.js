@@ -43,7 +43,7 @@ const cookieCommand = async (client, message) => {
     const args = message.messageText.split(' ');
     const targetCommand = args[1].toLowerCase();
 
-    if (['diario', 'diário'].includes(targetCommand)) {
+    if (['diario', 'diário', 'daily'].includes(targetCommand)) {
         const userCookieStats = await loadUserCookieStats(client, message.senderUserID);
 
         if (!userCookieStats) {
