@@ -11,8 +11,8 @@ const optoutCommand = async (client, message) => {
 
     const optoutTarget = message.messageText.split(' ')[1]?.toLowerCase();
 
-    if (!['channel', 'canal', 'lastseen', 'ls', 'stalk'].includes(optoutTarget)) {
-        client.log.logAndReply(message, `Use o formato ${message.commandPrefix}optout <lastseen/stalk>`);
+    if (!['channel', 'canal', 'lastseen', 'ls', 'stalk', 'remind'].includes(optoutTarget)) {
+        client.log.logAndReply(message, `Use o formato ${message.commandPrefix}optout <lastseen/stalk/remind>`);
         return;
     }
 
@@ -48,6 +48,15 @@ const optoutCommand = async (client, message) => {
         return;
     }
 
+    if (['remind'].includes(optoutTarget)) {
+        const userOptout = await client.db.get('users', { userid: message.senderUserID });
+        const currState = userOptout[0].optoutRemind;
+
+        await client.db.update('users', { userid: message.senderUserID }, { $set: { optoutRemind: !currState } });
+        client.log.logAndReply(message, `A partir de agora você ${!currState ? 'NÃO' : ''} pode ser alvo de comandos remind`);
+        return;
+    }
+
 };
 
 optoutCommand.commandName = 'optout';
@@ -55,7 +64,7 @@ optoutCommand.aliases = ['optout'];
 optoutCommand.shortDescription = 'Opte fora de alguns comandos do bot';
 optoutCommand.cooldown = 5000;
 optoutCommand.whisperable = false;
-optoutCommand.description = 'Uso: !optout <lastseen/stalk>; Resposta esperada: A partir de agora você {optou/não optou} por {lastseen/stalk}';
+optoutCommand.description = 'Uso: !optout <lastseen/stalk/remind>; Resposta esperada: A partir de agora você {optou/não optou} por {lastseen/stalk/remind}';
 optoutCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${optoutCommand.commandName}/${optoutCommand.commandName}.js`;
 
 module.exports = {

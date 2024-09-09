@@ -84,13 +84,13 @@ const reminderListener = async (client, message) => {
         }
 
         client.log.send(message.channelName, replyMsg);
-        
+
         for (const reminder of firstThreeReminders) {
-            await client.db.update('remind', { _id: reminder._id }, { $set : { beenRead: true } });
+            await client.db.update('remind', { _id: reminder._id }, { $set: { beenRead: true } });
         }
         client.reloadReminders();
         return;
-    } 
+    }
 
     client.log.send(message.channelName, `${message.senderUsername}, você tem ${reminders.length} lembretes pendentes. Use o comando ${message.commandPrefix}remind <show> para ver os IDs dos lembretes. Pode também usar ${message.commandPrefix}remind <show all> para ver todos os lembretes de uma vez`);
     client.notifiedUsers.push(message.senderUserID);
@@ -100,14 +100,14 @@ const reminderListener = async (client, message) => {
 
 
 async function updateLastSeen(client, message) {
-    
+
     const update_doc = {
         $set: {
             lsDate: Math.floor(Date.now() / 1000),
             lsChannel: message.channelName,
             lsMessage: message.messageText
         },
-        $inc: { 
+        $inc: {
             'msgCount.total': 1,
             [`msgCount.${message.channelName}`]: 1
         }
@@ -119,14 +119,14 @@ async function updateLastSeen(client, message) {
 
 const updateUserListener = async (client, message) => {
     if (message.senderUsername === 'folhinhabot') { return; }
-    
+
     if ([...client.knownUserAliases].includes(message.senderUsername)) { return await updateLastSeen(client, message); }
 
     const knownUsersDB = await client.db.get('users', { userid: message.senderUserID });
     if (knownUsersDB.length > 0) {
         client.discord.log(`* Updating user aliases: ${knownUsersDB[0].currAlias} -> ${message.senderUsername}`);
         console.log(`User found in DB. updating aliases: ${knownUsersDB[0].currAlias} -> ${message.senderUsername}`);
-        
+
         await client.db.update('users', { userid: message.senderUserID }, { $set: { currAlias: message.senderUsername }, $push: { aliases: message.senderUsername } });
         client.knownUserAliases = client.knownUserAliases.filter(alias => alias !== knownUsersDB[0].currAlias);
         client.knownUserAliases.push(message.senderUsername);
@@ -134,7 +134,7 @@ const updateUserListener = async (client, message) => {
         if (client.channelConfigs[knownUsersDB[0].currAlias]) {
             client.discord.log(`* Updating channel config for ${knownUsersDB[0].currAlias} -> ${message.senderUsername}`);
             console.log(`Updating channel config for ${knownUsersDB[0].currAlias} -> ${message.senderUsername}`);
-            await client.db.update('config', { channel: knownUsersDB[0].currAlias.toLowerCase() }, { $set: { channel: message.senderUsername} });
+            await client.db.update('config', { channel: knownUsersDB[0].currAlias.toLowerCase() }, { $set: { channel: message.senderUsername } });
             client.part(knownUsersDB[0].currAlias);
             client.join(message.senderUsername);
             client.log.send(message.senderUsername, `Troca de nick detetada (${knownUsersDB[0].currAlias} -> ${message.senderUsername})`);
@@ -159,15 +159,17 @@ const updateUserListener = async (client, message) => {
         lsDate: Math.floor(Date.now() / 1000),
         optoutLs: false,
         optoutStalk: false,
+        optoutRemind: false,
         optoutOwnChannel: false,
+        blocks: {},
         msgCount: { total: 1, [message.channelName]: 1 },
     });
 
-    client.knownUserAliases.push(message.senderUsername);    
+    client.knownUserAliases.push(message.senderUsername);
 }
 
 
-module.exports = { 
+module.exports = {
     replyMentionListener,
     afkUserListener,
     reminderListener,
