@@ -26,6 +26,7 @@ const loadCommands2 = () => {
         const whisperable = value.whisperable;
         const description = value.description;
         const code = value.code;
+        const emojis = value.emojis ? value.emojis : null;
 
         console.log(commandName, aliases, shortDescription, cooldown, whisperable, description, code);
 
@@ -49,6 +50,10 @@ const loadCommands2 = () => {
             "description": description,
             "code": code
         };
+        if (emojis) {
+            agoraVai[commandName]['emojis'] = emojis;
+        }
+
     }
 
     // console.log(agoraVai);
