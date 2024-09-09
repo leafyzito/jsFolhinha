@@ -232,6 +232,7 @@ petCommand.cooldown = 5000;
 petCommand.whisperable = false;
 petCommand.description = 'descrição longa estou com preguiça agora';
 petCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${petCommand.commandName}/${petCommand.commandName}.js`;
+petCommand.emojis = petEmojis;
 
 carinhoCommand.aliases = ['carinho', 'pat'];
 
