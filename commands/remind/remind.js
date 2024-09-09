@@ -133,6 +133,42 @@ const remindCommand = async (client, message) => {
         return;
     }
 
+    if (['block', 'bloquear'].includes(targetUser)) {
+        const targetUser = message.messageText.split(' ')[2]?.replace(/^@/, '');
+        if (!targetUser) {
+            client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind block <usuário>`);
+            return;
+        }
+
+        const targetUserId = await client.getUserID(targetUser);
+        if (!targetUserId) {
+            client.log.logAndReply(message, `Esse usuário não existe`);
+            return;
+        }
+
+        await client.db.update('users', { userid: message.senderUserID }, { $push: { 'blocks.remind': targetUserId } });
+        client.log.logAndReply(message, `Você bloqueou ${targetUser} de usar comandos remind para você`);
+        return;
+    }
+
+    if (['unblock', 'desbloquear'].includes(targetUser)) {
+        const targetUser = message.messageText.split(' ')[2]?.replace(/^@/, '');
+        if (!targetUser) {
+            client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind unblock <usuário>`);
+            return;
+        }
+
+        const targetUserId = await client.getUserID(targetUser);
+        if (!targetUserId) {
+            client.log.logAndReply(message, `Esse usuário não existe`);
+            return;
+        }
+
+        await client.db.updateMany('users', { userid: message.senderUserID }, { $pull: { 'blocks.remind': targetUserId } });
+        client.log.logAndReply(message, `Você desbloqueou ${targetUser} de usar comandos remind para você`);
+        return;
+    }
+
     if (['folhinha', 'folhinhabot'].includes(targetUser)) {
         client.log.logAndReply(message, `Stare que foi ow`);
         return;
@@ -142,8 +178,8 @@ const remindCommand = async (client, message) => {
         targetUser = message.senderUsername;
     }
 
-    const targetId = await client.getUserID(targetUser);
-    if (!targetId) {
+    const targetUserId = await client.getUserID(targetUser);
+    if (!targetUserId) {
         client.log.logAndReply(message, `Esse usuário não existe`);
         return;
     }
@@ -198,12 +234,33 @@ const remindCommand = async (client, message) => {
     }
 
     console.log(totalSeconds);
-    const newRemindId = await newRemind(client, message, targetId, remindMessage, remindAt);
+
+    // check user optout and reminder blocks
+    let targetUserInfo = await client.db.get('users', { userid: targetUserId });
+    targetUserInfo = targetUserInfo[0];
+
+    // if exists in logs, check for stuff. if not, skip and create remind anyway
+    if (targetUserInfo) {
+        if (targetUserInfo.optoutRemind) {
+            client.log.logAndReply(message, `Esse usuário optou por não ser alvo de comandos remind 🚫`);
+            return;
+        }
+
+        if (targetUserInfo.blocks && targetUserInfo.blocks.remind) {
+            if (targetUserInfo.blocks.remind.includes(message.senderUserID)) {
+                client.log.logAndReply(message, `Esse usuário bloqueou você de usar comandos remind para ele 🚫`);
+                return;
+            }
+        }
+    }
+
+    // create remind
+    const newRemindId = await newRemind(client, message, targetUserId, remindMessage, remindAt);
 
     const emote = await client.emotes.getEmoteFromList(message.channelName, ['noted'], '📝');
     client.log.logAndReply(message, `${targetUser !== message.senderUsername ? `@${targetUser}` : 'Você'} vai ser lembrado disso ${totalSeconds ? `em ${days ? `${days} ` : ''}${hours ? `${hours} ` : ''}${minutes ? `${minutes} ` : ''}${seconds ? `${seconds} ` : ''}` : 'assim que falar no chat'} ${emote} (ID ${newRemindId})`);
     await client.reloadReminders();
-    client.notifiedUsers = client.notifiedUsers.filter(id => id !== targetId); // Remove user from notifiedUsers
+    client.notifiedUsers = client.notifiedUsers.filter(id => id !== targetUserId); // Remove user from notifiedUsers
     return;
 };
 
