@@ -43,6 +43,34 @@ const cookieCommand = async (client, message) => {
     const args = message.messageText.split(' ');
     const targetCommand = args[1].toLowerCase();
 
+    if (['diario', 'diário'].includes(targetCommand)) {
+        const userCookieStats = await loadUserCookieStats(client, message.senderUserID);
+
+        if (!userCookieStats) {
+            await createUserCookieBase(client, message);
+            client.log.logAndReply(message, `Você resgatou seu cookie diário e agora tem 1 cookie! 🍪`);
+            return;
+        }
+
+        if (userCookieStats.claimedToday) {
+            // Calculate the time remaining until the next 9 AM
+            const now = new Date();
+            let nextNineAM = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0);
+
+            // If it's already past 9 AM today, calculate time until 9 AM tomorrow
+            if (now >= nextNineAM) {
+                nextNineAM.setDate(nextNineAM.getDate() + 1);
+            }
+
+            const timeLeft = nextNineAM - now;
+            const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+
+            client.log.logAndReply(message, `Você resgatou seu cookie diário e agora tem ${userCookieStats.total} cookies! 🍪`);
+            return;
+        }
+    }
+
     if (['abrir', 'open'].includes(targetCommand)) {
         const userCookieStats = await loadUserCookieStats(client, message.senderUserID);
 
@@ -314,7 +342,7 @@ cookieCommand.aliases = ['cookie', 'cookies'];
 cookieCommand.shortDescription = 'Faça várias coisas com os seus cookies';
 cookieCommand.cooldown = 5000;
 cookieCommand.whisperable = true;
-cookieCommand.description = 'Uso: !cookie <open/show/give/top/slot>; Open: Abra um dos seus cookies para receber uma frase inspiradora; Show: mostra as estatísticas de cookie de algum usuário; Give: Ofereça um cookie para algum usuário; Top: Mostra os 5 usuários de quantidade de cookies; Slot: Aposte um cookie para a chance de receber mais em troca';
+cookieCommand.description = 'Uso: !cookie <diário/open/show/give/top/slot>; Diário: resgate o seu cookie diário; Open: Abra um dos seus cookies para receber uma frase inspiradora; Show: mostra as estatísticas de cookie de algum usuário; Give: Ofereça um cookie para algum usuário; Top: Mostra os 5 usuários de quantidade de cookies; Slot: Aposte um cookie para a chance de receber mais em troca';
 cookieCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${cookieCommand.commandName}/${cookieCommand.commandName}.js`;
 
 cookieDiarioCommand.commandName = 'cookie diário (cd)';
