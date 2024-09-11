@@ -234,10 +234,21 @@ petCommand.description = 'descrição longa estou com preguiça agora';
 petCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${petCommand.commandName}/${petCommand.commandName}.js`;
 petCommand.emojis = petEmojis;
 
+carinhoCommand.commandName = 'carinho';
 carinhoCommand.aliases = ['carinho', 'pat'];
+carinhoCommand.shortDescription = 'Faça carinho no pet do chat';
+carinhoCommand.cooldown = 5000;
+carinhoCommand.whisperable = false;
+carinhoCommand.description = 'Uso: !carinho; Resposta esperada: Faça carinho no pat do chat';
+carinhoCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${petCommand.commandName}/${petCommand.commandName}.js`;
 
-
+brincarCommand.commandName = 'brincar';
 brincarCommand.aliases = ['brincar', 'play'];
+brincarCommand.shortDescription = 'Brinque com o pet do chat';
+brincarCommand.cooldown = 5000;
+brincarCommand.whisperable = false;
+brincarCommand.description = 'Uso: !brincar; Resposta esperada: Uma brincadeira aleatória';
+brincarCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${petCommand.commandName}/${petCommand.commandName}.js`;
 
 module.exports = {
     petCommand,
