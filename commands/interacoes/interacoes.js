@@ -176,7 +176,7 @@ const slapCommand = async (client, message) => {
     const slaps = [
         `${message.senderUsername} deu um tapa em ${slapTarget} ${emote}`,
         `${message.senderUsername} deu um tapa bem forte em ${slapTarget} ${emote}`,
-        `${message.senderUsername} deu um tapa com as costas em ${slapTarget} ${emote}`,
+        `${message.senderUsername} deu um tapa com as costas da mão em ${slapTarget} ${emote}`,
     ];
 
     client.log.logAndReply(message, randomChoice(slaps));
