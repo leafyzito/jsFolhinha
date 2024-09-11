@@ -103,17 +103,17 @@ const isAfkCommand = async (client, message) => {
         return;
     }
 
-    const isAfkTarger = message.messageText.split(' ')[1]?.replace(/^@/, '');
+    const isAfkTarget = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase();
 
-    var afkStats = await client.db.get('afk', { channel: message.channelName, user: isAfkTarger });
+    var afkStats = await client.db.get('afk', { channel: message.channelName, user: isAfkTarget });
     if (afkStats.length === 0) {
-        client.log.logAndReply(message, `${isAfkTarger} nunca esteve afk aqui antes`);
+        client.log.logAndReply(message, `${isAfkTarget} nunca esteve afk aqui antes`);
         return;
     }
 
     afkStats = afkStats[0];
     if (!afkStats.is_afk) {
-        client.log.logAndReply(message, `${isAfkTarger} não está afk`);
+        client.log.logAndReply(message, `${isAfkTarget} não está afk`);
         return;
     }
 
@@ -123,7 +123,7 @@ const isAfkCommand = async (client, message) => {
     const afkMessage = afkStats.afk_message;
     var afkSince = timeSince(afkStats.afk_since);
 
-    client.log.logAndReply(message, `${isAfkTarger} está ${afkAction} ${afkEmoji} há ${afkSince} ⌛ ${afkMessage ? `: ${afkMessage}` : ''}`);
+    client.log.logAndReply(message, `${isAfkTarget} está ${afkAction} ${afkEmoji} há ${afkSince} ⌛ ${afkMessage ? `: ${afkMessage}` : ''}`);
     return;
 };
 
