@@ -234,10 +234,10 @@ const remindCommand = async (client, message) => {
         return;
     }
 
-    if (targetUser === message.senderUsername && !totalSeconds) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind me in <tempo> <mensagem> (ex: in 10s/10m/10h/10d)`);
-        return;
-    }
+    // if (targetUser === message.senderUsername && !totalSeconds) {
+    //     client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind me in <tempo> <mensagem> (ex: in 10s/10m/10h/10d)`);
+    //     return;
+    // }
 
     console.log(totalSeconds);
 
