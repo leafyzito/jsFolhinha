@@ -67,7 +67,7 @@ async function petAttencionTask(client) {
                 continue;
             }
 
-            client.log.send(channel, `${pet.pet_emoji} ${pet.pet_name} tá pedindo atenção! Se não interagir com ele, ele vai ficar rabugento!`);
+            client.log.send(channel, `${pet.pet_emoji} ${pet.pet_name} está pedindo atenção! Se não interagir com ele, ele vai ficar rabugento!`);
             await client.db.update('pet', { channelId: pet.channelId }, { $set: { warns: 1 } });
             continue;
         }
