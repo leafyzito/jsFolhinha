@@ -228,6 +228,12 @@ const remindCommand = async (client, message) => {
         return;
     }
 
+    // max time limit is 5 years
+    if (totalSeconds && totalSeconds > 157_784_630) {
+        client.log.logAndReply(message, `O tempo máximo em lembretes cronometrados é de 5 anos`);
+        return;
+    }
+
     if (targetUser === message.senderUsername && !totalSeconds) {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind me in <tempo> <mensagem> (ex: in 10s/10m/10h/10d)`);
         return;
