@@ -146,6 +146,11 @@ const remindCommand = async (client, message) => {
             return;
         }
 
+        if (targetUserId === message.senderUserID) {
+            client.log.logAndReply(message, `Você não pode se bloquear a você mesmo Stare`);
+            return;
+        }
+
         await client.db.update('users', { userid: message.senderUserID }, { $push: { 'blocks.remind': targetUserId } });
         client.log.logAndReply(message, `Você bloqueou ${targetUser} de usar comandos remind para você`);
         return;
