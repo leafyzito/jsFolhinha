@@ -169,6 +169,11 @@ const remindCommand = async (client, message) => {
             return;
         }
 
+        if (targetUserId === message.senderUserID) {
+            client.log.logAndReply(message, `Você não pode se desbloquear a você mesmo Stare`);
+            return;
+        }
+
         await client.db.updateMany('users', { userid: message.senderUserID }, { $pull: { 'blocks.remind': targetUserId } });
         client.log.logAndReply(message, `Você desbloqueou ${targetUser} de usar comandos remind para você`);
         return;
