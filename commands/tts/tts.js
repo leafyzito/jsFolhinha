@@ -45,8 +45,9 @@ const ttsCommand = async (client, message) => {
     let args = message.messageText.split(' ').slice(1);
     let voice = 'Ricardo';
     args = args.filter(arg => {
-        if (arg.startsWith('voice:') || arg.startsWith('voz:')) {
-            voice = arg.split(':')[1].toLowerCase();
+        const argLower = arg.toLowerCase();
+        if (argLower.startsWith('voice:') || argLower.startsWith('voz:')) {
+            voice = argLower.split(':')[1];
             return false;
         }
         return true;
