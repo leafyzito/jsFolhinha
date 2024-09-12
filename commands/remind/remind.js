@@ -191,7 +191,7 @@ const remindCommand = async (client, message) => {
 
     let totalSeconds = 0;
     let timeParts = message.messageText.split(' ');
-    let timeIndex = timeParts[2].toLowerCase() === 'in' ? 3 : null;
+    let timeIndex = timeParts[2]?.toLowerCase() === 'in' ? 3 : null;
     let days = timeParts[timeIndex] && ['d', 'day', 'days'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
     if (days && !isNaN(parseInt(days))) timeIndex++;
     let hours = timeParts[timeIndex] && ['h', 'hrs', 'hour', 'hours'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
