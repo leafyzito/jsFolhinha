@@ -146,6 +146,11 @@ const remindCommand = async (client, message) => {
             return;
         }
 
+        if (targetUserId === message.senderUserID) {
+            client.log.logAndReply(message, `Você não pode se bloquear a você mesmo Stare`);
+            return;
+        }
+
         await client.db.update('users', { userid: message.senderUserID }, { $push: { 'blocks.remind': targetUserId } });
         client.log.logAndReply(message, `Você bloqueou ${targetUser} de usar comandos remind para você`);
         return;
@@ -161,6 +166,11 @@ const remindCommand = async (client, message) => {
         const targetUserId = await client.getUserID(targetUser);
         if (!targetUserId) {
             client.log.logAndReply(message, `Esse usuário não existe`);
+            return;
+        }
+
+        if (targetUserId === message.senderUserID) {
+            client.log.logAndReply(message, `Você não pode se desbloquear a você mesmo Stare`);
             return;
         }
 
@@ -186,7 +196,7 @@ const remindCommand = async (client, message) => {
 
     let totalSeconds = 0;
     let timeParts = message.messageText.split(' ');
-    let timeIndex = timeParts[2].toLowerCase() === 'in' ? 3 : null;
+    let timeIndex = timeParts[2]?.toLowerCase() === 'in' ? 3 : null;
     let days = timeParts[timeIndex] && ['d', 'day', 'days'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
     if (days && !isNaN(parseInt(days))) timeIndex++;
     let hours = timeParts[timeIndex] && ['h', 'hrs', 'hour', 'hours'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
