@@ -42,8 +42,16 @@ const ttsCommand = async (client, message) => {
         return;
     }
 
-    const args = message.messageText.split(' ').slice(1);
-    var voice = args[0].startsWith('voice:') || args[0].startsWith('voz:') ? args.shift().split(':')[1].toLowerCase() : 'Ricardo';
+    let args = message.messageText.split(' ').slice(1);
+    let voice = 'Ricardo';
+    args = args.filter(arg => {
+        const argLower = arg.toLowerCase();
+        if (argLower.startsWith('voice:') || argLower.startsWith('voz:')) {
+            voice = argLower.split(':')[1];
+            return false;
+        }
+        return true;
+    });
 
     var msgContent = args.join(' ');
 
