@@ -28,10 +28,17 @@ const mathCommand = async (client, message) => {
 
 mathCommand.commandName = 'math';
 mathCommand.aliases = ['math', 'maths', 'matematica', 'matemática'];
-mathCommand.shortDescription = 'Faz uma operação matemática';
+mathCommand.shortDescription = 'Faça cálculos matemáticos e conversões';
 mathCommand.cooldown = 5000;
 mathCommand.whisperable = true;
-mathCommand.description = 'Uso: !math <expressão matemática>; Resposta esperada: {resposta da expressão matemática}';
+mathCommand.description = `Use !math {expressão matemática} para fazer cálculos matemáticos
+• Exemplo: !math 2+2*4 - O bot irá responder com o resultado: 10
+
+Pode também fazer algumas conversões, apenas em inglês, como:
+• Conversão de unidades de medida: !math 10cm to inches - O bot irá responder com o resultado: 3.937007874015748
+• Conversão de tempo: !math 10 hours in seconds - O bot irá responder com o resultado: 36000
+
+Para mais informações, consulte o site oficial do Math.js: https://mathjs.org/docs/expressions/syntax.html`;
 mathCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${mathCommand.commandName}/${mathCommand.commandName}.js`;
 
 module.exports = {

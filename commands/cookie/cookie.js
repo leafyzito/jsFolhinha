@@ -345,10 +345,20 @@ const cookieDiarioCommand = async (client, message) => {
 
 cookieCommand.commandName = 'cookie';
 cookieCommand.aliases = ['cookie', 'cookies'];
-cookieCommand.shortDescription = 'Faça várias coisas com os seus cookies';
+cookieCommand.shortDescription = 'Faça várias relacionadas com os cookies';
 cookieCommand.cooldown = 5000;
 cookieCommand.whisperable = true;
-cookieCommand.description = 'Uso: !cookie <diário/open/show/give/top/slot>; Diário: resgate o seu cookie diário; Open: Abra um dos seus cookies para receber uma frase inspiradora; Show: mostra as estatísticas de cookie de algum usuário; Give: Ofereça um cookie para algum usuário; Top: Mostra os 5 usuários de quantidade de cookies; Slot: Aposte um cookie para a chance de receber mais em troca';
+cookieCommand.description = `!Cookie diario/daily: Receba um cookie. O comando poderá ser reutilizado todo dia a partir das cinco horas da manhã (horário de Brasília). Há de aliase o comando "cd" de mesma funcionalidade.
+
+!Cookie open: Abra um dos seus cookies para receber uma poderosa mensagem de reflexão.
+
+!Cookie gift/give: Ofereça um dos seus cookies a outro usuario, uma vez presenteado, poderá presentear novamente no próximo ciclo do cookie diário.
+
+!Cookie slot: Aposte um dos seus cookies e tenha a chance de ganhar 3 ou 10 cookies. Poderá apostar novamente no próximo ciclo do cookie diário.
+
+!Cookie show: Exiba estatísticas de cookies. Quando não mencionado um usuário, exibirá as estatísticas de quem realizou o comando.
+
+!Cookie top: Exiba os cinco usuários com mais cookies e a sua posição no ranking global. Use "!cookie top gift" e "!cookie top slot" para exibir os maiores presenteadores e apostadores, respectivamente, e a sua posição no ranking específico.`;
 cookieCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${cookieCommand.commandName}/${cookieCommand.commandName}.js`;
 
 cookieDiarioCommand.commandName = 'cookie diário (cd)';

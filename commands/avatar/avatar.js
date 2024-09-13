@@ -33,7 +33,8 @@ avatarCommand.aliases = ['avatar', 'pfp'];
 avatarCommand.shortDescription = 'Mostra o avatar de algum usuário';
 avatarCommand.cooldown = 5000;
 avatarCommand.whisperable = true;
-avatarCommand.description = 'Uso: !avatar <usuário>; Resposta esperada: O avatar de {usuário} é: {url}';
+avatarCommand.description = `Marque alguém para ver a foto de perfil.
+• Exemplo: !avatar @pessoa`;
 avatarCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${avatarCommand.commandName}/${avatarCommand.commandName}.js`;
 
 module.exports = {

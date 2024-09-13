@@ -69,7 +69,8 @@ liveCommand.aliases = ['live'];
 liveCommand.shortDescription = 'Mostra se um canal está fazendo live';
 liveCommand.cooldown = 5000;
 liveCommand.whisperable = true;
-liveCommand.description = 'Uso: !live <canal>; Resposta esperada: {canal} está agora fazendo live de {jogo} com {número de viewers} - {título}';
+liveCommand.description = `Saiba há quanto tempo foi a última live do canal fornecido, ou no canal o qual o comando foi executado caso nenhum tenha sido fornecido
+Se o canal estiver ao vivo, mostrará a categoria, a quantidade de viewers, o título e o link para a live`;
 liveCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${liveCommand.commandName}/${liveCommand.commandName}.js`;
 
 module.exports = {

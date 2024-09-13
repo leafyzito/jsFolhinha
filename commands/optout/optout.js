@@ -64,7 +64,11 @@ optoutCommand.aliases = ['optout'];
 optoutCommand.shortDescription = 'Opte fora de alguns comandos do bot';
 optoutCommand.cooldown = 5000;
 optoutCommand.whisperable = false;
-optoutCommand.description = 'Uso: !optout <lastseen/stalk/remind>; Resposta esperada: A partir de agora você {optou/não optou} por {lastseen/stalk/remind}';
+optoutCommand.description = `Alterne entre o estado ativado e desativado de ser alvo de alguns comandos do bot
+!optout stalk - Alterne o estado da possibilidade de ser alvo de comandos stalk
+!optout lastseen - Alterne o estado da possibilidade de ser alvo de comandos lastseen
+!optout remind - Alterne o estado da possibilidade de ser alvo de comandos remind
+!optout channel - Alterne o estado da censura do nome do seu canal no uso de comandos stalk`;
 optoutCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${optoutCommand.commandName}/${optoutCommand.commandName}.js`;
 
 module.exports = {

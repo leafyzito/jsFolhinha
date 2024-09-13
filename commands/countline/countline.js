@@ -85,7 +85,8 @@ countlineCommand.aliases = ['countline', 'cl'];
 countlineCommand.shortDescription = 'Mostra a quantidade de mensagens de um usuário no chat atual';
 countlineCommand.cooldown = 5000;
 countlineCommand.whisperable = false;
-countlineCommand.description = 'Uso: !countline <usuário>; Resposta esperada: {usuário} mandou um total de {quantidade de mensagens} neste chat';
+countlineCommand.description = `Veja quantas mensagem você ou algum usuário já mandou no chat no qual o comando foi realizado
+Pode também utilizar !countline top para ver o top 5 de pessoas que mais falaram no chat`;
 countlineCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${countlineCommand.commandName}/${countlineCommand.commandName}.js`;
 
 module.exports = {

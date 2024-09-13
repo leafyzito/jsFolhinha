@@ -49,7 +49,8 @@ cachorroCommand.aliases = ['cachorro', 'dog', 'doggo', 'cao'];
 cachorroCommand.shortDescription = 'Mostra uma imagem aleatória de cachorro';
 cachorroCommand.cooldown = 5000;
 cachorroCommand.whisperable = true;
-cachorroCommand.description = 'Uso: !cachorro; Resposta esperada: 🐶 {imagem}';
+cachorroCommand.description = `Receba uma imagem aleatória de um cachorro
+A pesquisa das fotos é feita usando o Google, então meio que pode vir qualquer coisa relacionada com cachorros`;
 cachorroCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${cachorroCommand.commandName}/${cachorroCommand.commandName}.js`;
 
 module.exports = {

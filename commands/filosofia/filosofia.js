@@ -32,7 +32,9 @@ filosofiaCommand.aliases = ['filosofia', 'filosofias'];
 filosofiaCommand.shortDescription = 'Mostra uma filosofia aleatória';
 filosofiaCommand.cooldown = 5000;
 filosofiaCommand.whisperable = true;
-filosofiaCommand.description = 'Uso: !filosofia; Resposta esperada: {filosofia}';
+filosofiaCommand.description = `Veja uma filosofia aleatória ou específica quando determinado um número da lista de filosofias
+• Exemplo: "!filosofia - O bot vai enviar uma filosofia aleatória
+• Exemplo: "!filosofia 4 - O bot vai enviar a filosofia número 4 da lista de filosofias`;
 filosofiaCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${filosofiaCommand.commandName}/${filosofiaCommand.commandName}.js`;
 
 module.exports = {

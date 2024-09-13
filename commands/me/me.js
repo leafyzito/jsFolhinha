@@ -29,7 +29,8 @@ meCommand.aliases = ['me'];
 meCommand.shortDescription = 'Faz o bot mandar uma mensagem /me';
 meCommand.cooldown = 5000;
 meCommand.whisperable = false;
-meCommand.description = 'Uso: !me <mensagem>; Resposta esperada: /me {mensagem}';
+meCommand.description = `Forneça uma mensagem para o bot enviar com a funcionalidade /me
+• Exemplo: !me Olá mundo - O bot irá enviar: /me Olá mundo`;
 meCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${meCommand.commandName}/${meCommand.commandName}.js`;
 
 module.exports = {

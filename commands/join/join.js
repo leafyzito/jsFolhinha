@@ -61,7 +61,7 @@ joinCommand.aliases = ['join', 'entrar'];
 joinCommand.shortDescription = 'Convide o bot para entrar no seu chat';
 joinCommand.cooldown = 5000;
 joinCommand.whisperable = true;
-joinCommand.description = 'Uso: !join; Resposta esperada: Entrei no chat {usuário} com sucesso! Tô lá te esperando! {emoji de felicidade}';
+joinCommand.description = `Utilize o comando !join num chat no qual o Folhinha esteja presente e faça com que o bot entre no chat de quem executou o comando`;
 joinCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${joinCommand.commandName}/${joinCommand.commandName}.js`;
 
 module.exports = {

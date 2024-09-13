@@ -35,7 +35,7 @@ dneCommand.aliases = ['dne', 'thispersondoesnotexist', 'doesnotexist'];
 dneCommand.shortDescription = 'Mostra uma imagem aleatória de uma pessoa que não existe';
 dneCommand.cooldown = 5000;
 dneCommand.whisperable = true;
-dneCommand.description = 'Uso: !doesnotexist; Resposta esperada: {imagem aleatória}';
+dneCommand.description = 'Veja uma foto aleatória gerada pelo site thispersondoesnotexist.com';
 dneCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${dneCommand.commandName}/${dneCommand.commandName}.js`;
 
 module.exports = {

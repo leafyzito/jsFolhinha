@@ -132,7 +132,13 @@ afkCommand.aliases = [...afkAliasList];
 afkCommand.shortDescription = 'Fique com status afk para contar quanto tempo esteve fora no canal atual';
 afkCommand.cooldown = 5000;
 afkCommand.whisperable = false;
-afkCommand.description = 'Uso: !afk <usuário>; Resposta esperada: {usuário} ficou afk';
+afkCommand.description = `Registra seu status como AFK no canal onde o comando foi realizado. Após você enviar qualquer mensagem no canal ficou AFK, o Folhinha responderá indicando quanto tempo você esteve ausente juntamente com uma mensagem, caso tenha deixado uma
+
+Esse comando não afetará seu estado de AFK em outros canais
+
+Além de AFK, você poderá escolher entre uma variedade de ações, como !ler ou !desenhar, que terão o mesmo efeito do AFK, mas com uma mensagem diferentes.
+
+Nos aliases do comando você poderá ver todas as opções de ações disponíveis`;
 afkCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${afkCommand.commandName}/${afkCommand.commandName}.js`;
 
 rafkCommand.commandName = 'resumeafk';
@@ -148,7 +154,7 @@ isAfkCommand.aliases = ['isafk'];
 isAfkCommand.shortDescription = 'Verifica o status de afk de algum usuário no canal atual';
 isAfkCommand.cooldown = 5000;
 isAfkCommand.whisperable = false;
-isAfkCommand.description = 'Uso: !isafk <usuário>; Resposta esperada: Usuário {usuário} está afk há {tempo}';
+isAfkCommand.description = `Veja se algum usuário está AFK e há quanto tempo no chat em que o comando foi executado`;
 isAfkCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${afkCommand.commandName}/${afkCommand.commandName}.js`;
 
 module.exports = {

@@ -65,7 +65,10 @@ followAgeCommand.aliases = ['followage', 'fa'];
 followAgeCommand.shortDescription = 'Mostra há quanto tempo um usuário segue um canal';
 followAgeCommand.cooldown = 5000;
 followAgeCommand.whisperable = false;
-followAgeCommand.description = 'Uso: !followage <usuário>; Resposta esperada: {usuário} segue {canal} há {tempo}';
+followAgeCommand.description = `Mostra há quanto tempo um usuário segue um canal, tendo várias formas de o fazer:
+Apenas !followage: O bot vai responder com a quantidade de tempo que o usuário que executou o comando segue o canal no qual o comando foi executado
+!followage @usuário: O bot vai responder com a quantidade de tempo que o usuário que executou o comando segue o canal que foi fornecido
+!followage @usuário1 @usuário2: O bot vai responder com a quantidade de tempo que o @usuário1 segue @usuário2`;
 followAgeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${followAgeCommand.commandName}/${followAgeCommand.commandName}.js`;
 
 module.exports = {

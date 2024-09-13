@@ -47,10 +47,10 @@ const botStatsCommand = async (client, message) => {
 
 comandosCommand.commandName = 'comandos';
 comandosCommand.aliases = ['comandos', 'commands', 'comando', 'command'];
-comandosCommand.shortDescription = 'Mostra um link para uma lista de comandos do bot';
+comandosCommand.shortDescription = 'Veja os comandos disponíveis no bot';
 comandosCommand.cooldown = 5000;
 comandosCommand.whisperable = true;
-comandosCommand.description = 'Uso: !comandos; Resposta esperada: Para uma lista de comandos acesse {link}';
+comandosCommand.description = 'Apenas um comando para direcionar o usuário para a página de comandos do bot';
 comandosCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/help/help.js`;
 
 helpCommand.commandName = 'help';
@@ -58,7 +58,7 @@ helpCommand.aliases = ['help', 'ajuda', 'info'];
 helpCommand.shortDescription = 'Mostra um link para o site do bot';
 helpCommand.cooldown = 5000;
 helpCommand.whisperable = true;
-helpCommand.description = 'Uso: !help; Resposta esperada: Para informações sobre o bot, acesse {link}';
+helpCommand.description = 'Apenas um comando para direcionar o usuário para a página do bot';
 helpCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/help/help.js`;
 
 statsCommand.commandName = 'stats';
@@ -66,7 +66,7 @@ statsCommand.aliases = ['stats', 'ping', 'uptime'];
 statsCommand.shortDescription = 'Mostra algumas informações sobre o bot';
 statsCommand.cooldown = 5000;
 statsCommand.whisperable = true;
-statsCommand.description = 'Uso: !stats; Resposta esperada: Uptime: {uptime} | Canais {canais} | Memória: {memória utilizada}';
+statsCommand.description = 'Exibe algumas informações sobre o bot, como uptime, quantidade de canais ativos e RAM utilizada';
 statsCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/help/help.js`;
 
 botStatsCommand.commandName = 'botstats';
@@ -74,7 +74,14 @@ botStatsCommand.aliases = ['botstats', 'bstats'];
 botStatsCommand.shortDescription = 'Mostra algumas informações extra sobre o bot';
 botStatsCommand.cooldown = 5000;
 botStatsCommand.whisperable = true;
-botStatsCommand.description = 'Uso: !botstats; Resposta esperada: Comandos nas últimas 24h/1h: {comandos nas últimas 24h}/{comandos nas últimas 1h} {link para estatísticas do bot}';
+botStatsCommand.description = `Exibe algumas estatísticas extra sobre o bot, incluindo ranking de cookies em uma tabela
+Estatísticas que podem ser encontradas:
+• Total de mensagens
+• Total de comandos executados
+• Total de usuários vistos pelo bot
+• Total de mensagens por usuário
+• Total de canais com o Folhinha.
+• Gráfico com número de uso para cada comando`;
 botStatsCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/help/help.js`;
 
 module.exports = {

@@ -50,7 +50,8 @@ lastSeenCommand.aliases = ['lastseen', 'ls'];
 lastSeenCommand.shortDescription = 'Mostra quando alguém foi visto em algum chat pela última vez';
 lastSeenCommand.cooldown = 5000;
 lastSeenCommand.whisperable = false;
-lastSeenCommand.description = 'Uso: !lastseen <usuário>; Resposta esperada: {usuário} foi visto pela última vez num chat há {tempo}';
+lastSeenCommand.description = `Pesquise há quanto tempo um usuário foi visto pela última vez em algum canal onde o Folhinha esteja presente
+Se quiser desabilitar a função de outras pessoas usarem este comando em você, use !optout lastseen`;
 lastSeenCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${lastSeenCommand.commandName}/${lastSeenCommand.commandName}.js`;
 
 module.exports = {
