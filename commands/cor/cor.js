@@ -49,7 +49,9 @@ corCommand.aliases = ['cor', 'color'];
 corCommand.shortDescription = 'Mostra a cor de algum usuário';
 corCommand.cooldown = 5000;
 corCommand.whisperable = true;
-corCommand.description = 'Uso: !cor <usuário>; Resposta esperada: A cor de {usuário} é: {cor} - {nome da cor}';
+corCommand.description = `Veja a cor de algum usuário. O bot responderá com o código hexadecimal da cor juntamente com o nome da mesma. Caso nenhum usuário tenha sido marcado, exibirá a cor de quem realizou o comando
+• Exemplo: !cor - O bot vai responder com a informações sobre a cor de quem realizou o comando
+• Exemplo: !cor @usuário - O bot vai responder com a informações sobre a cor de @usuário`;
 corCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${corCommand.commandName}/${corCommand.commandName}.js`;
 
 module.exports = {

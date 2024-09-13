@@ -32,7 +32,9 @@ curiosidadeCommand.aliases = ['curiosidade', 'curiosidades'];
 curiosidadeCommand.shortDescription = 'Mostra uma curiosidade aleatória';
 curiosidadeCommand.cooldown = 5000;
 curiosidadeCommand.whisperable = true;
-curiosidadeCommand.description = 'Uso: !curiosidade; Resposta esperada: {curiosidade}';
+curiosidadeCommand.description = `Veja uma curiosidade aleatória ou específica quando determinado um número da lista de curiosidades
+• Exemplo: "!curiosidade - O bot vai enviar uma curiosidade aleatória
+• Exemplo: "!curiosidade 4 - O bot vai enviar a curiosidade número 4 da lista de curiosidades`;
 curiosidadeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${curiosidadeCommand.commandName}/${curiosidadeCommand.commandName}.js`;
 
 module.exports = {

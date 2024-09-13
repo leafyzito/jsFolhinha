@@ -76,7 +76,10 @@ chattersCommand.aliases = ['chatters'];
 chattersCommand.shortDescription = 'Mostra a lista de chatters de algum canal';
 chattersCommand.cooldown = 5000;
 chattersCommand.whisperable = false;
-chattersCommand.description = 'Uso: !chatters <canal>; Resposta esperada: Lista de chatters de {canal}';
+chattersCommand.description = `Exibe uma lista de usuários totais online no canal e suas devidas categorias (Streamer, Moderadores, VIPs, Chatters)
+O comando funcionará mesmo em canais que o Folhinha não esteja presente
+• Exemplo: !chatters - Exibe a lista de chatters do canal atual
+• Exemplo: !chatters {canal} - Exibe a lista de chatters do canal escolhido`;
 chattersCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${chattersCommand.commandName}/${chattersCommand.commandName}.js`;
 
 module.exports = {

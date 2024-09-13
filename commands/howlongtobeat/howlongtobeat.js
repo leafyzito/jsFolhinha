@@ -176,7 +176,8 @@ howLongToBeatCommand.aliases = ['howlongtobeat', 'hltb'];
 howLongToBeatCommand.shortDescription = 'Mostra o tempo que leva para um jogo ser completado';
 howLongToBeatCommand.cooldown = 5000;
 howLongToBeatCommand.whisperable = true;
-howLongToBeatCommand.description = 'Uso: !howlongtobeat <jogo>; Resposta esperada: {informações sobre tempo geral para completar o jogo}';
+howLongToBeatCommand.description = `Descubra o tempo que leva para um jogo ser completado em média
+• Exemplo: !howlongtobeat Hollow Knight - O bot vai responder com o tempo que leva para completar o jogo fornecido juntamente com um link para a página do jogo no site howlongtobeat.com`;
 howLongToBeatCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${howLongToBeatCommand.commandName}/${howLongToBeatCommand.commandName}.js`;
 
 module.exports = {

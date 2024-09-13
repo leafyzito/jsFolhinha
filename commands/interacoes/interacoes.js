@@ -219,7 +219,8 @@ abracoCommand.aliases = ['abraco', 'abraço', 'abracar', 'abraçar', 'hug'];
 abracoCommand.shortDescription = 'Dá um abraço em alguém no chat';
 abracoCommand.cooldown = 5000;
 abracoCommand.whisperable = false;
-abracoCommand.description = 'Uso: !abraco <pessoa>; Resposta esperada: uma mensagem de abraço direcionada à pessoa mencionada';
+abracoCommand.description = `Marque alguém do chat para dar um abraço virtual
+• Exemplo: !abraco @pessoa`;
 abracoCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/interacoes/interacoes.js`;
 
 beijoCommand.commandName = 'beijo';
@@ -227,7 +228,8 @@ beijoCommand.aliases = ['beijo', 'beijar', 'kiss'];
 beijoCommand.shortDescription = 'Dá um beijo em alguém no chat';
 beijoCommand.cooldown = 5000;
 beijoCommand.whisperable = false;
-beijoCommand.description = 'Uso: !beijo <pessoa>; Resposta esperada: uma mensagem de beijo direcionada à pessoa mencionada';
+beijoCommand.description = `Marque alguém do chat para dar um beijo virtual
+• Exemplo: !beijo @pessoa`;
 beijoCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/interacoes/interacoes.js`;
 
 bonkCommand.commandName = 'bonk';
@@ -235,7 +237,8 @@ bonkCommand.aliases = ['bonk'];
 bonkCommand.shortDescription = 'Dá um bonk em alguém no chat';
 bonkCommand.cooldown = 5000;
 bonkCommand.whisperable = false;
-bonkCommand.description = 'Uso: !bonk <pessoa>; Resposta esperada: uma mensagem de bonk direcionada à pessoa mencionada';
+bonkCommand.description = `Marque alguém do chat para dar um bonk com uam força aleatória entre 0% e 100%
+• Exemplo: !bonk @pessoa`;
 bonkCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/interacoes/interacoes.js`;
 
 tuckCommand.commandName = 'tuck';
@@ -243,7 +246,8 @@ tuckCommand.aliases = ['tuck'];
 tuckCommand.shortDescription = 'Coloca alguém para dormir no chat';
 tuckCommand.cooldown = 5000;
 tuckCommand.whisperable = false;
-tuckCommand.description = 'Uso: !tuck <pessoa>; Resposta esperada: uma mensagem dizendo que a pessoa mencionada foi colocada para dormir';
+tuckCommand.description = `Deseje bons sonhos a alguém do chat
+• Exemplo !tuck @pessoa`;
 tuckCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/interacoes/interacoes.js`;
 
 slapCommand.commandName = 'slap';
@@ -251,22 +255,17 @@ slapCommand.aliases = ['slap', 'tapa'];
 slapCommand.shortDescription = 'Dá um tapa em alguém no chat';
 slapCommand.cooldown = 5000;
 slapCommand.whisperable = false;
-slapCommand.description = 'Uso: !slap <pessoa>; Resposta esperada: uma mensagem de tapa direcionada à pessoa mencionada';
+slapCommand.description = `Dê um tapa virtual em alguém do chat
+• Exemplo: !slap @pessoa`;
 slapCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/interacoes/interacoes.js`;
 
 explodeCommand.commandName = 'explode';
 explodeCommand.aliases = ['explode', 'explodir', 'bomb'];
 explodeCommand.shortDescription = 'Explode alguém no chat';
-slapCommand.cooldown = 5000;
-slapCommand.whisperable = false;
-slapCommand.description = 'Uso: !slap <pessoa>; Resposta esperada: uma mensagem de tapa direcionada à pessoa mencionada';
-slapCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/interacoes/interacoes.js`;
-
-explodeCommand.commandName = 'explode';
-explodeCommand.aliases = ['explode', 'explodir', 'bomb'];
 explodeCommand.cooldown = 5000;
 explodeCommand.whisperable = false;
-explodeCommand.description = 'Uso: !explode <pessoa>; Resposta esperada: uma mensagem de explosão direcionada à pessoa mencionada';
+explodeCommand.description = `Exploda virtualmente alguém do chat
+• Exemplo: !explode @pessoa`;
 explodeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/interacoes/interacoes.js`;
 
 

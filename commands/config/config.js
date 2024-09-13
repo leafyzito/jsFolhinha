@@ -97,10 +97,22 @@ const configCommand = async (client, message) => {
 
 configCommand.commandName = 'config';
 configCommand.aliases = ['config'];
-configCommand.shortDescription = 'Muda as configurações do bot para o canal atual';
+configCommand.shortDescription = 'Mude as configurações do bot para o seu chat';
 configCommand.cooldown = 5000;
 configCommand.whisperable = false;
-configCommand.description = 'Uso: !config <prefixo/ban/unban/offline>; Prefixo: para alterar o prefixo do bot no canal atual; Ban: para banir/desabilitar algum comando no chat atual; Unban: para desbanir/reabilitar algum comando no chat atual; Offline: para habilitar/desabilitar o modo offline no canal atual';
+configCommand.description = `Mude algumas confugurações do bot para o chat atual
+Caso queira trocar o prefixo do bot, pode usar o comando !config prefixo {prefixo}, sendo a lista de prefixos válidos:
+?&%+*-=|@#$~\_,;<>
+• Exemplo: !config prefixo ? - Muda o prefixo do bot para "?"
+
+Caso deseje desabilitar algum comando no chat, pode usar !config ban {comando} ou !config unban {comando} para reabilitá-lo
+• Exemplo: !config ban piada - Desabilita o comando "piada" no canal
+• Exemplo: !config unban piada - Reabilita o comando "piada" no canal
+
+Caso queira que o bot apenas funcione quando o canal estiver offline, pode usar o comando !config offline
+Usar o comando !config offline alterna entre o estado ativado e desativado. Por padrão, esta função está desabilitada
+
+Este comandos podem ser executados apenas pelo streamer ou os moderadores do canal`;
 configCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${configCommand.commandName}/${configCommand.commandName}.js`;
 
 module.exports = {

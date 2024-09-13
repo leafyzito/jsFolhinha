@@ -77,7 +77,9 @@ gptCommand.aliases = ['gpt'];
 gptCommand.shortDescription = 'Faça uma pergunta para o ChatGPT';
 gptCommand.cooldown = 15000;
 gptCommand.whisperable = true;
-gptCommand.description = 'Uso: !gpt <qualquer coisa>; Resposta esperada: {resposta do ChatGPT com alguma personalidade}';
+gptCommand.description = `Envie uma mensagem para o GPT com a personalidade do Folhinha
+Use esse comando para diversão apenas
+Caso deseje usar para perguntar alguma dúvida genuina, use o comando <a href="https://folhinhabot.com/comandos/gptserio">!gptserio</a> que lhe responderá de maneira mais acertiva e extensa, sem a personalidade brincalhona do !gpt normal`;
 gptCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${gptCommand.commandName}/${gptCommand.commandName}.js`;
 
 gptSerioCommand.commandName = 'gptserio';
@@ -85,7 +87,7 @@ gptSerioCommand.aliases = ['gptserio', 'gptsério'];
 gptSerioCommand.shortDescription = 'Faça uma pergunta para o ChatGPT sério';
 gptSerioCommand.cooldown = 15000;
 gptSerioCommand.whisperable = true;
-gptSerioCommand.description = 'Uso: !gptserio <qualquer coisa>; Resposta esperada: {resposta do ChatGPT sério}';
+gptSerioCommand.description = `Envie uma mensagem para o GPT com uma personalidade mais séria e sem teor humorístico`;
 gptSerioCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${gptCommand.commandName}/${gptCommand.commandName}.js`;
 
 module.exports = {

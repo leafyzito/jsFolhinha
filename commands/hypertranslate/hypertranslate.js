@@ -65,7 +65,9 @@ hypertranslateCommand.aliases = ['hypertranslate', 'htranslate', 'ht'];
 hypertranslateCommand.shortDescription = 'Traduz um texto várias vezes';
 hypertranslateCommand.cooldown = 20000;
 hypertranslateCommand.whisperable = false;
-hypertranslateCommand.description = 'Uso: !hypertranslate <texto para traduzir> (opcional: número de traduções default: 10); Resposta esperada: {texto traduzido várias vezes}';
+hypertranslateCommand.description = `Traduz o texto fornecido o número de vezes especificado para uma linguagem aleatória, sendo o valor padrão 10
+• Exemplo: !hypertranslate Olá mundo - O bot vai traduzir aleatoriamente "Olá mundo" 10 vezes
+• Exemplo: !hypertranslate 15 Olá mundo - O bot vai traduzir aleatoriamente "Olá mundo" 15 vezes`;
 hypertranslateCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${hypertranslateCommand.commandName}/${hypertranslateCommand.commandName}.js`;
 
 module.exports = {

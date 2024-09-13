@@ -23,7 +23,8 @@ nicksCommand.aliases = ['nick', 'nicks', 'nicknames'];
 nicksCommand.shortDescription = 'Mostra o histórico de nicks de algum usuário';
 nicksCommand.cooldown = 5000;
 nicksCommand.whisperable = false;
-nicksCommand.description = 'Uso: !nicks <usuário>; Resposta esperada: O histórico de nicks de {usuário} é: {histórico de nicks}';
+nicksCommand.description = `Exibe o histórico de nicks de um usuário ou de quem executou o comando caso nenhum usuário seja fornecido
+• Exemplo: !nicks @leafyzito - O bot irá responder com o histórico de nicks de leafyzito`;
 nicksCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${nicksCommand.commandName}/${nicksCommand.commandName}.js`;
 
 module.exports = {

@@ -58,7 +58,8 @@ stalkCommand.aliases = ['stalk'];
 stalkCommand.shortDescription = 'Veja onde um usuário falou pela última vez e o que ele disse';
 stalkCommand.cooldown = 5000;
 stalkCommand.whisperable = false;
-stalkCommand.description = 'Uso: !stalk <usuário>; Resposta esperada: {usuário} foi visto pela última vez há {tempo} no #{canal} - {mensagem}';
+stalkCommand.description = `Pesquise há quanto tempo um usuário foi visto pela última vez, em algum canal onde o Folhinha esteja presente, em qual canal e o conteúdo da mensagem
+Se quiser desabilitar a função de outras pessoas usarem este comando em você, use !optout stalk`;
 stalkCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${stalkCommand.commandName}/${stalkCommand.commandName}.js`;
 
 module.exports = {

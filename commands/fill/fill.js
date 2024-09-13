@@ -33,7 +33,8 @@ fillCommand.aliases = ['fill'];
 fillCommand.shortDescription = 'Faça o bot enviar uma mensagem cheia do que você quiser';
 fillCommand.cooldown = 5000;
 fillCommand.whisperable = true;
-fillCommand.description = 'Uso: !fill <qualquer coisa>; Resposta esperada: {mensagem repetindo o padrão do que foi pedido}';
+fillCommand.description = `O bot vai repetir o que você fornecer até que o limite de caracteres seja atingido (500)
+• Exemplo: !fill OMEGALUL - O bot vai repetir OMEGALUL até que o limite de caracteres seja atingido`;
 fillCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${fillCommand.commandName}/${fillCommand.commandName}.js`;
 
 module.exports = {

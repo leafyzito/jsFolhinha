@@ -134,7 +134,14 @@ downloadCommand.aliases = ['download', 'dl'];
 downloadCommand.shortDescription = 'Faz o download de algum vídeo/audio';
 downloadCommand.cooldown = 5000;
 downloadCommand.whisperable = true;
-downloadCommand.description = 'Uso: !download (opcional: video/audio default: video) <link para fazer download>';
+downloadCommand.description = `Faça o download de mídias através do bot
+• Exemplo: !download https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+Pode também fazer download apenas do audio (mp3), utilizando o formato !download audio {link}
+• Exemplo: !download audio https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+Sites mais famosos suportados: Youtube, Instagram, Facebook, Reddit, Tiktok, Twitter, clipes da Twitch
+Para mais informações sobre a API utilizada, acesse https://github.com/imputnet/cobalt`;
 downloadCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${downloadCommand.commandName}/${downloadCommand.commandName}.js`;
 
 module.exports = {
