@@ -210,7 +210,7 @@ async function isStreamOnline(canal, cache_timeout = 60) {
 }
 
 function parseTime(value, unit) {
-    value = parseInt(value, 10);
+    value = parseFloat(value.replace(/,/g, '.'));
     switch(unit) {
         case 'seconds':
         case 'second':
