@@ -32,7 +32,9 @@ piadaCommand.aliases = ['piada', 'joke', 'piadas', 'jokes'];
 piadaCommand.shortDescription = 'Mostra uma piada aleatória';
 piadaCommand.cooldown = 5000;
 piadaCommand.whisperable = true;
-piadaCommand.description = 'Uso: !piada; Resposta esperada: {piada aleatória}';
+piadaCommand.description = `Veja uma piada aleatória ou específica quando determinado um número da lista de piadas
+• Exemplo: "!piada - O bot vai enviar uma piada aleatória
+• Exemplo: "!piada 4 - O bot vai enviar a piada número 4 da lista de piadas`;
 piadaCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${piadaCommand.commandName}/${piadaCommand.commandName}.js`;
 
 module.exports = {

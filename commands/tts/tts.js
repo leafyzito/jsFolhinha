@@ -69,13 +69,20 @@ const ttsCommand = async (client, message) => {
     client.log.logAndReply(message, tts);
 };
 
-ttsCommand.commandName = 'tts';
+ttsCommand.commandName = 'text-to-speech';
 ttsCommand.aliases = ['tts'];
 ttsCommand.shortDescription = 'Crie um TTS com algum texto';
 ttsCommand.cooldown = 5000;
 ttsCommand.whisperable = true;
-ttsCommand.description = 'Uso: !tts <texto>; Resposta esperada: {link do TTS}';
-ttsCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${ttsCommand.commandName}/${ttsCommand.commandName}.js`;
+ttsCommand.description = `Dê voz ao Folhinha e faça-o falar uma mensagem a sua escolha
+• Exemplo: !tts No jardim da vida, Floresce a esperança, Entre espinhos e espinhas, A felicidade dança. - Resposta: https://f.feridinha.com/lkTCL.mp3 
+
+Poderá alterar a voz da mensagem através do nome da voz.
+• Exemplo: !tts No jardim da vida, Floresce a esperança, Entre espinhos e espinhas, A felicidade dança. voz:Brian - Resposta: https://f.feridinha.com/j4nLL.mp3
+
+Acesse a lista de vozes disponíveis aqui: https://github.com/chrisjp/tts/blob/master/assets/js/voices.json
+Um dia irá ter uma página bonitinha com as possíveis vozes`;
+ttsCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/tts/tts.js`;
 
 module.exports = {
     ttsCommand,

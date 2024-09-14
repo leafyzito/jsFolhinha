@@ -282,10 +282,30 @@ const remindCommand = async (client, message) => {
 
 remindCommand.commandName = 'remind';
 remindCommand.aliases = ['remind', 'lembrar'];
-remindCommand.shortDescription = 'Deixe um lembrete para a próxima vez que algum usuário falar no chat';
+remindCommand.shortDescription = 'Deixe um lembrete para a próxima vez que um usuário falar no chat';
 remindCommand.cooldown = 5000;
 remindCommand.whisperable = false;
-remindCommand.description = 'Uso: !remind <usuário> <mensagem> ; Resposta esperada: {usuário} vai ser lembrado disso em assim que falar no chat (ID: {ID do lembrete})';
+remindCommand.description = `Use este comando para deixar um lembrete para a próxima vez que um usuário falar no chat
+Pode deixar um lembrete para si mesmo ou para outra pessoa
+Este comando funciona independetemente do chat em que esteja, ou seja, se você marcar um lembrete para você mesmo em um chat, se você falar em outro, o bot irá lhe lembrar do que foi deixado no recado
+• Exemplo: !remind me Faz aquilo lá - O bot irá lembrar de "Fazer aquilo lá" a pessoa que executou o comando assim que voltar a falar em qualquer chat, juntamente com o ID do lembrete criado
+• Exemplo: !remind @leafyzito Faz aquilo lá - O bot irá lembrar @leafyzito de "Fazer aquilo lá" assim que @leafyzito falar no chat, juntamente com o ID do lembrete criado
+
+Pode também deixar um lembretes cronometrados, para que apenas quando passado o tempo especificado, o bot lembrar X usuario de algo:
+• Exemplo: !remind me in 10m Faz aquilo lá - O bot irá lembrar quem executou o comando de "Fazer aquilo lá" 10 minutos depois de ter criado o lembrete, independentemente de falar no chat ou não
+• Exemplo: !remind @leafyzito in 15d 10h - @leafyzito será lembrado passado 15 dias e 10 horas de criar o lembrete
+
+Atenção que o formato de tempos devem ser sempre seguindo este padrão:
+10d - 10 dias; usar 10 days não vai funcionar
+10h 50s - 10 horas e 50 segundos; usar 10h50s ou 10h e 50s não vai funcionar
+
+Existe também o !remind show, que será apenas útil quando tiver múltiplos lembretes pendentes
+Juntamente do !remind show, existe o !remind show all que irá juntar todos os lembretes pendentes, sejam eles 5 ou 100, e irá mandar em um link com todos os lembretes
+Se for necessário você usar este comando para ver os seus lembretes, o Folhinha irá lhe avisar disso
+
+Caso queira apagar algum lembrete, use o comando !remind delete {ID do lembrete}
+
+Por fim, se quiser bloquear lembretes de algum usuário em específico pode usar !remind block/unblock para o fazer`;
 remindCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${remindCommand.commandName}/${remindCommand.commandName}.js`;
 
 module.exports = {

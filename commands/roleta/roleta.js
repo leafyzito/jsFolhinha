@@ -36,13 +36,18 @@ const roletaCommand = async (client, message) => {
     client.log.logAndSay(message, `BANG! Foi de arrasta pra cima ${emote}`);
 };
 
-roletaCommand.commandName = 'roleta';
+roletaCommand.commandName = 'roleta russa';
 roletaCommand.aliases = ['roleta', 'rr'];
 roletaCommand.shortDescription = 'Teste a sua sorte com a roleta-russa do timeout';
 roletaCommand.cooldown = 5000;
 roletaCommand.whisperable = false;
-roletaCommand.description = 'Uso: !roleta; Resposta esperada: BANG! Foi de arrasta pra cima 🤫; É necessário o bot ser moderador para este comando ter efeito';
-roletaCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${roletaCommand.commandName}/${roletaCommand.commandName}.js`;
+roletaCommand.description = `Teste a sua sorte (1 em 6) para uma chance de levar um timeout no chat
+O tempo do timeout pode ser customizado, sendo o tempo padrão 10 minutos
+• Exemplo: !roleta - Caso calhe de rolar um timeout, quem executou o comando tomará um timeout de 10 minutos
+• Exemplo: !roleta 2 - Caso calhe de rolar um timeout, quem executou o comando tomará um timeout de 2 minutos
+
+Para este comando funcione corretamente, o Folhinha precisa do cargo de moderador`;
+roletaCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/roleta/roleta.js`;
 
 module.exports = {
     roletaCommand,
