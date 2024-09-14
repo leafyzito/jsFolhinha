@@ -146,7 +146,11 @@ rafkCommand.aliases = ['rafk', 'resumeafk'];
 rafkCommand.shortDescription = 'Retome o seu status afk anterior no canal atual';
 rafkCommand.cooldown = 5000;
 rafkCommand.whisperable = false;
-rafkCommand.description = 'Uso: !rafk <usuário>; Resposta esperada: {usuário} voltou a ficar afk';
+rafkCommand.description = `Para o caso de ter voltado a falar em um canal no qual estava com status de AFK e queira voltar a ficar AFK, poderá usar !resumeafk
+Este comando poderá apenas ser usado nos primeiros 5 minutos de ter voltado do seu estado de AFK
+Caso contrário, para voltar a ficar AFK, use o comando !afk
+
+Para evitar spam de !rafk, o AFK tem um limite de quantos !rafk podem ser usados, sendo esse limite de 3 usos apenas`;
 rafkCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${afkCommand.commandName}/${afkCommand.commandName}.js`;
 
 isAfkCommand.commandName = 'isafk';

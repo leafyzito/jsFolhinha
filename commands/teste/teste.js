@@ -13,10 +13,10 @@ const testeCommand = async (client, message) => {
 
 testeCommand.commandName = 'teste';
 testeCommand.aliases = ['teste', 'test', 'testing'];
-testeCommand.shortDescription = 'Este é apenas um comando para verificar se o bot está vivo, nada de especial';
+testeCommand.shortDescription = 'Comando para verificar se o bot está vivo';
 testeCommand.cooldown = 5000;
 testeCommand.whisperable = true;
-testeCommand.description = 'Uso: !teste; Resposta esperada: testado 3';
+testeCommand.description = `Use para verificar se o Folhinha ainda está presente entre nós. Caso ele não responda, infelizmente ele se foi.`;
 testeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${testeCommand.commandName}/${testeCommand.commandName}.js`;
 
 module.exports = {

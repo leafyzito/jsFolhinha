@@ -24,7 +24,7 @@ wikiCommand.aliases = ['wiki', 'wikipedia'];
 wikiCommand.shortDescription = 'Mostra um artigo aleatório do Wikipedia';
 wikiCommand.cooldown = 5000;
 wikiCommand.whisperable = true;
-wikiCommand.description = 'Uso: !wiki; Resposta esperada: {link do artigo aleatório}';
+wikiCommand.description = `Apenas um comando para receber um artigo aleatório do Wikipedia`;
 wikiCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${wikiCommand.commandName}/${wikiCommand.commandName}.js`;
 
 module.exports = {

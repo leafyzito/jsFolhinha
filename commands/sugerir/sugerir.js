@@ -30,7 +30,8 @@ sugerirCommand.aliases = ['sugerir', 'sugestao', 'sugestão'];
 sugerirCommand.shortDescription = 'Envia uma sugestão para o bot';
 sugerirCommand.cooldown = 5000;
 sugerirCommand.whisperable = true;
-sugerirCommand.description = 'Uso: !sugerir <sugestão>; Resposta esperada: Obrigado pela sugestão 👍';
+sugerirCommand.description = `Deixe a sua contribuição para a caixinha de sugestões do Folhinha, poderá relatar bugs, erros, inovações...
+Qualquer coisa que ache que possa melhorar a experiência com o Folhinha e suas funcionalidades`;
 sugerirCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${sugerirCommand.commandName}/${sugerirCommand.commandName}.js`;
 
 module.exports = {

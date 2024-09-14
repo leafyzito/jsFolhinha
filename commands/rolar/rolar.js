@@ -50,7 +50,9 @@ rolarCommand.aliases = ['rolar', 'roll'];
 rolarCommand.shortDescription = 'Lance um ou mais dados';
 rolarCommand.cooldown = 5000;
 rolarCommand.whisperable = true;
-rolarCommand.description = 'Uso: !rolar <quantidade de lados> (opcional: quantidade de dados default: 1); Resposta esperada: As suas roladas foram: {dados da rolada} (soma: {soma da rolada}) 🎲';
+rolarCommand.description = `Lance até 10 dados com quantos lados você quiser, com limite de 100 lados
+• Exemplo: !rolar 2 10 - O bot irá lançar 2 dados de 10 lados
+• Exemplo: !rolar 6d10 - O bot irá lançar 6 dados de 10 lados`;
 rolarCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${rolarCommand.commandName}/${rolarCommand.commandName}.js`;
 
 module.exports = {

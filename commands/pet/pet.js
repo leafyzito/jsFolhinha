@@ -227,10 +227,17 @@ const brincarCommand = async (client, message) => {
 
 petCommand.commandName = 'pet';
 petCommand.aliases = ['pet'];
-petCommand.shortDescription = 'Veja várias opções do que pode fazer com o pet do chat';
+petCommand.shortDescription = 'Faça várias coisas relacionadas ao pet do chat';
 petCommand.cooldown = 5000;
 petCommand.whisperable = false;
-petCommand.description = 'descrição longa estou com preguiça agora';
+petCommand.description = `Com este comando, você por ter um pet único no seu chat e poderá fazer algumas coisas com ele, como:
+Para criar um pet, use o comando !pet criar {emoji} {nome do pet}
+• Exemplo: !pet criar 🐶 Max - O bot irá criar um pet chamado Max com o emoji 🐶
+
+Para ver algumas informações sobre o pet, use o comando !pet stats
+Este comando mostra quantos carinhos o pet já recebeu, quantas vezes ele brincou e o total de dias desde que ele foi criado
+
+Se quiser sacrificar o seu pet, para talvez criar um outro com nome diferente, use o comando !pet matar`;
 petCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${petCommand.commandName}/${petCommand.commandName}.js`;
 petCommand.emojis = petEmojis;
 

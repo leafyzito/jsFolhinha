@@ -42,7 +42,8 @@ userCommand.aliases = ['user', 'u'];
 userCommand.shortDescription = 'Mostra informações gerais sobre um usuário';
 userCommand.cooldown = 5000;
 userCommand.whisperable = false;
-userCommand.description = 'Uso: !user <usuário>; Resposta esperada: Nome: {nome do usuário} || ID: {ID do usuário} || Cor: {cor do usuário} || Badge: {badge do usuário} || Chatters: {quantidade de chatters} || Seguidores: {quantidade de seguidores} || Criado há {tempo} ({data de criação de conta})';
+userCommand.description = `Exibe várias informações sobre quem executou o comando ou sobre o usuário fornecido
+Informações a serem exibidas: Nick, ID, Cor, Badge, Chatters no canal, Seguidores e Tempo de criação da conta`;
 userCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${userCommand.commandName}/${userCommand.commandName}.js`;
 
 module.exports = {

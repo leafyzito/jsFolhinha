@@ -56,7 +56,13 @@ translateCommand.aliases = ['translate', 'traduzir', 't'];
 translateCommand.shortDescription = 'Traduza algum texto';
 translateCommand.cooldown = 5000;
 translateCommand.whisperable = true;
-translateCommand.description = 'Uso: !translate <texto para traduzir> (opcional: to:língua; default: pt); Resposta esperada: {texto traduzido para a língua escolhida}';
+translateCommand.description = `Forneça um texto para o bot traduzir para português, ou, caso especificado, para outra língua
+• Exemplo: !translate Hello World - O bot irá traduzir "Hello World" para o português
+• Exemplo: !translate to:es Hello World - O bot irá traduzir "Hello World" para espanhol
+• Exemplo: !translate to:spanish Hello World - O bot irá traduzir "Hello World" para espanhol
+
+A língua fornecida deve ser o seu código ou o nome do idioma em inglês
+Mais tarde possivelmente existirá uma página com as possibilidades de códigos dos idiomas e nomes respectivamente`;
 translateCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${translateCommand.commandName}/${translateCommand.commandName}.js`;
 
 module.exports = {

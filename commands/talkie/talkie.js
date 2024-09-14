@@ -60,7 +60,10 @@ talkieCommand.aliases = ['talkie'];
 talkieCommand.shortDescription = 'Envia uma mensagem para um canal aleatório que o bot esteja conectado';
 talkieCommand.cooldown = 15000;
 talkieCommand.whisperable = false;
-talkieCommand.description = 'Uso: !talkie <mensagem>; Resposta esperada: Mensagem enviada 🤭';
+talkieCommand.description = `Envie uma mensagem misteriosa para um canal aleatório que o Folhinha esteja conectado
+• Exemplo: !talkie Olá mundo - O bot irá enviar a mensagem "Olá mundo" para um canal aleatório
+
+Se quiser desabilitar a possibilidade do seu chat ser um dos canais onde o bot irá enviar mensagens misteriosas, use o comando !config ban talkie`;
 talkieCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${talkieCommand.commandName}/${talkieCommand.commandName}.js`;
 
 module.exports = {
