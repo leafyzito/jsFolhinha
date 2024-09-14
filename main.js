@@ -5,6 +5,7 @@ const { commandHandler, listenerHandler } = require('./utils/handlers.js');
 const { dailyCookieResetTask, startPetTask, startFetchPendingJoinsTask } = require('./utils/tasks.js');
 const fs = require('fs');
 const cron = require('node-cron');
+const { start } = require('repl');
 
 
 // Load the channels to join from the channels.txt
@@ -40,24 +41,21 @@ client.connect();
 // Register event handlers
 client.on('ready', () => { onReadyHandler(); });
 client.on('JOIN', (channel) => { onJoinHandler(channel); });
-client.on('PRIVMSG', (msg) => { onMessageHandler(msg); });
-client.on('WHISPER', (msg) => { onWhisperHandler(msg); });
+client.on("PRIVMSG", (msg) => { onMessageHandler(msg); });
 // client.on('error', (error) => { console.log('Error:', error); });
 
-// // Join the channels
-// const channelsToJoin = client.getManyUsersByUserIDs(channelIds);
-// channelsToJoin.then((channels) => {
-//     client.joinAll(channels);
-// }).catch((error) => {
-//     console.log('Error on getting channelsToJoin:', error);
-// });
+// Join the channels
+const channelsToJoin = client.getManyUsersByUserIDs(channelIds);
+channelsToJoin.then((channels) => {
+    client.joinAll(channels);
+}).catch((error) => {
+    console.log('Error on getting channelsToJoin:', error);
+});
 
-// // Schedule tasks
-// cron.schedule('0 9 * * *', async () => { await dailyCookieResetTask(client); });
-// startPetTask(client);
-// startFetchPendingJoinsTask(client);
-
-client.join('gocrazybh');
+// Schedule tasks
+cron.schedule('0 9 * * *', async () => { await dailyCookieResetTask(client); });
+startPetTask(client);
+startFetchPendingJoinsTask(client);
 
 
 // handlers
@@ -72,8 +70,8 @@ async function onReadyHandler() {
 function onMessageHandler(message) {
     if (message.senderUsername == 'folhinhabot') { return; }
 
-    // message.commandPrefix = client.channelPrefixes[message.channelName] || "!";
-    message.commandPrefix = '!!'; // for testing
+    message.commandPrefix = client.channelPrefixes[message.channelName] || "!";
+    // message.commandPrefix = '!!'; // for testing
 
     if (message.senderUsername === message.channelName) {
         message.isMod = true;
@@ -82,9 +80,4 @@ function onMessageHandler(message) {
 
     listenerHandler(client, message);
     commandHandler(client, message);
-}
-
-function onWhisperHandler(message) {
-    console.log(message);
-    client.log.logAndWhisper(message, 'avisem o leafy se receberem essa mensagem pufavo');
 }
