@@ -2,7 +2,7 @@ const { processCommand } = require("../../utils/processCommand.js");
 
 const configCommand = async (client, message) => {
     message.command = 'config';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    // if (!await processCommand(5000, 'channel', message, client)) return;
 
     if (message.senderUsername !== process.env.DEV_NICK) {
         if (!message.isMod) {
