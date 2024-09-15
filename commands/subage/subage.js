@@ -80,9 +80,9 @@ subAgeCommand.description = 'Uso: !subage <usuário> <canal>; Resposta esperada:
 subAgeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${subAgeCommand.commandName}/${subAgeCommand.commandName}.js`;
 
 subAgeCommand.description = `Mostra há quanto tempo um usuário é sub de um canal, tendo várias formas de o fazer:
-Apenas !followage: O bot vai responder com a quantidade de tempo que o usuário que executou o comando é sub do canal no qual o comando foi executado
-!followage @usuário: O bot vai responder com a quantidade de tempo que o usuário que executou o comando é sub do canal que foi fornecido
-!followage @usuário1 @usuário2: O bot vai responder com a quantidade de tempo que o @usuário1 é sub do @usuário2`;
+Apenas !subage: O bot vai responder com a quantidade de tempo que o usuário que executou o comando é sub do canal no qual o comando foi executado
+!subage @usuário: O bot vai responder com a quantidade de tempo que o usuário que executou o comando é sub do canal que foi fornecido
+!subage @usuário1 @usuário2: O bot vai responder com a quantidade de tempo que o @usuário1 é sub do @usuário2`;
 
 
 module.exports = {
