@@ -113,6 +113,9 @@ const timeSince = (lsDate) => {
         formattedDeltaTime = `${tdAFK.days}d ${tdAFK.hours}h ${tdAFK.minutes}m ${tdAFK.seconds}s`;
     }
 
+    // clean up zeros
+    formattedDeltaTime = formattedDeltaTime.replace(/\b0[d|h|m|s]\b/g, '').trim();
+    
     return formattedDeltaTime;
 };
 
