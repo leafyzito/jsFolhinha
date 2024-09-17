@@ -52,7 +52,7 @@ const joinCommand = async (client, message) => {
     client.log.send(channelToJoin, `${emote} Oioi! Fui convidado para me juntar aqui! Para saber mais sobre mim, pode usar !ajuda ou !comandos`);
 
     const happyEmote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.happyEmotes);
-    client.log.logAndReply(message, `Entrei no chat ${message.senderUsername} com sucesso! Tô lá te esperando! ${happyEmote}`);
+    client.log.logAndReply(message, `Entrei no chat ${message.senderUsername} com sucesso! Tô lá te esperando! ${happyEmote} Caso tenha follow-mode ativado, me dê cargo de moderador no seu chat para conseguir falar lá`);
     return;
 };
 
@@ -61,7 +61,9 @@ joinCommand.aliases = ['join', 'entrar'];
 joinCommand.shortDescription = 'Convide o bot para entrar no seu chat';
 joinCommand.cooldown = 5000;
 joinCommand.whisperable = true;
-joinCommand.description = `Utilize o comando !join num chat no qual o Folhinha esteja presente e faça com que o bot entre no chat de quem executou o comando`;
+joinCommand.description = `Utilize o comando !join num chat no qual o Folhinha esteja presente e faça com que o bot entre no chat de quem executou o comando
+
+Caso tenha follow-mode ativado no seu chat, o bot não conseguirá falar no seu chat. Para resolver isso, dê cargo de moderador ao Folhinha`;
 joinCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${joinCommand.commandName}/${joinCommand.commandName}.js`;
 
 module.exports = {
