@@ -29,7 +29,7 @@ const EightBallCommand = async (client, message) => {
     if (!await processCommand(5000, 'channel', message, client)) return;
 
     randomResponse = randomInt(0, ball_responses.length - 1);
-    client.log.logAndReply(message, `${ball_responses[randomResponse]}`);
+    client.log.logAndReply(message, `🎱 ${ball_responses[randomResponse]}`);
 
 };
 
