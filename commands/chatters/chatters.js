@@ -63,11 +63,11 @@ const chattersCommand = async (client, message) => {
 
     // TODO: getEmoteFromList
     if (count > 99) {
-        client.log.logAndReply(message, `${count} chatters em #${targetChannel}: ${gistUrl} (devido a limitações da Twitch, esta lista contém apenas 100 chatters)`);
+        client.log.logAndReply(message, `Existem ${count} chatters em #${targetChannel}: ${gistUrl} (devido a limitações da Twitch, esta lista contém apenas 100 chatters)`);
         return;
     }
 
-    client.log.logAndReply(message, `${count} chatters em #${targetChannel}: ${gistUrl}`);
+    client.log.logAndReply(message, `Existem ${count} chatters em #${targetChannel}: ${gistUrl}`);
 
 };
 
