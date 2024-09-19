@@ -345,7 +345,7 @@ const cookieDiarioCommand = async (client, message) => {
 
 cookieCommand.commandName = 'cookie';
 cookieCommand.aliases = ['cookie', 'cookies'];
-cookieCommand.shortDescription = 'Faça várias relacionadas com os cookies';
+cookieCommand.shortDescription = 'Faça várias coisas relacionadas com os cookies';
 cookieCommand.cooldown = 5000;
 cookieCommand.whisperable = true;
 cookieCommand.description = `!Cookie diario/daily: Receba um cookie. O comando poderá ser reutilizado todo dia a partir das cinco horas da manhã (horário de Brasília). Há de aliase o comando "cd" de mesma funcionalidade.
