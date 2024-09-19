@@ -137,6 +137,8 @@ async function fetchPendingJoins(client) {
 
             const emote = await client.emotes.getEmoteFromList(username, ['peepohey', 'heyge'], 'KonCha');
             client.log.send(username, `${emote} Oioi! Fui convidado para me juntar aqui! Para saber mais sobre mim, pode usar !ajuda ou !comandos`);
+            client.whisper(username, `Caso tenha follow-mode ativado no seu chat, me dê cargo de moderador ou vip para conseguir falar lá :D`);
+
 
             client.db.update('pendingjoin', { _id: channelToJoin._id }, { $set: { status: 'joined' } });
         }
