@@ -13,8 +13,25 @@ const helpCommand = async (client, message) => {
     message.command = 'help';
     if (!await processCommand(5000, 'channel', message, client)) return;
 
-    const emote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.happyEmotes, 'peepoHappy');
-    client.log.logAndReply(message, `Para informações sobre o bot, acesse https://folhinhabot.com/ ${emote} Se tiver qualquer dúvida, pode contactar o @${process.env.DEV_NICK}`);
+    const specificCommand = message.messageText.split(' ')[1]?.toLowerCase();
+
+    if (!specificCommand) {
+        const emote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.happyEmotes, 'peepoHappy');
+        client.log.logAndReply(message, `Para informações sobre o bot, acesse https://folhinhabot.com/ ${emote} Para ver infomações sobre um comando específico, use !help <comando>`); 
+        return; 
+    }
+
+    const commandsList = client.commandsList;
+    if (!(specificCommand in commandsList)) {
+        client.log.logAndReply(message, `O comando ${specificCommand} não existe. Para uma lista de comandos, acesse https://folhinhabot.com/comandos`);
+        return;
+    }
+    
+    const commandInfo = commandsList[specificCommand];
+    const shortDescription = commandInfo.shortDescription;
+    
+    client.log.logAndReply(message, `${commandInfo.aliases[0].charAt(0).toUpperCase() + commandInfo.aliases[0].slice(1)}: ${shortDescription} - https://folhinhabot.com/comandos/${commandInfo.commandName}`);
+
 };
 
 const statsCommand = async (client, message) => {
