@@ -50,7 +50,7 @@ const stalkCommand = async (client, message) => {
     const lsMessage = userInfo[0].lsMessage;
     const timeSinceLs = timeSince(lsDate);
 
-    client.log.logAndReply(message, `${targetUser} foi visto pela última vez há ${timeSinceLs} no #${lsChannel} - ${lsMessage}`);
+    client.log.logAndReply(message, `${targetUser} foi visto pela última vez há ${timeSinceLs} em #${lsChannel} - ${lsMessage}`);
 };
 
 stalkCommand.commandName = 'stalk';
