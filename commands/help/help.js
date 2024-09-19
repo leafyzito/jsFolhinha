@@ -30,7 +30,7 @@ const helpCommand = async (client, message) => {
     const commandInfo = commandsList[specificCommand];
     const shortDescription = commandInfo.shortDescription;
     
-    client.log.logAndReply(message, `${commandInfo.aliases[0].charAt(0).toUpperCase() + commandInfo.aliases[0].slice(1)}: ${shortDescription} - https://folhinhabot.com/comandos/${commandInfo.commandName}`);
+    client.log.logAndReply(message, `${commandInfo.aliases[0].charAt(0).toUpperCase() + commandInfo.aliases[0].slice(1)}: ${shortDescription} - https://folhinhabot.com/comandos/${encodeURIComponent(commandInfo.commandName)}`);
 
 };
 
