@@ -134,6 +134,7 @@ async function fetchPendingJoins(client) {
 
             // create config
             createNewChannelConfig(client, userid);
+            client.channelsToJoin.push(username);
 
             const emote = await client.emotes.getEmoteFromList(username, ['peepohey', 'heyge'], 'KonCha');
             client.log.send(username, `${emote} Oioi! Fui convidado para me juntar aqui! Para saber mais sobre mim, pode usar !ajuda ou !comandos`);
