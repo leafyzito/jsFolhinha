@@ -167,8 +167,9 @@ async function rejoinDisconnectedChannels(client) {
             // console.log('all good ' + client.channelsToJoin);
         }
     });
-
-    client.discord.log(`* Rejoined ${rejoinedChannels.length} channels: ${rejoinedChannels}`);
+    if (rejoinedChannels.length > 0) {
+        console.log(`* Rejoined ${rejoinedChannels.length} channels: ${rejoinedChannels}`);
+    }
 }
 
 function startPetTask(client) {
