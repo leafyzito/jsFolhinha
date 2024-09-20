@@ -2,7 +2,7 @@ require('dotenv').config();
 const { ChatClient } = require('@kararty/dank-twitch-irc');
 const { modifyClient } = require('./utils/startup.js');
 const { commandHandler, listenerHandler } = require('./utils/handlers.js');
-const { dailyCookieResetTask, startPetTask, startFetchPendingJoinsTask } = require('./utils/tasks.js');
+const { dailyCookieResetTask, startPetTask, startFetchPendingJoinsTask, startRejoinDisconnectedChannelsTask } = require('./utils/tasks.js');
 const fs = require('fs');
 const cron = require('node-cron');
 const { start } = require('repl');
@@ -47,6 +47,7 @@ client.on("PRIVMSG", (msg) => { onMessageHandler(msg); });
 // Join the channels
 const channelsToJoin = client.getManyUsersByUserIDs(channelIds);
 channelsToJoin.then((channels) => {
+    client.channelsToJoin = channels;
     client.joinAll(channels);
 }).catch((error) => {
     console.log('Error on getting channelsToJoin:', error);
@@ -56,6 +57,7 @@ channelsToJoin.then((channels) => {
 cron.schedule('0 9 * * *', async () => { await dailyCookieResetTask(client); });
 startPetTask(client);
 startFetchPendingJoinsTask(client);
+startRejoinDisconnectedChannelsTask(client);
 
 
 // handlers
