@@ -42,6 +42,9 @@ const forceJoinCommand = async (client, message) => {
             if (announce) {
                 client.log.send(targetChannel, `👀`);
             }
+
+            // add channel to channelsToJoin array
+            client.channelsToJoin.push(targetChannel);
         })
         .catch((err) => {
             client.log.logAndReply(message, `Não foi, check logs`);
@@ -65,6 +68,9 @@ const forcePartCommand = async (client, message) => {
             if (announce) {
                 client.log.send(targetChannel, `👋`);
             }
+
+            // remove channel from channelsToJoin array
+            client.channelsToJoin = client.channelsToJoin.filter(channel => channel !== targetChannel);
         })
         .catch((err) => {
             client.log.logAndReply(message, `Erro ao dar part em ${targetChannel}: ${err}`);

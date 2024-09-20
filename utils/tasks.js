@@ -153,6 +153,20 @@ async function fetchPendingJoins(client) {
     // console.log('all good já FORA do for loop');
 }
 
+async function rejoinDisconnectedChannels(client) {
+    const channelsToJoin = client.channelsToJoin;
+    channelsToJoin.forEach(async (channel) => {
+        if (![...client.joinedChannels].includes(channel)) {
+            console.log(`* Rejoining ${channel}`);
+            client.discord.log(`* Rejoining ${channel}`);
+            client.join(channel);
+        }
+        else {
+            // console.log('all good ' + client.channelsToJoin);
+        }
+    });
+}
+
 function startPetTask(client) {
     // run every X time
     setInterval(() => petAttencionTask(client), 60_000); // 1 minute
@@ -163,9 +177,15 @@ function startFetchPendingJoinsTask(client) {
     setInterval(() => fetchPendingJoins(client), 10_000); // 10 seconds
 }
 
+function startRejoinDisconnectedChannelsTask(client) {
+    // run every X time
+    setInterval(() => rejoinDisconnectedChannels(client), 30_000); // 30 seconds
+}
+
 
 module.exports = {
     dailyCookieResetTask,
     startPetTask,
-    startFetchPendingJoinsTask
+    startFetchPendingJoinsTask,
+    startRejoinDisconnectedChannelsTask
 };
