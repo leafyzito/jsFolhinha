@@ -9,8 +9,8 @@ class Logger {
 
     async logAndReply(message, response) {
         if (regex.check(response, response.split(' '), message.channelName)) {
-            console.log(`* Caught by regex - original response: ${response}`);
-            this.client.discord.log(`* Caught by regex - original response: ${response}`);
+            console.log(`* Caught by regex in #${message.channelName}/${[message.senderUsername]} - original response: ${response}`);
+            this.client.discord.log(`* Caught by regex in #${message.channelName}/${[message.senderUsername]} - original response: ${response}`);
             this.send(process.env.DEV_TEST_CHANNEL, 'Regex apanhado, check logs @leafyzito');
             return;
         }
