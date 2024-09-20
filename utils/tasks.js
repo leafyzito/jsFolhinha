@@ -155,16 +155,20 @@ async function fetchPendingJoins(client) {
 
 async function rejoinDisconnectedChannels(client) {
     const channelsToJoin = client.channelsToJoin;
+    let rejoinedChannels = [];
     channelsToJoin.forEach(async (channel) => {
         if (![...client.joinedChannels].includes(channel)) {
             console.log(`* Rejoining ${channel}`);
-            client.discord.log(`* Rejoining ${channel}`);
+            // client.discord.log(`* Rejoining ${channel}`);
+            rejoinedChannels.push(channel);
             client.join(channel);
         }
         else {
             // console.log('all good ' + client.channelsToJoin);
         }
     });
+
+    client.discord.log(`* Rejoined ${rejoinedChannels.length} channels: ${rejoinedChannels}`);
 }
 
 function startPetTask(client) {
