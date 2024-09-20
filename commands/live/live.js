@@ -59,7 +59,7 @@ const liveCommand = async (client, message) => {
 
     if (live.isLive) {
         const liveUrl = liveTarget !== message.channelName ? ` | https://twitch.tv/${liveTarget}` : '';
-        client.log.logAndReply(message, `${liveTarget} está agora fazendo live de ${live.game} com ${live.viewers} viewers - ${live.title}${liveUrl}`);
+        client.log.logAndReply(message, `${liveTarget} está agora fazendo live de ${live.game} para ${live.viewers} viewers - ${live.title}${liveUrl}`);
         return;
     }
 };
