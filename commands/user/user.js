@@ -6,7 +6,7 @@ async function getUserInfo(targetUser) {
     const response = await fetch(api_url);
     const data = await response.json();
 
-    if (data === null || data == []) { return null; }
+    if (data === null || data == [] || data.length === 0) { return null; }
 
     const displayName = data[0].displayName;
     const userId = data[0].id;
@@ -29,7 +29,7 @@ const userCommand = async (client, message) => {
 
     const userInfo = await getUserInfo(userTarget);
     if (!userInfo) {
-        client.log.send(message.channelName, `Esse usuário não existe`);
+        client.log.logAndReply(message, `Esse usuário não existe`);
         return;
     }
 
