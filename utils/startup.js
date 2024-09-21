@@ -209,7 +209,7 @@ async function modifyClient(client) {
                             await client.db.update('remind', { _id: reminder._id }, { $set: { beenRead: true } });
 
                         } else if (reminder.remindAt > currentTime) {
-                            client.discord.log(`* Setting timed reminder for ${reminderDate.toLocaleString()}`);
+                            // client.discord.log(`* Setting timed reminder for ${reminderDate.toLocaleString()}`);
                             console.log('* Setting timed reminder for ' + reminderDate.toLocaleString());
 
                             schedule.scheduleJob(new Date(reminder.remindAt * 1000), async function () {
