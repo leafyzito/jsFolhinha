@@ -95,6 +95,22 @@ async function modifyClient(client) {
         }
     }
 
+    // get channelsToJoin from database
+    client.getChannelsToJoin = async function () {
+        let channelIdsToJoin = [];
+        await client.db.get('config').then((result) => {
+            result.forEach((channel) => {
+                channelIdsToJoin.push(channel.channelId);
+            });
+        });
+
+        const channelsToJoin = client.getManyUsersByUserIDs(channelIdsToJoin);
+        // client.channelsToJoin = channelsToJoin; for sake of local testing
+
+        return channelsToJoin;
+    }
+
+    // load commands
     client.loadCommands = function () {
         client.commandsList = loadCommands();
     }

@@ -3,21 +3,8 @@ const { ChatClient } = require('@kararty/dank-twitch-irc');
 const { modifyClient } = require('./utils/startup.js');
 const { commandHandler, listenerHandler } = require('./utils/handlers.js');
 const { dailyCookieResetTask, startPetTask, startFetchPendingJoinsTask, startRejoinDisconnectedChannelsTask } = require('./utils/tasks.js');
-const fs = require('fs');
 const cron = require('node-cron');
-const { start } = require('repl');
 
-
-// Load the channels to join from the channels.txt
-const channelsFile = fs.readFileSync('channels.txt', 'utf-8');
-const channelsLines = channelsFile.split('\n');
-const channelIds = [];
-channelsLines.forEach((line) => {
-    const cId = line.split(' ')[0];
-    if (cId) {
-        channelIds.push(cId.replace('\r', ''));
-    }
-});
 
 // Create a client
 const client = new ChatClient({
@@ -45,7 +32,7 @@ client.on("PRIVMSG", (msg) => { onMessageHandler(msg); });
 // client.on('error', (error) => { console.log('Error:', error); });
 
 // Join the channels
-const channelsToJoin = client.getManyUsersByUserIDs(channelIds);
+const channelsToJoin = client.getChannelsToJoin();
 channelsToJoin.then((channels) => {
     client.channelsToJoin = channels;
     client.joinAll(channels);
