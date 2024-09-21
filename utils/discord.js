@@ -12,6 +12,18 @@ discordClient.on('ready', () => {
     console.log(`* Discord Client ${discordClient.user.tag} ready!`);
 });
 
+function getFormattedDateTime() {
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const year = now.getFullYear();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+
+    return `${day}/${month}/${year} - ${hours}:${minutes}:${seconds}`;
+}
+
 
 discordClient.logCommand = async function (message, response) {
     const embed = new discordClient.EmbedBuilder()
@@ -30,9 +42,8 @@ discordClient.logCommand = async function (message, response) {
         )
         .setColor(message.color ? colorToHexString(message.color) : '#008000')
         .setFooter({
-            text: `${message.responseTime}ms`,
+            text: `${message.responseTime}ms • ${getFormattedDateTime()}`,
         })
-        .setTimestamp();
 
     const logChannel = await discordClient.channels.fetch(process.env.DISCORD_LOG_CHANNEL);
     logChannel.send({ embeds: [embed] })
@@ -52,7 +63,9 @@ discordClient.logSend = async function (channel, content) {
             },
         )
         .setColor('#008000')
-        .setTimestamp();
+        .setFooter({
+            text: `${getFormattedDateTime()}`,
+        });
 
     const logChannel = await discordClient.channels.fetch(process.env.DISCORD_LOG_CHANNEL);
     logChannel.send({ embeds: [embed] })
@@ -80,7 +93,9 @@ discordClient.logWhisper = async function (recipient, content) {
             },
         )
         .setColor('#008000')
-        .setTimestamp();
+        .setFooter({
+            text: `${getFormattedDateTime()}`,
+        });
 
     const logChannel = await discordClient.channels.fetch(process.env.DISCORD_LOG_CHANNEL);
     logChannel.send({ embeds: [embed] })
