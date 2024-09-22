@@ -356,6 +356,19 @@ const shortenCommand = async (client, message) => {
     return;
 }
 
+const joinedChannelsCommand = async (client, message) => {
+    message.command = 'dev joinedchannels';
+
+    const authorId = message.senderUserID;
+    if (authorId !== process.env.DEV_USERID) { return; }
+
+    const joinedChannels = [...client.joinedChannels].length;
+    const channelsToJoin = client.channelsToJoin.length;
+
+    client.log.logAndReply(message, `🤖 ${joinedChannels}/${channelsToJoin}`);
+    return;
+}
+
 
 botSayCommand.aliases = ['botsay', 'bsay'];
 forceJoinCommand.aliases = ['forcejoin', 'fjoin'];
@@ -372,6 +385,7 @@ allEmotesCommand.aliases = ['allemotes'];
 devBanCommand.aliases = ['devban', 'dban'];
 unbanDevCommand.aliases = ['devunban', 'dunban'];
 shortenCommand.aliases = ['shorten'];
+joinedChannelsCommand.aliases = ['joinedchannels', 'jchannels'];
 
 module.exports = {
     botSayCommand,
@@ -389,4 +403,5 @@ module.exports = {
     devBanCommand,
     unbanDevCommand,
     shortenCommand,
+    joinedChannelsCommand,
 };
