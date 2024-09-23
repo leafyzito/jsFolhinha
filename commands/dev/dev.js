@@ -1,6 +1,25 @@
 const { exec } = require('child_process');
 const { shortenUrl } = require('../../utils/utils.js');
 
+
+async function createNewChannelConfig(client, user) {
+    const newConfig = {
+        channel: user,
+        channelId: client.getUserID(user),
+        prefix: '!',
+        offlineOnly: false,
+        isPaused: false,
+        disabledCommands: [],
+        devBanCommands: []
+    };
+
+    await client.db.insert('config', newConfig);
+    await client.reloadChannelConfigs();
+    await client.reloadChannelPrefixes();
+
+    return;
+}
+
 const botSayCommand = async (client, message) => {
     message.command = 'dev botsay';
 
@@ -369,6 +388,54 @@ const joinedChannelsCommand = async (client, message) => {
     return;
 }
 
+const devJoinChannelCommand = async (client, message) => {
+    message.command = 'dev join';
+
+    const authorId = message.senderUserID;
+    if (authorId !== process.env.DEV_USERID) { return; }
+
+    const targetChannel = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase() || null;
+
+    if (!targetChannel) {
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}devjoin <canal>`);
+        return;
+    }
+
+    const channelConfigs = Array.from(Object.values(client.channelConfigs));
+    if (!channelConfigs.some(channel => channel.channel === targetChannel)) {
+        console.log(`* Creating new config for ${targetChannel}`);
+        client.discord.log(`* Creating new config for ${targetChannel}`);
+        createNewChannelConfig(client, targetChannel);
+    }
+
+    client.join(targetChannel);
+    client.log.logAndReply(message, `🤖 Criei config e entrei no canal ${targetChannel}`);
+    return;
+}
+
+const devPartChannelCommand = async (client, message) => {
+    message.command = 'dev part';
+
+    const authorId = message.senderUserID;
+    if (authorId !== process.env.DEV_USERID) { return; }
+
+    const targetChannel = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase() || null;
+
+    if (!targetChannel) {
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}devpart <canal>`);
+        return;
+    }
+
+    // delete config
+    await client.db.delete('config', { channel: targetChannel });
+    await client.reloadChannelConfigs();
+    await client.reloadChannelPrefixes();
+
+    client.part(targetChannel);
+    client.log.logAndReply(message, `🤖 Apaguei config a saí do canal ${targetChannel}`);
+    return;
+}
+
 
 botSayCommand.aliases = ['botsay', 'bsay'];
 forceJoinCommand.aliases = ['forcejoin', 'fjoin'];
@@ -386,6 +453,8 @@ devBanCommand.aliases = ['devban', 'dban'];
 unbanDevCommand.aliases = ['devunban', 'dunban'];
 shortenCommand.aliases = ['shorten'];
 joinedChannelsCommand.aliases = ['joinedchannels', 'jchannels'];
+devJoinChannelCommand.aliases = ['devjoin', 'djoin'];
+devPartChannelCommand.aliases = ['devpart', 'dpart'];
 
 module.exports = {
     botSayCommand,
@@ -404,4 +473,6 @@ module.exports = {
     unbanDevCommand,
     shortenCommand,
     joinedChannelsCommand,
+    devJoinChannelCommand,
+    devPartChannelCommand,
 };
