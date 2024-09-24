@@ -48,14 +48,14 @@ function manageCooldown(cooldownDuration, type, message) {
 
 async function processCommand(cooldownDuration, type, message, client) {
     // check perms to execute
-    var currChannelConfigs = client.channelConfigs[message.channelName];
+    var currChannelConfigs = client.channelConfigs[message.channelName] || null;
     var currUserBans = client.bans[message.senderUserID];
 
     if (currUserBans && (currUserBans.includes('all') || currUserBans.includes(message.command))) { return false; }
-    if (currChannelConfigs.isPaused) { return false; }
-    if (currChannelConfigs.disabledCommands.includes(message.command)) { return false; }
-    if (currChannelConfigs.devBanCommands.includes(message.command)) { return false; }
-    if (currChannelConfigs.offlineOnly && await isStreamOnline(message.channelName)) { return false; }
+    if (currChannelConfigs && currChannelConfigs.isPaused) { return false; }
+    if (currChannelConfigs && currChannelConfigs.disabledCommands.includes(message.command)) { return false; }
+    if (currChannelConfigs && currChannelConfigs.devBanCommands.includes(message.command)) { return false; }
+    if (currChannelConfigs && currChannelConfigs.offlineOnly && await isStreamOnline(message.channelName)) { return false; }
 
     // if all good to go, manage cooldown
     return manageCooldown(cooldownDuration, type, message);
