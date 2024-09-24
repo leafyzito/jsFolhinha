@@ -10,7 +10,7 @@ const replyMentionListener = async (client, message) => {
     if (timeDifference < 15000) { return; }
 
     const msgContent = message.messageText.split(' ');
-    if (msgContent.length === 1 && msgContent[0].toLowerCase() === 'folhinha' || msgContent[0].toLowerCase() === 'folhinhabot') {
+    if (msgContent.length === 1 && (msgContent[0].toLowerCase() === 'folhinha' || msgContent[0].toLowerCase() === 'folhinhabot')) {
         const channelEmotes = await client.emotes.getChannelEmotes(message.channelName);
         client.log.send(message.channelName, `${message.senderUsername} ${randomChoice(channelEmotes)}`);
         lastReplyTime[message.channelName] = currentTime;
