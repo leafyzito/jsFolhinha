@@ -12,7 +12,7 @@ class Logger {
             console.log(`* Caught by regex in #${message.channelName}/${[message.senderUsername]} - original response: ${response}`);
             this.client.discord.log(`* Caught by regex in #${message.channelName}/${[message.senderUsername]} - original response: ${response}`);
             this.send(process.env.DEV_TEST_CHANNEL, 'Regex apanhado, check logs @leafyzito');
-            return;
+            response = '⚠️ Mensagem retida por conter conteúdo banido, tente novamente ou mude um pouco o comando'
         }
 
         message.responseTime = new Date().getTime() - message.serverTimestampRaw;
@@ -58,7 +58,7 @@ class Logger {
             console.log(`* Caught by regex - original response: ${response}`);
             this.client.discord.log(`* Caught by regex - original response: ${response}`);
             this.send(process.env.DEV_TEST_CHANNEL, 'Regex apanhado, check logs @leafyzito');
-            return;
+            response = '⚠️ Mensagem retida por conter conteúdo banido, tente novamente ou mude um pouco o comando'
         }
 
         message.responseTime = new Date().getTime() - message.serverTimestampRaw;
@@ -104,7 +104,7 @@ class Logger {
             console.log(`* Caught by regex - original response: ${response}`);
             this.client.discord.log(`* Caught by regex - original response: ${response}`);
             this.send(process.env.DEV_TEST_CHANNEL, 'Regex apanhado, check logs @leafyzito');
-            return;
+            response = '⚠️ Mensagem retida por conter conteúdo banido, tente novamente ou mude um pouco o comando'
         }
 
         message.responseTime = new Date().getTime() - message.serverTimestampRaw;
@@ -161,7 +161,7 @@ class Logger {
             console.log(`* Caught by regex - original content: ${content}`);
             this.client.discord.log(`* Caught by regex - original content: ${content}`);
             this.send(process.env.DEV_TEST_CHANNEL, 'Regex apanhado, check logs @leafyzito');
-            return;
+            content = '⚠️ Mensagem retida por conter conteúdo banido, tente novamente ou mude um pouco o comando'
         }
 
         this.client.say(channel, content)
