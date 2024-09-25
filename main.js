@@ -59,6 +59,10 @@ async function onReadyHandler() {
 function onMessageHandler(message) {
     if (message.senderUsername == 'folhinhabot') { return; }
 
+    // for shared chats, read the original message with priority
+    const sourceRoomId = message.ircTags['source-room-id'] || message.channelID;
+    if (sourceRoomId && sourceRoomId !== message.channelID && client.joinedChannelsIds.includes(sourceRoomId)) { return; }
+
     message.commandPrefix = client.channelPrefixes[message.channelName] || "!";
     // message.commandPrefix = '!!'; // for testing
 
