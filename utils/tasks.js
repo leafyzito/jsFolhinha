@@ -170,6 +170,7 @@ async function rejoinDisconnectedChannels(client) {
     });
     if (rejoinedChannels.length > 0) {
         console.log(`* Rejoined ${rejoinedChannels.length} channels: ${rejoinedChannels}`);
+        client.discord.log(`* Rejoined ${rejoinedChannels.length} channels: ${rejoinedChannels}`);
     }
 }
 
