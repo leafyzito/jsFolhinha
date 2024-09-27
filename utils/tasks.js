@@ -51,6 +51,9 @@ async function petAttencionTask(client) {
     const pets = await client.db.get('pet', { is_alive: true });
     for (const pet of pets) {
         const channel = await client.getUserByUserID(pet.channelId);
+        // if not connected to channel, skip (for the case the bot leaves the channel)
+        if (![...client.joinedChannels].includes(channel)) { continue; }
+
         const lastInteraction = pet.last_interaction;
         const warns = pet.warns;
         const currentTime = Math.floor(Date.now() / 1000);
