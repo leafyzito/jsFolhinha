@@ -72,12 +72,19 @@ const countlineCommand = async (client, message) => {
         }
     }
 
+    // get channel total
+    const channelTotal = await client.db.get('users', { [`msgCount.${message.channelName}`]: { '$exists': true } });
+    let channelTotalCount = 0;
+    for (const countChannel of channelTotal) {
+        channelTotalCount += countChannel.msgCount[message.channelName];
+    }
+
     if (userMsgCount === 0) {
         client.log.logAndReply(message, `${clTarget} nunca falou neste chat`);
         return;
     }
 
-    client.log.logAndReply(message, `${clTarget} mandou um total de ${userMsgCount} mensagens neste chat`);
+    client.log.logAndReply(message, `${clTarget} mandou ${userMsgCount.toLocaleString('en-US')} das ${channelTotalCount.toLocaleString('en-US')} mensagens totais deste chat`);
 };
 
 countlineCommand.commandName = 'countline';
