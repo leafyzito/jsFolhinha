@@ -140,6 +140,10 @@ const updateUserListener = async (client, message) => {
             client.log.send(message.senderUsername, `Troca de nick detetada (${knownUsersDB[0].currAlias} -> ${message.senderUsername})`);
             await client.reloadChannelConfigs();
             await client.reloadChannelPrefixes();
+
+            // update channelsToJoin
+            client.channelsToJoin = client.channelsToJoin.filter(channel => channel !== knownUsersDB[0].currAlias);
+            client.channelsToJoin.push(message.senderUsername);
         }
 
         await updateLastSeen(client, message);
