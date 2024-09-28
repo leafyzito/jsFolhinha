@@ -56,12 +56,18 @@ async function onReadyHandler() {
     console.log(`* Connected and ready! Joining channels...`);
 }
 
+client.duplicateMessages = [];
 function onMessageHandler(message) {
     if (message.senderUsername == 'folhinhabot') { return; }
 
     // for shared chats, read the original message with priority
-    const sourceRoomId = message.ircTags['source-room-id'] || message.channelID;
+    const sourceRoomId = message.ircTags['source-room-id'] || null;
+    const sourceMessageId = message.ircTags['source-id'] || null;
     if (sourceRoomId && sourceRoomId !== message.channelID && client.joinedChannelsIds.includes(sourceRoomId)) { return; }
+    if (sourceMessageId) { // to avoid duplicate messages
+        client.duplicateMessages.push(sourceMessageId);
+        if (client.duplicateMessages.length > 100) { client.duplicateMessages.shift(); }
+    }
 
     message.commandPrefix = client.channelPrefixes[message.channelName] || "!";
     // message.commandPrefix = '!!'; // for testing
