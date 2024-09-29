@@ -128,7 +128,7 @@ const dungeonCommand = async (client, message) => {
             await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [+${experience} ⇒ ${userDungeonStats.xp + experience} XP]`);
         }
     } else {
-        let experienceLoss = Math.floor(randomInt(25, 50) + 1 * userDungeonStats.level);
+        let experienceLoss = Math.floor(randomInt(25, 50) * userDungeonStats.level);
         if (userDungeonStats.xp - experienceLoss <= 0) {
             experienceLoss = userDungeonStats.xp;
         }
@@ -163,7 +163,7 @@ const fastDungeonCommand = async (client, message) => {
             responseMessage += `${dungeon[option][result]}! [+${experience} ⇒ ${userDungeonStats.xp + experience} XP]`;
         }
     } else {
-        const experienceLoss = Math.floor(randomInt(25, 50) + 1 * userDungeonStats.level);
+        const experienceLoss = Math.floor(randomInt(25, 50) * userDungeonStats.level);
         await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { losses: 1 }, $set: { xp: userDungeonStats.xp - experienceLoss } });
         responseMessage += `${dungeon[option][result]}! [-${experienceLoss} ⇒ ${userDungeonStats.xp - experienceLoss} XP]`;
     }
@@ -187,8 +187,11 @@ A sua escolha é feita ao mandar "1" ou "2" no chat quando o bot lhe apresentar 
 O XP ganho depende do nível que você atingiu, e é calculado assim:
 XP = 50~75 + 3 * Nível do player
 
-E o XP necessário para subir de nível é calculado assim:
-XP necessário para subir de nível = 100 * Nível do player + 25 * (Nível do player * (Nível do player + 1) / 2)`;
+O XP necessário para subir de nível é calculado assim:
+XP necessário para subir de nível = 100 * Nível do player + 25 * (Nível do player * (Nível do player + 1) / 2)
+
+O XP perdido é calculado assim:
+XP perdido = 25~50 * Nível do player`;
 dungeonCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${dungeonCommand.commandName}/${dungeonCommand.commandName}.js`;
 
 fastDungeonCommand.commandName = 'fastdungeon';
@@ -201,8 +204,11 @@ fastDungeonCommand.description = `Você entrará em uma dungeon aleatória e ter
 O XP ganho depende do nível que você atingiu, e é calculado assim:
 XP = 50~75 + 3 * Nível do player
 
-E o XP necessário para subir de nível é calculado assim:
-XP necessário para subir de nível = 100 * Nível do player + 25 * (Nível do player * (Nível do player + 1) / 2)`;
+O XP necessário para subir de nível é calculado assim:
+XP necessário para subir de nível = 100 * Nível do player + 25 * (Nível do player * (Nível do player + 1) / 2)
+
+O XP perdido é calculado assim:
+XP perdido = 25~50 * Nível do player`;
 fastDungeonCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${fastDungeonCommand.commandName}/${fastDungeonCommand.commandName}.js`;
 
 module.exports = {
