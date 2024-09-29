@@ -144,7 +144,7 @@ async function fetchPendingJoins(client) {
             client.whisper(username, `Caso tenha follow-mode ativado no seu chat, me dê cargo de moderador ou vip para conseguir falar lá :D`);
 
 
-            client.db.update('pendingjoin', { _id: channelToJoin._id }, { $set: { status: 'joined' } });
+            await client.db.update('pendingjoin', { _id: channelToJoin._id }, { $set: { status: 'joined' } });
         }
         else {
             console.log(`* ${channelToJoin.userid} not found from website`);
