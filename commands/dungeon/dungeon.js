@@ -113,7 +113,7 @@ const dungeonCommand = async (client, message) => {
     const userOption = resMessage.toLowerCase().replace('d', '');
     console.log(resMessage, userOption);
 
-    const result = randomInt(1, 3) <= 2 ? 'win' : 'lose';
+    const result = randomInt(1, 3) == 1 ? 'win' : 'lose';
     if (result === 'win') {
         const experience = Math.floor(randomInt(50, 75) + 3 * userDungeonStats.level);
         const experienceNeededForLvlUp = 100 * userDungeonStats.level + 25 * (userDungeonStats.level * (userDungeonStats.level + 1) / 2);
@@ -145,7 +145,7 @@ const fastDungeonCommand = async (client, message) => {
     const dungeon = dungeonData[Math.floor(Math.random() * dungeonData.length)];
 
     const option = randomChoice(['1', '2']);
-    const result = randomInt(1, 3) <= 2 ? 'win' : 'lose';
+    const result = randomInt(1, 2) == 1 ? 'win' : 'lose';
     let responseMessage = `${capitalize(dungeon.quote)} Você decide ${dungeon[option].option} e `;
 
     if (result === 'win') {
