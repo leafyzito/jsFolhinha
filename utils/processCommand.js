@@ -46,6 +46,26 @@ function manageCooldown(cooldownDuration, type, message) {
     return false;
 }
 
+function resetCooldown(identifier, type, command, originalCooldown = 5000, newCooldown = 0) {
+    // i couldn't make it set the cooldown to newCooldown seconds ago, so i had to make it set it to originalCooldown - newCooldown help
+    let cooldowns2;
+    if (type === 'user') {
+        cooldowns2 = userCooldowns;
+    } else if (type === 'channel') {
+        cooldowns2 = channelCooldowns;
+    } else {
+        throw new Error('Invalid cooldown type');
+    }
+
+    let commandCooldown = cooldowns2[identifier];
+    if (!commandCooldown) {
+        commandCooldown = {};
+        cooldowns2[identifier] = commandCooldown;
+    }
+
+    commandCooldown[command] = Date.now() - (originalCooldown - newCooldown);
+}
+
 async function processCommand(cooldownDuration, type, message, client) {
     // check perms to execute
     var currChannelConfigs = client.channelConfigs[message.channelName] || null;
@@ -63,6 +83,7 @@ async function processCommand(cooldownDuration, type, message, client) {
 
 module.exports = {
     processCommand: processCommand,
-    manageCooldown: manageCooldown
+    manageCooldown: manageCooldown,
+    resetCooldown: resetCooldown
 };
 
