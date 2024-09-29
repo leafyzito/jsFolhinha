@@ -356,7 +356,7 @@ cookieCommand.description = `!Cookie diario/daily: Receba um cookie. O comando p
 
 !Cookie slot: Aposte um dos seus cookies e tenha a chance de ganhar 3 ou 10 cookies. Poderá apostar novamente no próximo ciclo do cookie diário.
 
-!Cookie show: Exiba estatísticas de cookies. Quando não mencionado um usuário, exibirá as estatísticas de quem realizou o comando.
+!Cookie show: Exibe estatísticas de cookies. Quando não mencionado um usuário, exibirá as estatísticas de quem realizou o comando.
 
 !Cookie top: Exiba os cinco usuários com mais cookies e a sua posição no ranking global. Use "!cookie top gift" e "!cookie top slot" para exibir os maiores presenteadores e apostadores, respectivamente, e a sua posição no ranking específico.`;
 cookieCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${cookieCommand.commandName}/${cookieCommand.commandName}.js`;
