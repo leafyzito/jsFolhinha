@@ -39,7 +39,7 @@ async function loadUserDungeonStats(client, message) {
 
 const dungeonCommand = async (client, message) => {
     message.command = 'dungeon';
-    if (!await processCommand(30_000, 'channel', message, client)) return;
+    if (!await processCommand(30_000, 'user', message, client)) return;
 
     const userDungeonStats = await loadUserDungeonStats(client, message);
 
@@ -84,7 +84,7 @@ const dungeonCommand = async (client, message) => {
 
 const fastDungeonCommand = async (client, message) => {
     message.command = 'dungeon';
-    if (!await processCommand(30_000, 'channel', message, client)) return;
+    if (!await processCommand(30_000, 'user', message, client)) return;
 
     const userDungeonStats = await loadUserDungeonStats(client, message);
 
