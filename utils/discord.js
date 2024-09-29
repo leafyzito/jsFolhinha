@@ -75,11 +75,20 @@ discordClient.logSend = async function (channel, content) {
 }
 
 discordClient.log = async function (content) {
-    const logChannel = await discordClient.channels.fetch(process.env.DISCORD_LOG_CHANNEL);
-    logChannel.send(content)
-        .catch((err) => {
-            console.error(`Erro ao enviar mensagem no discord log: ${err}`);
-        });
+    try {
+        const logChannel = await discordClient.channels.fetch(process.env.DISCORD_LOG_CHANNEL);
+        await logChannel.send(content);
+    } catch (err) {
+        console.log(`Erro ao enviar mensagem no discord log: ${err}`);
+        setTimeout(async () => {
+            try {
+                const logChannel = await discordClient.channels.fetch(process.env.DISCORD_LOG_CHANNEL);
+                await logChannel.send(content);
+            } catch (secondErr) {
+                console.log(`Erro ao enviar mensagem no segundo envio no discord log: ${secondErr}`);
+            }
+        }, 5000);
+    }
 }
 
 discordClient.logWhisper = async function (recipient, content) {
