@@ -113,7 +113,7 @@ const dungeonCommand = async (client, message) => {
     const userOption = resMessage.toLowerCase().replace('d', '');
     console.log(resMessage, userOption);
 
-    const result = randomInt(1, 3) == 1 ? 'win' : 'lose';
+    const result = randomInt(1, 2) == 1 ? 'win' : 'lose';
     if (result === 'win') {
         const experience = Math.floor(randomInt(50, 75) + 3 * userDungeonStats.level);
         const experienceNeededForLvlUp = 100 * userDungeonStats.level + 25 * (userDungeonStats.level * (userDungeonStats.level + 1) / 2);
@@ -128,7 +128,7 @@ const dungeonCommand = async (client, message) => {
             await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [+${experience} ⇒ ${userDungeonStats.xp + experience} XP]`);
         }
     } else {
-        const experienceLoss = Math.floor(randomInt(50, 75) + 3 * userDungeonStats.level);
+        const experienceLoss = Math.floor(randomInt(25, 50) + 1 * userDungeonStats.level);
         await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { losses: 1 }, $set: { xp: userDungeonStats.xp - experienceLoss } });
         await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [-${experienceLoss} ⇒ ${userDungeonStats.xp - experienceLoss} XP]`);
     }
@@ -160,7 +160,7 @@ const fastDungeonCommand = async (client, message) => {
             responseMessage += `${dungeon[option][result]}! [+${experience} ⇒ ${userDungeonStats.xp + experience} XP]`;
         }
     } else {
-        const experienceLoss = Math.floor(randomInt(50, 75) + 3 * userDungeonStats.level);
+        const experienceLoss = Math.floor(randomInt(25, 50) + 1 * userDungeonStats.level);
         await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { losses: 1 }, $set: { xp: userDungeonStats.xp - experienceLoss } });
         responseMessage += `${dungeon[option][result]}! [-${experienceLoss} ⇒ ${userDungeonStats.xp - experienceLoss} XP]`;
     }
