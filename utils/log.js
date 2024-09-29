@@ -181,6 +181,31 @@ class Logger {
             });
         this.client.discord.logSend(channel, content);
     }
+
+    async reply(message, response) {
+        if (regex.check(response, response.split(' '), message.channelName)) {
+            console.log(`* Caught by regex in #${message.channelName}/${[message.senderUsername]} - original response: ${response}`);
+            this.client.discord.log(`* Caught by regex in #${message.channelName}/${[message.senderUsername]} - original response: ${response}`);
+            response = '⚠️ Mensagem retida por conter conteúdo banido, tente novamente ou mude um pouco o comando'
+        }
+
+        this.client.reply(message.channelName, message.messageID, response)
+            .catch((err) => {
+                if (err.message.includes('identical to the previous one')) {
+                    console.log('sending identical message error, ending here');
+                } else if (err.message.includes('too quickly')) {
+                    console.log('sending messages too quickly error, retrying');
+                    setTimeout(() => { this.send(message.channelName, response); }, 1500);
+                } else if (err.message.includes('waiting for response')) {
+                    console.log('waiting for response error, retrying');
+                    setTimeout(() => { this.send(message.channelName, response); }, 1500);
+                } else {
+                    console.log('logAndReply error: ', err);
+                }
+            });
+
+        this.client.discord.logSend(message.channelName, response);
+    }
 }
 
 module.exports = {

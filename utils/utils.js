@@ -80,7 +80,7 @@ async function createNewGist(content) {
     return null;
 }
 
-async function manageLongResponse(content){
+async function manageLongResponse(content) {
     const gist = await createNewGist(content);
     const lenOfGist = gist.length;
     const maxContentLength = 480 - lenOfGist - 10;
@@ -94,7 +94,7 @@ async function manageLongResponse(content){
 
 const timeSince = (lsDate) => {
     const deltaTime = Math.floor(Date.now() / 1000) - lsDate;
-    
+
     const tdAFK = {
         days: Math.floor(deltaTime / (3600 * 24)),
         hours: Math.floor((deltaTime % (3600 * 24)) / 3600),
@@ -115,7 +115,7 @@ const timeSince = (lsDate) => {
 
     // clean up zeros
     formattedDeltaTime = formattedDeltaTime.replace(/\b0[d|h|m|s]\b/g, '').trim();
-    
+
     return formattedDeltaTime;
 };
 
@@ -214,7 +214,7 @@ async function isStreamOnline(canal, cache_timeout = 60) {
 
 function parseTime(value, unit) {
     value = parseFloat(value.replace(/,/g, '.'));
-    switch(unit) {
+    switch (unit) {
         case 'seconds':
         case 'second':
         case 'secs':
@@ -247,6 +247,25 @@ function randomChoice(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
 }
 
+function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+async function waitForMessage(client, check, timeout = 30_000) {
+    return new Promise((resolve) => {
+        const timer = setTimeout(() => {
+            resolve(null);
+        }, timeout);
+
+        client.on('PRIVMSG', (msg) => {
+            if (msg.senderUsername === check.senderUsername && msg.channelName === check.channelName && check.content.some(content => msg.messageText.includes(content))) {
+                clearTimeout(timer);
+                resolve(msg);
+            }
+        });
+    });
+}
+
 module.exports = {
     isValidUser: isValidUser,
     shortenUrl: shortenUrl,
@@ -257,5 +276,7 @@ module.exports = {
     timeSince: timeSince,
     timeSinceDT: timeSinceDT,
     isStreamOnline: isStreamOnline,
-    parseTime: parseTime
+    parseTime: parseTime,
+    capitalize: capitalize,
+    waitForMessage: waitForMessage
 };
