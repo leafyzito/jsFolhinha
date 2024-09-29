@@ -163,7 +163,10 @@ const fastDungeonCommand = async (client, message) => {
             responseMessage += `${dungeon[option][result]}! [+${experience} ⇒ ${userDungeonStats.xp + experience} XP]`;
         }
     } else {
-        const experienceLoss = Math.floor(randomInt(25, 50) * userDungeonStats.level);
+        let experienceLoss = Math.floor(randomInt(25, 50) * userDungeonStats.level);
+        if (userDungeonStats.xp - experienceLoss <= 0) {
+            experienceLoss = userDungeonStats.xp;
+        }
         await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { losses: 1 }, $set: { xp: userDungeonStats.xp - experienceLoss } });
         responseMessage += `${dungeon[option][result]}! [-${experienceLoss} ⇒ ${userDungeonStats.xp - experienceLoss} XP]`;
     }
