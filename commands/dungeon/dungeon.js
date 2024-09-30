@@ -21,7 +21,9 @@ async function createUserDungeonBase(client, message) {
         xp: 0,
         level: 1,
         wins: 0,
-        losses: 0
+        losses: 0,
+        lastDungeon: 0,
+        cooldown: 0
     };
 
     await client.db.insert('dungeon', insert_doc);
@@ -37,9 +39,44 @@ async function loadUserDungeonStats(client, message) {
     return userDungeonStats[0];
 }
 
+function getFormattedRemainingTime(seconds) {
+    if (seconds < 60) {
+        return `${seconds}s`;
+    }
+
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) {
+        const secondsLeft = seconds % 60;
+        return `${minutes}m ${secondsLeft}s`;
+    }
+
+    const hours = Math.floor(minutes / 60);
+    const minutesLeft = minutes % 60;
+    const secondsLeft = seconds % 60;
+
+    return `${hours}h ${minutesLeft}m ${secondsLeft}s`;
+}
+
+async function checkDungeonCooldown(client, message, userDungeonStats) {
+    const currentTime = Math.floor(Date.now() / 1000);
+    const cooldownEndTime = userDungeonStats.lastDungeon + userDungeonStats.cooldown;
+
+    if (cooldownEndTime > currentTime) {
+        const remainingTime = getFormattedRemainingTime(cooldownEndTime - currentTime);
+        const resMsg = `Você se sente cansado... Só vai se sentir capaz de explorar de novo em ${remainingTime}`;
+        return [false, resMsg];
+    }
+
+    // set lastDungeon to current time
+    // set new random cooldown 45min-3h
+    const newCooldown = Math.floor(Math.random() * (3 * 60 * 60) + (45 * 60));
+    await client.db.update('dungeon', { userId: message.senderUserID }, { $set: { lastDungeon: currentTime, cooldown: newCooldown } });
+    return [true, ''];
+}
+
 const dungeonCommand = async (client, message) => {
     message.command = 'dungeon';
-    if (!await processCommand(30_000, 'user', message, client)) return;
+    if (!await processCommand(5000, 'user', message, client)) return;
 
     if (message.messageText.split(' ').length !== 1) {
         const userOption = message.messageText.split(' ')[1].toLowerCase();
@@ -49,14 +86,14 @@ const dungeonCommand = async (client, message) => {
             let userDungeonStats = await client.db.get('dungeon', { userId: targetId });
             if (userDungeonStats.length === 0) {
                 client.log.logAndReply(message, `${targetUser} ainda não explorou nenhuma dungeon`);
-                resetCooldown(message.senderUsername, 'user', message.command, 30_000, 5_000);
+                // resetCooldown(message.senderUsername, 'user', message.command, 30_000, 5_000);
                 return;
             }
 
             userDungeonStats = userDungeonStats[0];
             const winrate = userDungeonStats.wins / (userDungeonStats.wins + userDungeonStats.losses) * 100;
             await client.log.logAndReply(message, `${targetUser} tem ${Math.round(userDungeonStats.xp)} XP 🌟 está no level ${userDungeonStats.level} com ${userDungeonStats.wins + userDungeonStats.losses} dungeons ⚔️ (${userDungeonStats.wins} vitórias e ${userDungeonStats.losses} derrotas - ${winrate.toFixed(2)}% winrate)`);
-            resetCooldown(message.senderUsername, 'user', message.command, 30_000, 5_000);
+            // resetCooldown(message.senderUsername, 'user', message.command, 30_000, 5_000);
             return;
         }
 
@@ -89,12 +126,17 @@ const dungeonCommand = async (client, message) => {
                 }
             }
             await client.log.logAndReply(message, reply + '⚔️');
-            resetCooldown(message.senderUsername, 'user', message.command, 30_000, 5_000);
+            // resetCooldown(message.senderUsername, 'user', message.command, 30_000, 5_000);
             return;
         }
     }
 
     const userDungeonStats = await loadUserDungeonStats(client, message);
+    const [canDungeon, resMsg] = await checkDungeonCooldown(client, message, userDungeonStats);
+    if (!canDungeon) {
+        await client.log.logAndReply(message, resMsg);
+        return;
+    }
 
     const check = {
         senderUserID: message.senderUserID,
@@ -146,9 +188,14 @@ const dungeonCommand = async (client, message) => {
 
 const fastDungeonCommand = async (client, message) => {
     message.command = 'dungeon';
-    if (!await processCommand(30_000, 'user', message, client)) return;
+    if (!await processCommand(5000, 'user', message, client)) return;
 
     const userDungeonStats = await loadUserDungeonStats(client, message);
+    const [canDungeon, resMsg] = await checkDungeonCooldown(client, message, userDungeonStats);
+    if (!canDungeon) {
+        await client.log.logAndReply(message, resMsg);
+        return;
+    }
 
     const dungeon = dungeonData[Math.floor(Math.random() * dungeonData.length)];
 
@@ -185,6 +232,7 @@ dungeonCommand.cooldown = 30_000;
 dungeonCommand.whisperable = true;
 dungeonCommand.description = `Você entrará em uma dungeon aleatória e poderá escolher entre 2 destinos, sendo que apenas 1 deles lhe dará XP
 A sua escolha é feita ao mandar "1" ou "2" no chat quando o bot lhe apresentar a dungeon
+Após cada dungeon, o usuário entrará em um cooldown aleatório de 45 minutos a 3 horas
 
 !Dungeon show: Exibe estatísticas de dungeon. Quando não mencionado um usuário, exibirá as estatísticas de quem realizou o comando.
 
@@ -203,6 +251,7 @@ fastDungeonCommand.shortDescription = 'Entre em uma dungeon e tenha o seu destin
 fastDungeonCommand.cooldown = 30_000;
 fastDungeonCommand.whisperable = true;
 fastDungeonCommand.description = `Você entrará em uma dungeon aleatória e terá um destino aleatório
+Após cada dungeon, o usuário entrará em um cooldown aleatório de 45 minutos a 3 horas
 
 O XP ganho depende do nível que você atingiu, e é calculado assim:
 XP = 50~75 + 3 * Nível do player
