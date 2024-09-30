@@ -115,7 +115,7 @@ const dungeonCommand = async (client, message) => {
 
     const result = randomInt(1, 2) == 1 ? 'win' : 'lose';
     if (result === 'win') {
-        const experienceGain = Math.floor(0.1 * userDungeonStats.xp + randomInt(50, 75) + 2 * userDungeonStats.level);
+        const experienceGain = randomInt(50, 75) + 3 * userDungeonStats.level;
         const experienceNeededForLvlUp = 100 * userDungeonStats.level + 25 * (userDungeonStats.level * (userDungeonStats.level + 1) / 2);
         // const xpForNextLevel = experienceNeededForLvlUp - userDungeonStats.xp;
         // console.log('xp para o proximo lvl: ', xpForNextLevel);
@@ -128,13 +128,7 @@ const dungeonCommand = async (client, message) => {
             await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [+${Math.round(experienceGain)} ⇒ ${Math.round(userDungeonStats.xp + experienceGain)} XP]`);
         }
     } else {
-        let experienceLoss = Math.min(0.02 * userDungeonStats.xp, 0.05 * userDungeonStats.level * userDungeonStats.xp)
-            + randomInt(5, 10)
-            + Math.floor(0.5 * userDungeonStats.level);
-        if (userDungeonStats.xp - experienceLoss <= 0) {
-            experienceLoss = userDungeonStats.xp;
-        }
-        await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { losses: 1 }, $set: { xp: userDungeonStats.xp - experienceLoss } });
+        await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { losses: 1 } });
         await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [-${Math.round(experienceLoss)} ⇒ ${Math.round(userDungeonStats.xp - experienceLoss)} XP]`);
     }
 
@@ -154,7 +148,7 @@ const fastDungeonCommand = async (client, message) => {
     let responseMessage = `${capitalize(dungeon.quote)} Você decide ${dungeon[option].option} e `;
 
     if (result === 'win') {
-        const experienceGain = Math.floor(0.1 * userDungeonStats.xp + randomInt(50, 75) + 2 * userDungeonStats.level);
+        const experienceGain = randomInt(50, 75) + 3 * userDungeonStats.level;
         const experienceNeededForLvlUp = 100 * userDungeonStats.level + 25 * (userDungeonStats.level * (userDungeonStats.level + 1) / 2);
 
         if (userDungeonStats.xp + experienceGain >= experienceNeededForLvlUp) {
@@ -165,13 +159,7 @@ const fastDungeonCommand = async (client, message) => {
             responseMessage += `${dungeon[option][result]}! [+${Math.round(experienceGain)} ⇒ ${Math.round(userDungeonStats.xp + experienceGain)} XP]`;
         }
     } else {
-        let experienceLoss = Math.min(0.02 * userDungeonStats.xp, 0.05 * userDungeonStats.level * userDungeonStats.xp)
-            + randomInt(5, 10)
-            + Math.floor(0.5 * userDungeonStats.level);
-        if (userDungeonStats.xp - experienceLoss <= 0) {
-            experienceLoss = userDungeonStats.xp;
-        }
-        await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { losses: 1 }, $set: { xp: userDungeonStats.xp - experienceLoss } });
+        await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { losses: 1 } });
         responseMessage += `${dungeon[option][result]}! [-${Math.round(experienceLoss)} ⇒ ${Math.round(userDungeonStats.xp - experienceLoss)} XP]`;
     }
 
@@ -191,7 +179,11 @@ A sua escolha é feita ao mandar "1" ou "2" no chat quando o bot lhe apresentar 
 
 !Dungeon top: Exibe os 5 usuários com mais XP, nível, vitórias ou derrotas. Use "!dungeon top xp/level/win/loss" para escolher o que será usado para classificar os usuários
 
-O ganho/perda de XP é baseado no nível do usuário`;
+O XP ganho depende do nível que você atingiu, e é calculado assim:
+XP = 50~75 + 3 * Nível do player
+
+O XP necessário para subir de nível é calculado assim:
+XP necessário para subir de nível = 100 * Nível do player + 25 * (Nível do player * (Nível do player + 1) / 2)`;
 dungeonCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${dungeonCommand.commandName}/${dungeonCommand.commandName}.js`;
 
 fastDungeonCommand.commandName = 'fastdungeon';
@@ -201,7 +193,11 @@ fastDungeonCommand.cooldown = 30_000;
 fastDungeonCommand.whisperable = true;
 fastDungeonCommand.description = `Você entrará em uma dungeon aleatória e terá um destino aleatório
 
-O ganho/perda de XP é baseado no nível do usuário`;
+O XP ganho depende do nível que você atingiu, e é calculado assim:
+XP = 50~75 + 3 * Nível do player
+
+O XP necessário para subir de nível é calculado assim:
+XP necessário para subir de nível = 100 * Nível do player + 25 * (Nível do player * (Nível do player + 1) / 2)`;
 fastDungeonCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${fastDungeonCommand.commandName}/${fastDungeonCommand.commandName}.js`;
 
 module.exports = {
