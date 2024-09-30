@@ -17,8 +17,8 @@ const helpCommand = async (client, message) => {
 
     if (!specificCommand) {
         const emote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.happyEmotes, 'peepoHappy');
-        client.log.logAndReply(message, `Para informações sobre o bot, acesse https://folhinhabot.com/ ${emote} Para ver infomações sobre um comando específico, use !help <comando>`); 
-        return; 
+        client.log.logAndReply(message, `Para informações sobre o bot, acesse https://folhinhabot.com/ ${emote} Para ver infomações sobre um comando específico, use !help <comando>`);
+        return;
     }
 
     const commandsList = client.commandsList;
@@ -26,10 +26,10 @@ const helpCommand = async (client, message) => {
         client.log.logAndReply(message, `O comando ${specificCommand} não existe. Para uma lista de comandos, acesse https://folhinhabot.com/comandos`);
         return;
     }
-    
+
     const commandInfo = commandsList[specificCommand];
     const shortDescription = commandInfo.shortDescription;
-    
+
     client.log.logAndReply(message, `${commandInfo.aliases[0].charAt(0).toUpperCase() + commandInfo.aliases[0].slice(1)}: ${shortDescription} - https://folhinhabot.com/comandos/${encodeURIComponent(commandInfo.commandName)}`);
 
 };
@@ -51,16 +51,14 @@ const botStatsCommand = async (client, message) => {
 
     const currentDate = new Date();
     const oneDayBefore = new Date(currentDate.getTime() - (24 * 60 * 60 * 1000));
-    const oneDayFormattedDate = oneDayBefore.toISOString().slice(0, 19).replace("T", " ");
     const oneHourBefore = new Date(currentDate.getTime() - (60 * 60 * 1000));
-    const oneHourFormattedDate = oneHourBefore.toISOString().slice(0, 19).replace("T", " ");
 
-    const dayBeforeCommandsCount = await client.db.get('commandlog', { 'sentDate': { '$gt': oneDayFormattedDate } });
-    const hourBeforeCommandsCount = await client.db.get('commandlog', { 'sentDate': { '$gt': oneHourFormattedDate } });
+    const dayBeforeCommandsCount = await client.db.count('commandlog', { sentDate: { $gte: oneDayBefore } });
+    const hourBeforeCommandsCount = await client.db.count('commandlog', { sentDate: { $gte: oneHourBefore } });
 
-    client.log.logAndReply(message, `Comandos nas últimas 24h/1h: ${dayBeforeCommandsCount.length}/${hourBeforeCommandsCount.length} - https://shlink.mrchuw.com.br/jErVU`);
+    client.log.logAndReply(message, `Comandos nas últimas 24h/1h: ${dayBeforeCommandsCount}/${hourBeforeCommandsCount} - https://shlink.mrchuw.com.br/jErVU`);
+};
 
-}
 
 comandosCommand.commandName = 'comandos';
 comandosCommand.aliases = ['comandos', 'commands', 'comando', 'command'];
