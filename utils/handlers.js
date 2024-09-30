@@ -31,6 +31,8 @@ function listenerHandler(client, message) {
 
     logMessage(client, message);
 
+    if (message.senderUsername == 'folhinhabot') { return; }
+
     replyMentionListener(client, message)
         .catch(err => {
             console.log(`Error in reply mention listener: ${err}`);
