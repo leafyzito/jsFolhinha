@@ -63,7 +63,7 @@ async function checkDungeonCooldown(client, message, userDungeonStats) {
 
     if (cooldownEndTime > currentTime) {
         const remainingTime = getFormattedRemainingTime(cooldownEndTime - currentTime);
-        const resMsg = `Você se sente cansado... Só vai se sentir capaz de explorar de novo em ${remainingTime}`;
+        const resMsg = `Você se sente cansado... Só vai se sentir capaz de explorar de novo em ${remainingTime} ⏰`;
         return [false, resMsg];
     }
 
