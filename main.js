@@ -58,8 +58,6 @@ async function onReadyHandler() {
 
 client.duplicateMessages = [];
 function onMessageHandler(message) {
-    if (message.senderUsername == 'folhinhabot') { return; }
-
     // for shared chats, read the original message with priority
     const sourceRoomId = message.ircTags['source-room-id'] || null;
     const sourceMessageId = message.ircTags['source-id'] || null;
