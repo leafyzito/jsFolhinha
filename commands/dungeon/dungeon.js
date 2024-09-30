@@ -122,7 +122,7 @@ const dungeonCommand = async (client, message) => {
 
         if (userDungeonStats.xp + experience > experienceNeededForLvlUp) {
             await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { xp: experience, wins: 1, level: 1 } });
-            await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [+${experience} ⇒ ${userDungeonStats.xp + experience} XP] e subiu para o nível ${userDungeonStats.level + 1}`);
+            await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [+${experience} ⇒ ${userDungeonStats.xp + experience} XP] ⬆ subiu para o nível ${userDungeonStats.level + 1}`);
         } else {
             await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { xp: experience, wins: 1 } });
             await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [+${experience} ⇒ ${userDungeonStats.xp + experience} XP]`);
@@ -157,7 +157,7 @@ const fastDungeonCommand = async (client, message) => {
 
         if (userDungeonStats.xp + experience >= experienceNeededForLvlUp) {
             await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { xp: experience, wins: 1, level: 1 } });
-            responseMessage += `${dungeon[option][result]}! [+${experience} ⇒ ${userDungeonStats.xp + experience} XP] e subiu para o nível ${userDungeonStats.level + 1}`;
+            responseMessage += `${dungeon[option][result]}! [+${experience} ⇒ ${userDungeonStats.xp + experience} XP] ⬆ subiu para o nível ${userDungeonStats.level + 1}`;
         } else {
             await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { xp: experience, wins: 1 } });
             responseMessage += `${dungeon[option][result]}! [+${experience} ⇒ ${userDungeonStats.xp + experience} XP]`;
