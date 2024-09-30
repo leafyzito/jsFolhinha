@@ -12,8 +12,24 @@ function commandHandler(client, message) {
     }
 }
 
+function logMessage(client, message) {
+    const insert_doc = {
+        messageid: message.messageID,
+        date: message.serverTimestamp,
+        channel: message.channelName,
+        channelId: message.channelID,
+        user: message.senderUsername,
+        userId: message.senderUserID,
+        content: message.messageText,
+    }
+
+    client.db.insert('messagelog', insert_doc);
+}
+
 function listenerHandler(client, message) {
     if ([...client.knownUserAliases].length === 0) { return console.log('still loading users'); }
+
+    logMessage(client, message);
 
     replyMentionListener(client, message)
         .catch(err => {
