@@ -135,7 +135,7 @@ const dungeonCommand = async (client, message) => {
             experienceLoss = userDungeonStats.xp;
         }
         await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { losses: 1 }, $set: { xp: userDungeonStats.xp - experienceLoss } });
-        await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [-${experienceLoss} ⇒ ${userDungeonStats.xp - experienceLoss} XP]`);
+        await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [-${Math.round(experienceLoss)} ⇒ ${userDungeonStats.xp - experienceLoss} XP]`);
     }
 
     return;
@@ -172,7 +172,7 @@ const fastDungeonCommand = async (client, message) => {
             experienceLoss = userDungeonStats.xp;
         }
         await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { losses: 1 }, $set: { xp: userDungeonStats.xp - experienceLoss } });
-        responseMessage += `${dungeon[option][result]}! [-${experienceLoss} ⇒ ${userDungeonStats.xp - experienceLoss} XP]`;
+        responseMessage += `${dungeon[option][result]}! [-${Math.round(experienceLoss)} ⇒ ${userDungeonStats.xp - experienceLoss} XP]`;
     }
 
     await client.log.logAndReply(message, responseMessage);
