@@ -36,7 +36,7 @@ class Logger {
 
         const insertDoc = {
             messageid: message.messageID,
-            sentDate: formattedDate,
+            sentDate: message.serverTimestamp,
             channel: message.channelName,
             channelId: message.channelID,
             user: message.senderUsername,
@@ -82,7 +82,7 @@ class Logger {
 
         const insertDoc = {
             messageid: message.messageID,
-            sentDate: formattedDate,
+            sentDate: message.serverTimestamp,
             channel: message.channelName,
             channelId: message.channelID,
             user: message.senderUsername,
@@ -128,7 +128,7 @@ class Logger {
 
         const insertDoc = {
             messageid: message.messageID,
-            sentDate: formattedDate,
+            sentDate: message.serverTimestamp,
             channel: message.channelName,
             channelId: message.channelID,
             user: message.senderUsername,
