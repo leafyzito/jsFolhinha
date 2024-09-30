@@ -129,7 +129,7 @@ const dungeonCommand = async (client, message) => {
         }
     } else {
         await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { losses: 1 } });
-        await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [-${Math.round(experienceLoss)} ⇒ ${Math.round(userDungeonStats.xp - experienceLoss)} XP]`);
+        await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [-0 ⇒ ${userDungeonStats.xp} XP]`);
     }
 
     return;
@@ -160,7 +160,7 @@ const fastDungeonCommand = async (client, message) => {
         }
     } else {
         await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { losses: 1 } });
-        responseMessage += `${dungeon[option][result]}! [-${Math.round(experienceLoss)} ⇒ ${Math.round(userDungeonStats.xp - experienceLoss)} XP]`;
+        responseMessage += `${dungeon[option][result]}! [-0 ⇒ ${userDungeonStats.xp} XP]`;
     }
 
     await client.log.logAndReply(message, responseMessage);
