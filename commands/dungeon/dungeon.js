@@ -128,7 +128,9 @@ const dungeonCommand = async (client, message) => {
             await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [+${experienceGain} ⇒ ${userDungeonStats.xp + experienceGain} XP]`);
         }
     } else {
-        let experienceLoss = Math.floor(randomInt(5, 15) + 1.5 * userDungeonStats.level);
+        let experienceLoss = Math.min(0.02 * userDungeonStats.xp, 0.05 * userDungeonStats.level * userDungeonStats.xp)
+            + randomInt(5, 10)
+            + Math.floor(0.5 * userDungeonStats.level);
         if (userDungeonStats.xp - experienceLoss <= 0) {
             experienceLoss = userDungeonStats.xp;
         }
@@ -163,7 +165,9 @@ const fastDungeonCommand = async (client, message) => {
             responseMessage += `${dungeon[option][result]}! [+${experienceGain} ⇒ ${userDungeonStats.xp + experienceGain} XP]`;
         }
     } else {
-        let experienceLoss = Math.floor(randomInt(5, 15) + 1.5 * userDungeonStats.level);
+        let experienceLoss = Math.min(0.02 * userDungeonStats.xp, 0.05 * userDungeonStats.level * userDungeonStats.xp)
+            + randomInt(5, 10)
+            + Math.floor(0.5 * userDungeonStats.level);
         if (userDungeonStats.xp - experienceLoss <= 0) {
             experienceLoss = userDungeonStats.xp;
         }
