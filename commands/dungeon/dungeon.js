@@ -110,7 +110,14 @@ const dungeonCommand = async (client, message) => {
 
     // choose a random dungeon
     let resMessage = response.messageText.replace(message.commandPrefix, '');
-    const userOption = resMessage.toLowerCase().replace('d', '');
+    let userOption;
+    if (resMessage.startsWith('dungeon')) {
+        userOption = resMessage.replace('dungeon', '').trim();
+    } else if (resMessage.startsWith('d')) {
+        userOption = resMessage.replace('d', '').trim();
+    } else {
+        userOption = resMessage.trim();
+    }
     console.log(resMessage, userOption);
 
     const result = randomInt(1, 2) == 1 ? 'win' : 'lose';
