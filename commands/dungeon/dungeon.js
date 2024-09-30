@@ -68,8 +68,8 @@ async function checkDungeonCooldown(client, message, userDungeonStats) {
     }
 
     // set lastDungeon to current time
-    // set new random cooldown 45min-3h
-    const newCooldown = Math.floor(Math.random() * (3 * 60 * 60) + (45 * 60));
+    // set new random cooldown 30min-2.5h
+    const newCooldown = Math.floor(Math.random() * (2 * 60 * 60 + 30 * 60) + (30 * 60));
     await client.db.update('dungeon', { userId: message.senderUserID }, { $set: { lastDungeon: currentTime, cooldown: newCooldown } });
     return [true, ''];
 }
