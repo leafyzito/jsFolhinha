@@ -83,7 +83,7 @@ async function setNewCooldown(client, message, winOrLose) {
 
 const dungeonCommand = async (client, message) => {
     message.command = 'dungeon';
-    if (!await processCommand(5000, 'user', message, client)) return;
+    if (!await processCommand(10_000, 'user', message, client)) return;
 
     if (message.messageText.split(' ').length !== 1) {
         const userOption = message.messageText.split(' ')[1].toLowerCase();
@@ -154,7 +154,7 @@ const dungeonCommand = async (client, message) => {
 
     const dungeon = dungeonData[Math.floor(Math.random() * dungeonData.length)];
     await client.log.reply(message, `${capitalize(dungeon.quote)} você quer ${dungeon['1'].option} ou ${dungeon['2'].option}? (1 ou 2)`);
-    const response = await waitForMessage(client, check, 30_000);
+    const response = await waitForMessage(client, check, 10_000);
     if (!response) { return; } // end it here if no response
 
     // set new cooldown, only after response
@@ -203,7 +203,7 @@ const dungeonCommand = async (client, message) => {
 
 const fastDungeonCommand = async (client, message) => {
     message.command = 'dungeon';
-    if (!await processCommand(5000, 'user', message, client)) return;
+    if (!await processCommand(10_000, 'user', message, client)) return;
 
     const userDungeonStats = await loadUserDungeonStats(client, message);
     const [canDungeon, remainingTime] = await checkDungeonCooldown(client, message, userDungeonStats);
