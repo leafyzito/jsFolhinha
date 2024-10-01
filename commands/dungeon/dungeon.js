@@ -71,7 +71,8 @@ async function checkDungeonCooldown(client, message, userDungeonStats) {
     // set new random cooldown 30min-2.5h
     const newCooldown = Math.floor(Math.random() * (2 * 60 * 60 + 30 * 60) + (30 * 60));
     await client.db.update('dungeon', { userId: message.senderUserID }, { $set: { lastDungeon: currentTime, cooldown: newCooldown } });
-    return [true, ''];
+    // return true and formatted new cooldown
+    return [true, getFormattedRemainingTime(newCooldown)];
 }
 
 const dungeonCommand = async (client, message) => {
@@ -173,14 +174,14 @@ const dungeonCommand = async (client, message) => {
         if (userDungeonStats.xp + experienceGain > experienceNeededForLvlUp) {
             const emote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.pogEmotes, 'PogChamp');
             await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { xp: experienceGain, wins: 1, level: 1 } });
-            await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [+${Math.round(experienceGain)} ⇒ ${Math.round(userDungeonStats.xp + experienceGain)} XP] ⬆ subiu para o nível ${userDungeonStats.level + 1}! ${emote}`);
+            await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [+${Math.round(experienceGain)} ⇒ ${Math.round(userDungeonStats.xp + experienceGain)} XP] ⬆ subiu para o nível ${userDungeonStats.level + 1}! ${emote} (descanse por ${resMsg} ⏰)`);
         } else {
             await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { xp: experienceGain, wins: 1 } });
-            await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [+${Math.round(experienceGain)} ⇒ ${Math.round(userDungeonStats.xp + experienceGain)} XP]`);
+            await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [+${Math.round(experienceGain)} ⇒ ${Math.round(userDungeonStats.xp + experienceGain)} XP] (descanse por ${resMsg} ⏰)`);
         }
     } else {
         await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { losses: 1 } });
-        await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [+0 ⇒ ${userDungeonStats.xp} XP]`);
+        await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [+0 ⇒ ${userDungeonStats.xp} XP] (descanse por ${resMsg} ⏰)`);
     }
 
     return;
@@ -211,14 +212,14 @@ const fastDungeonCommand = async (client, message) => {
         if (userDungeonStats.xp + experienceGain >= experienceNeededForLvlUp) {
             const emote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.pogEmotes, 'PogChamp');
             await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { xp: experienceGain, wins: 1, level: 1 } });
-            responseMessage += `${dungeon[option][result]}! [+${Math.round(experienceGain)} ⇒ ${Math.round(userDungeonStats.xp + experienceGain)} XP] ⬆ subiu para o nível ${userDungeonStats.level + 1}! ${emote}`;
+            responseMessage += `${dungeon[option][result]}! [+${Math.round(experienceGain)} ⇒ ${Math.round(userDungeonStats.xp + experienceGain)} XP] ⬆ subiu para o nível ${userDungeonStats.level + 1}! ${emote} (descanse por ${resMsg} ⏰)`;
         } else {
             await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { xp: experienceGain, wins: 1 } });
-            responseMessage += `${dungeon[option][result]}! [+${Math.round(experienceGain)} ⇒ ${Math.round(userDungeonStats.xp + experienceGain)} XP]`;
+            responseMessage += `${dungeon[option][result]}! [+${Math.round(experienceGain)} ⇒ ${Math.round(userDungeonStats.xp + experienceGain)} XP] (descanse por ${resMsg} ⏰)`;
         }
     } else {
         await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { losses: 1 } });
-        responseMessage += `${dungeon[option][result]}! [+0 ⇒ ${userDungeonStats.xp} XP]`;
+        responseMessage += `${dungeon[option][result]}! [+0 ⇒ ${userDungeonStats.xp} XP] (descanse por ${resMsg} ⏰)`;
     }
 
     await client.log.logAndReply(message, responseMessage);
