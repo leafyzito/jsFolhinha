@@ -258,7 +258,7 @@ async function waitForMessage(client, check, timeout = 30_000) {
         }, timeout);
 
         client.on('PRIVMSG', (msg) => {
-            if (msg.senderUsername === check.senderUsername && msg.channelName === check.channelName && check.content.some(content => msg.messageText.includes(content))) {
+            if (msg.senderUsername === check.senderUsername && msg.channelName === check.channelName && check.content.some(content => msg.messageText.toLowerCase() === content.toLowerCase())) {
                 clearTimeout(timer);
                 resolve(msg);
             }
