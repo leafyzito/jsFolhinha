@@ -459,7 +459,7 @@ const giveXpCommand = async (client, message) => {
         return;
     }
 
-    await client.db.update('dungeon', { userId: targetUserId }, { $inc: { xp: xp } });
+    await client.db.update('dungeon', { userId: targetUserId }, { $inc: { xp: parseInt(xp) } });
     client.log.logAndReply(message, `🤖 ${targetUser} recebeu ${xp} XP`);
     return;
 }
