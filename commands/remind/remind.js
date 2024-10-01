@@ -1,5 +1,6 @@
 const { processCommand } = require("../../utils/processCommand.js");
 const { manageLongResponse, createNewGist, timeSince, parseTime } = require("../../utils/utils.js");
+const schedule = require('node-schedule');
 
 async function newRemind(client, message, targetId, remindMessage, remindAt) {
     const newRemindId = await client.db.count('remind') + 1;
@@ -58,6 +59,12 @@ const remindCommand = async (client, message) => {
         client.log.logAndReply(message, `Lembrete apagado ${emote}`);
         await client.db.update('remind', { _id: parseInt(reminderId) }, { $set: { beenRead: true } });
         await client.reloadReminders();
+
+        // cancel the cron job
+        if (client.reminderJobs[reminderId]) {
+            client.reminderJobs[reminderId].cancel();
+            delete client.reminderJobs[reminderId];
+        }
         return;
     }
 
