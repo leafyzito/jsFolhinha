@@ -483,6 +483,7 @@ shortenCommand.aliases = ['shorten'];
 joinedChannelsCommand.aliases = ['joinedchannels', 'jchannels'];
 devJoinChannelCommand.aliases = ['devjoin', 'djoin'];
 devPartChannelCommand.aliases = ['devpart', 'dpart'];
+giveXpCommand.aliases = ['devgivexp', 'givexp'];
 
 module.exports = {
     botSayCommand,
@@ -503,4 +504,5 @@ module.exports = {
     joinedChannelsCommand,
     devJoinChannelCommand,
     devPartChannelCommand,
+    giveXpCommand,
 };
