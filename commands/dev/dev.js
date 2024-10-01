@@ -212,7 +212,7 @@ const reloadCommand = async (client, message) => {
         // Reload the commands
         client.loadCommands();
 
-        client.log.logAndReply(message, `Comandos recarregados, supostamente 👍`);
+        client.log.logAndReply(message, `Comandos recarregados 👍`);
     });
 };
 
@@ -433,6 +433,34 @@ const devPartChannelCommand = async (client, message) => {
 
     client.part(targetChannel);
     client.log.logAndReply(message, `🤖 Apaguei config a saí do canal ${targetChannel}`);
+    return;
+}
+
+const giveXpCommand = async (client, message) => {
+    message.command = 'dev givexp';
+
+    const authorId = message.senderUserID;
+    if (authorId !== process.env.DEV_USERID) { return; }
+
+    const targetUser = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase();
+    if (!targetUser) {
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}givexp <usuário> <xp>`);
+        return;
+    }
+    const targetUserId = await client.getUserID(targetUser);
+    if (!targetUserId) {
+        client.log.logAndReply(message, `Esse usuário não existe`);
+        return;
+    }
+
+    const xp = message.messageText.split(' ')[2];
+    if (!xp || isNaN(xp)) {
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}givexp <usuário> <xp>`);
+        return;
+    }
+
+    await client.db.update('dungeon', { userId: targetUserId }, { $inc: { xp: xp } });
+    client.log.logAndReply(message, `🤖 ${targetUser} recebeu ${xp} XP`);
     return;
 }
 
