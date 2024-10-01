@@ -73,7 +73,7 @@ async function setNewCooldown(client, message, winOrLose) {
     const currentTime = Math.floor(Date.now() / 1000);
     let newCooldown;
     if (winOrLose === 'win') {
-        newCooldown = Math.floor(Math.random() * (2 * 60 * 60 + 30 * 60) + (30 * 60));
+        newCooldown = Math.floor(Math.random() * (2 * 60 * 60) + (30 * 60));
     } else if (winOrLose === 'lose') {
         newCooldown = Math.floor(Math.random() * (10 * 60) + (20 * 60)); // 20 to 30 minutes
     }
@@ -159,7 +159,7 @@ const dungeonCommand = async (client, message) => {
 
     // set new cooldown, only after response
     const currentTime = Math.floor(Date.now() / 1000);
-    const newCooldown = Math.floor(Math.random() * (2 * 60 * 60 + 30 * 60) + (30 * 60));
+    const newCooldown = Math.floor(Math.random() * (2 * 60 * 60) + (30 * 60));
     await client.db.update('dungeon', { userId: message.senderUserID }, { $set: { lastDungeon: currentTime, cooldown: newCooldown } });
 
     // choose a random dungeon
