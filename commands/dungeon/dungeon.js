@@ -153,7 +153,7 @@ const dungeonCommand = async (client, message) => {
     };
 
     const dungeon = dungeonData[Math.floor(Math.random() * dungeonData.length)];
-    await client.log.reply(message, `${capitalize(dungeon.quote)} você quer ${dungeon['1'].option} ou ${dungeon['2'].option}? (1 ou 2)`);
+    await client.log.reply(message, `${capitalize(dungeon.quote)} você quer ${dungeon['1'].option} ou ${dungeon['2'].option}? Tem 10 segundos para responder (1 ou 2)`);
     const response = await waitForMessage(client, check, 10_000);
     if (!response) { return; } // end it here if no response
 
