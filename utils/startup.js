@@ -176,6 +176,7 @@ async function modifyClient(client) {
     client.usersWithPendingReminders = [];
     client.notifiedUsers = [];
     client.scheduledReminders = [];
+    client.reminderJobs = {};
     client.reloadReminders = async function () {
         client.usersWithPendingReminders = [];
         const currentTime = Math.floor(Date.now() / 1000);
@@ -212,7 +213,7 @@ async function modifyClient(client) {
                             // client.discord.log(`* Setting timed reminder for ${reminderDate.toLocaleString()}`);
                             console.log('* Setting timed reminder for ' + reminderDate.toLocaleString());
 
-                            schedule.scheduleJob(new Date(reminder.remindAt * 1000), async function () {
+                            const job = schedule.scheduleJob(new Date(reminder.remindAt * 1000), async function () {
                                 const reminderSender = await client.getUserByUserID(reminder.senderId) || 'Usuário deletado';
                                 const receiverName = await client.getUserByUserID(reminder.receiverId) || 'Usuário deletado 2';
                                 const reminderMessage = timeSince(reminder.remindTime);
@@ -226,6 +227,9 @@ async function modifyClient(client) {
                                 await client.log.send(channelName, finalRes);
                                 await client.db.update('remind', { _id: reminder._id }, { $set: { beenRead: true } });
                             });
+
+                            // Store the job in a global object to associate it with the reminderId
+                            client.reminderJobs[reminder._id] = job;
                         }
                     }
                 }
