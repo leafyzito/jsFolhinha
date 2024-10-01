@@ -16,6 +16,10 @@ const roletaCommand = async (client, message) => {
     }
 
     var timeoutDuration = message.messageText.split(' ')[1] || 10;
+    // if timeDuration not a number, turn it to 10
+    if (isNaN(timeoutDuration)) {
+        timeoutDuration = 10;
+    }
     timeoutDuration = parseInt(timeoutDuration) * 60;
 
     const randomChance = randomInt(1, 6);
