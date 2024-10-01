@@ -217,15 +217,14 @@ const remindCommand = async (client, message) => {
     }
 
     if (timeIndex === null) { timeIndex = 2; }
-    var remindMessage = message.messageText.split(' ').slice(timeIndex).join(' ').trim();
+    let remindMessage = message.messageText.split(' ').slice(timeIndex).join(' ').trim();
 
     const remindAt = totalSeconds ? Math.floor(Date.now() / 1000) + totalSeconds : null;
     console.log(Math.floor(Date.now() / 1000));
     console.log(remindAt);
 
     if (!remindMessage) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind <usuário> in <tempo> <mensagem> (ex: in 10s/10m/10h/10d)`);
-        return;
+        remindMessage = '(sem mensagem)';
     }
 
     if (timeParts.includes('in') && !totalSeconds) {
