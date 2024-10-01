@@ -57,7 +57,7 @@ function getFormattedRemainingTime(seconds) {
     return `${hours}h ${minutesLeft}m ${secondsLeft}s`;
 }
 
-async function checkDungeonCooldown(client, message, userDungeonStats) {
+async function checkDungeonCooldown(client, message, userDungeonStats, setNewCooldown = true) {
     const currentTime = Math.floor(Date.now() / 1000);
     const cooldownEndTime = userDungeonStats.lastDungeon + userDungeonStats.cooldown;
 
@@ -70,7 +70,9 @@ async function checkDungeonCooldown(client, message, userDungeonStats) {
     // set lastDungeon to current time
     // set new random cooldown 30min-2.5h
     const newCooldown = Math.floor(Math.random() * (2 * 60 * 60 + 30 * 60) + (30 * 60));
-    await client.db.update('dungeon', { userId: message.senderUserID }, { $set: { lastDungeon: currentTime, cooldown: newCooldown } });
+    if (setNewCooldown) {
+        await client.db.update('dungeon', { userId: message.senderUserID }, { $set: { lastDungeon: currentTime, cooldown: newCooldown } });
+    }
     // return true and formatted new cooldown
     return [true, getFormattedRemainingTime(newCooldown)];
 }
@@ -133,7 +135,7 @@ const dungeonCommand = async (client, message) => {
     }
 
     const userDungeonStats = await loadUserDungeonStats(client, message);
-    const [canDungeon, resMsg] = await checkDungeonCooldown(client, message, userDungeonStats);
+    const [canDungeon, resMsg] = await checkDungeonCooldown(client, message, userDungeonStats, false);
     if (!canDungeon) {
         await client.log.logAndReply(message, resMsg);
         return;
@@ -148,8 +150,13 @@ const dungeonCommand = async (client, message) => {
 
     const dungeon = dungeonData[Math.floor(Math.random() * dungeonData.length)];
     await client.log.reply(message, `${capitalize(dungeon.quote)} você quer ${dungeon['1'].option} ou ${dungeon['2'].option}? (1 ou 2)`);
-    const response = await waitForMessage(client, check, 10_000);
+    const response = await waitForMessage(client, check, 30_000);
     if (!response) { return; } // end it here if no response
+
+    // set new cooldown, only after response
+    const currentTime = Math.floor(Date.now() / 1000);
+    const newCooldown = Math.floor(Math.random() * (2 * 60 * 60 + 30 * 60) + (30 * 60));
+    await client.db.update('dungeon', { userId: message.senderUserID }, { $set: { lastDungeon: currentTime, cooldown: newCooldown } });
 
     // choose a random dungeon
     let resMessage = response.messageText.replace(message.commandPrefix, '');
@@ -233,7 +240,7 @@ dungeonCommand.cooldown = 30_000;
 dungeonCommand.whisperable = true;
 dungeonCommand.description = `Você entrará em uma dungeon aleatória e poderá escolher entre 2 destinos, sendo que apenas 1 deles lhe dará XP
 A sua escolha é feita ao mandar "1" ou "2" no chat quando o bot lhe apresentar a dungeon
-Após cada dungeon, o usuário entrará em um cooldown aleatório de 45 minutos a 3 horas
+Após cada dungeon, o usuário entrará em um cooldown aleatório de 30 minutos a 2 horas e 30 minutos
 
 !Dungeon show: Exibe estatísticas de dungeon. Quando não mencionado um usuário, exibirá as estatísticas de quem realizou o comando.
 
@@ -252,7 +259,7 @@ fastDungeonCommand.shortDescription = 'Entre em uma dungeon e tenha o seu destin
 fastDungeonCommand.cooldown = 30_000;
 fastDungeonCommand.whisperable = true;
 fastDungeonCommand.description = `Você entrará em uma dungeon aleatória e terá um destino aleatório
-Após cada dungeon, o usuário entrará em um cooldown aleatório de 45 minutos a 3 horas
+Após cada dungeon, o usuário entrará em um cooldown aleatório de 30 minutos a 2 horas e 30 minutos
 
 O XP ganho depende do nível que você atingiu, e é calculado assim:
 XP = 50~75 + 3 * Nível do player
