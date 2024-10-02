@@ -83,7 +83,7 @@ async function setNewCooldown(client, message, winOrLose) {
 
 const dungeonCommand = async (client, message) => {
     message.command = 'dungeon';
-    if (!await processCommand(10_000, 'user', message, client)) return;
+    if (!await processCommand(12_000, 'user', message, client)) return;
 
     if (message.messageText.split(' ').length !== 1) {
         const userOption = message.messageText.split(' ')[1].toLowerCase();
