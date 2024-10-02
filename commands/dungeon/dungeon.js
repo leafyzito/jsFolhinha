@@ -99,7 +99,7 @@ const dungeonCommand = async (client, message) => {
 
             userDungeonStats = userDungeonStats[0];
             const winrate = userDungeonStats.wins / (userDungeonStats.wins + userDungeonStats.losses) * 100;
-            await client.log.logAndReply(message, `${targetUser} tem ${Math.round(userDungeonStats.xp)} XP 🌟 está no level ${userDungeonStats.level} com ${userDungeonStats.wins + userDungeonStats.losses} dungeons ⚔️ (${userDungeonStats.wins} vitórias e ${userDungeonStats.losses} derrotas - ${winrate.toFixed(2)}% winrate)`);
+            await client.log.logAndReply(message, `${targetUser} tem ${Math.round(userDungeonStats.xp)} XP 🌟 está no nível ${userDungeonStats.level} com ${userDungeonStats.wins + userDungeonStats.losses} dungeons ⚔️ (${userDungeonStats.wins} vitórias e ${userDungeonStats.losses} derrotas - ${winrate.toFixed(2)}% winrate)`);
             // resetCooldown(message.senderUsername, 'user', message.command, 30_000, 5_000);
             return;
         }
