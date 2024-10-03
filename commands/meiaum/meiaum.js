@@ -34,7 +34,8 @@ const meiaUmCommand = async (client, message) => {
     if (!await processCommand(5000, 'channel', message, client)) return;
 
     const timeLeft = await getMeiaUm(client, message);
-    client.log.logAndReply(message, `Timer atual da subathon do MeiaUm: ${timeLeft}`);
+    const emote = await client.emotes.getEmoteFromList(['meiaThon'], '');
+    client.log.logAndReply(message, `Timer atual da subathon do MeiaUm: ${timeLeft} ${emote}`);
     return;
 };
 
