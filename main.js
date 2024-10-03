@@ -29,10 +29,9 @@ client.connect();
 client.on('ready', () => { onReadyHandler(); });
 client.on('JOIN', (channel) => { onJoinHandler(channel); });
 client.on("PRIVMSG", (msg) => { onMessageHandler(msg); });
-// client.on('error', (error) => { console.log('Error:', error); });
 
 // Join the channels
-const channelsToJoin = client.getChannelsToJoin();
+const channelsToJoin = process.env.ENV == 'prod' ? client.getChannelsToJoin() : Promise.resolve(['gocrazybh']);
 channelsToJoin.then((channels) => {
     client.channelsToJoin = channels;
     client.joinAll(channels);
@@ -40,10 +39,13 @@ channelsToJoin.then((channels) => {
     console.log('Error on getting channelsToJoin:', error);
 });
 
-// Schedule tasks
-cron.schedule('0 9 * * *', async () => { await dailyCookieResetTask(client); });
-startPetTask(client);
-startFetchPendingJoinsTask(client);
+// Start tasks
+if (process.env.ENV == 'prod') {
+    console.log('* Starting tasks');
+    cron.schedule('0 9 * * *', async () => { await dailyCookieResetTask(client); });
+    startPetTask(client);
+    startFetchPendingJoinsTask(client);
+}
 startRejoinDisconnectedChannelsTask(client);
 
 
@@ -67,8 +69,7 @@ function onMessageHandler(message) {
         if (client.duplicateMessages.length > 100) { client.duplicateMessages.shift(); }
     }
 
-    message.commandPrefix = client.channelPrefixes[message.channelName] || "!";
-    // message.commandPrefix = '!!'; // for testing
+    message.commandPrefix = process.env.ENV === 'prod' ? client.channelPrefixes[message.channelName] || '!' : '!!';
 
     if (message.senderUsername === message.channelName) {
         message.isMod = true;
