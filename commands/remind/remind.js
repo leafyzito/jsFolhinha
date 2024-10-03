@@ -208,9 +208,9 @@ const remindCommand = async (client, message) => {
     if (days && !isNaN(parseInt(days))) timeIndex++;
     let hours = timeParts[timeIndex] && ['h', 'hrs', 'hour', 'hours'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
     if (hours && !isNaN(parseInt(hours))) timeIndex++;
-    let minutes = timeParts[timeIndex] && ['m', 'mins', 'minute', 'minutes'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
+    let minutes = timeParts[timeIndex] && ['m', 'min', 'mins', 'minute', 'minutes'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
     if (minutes && !isNaN(parseInt(minutes))) timeIndex++;
-    let seconds = timeParts[timeIndex] && ['s', 'secs', 'second', 'seconds'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
+    let seconds = timeParts[timeIndex] && ['s', 'sec', 'secs', 'second', 'seconds'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
     if (seconds && !isNaN(parseInt(seconds))) timeIndex++;
 
     if (days && !isNaN(parseInt(days))) totalSeconds += parseTime(days, 'd');
