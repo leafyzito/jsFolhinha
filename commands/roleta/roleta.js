@@ -20,9 +20,12 @@ const roletaCommand = async (client, message) => {
     if (isNaN(timeoutDuration)) {
         timeoutDuration = 10;
     }
+    if (parseInt(timeoutDuration) > 20160) {
+        timeoutDuration = 20160;
+    }
     timeoutDuration = parseInt(timeoutDuration) * 60;
 
-    const randomChance = randomInt(1, 6);
+    const randomChance = 1;
     if (randomChance !== 1) {
         const emote = await client.emotes.getEmoteFromList(message.channelName, ['saved'], 'monkaS');
         client.log.logAndReply(message, `Click! Não foi dessa vez ${emote}`);
