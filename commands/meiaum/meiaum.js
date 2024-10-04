@@ -7,6 +7,7 @@ function getFormattedRemainingTime(seconds) {
         return `${seconds}s`;
     }
 
+    const days = (seconds / 86400).toFixed(2);
     const minutes = Math.floor(seconds / 60);
     if (minutes < 60) {
         const secondsLeft = seconds % 60;
@@ -17,7 +18,7 @@ function getFormattedRemainingTime(seconds) {
     const minutesLeft = minutes % 60;
     const secondsLeft = seconds % 60;
 
-    return `${hours}h ${minutesLeft}m ${Math.round(secondsLeft)}s`;
+    return `${hours}h ${minutesLeft}m ${Math.round(secondsLeft)}s (${days} dias)`;
 }
 
 async function getMeiaUm(client, message) {
