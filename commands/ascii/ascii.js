@@ -3,6 +3,10 @@ const { processCommand } = require("../../utils/processCommand.js");
 async function getAscii(defaultChannel, input) {
     // encode input
     // if no "#" in input, add "&c=defaultChannel"
+    if (input.includes('.avif')) {
+        input = input.replace('.avif', '.webp');
+    }
+
     if (!input.includes('#')) {
         input = `${input}&c=${defaultChannel}`;
     }
@@ -63,6 +67,9 @@ Pode também usar vários emotes como input
 • Exemplo: !ascii OMEGALUL ALERT - O bot irá mandar o ascii do emote OMEGALUL e ALERT do canal atual juntos, como normalmente apareceria no chat
 • Exemplo: !ascii xqcL #xql ALERT #leafyzito - O bot irá mandar o ascii do emote xqcL no canal xqc, e o ascii do emote ALERT no canal leafyzito juntos, como normalmente apareceria no chat
 • Exemplo: !ascii OMEGALUL monkaS - O bot irá mandar o ascii do emote OMEGALUL e do monkaS um do lado do outro
+
+Pode também passar o link direto do emote:
+• Exemplo: !ascii https://cdn.7tv.app/emote/6042089e77137b000de9e669/4x.avif
 
 Mais alguns input opcionais diretos do dev da API:
 invert:true(default)|false
