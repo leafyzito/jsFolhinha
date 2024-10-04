@@ -17,7 +17,7 @@ const helpCommand = async (client, message) => {
 
     if (!specificCommand) {
         const emote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.happyEmotes, 'peepoHappy');
-        client.log.logAndReply(message, `Para informações sobre o bot, acesse https://folhinhabot.com/ ${emote} Para ver infomações sobre um comando específico, use !help <comando>`);
+        client.log.logAndReply(message, `Para informações sobre o bot, acesse https://folhinhabot.com/ ${emote} Para ver infomações sobre um comando específico, use ${message.commandPrefix}help <comando>`);
         return;
     }
 
