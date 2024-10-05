@@ -105,6 +105,11 @@ const jokenpoCommand = async (client, message) => {
         return;
     }
 
+    if (!await client.getUserID(gameTarget.toLowerCase())) {
+        client.log.logAndReply(message, `Esse usuário não existe`);
+        return;
+    }
+
     const check = {
         senderUsername1: message.senderUsername,
         senderUsername2: gameTarget.toLowerCase(),
