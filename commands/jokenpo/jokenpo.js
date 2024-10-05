@@ -100,6 +100,10 @@ const jokenpoCommand = async (client, message) => {
         return;
     }
 
+    if (gameTarget.toLowerCase() === 'folhinhabot') {
+        client.log.logAndReply(message, `Quero não Stare`);
+        return;
+    }
 
     const check = {
         senderUsername1: message.senderUsername,
