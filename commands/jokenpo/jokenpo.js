@@ -107,7 +107,7 @@ const jokenpoCommand = async (client, message) => {
         // content: ['1', '2', `${message.commandPrefix}1`, `${message.commandPrefix}2`, `${message.commandPrefix}jokenpo 1`, `${message.commandPrefix}jokenpo 2`]
         content: ['pedra', 'papel', 'tesoura']
     };
-    client.log.reply(message, `Você desafiou ${gameTarget} para um jogo de jokenpo. Ambos têm 30 segundos para enviar no meu whisper as suas respostas (pedra, papel ou tesoura)`);
+    client.log.reply(message, `Você desafiou ${gameTarget} para um jogo de jokenpo. Ambos têm 30 segundos para enviar no meu whisper as suas jogadas (pedra, papel ou tesoura)`);
     pendingPlayers.push(message.senderUsername);
     pendingPlayers.push(gameTarget.toLowerCase());
     const answers = await waitForJokenpoInputs(client, check, 30_000);
