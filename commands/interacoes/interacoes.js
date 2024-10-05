@@ -96,6 +96,12 @@ const bonkCommand = async (client, message) => {
         return;
     }
 
+    else if (bonkStrengh === 100) {
+        const emote = await client.emotes.getEmoteFromList(message.channelName, ['peepopoof', 'pppoof', 'pepepoof'], '💨');
+        client.log.logAndReply(message, `${message.senderUsername} deu um bonk com impacto de ${bonkStrengh}% em ${bonkTarget}, sendo apagado da existência ${emote}`);
+        return;
+    }
+
     else if (bonkStrengh <= 25) {
         client.log.logAndReply(message, `${message.senderUsername} deu um bonk com impacto de ${bonkStrengh}% em ${bonkTarget}, bem fraco 🤭`);
         return;
@@ -103,12 +109,6 @@ const bonkCommand = async (client, message) => {
 
     else if (bonkStrengh >= 80) {
         client.log.logAndReply(message, `${message.senderUsername} deu um bonk com impacto de ${bonkStrengh}% e nocauteou ${bonkTarget} 💫`);
-        return;
-    }
-
-    else if (bonkStrengh === 100) {
-        const emote = await client.emotes.getEmoteFromList(message.channelName, ['peepopoof', 'pppoof', 'pepepoof'], '💨');
-        client.log.logAndReply(message, `${message.senderUsername} deu um bonk com impacto de ${bonkStrengh}% em ${bonkTarget}, sendo apagado da existência ${emote}`);
         return;
     }
 
