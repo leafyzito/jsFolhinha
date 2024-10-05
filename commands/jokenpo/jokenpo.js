@@ -54,6 +54,11 @@ const jokenpoCommand = async (client, message) => {
         return;
     }
 
+    if (pendingPlayers.includes(gameTarget.toLowerCase())) {
+        client.log.logAndReply(message, `${gameTarget} já está numa partida. Deixa ele terminar para poder jogar outra`);
+        return;
+    }
+
     if (['show', 'mostrar', 'stats'].includes(gameTarget.toLowerCase())) {
         const targetUser = message.messageText.split(' ')[2]?.replace(/^@/, '') || message.senderUsername;
         let userStats = await client.db.get('jokenpo', { userId: await client.getUserID(targetUser) });
@@ -165,7 +170,7 @@ const jokenpoCommand = async (client, message) => {
             }
             break;
         default:
-            client.log.logAndReply(message, `algo deu errado eu acho, tente novamente. Se o erro persistir, entre em contato com o @${process.env.DEV_USERNAME}`);
+            client.log.logAndReply(message, `Algo deu errado eu acho, tente novamente. Se o erro persistir, entre em contato com o @${process.env.DEV_USERNAME}`);
             // remove players names from pendingPlayers
             pendingPlayers = pendingPlayers.filter(player => player !== message.senderUsername && player !== gameTarget.toLowerCase());
             // this should never happen but xdd
