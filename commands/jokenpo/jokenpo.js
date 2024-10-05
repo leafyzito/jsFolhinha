@@ -69,7 +69,7 @@ const jokenpoCommand = async (client, message) => {
 
         userStats = userStats[0];
         const winrate = userStats.wins / (userStats.wins + userStats.losses) * 100;
-        await client.log.logAndReply(message, `${targetUser} já jogou ${userStats.wins + userStats.losses + userStats.ties} partidas de jokenpo - ${userStats.wins} vitórias, ${userStats.losses} derrotas e ${userStats.ties} empates - ${winrate.toFixed(2)}% winrate`);
+        client.log.logAndReply(message, `${targetUser} já jogou ${userStats.wins + userStats.losses + userStats.ties} partidas de jokenpo - ${userStats.wins} vitórias, ${userStats.losses} derrotas e ${userStats.ties} empates - ${winrate.toFixed(2)}% winrate`);
         return;
     }
 
