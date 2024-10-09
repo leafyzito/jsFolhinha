@@ -172,7 +172,7 @@ const dungeonCommand = async (client, message) => {
     } else {
         userOption = resMessage.trim();
     }
-    console.log(resMessage, userOption);
+    // console.log(resMessage, userOption);
 
     let result = randomInt(1, 3) <= 2 ? 'win' : 'lose'; // 2/3 chance of winning
     if (userDungeonStats.level == 1) { result = 'win'; }

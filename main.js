@@ -29,6 +29,7 @@ client.connect();
 client.on('ready', () => { onReadyHandler(); });
 client.on('JOIN', (channel) => { onJoinHandler(channel); });
 client.on("PRIVMSG", (msg) => { onMessageHandler(msg); });
+client.on('WHISPER', (msg) => { onWhisperHandler(msg); });
 
 // Join the channels
 const channelsToJoin = process.env.ENV == 'prod' ? client.getChannelsToJoin() : Promise.resolve(['gocrazybh']);
@@ -78,4 +79,9 @@ function onMessageHandler(message) {
 
     listenerHandler(client, message);
     commandHandler(client, message);
+}
+
+function onWhisperHandler(message) {
+    // log whisper to discord
+    client.discord.logWhisperFrom(message);
 }
