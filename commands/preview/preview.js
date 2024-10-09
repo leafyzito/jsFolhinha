@@ -42,7 +42,7 @@ const previewCommand = async (client, message) => {
 };
 
 previewCommand.commandName = 'preview';
-previewCommand.aliases = ['preview', 'thumb'];
+previewCommand.aliases = ['preview', 'prev', 'thumb', 'thumbnail'];
 previewCommand.shortDescription = 'Mostra uma imagem do momento atual de uma live';
 previewCommand.cooldown = 5000;
 previewCommand.whisperable = false;

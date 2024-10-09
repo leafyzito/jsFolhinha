@@ -88,7 +88,8 @@ const cookieCommand = async (client, message) => {
         userCookieStats.total -= 1;
         userCookieStats.opened += 1;
         await client.db.update('cookie', { userId: message.senderUserID }, { $set: { total: userCookieStats.total, opened: userCookieStats.opened } });
-        client.log.logAndReply(message, `${randomChoice(cookieFrases.split('\n'))} 🥠`)
+        const randomFrase = randomChoice(cookieFrases.split('\n')).replace(/[\n\r]/g, ' ');
+        client.log.logAndReply(message, `${randomFrase} 🥠`)
         return;
     }
 

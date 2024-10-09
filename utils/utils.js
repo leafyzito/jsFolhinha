@@ -39,10 +39,10 @@ async function shortenUrl(url) {
     const jsonRes = await response.json();
     if (jsonRes != null) {
         // console.log(jsonRes['shortUrl']);
-        return jsonRes['shortUrl'];
+        return jsonRes['shortUrl'] || url;
     }
 
-    return null;
+    return url;
 }
 
 
