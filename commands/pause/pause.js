@@ -2,7 +2,7 @@ const { processCommand } = require("../../utils/processCommand.js");
 
 const pauseCommand = async (client, message) => {
     message.command = 'pause';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    // if (!await processCommand(5000, 'channel', message, client)) return;
 
     if (message.isStreamer || message.isMod || message.senderUsername === process.env.DEV_NICK) {
 
@@ -15,7 +15,7 @@ const pauseCommand = async (client, message) => {
 
 const unpauseCommand = async (client, message) => {
     message.command = 'unpause';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    // if (!await processCommand(5000, 'channel', message, client)) return;
 
     if (message.isStreamer || message.isMod || message.senderUsername === process.env.DEV_NICK) {
 
