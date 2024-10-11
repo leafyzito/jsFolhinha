@@ -57,7 +57,7 @@ const hypertranslateCommand = async (client, message) => {
     client.log.reply(message, `Correndo ${numTranslations} traduções... ${emote}`);
     const hyperTranslatedText = await hypertranslateText(textToTranslate, numTranslations);
 
-    client.log.logAndReply(message, `${hyperTranslatedText}`);
+    client.log.logAndReply(message, `🤖 ${hyperTranslatedText}`);
 };
 
 hypertranslateCommand.commandName = 'hypertranslate';
