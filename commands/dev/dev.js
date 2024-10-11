@@ -252,13 +252,15 @@ const reloadEmotesCommand = async (client, message) => {
             await client.emotes.getChannelEmotes(channel);
         }
 
-        client.log.logAndReply(message, `Emotes recarregados em ${channelsToReload.length} canais 👍`);
+        const emote = await client.emotes.getEmoteFromList(message.channelName, ['joia', 'jumilhao'], '👍');
+        client.log.logAndReply(message, `Emotes recarregados em ${channelsToReload.length} canais ${emote}`);
         return;
     }
     client.emotes.cachedEmotes[targetChannel] = null;
     await client.emotes.getChannelEmotes(targetChannel);
 
-    client.log.logAndReply(message, `Emotes recarregados 👍`);
+    const emote = await client.emotes.getEmoteFromList(message.channelName, ['joia', 'jumilhao'], '👍');
+    client.log.logAndReply(message, `Emotes recarregados ${emote}`);
 }
 
 const allEmotesCommand = async (client, message) => {
