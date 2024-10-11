@@ -54,7 +54,7 @@ const hypertranslateCommand = async (client, message) => {
 
     const textToTranslate = args.slice(1).join(' ');
     const emote = await client.emotes.getEmoteFromList(message.channelName, ['pphop', 'ppcircle', 'waiting', 'ppdvd'], '🤖');
-    client.say(message.channelName, `Correndo ${numTranslations} traduções... ${emote}`);
+    client.log.reply(message, `Correndo ${numTranslations} traduções... ${emote}`);
     const hyperTranslatedText = await hypertranslateText(textToTranslate, numTranslations);
 
     client.log.logAndReply(message, `${hyperTranslatedText}`);
