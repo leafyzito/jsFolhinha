@@ -7,6 +7,25 @@ class Logger {
         this.client = client;
     }
 
+    async createCommandLog(message, response) {
+        const insertDoc = {
+            messageid: message.messageID,
+            sentDate: message.serverTimestamp,
+            channel: message.channelName,
+            channelId: message.channelID,
+            user: message.senderUsername,
+            userId: message.senderUserID,
+            command: message.command,
+            content: message.messageText,
+            response: response
+        };
+
+        this.client.discord.logCommand(message, response);
+        if (!message.command.includes('dev') && process.env.ENV == 'prod') {
+            await this.client.db.insert('commandlog', insertDoc);
+        }
+    }
+
     async logAndReply(message, response) {
         if (regex.check(response, response.split(' '), message.channelName)) {
             console.log(`* Caught by regex in #${message.channelName}/${[message.senderUsername]} - original response: ${response}`);
@@ -31,25 +50,7 @@ class Logger {
                 }
             });
 
-        const currentDate = new Date();
-        const formattedDate = currentDate.toISOString().replace('T', ' ').substr(0, 19);
-
-        const insertDoc = {
-            messageid: message.messageID,
-            sentDate: message.serverTimestamp,
-            channel: message.channelName,
-            channelId: message.channelID,
-            user: message.senderUsername,
-            userId: message.senderUserID,
-            command: message.command,
-            content: message.messageText,
-            response: response
-        };
-
-        // console.log(insertDoc);
-        // console.log('command log is off');
-        this.client.discord.logCommand(message, response);
-        if (!message.command.includes('dev')) { await this.client.db.insert('commandlog', insertDoc); }
+        await this.createCommandLog(message, response);
         console.log(`#${message.channelName}/${message.senderUsername} - ${message.command}`);
     }
 
@@ -77,25 +78,7 @@ class Logger {
                 }
             });
 
-        const currentDate = new Date();
-        const formattedDate = currentDate.toISOString().replace('T', ' ').substr(0, 19);
-
-        const insertDoc = {
-            messageid: message.messageID,
-            sentDate: message.serverTimestamp,
-            channel: message.channelName,
-            channelId: message.channelID,
-            user: message.senderUsername,
-            userId: message.senderUserID,
-            command: message.command,
-            content: message.messageText,
-            response: response
-        };
-
-        // console.log(insertDoc);
-        // console.log('command log is off');
-        this.client.discord.logCommand(message, response);
-        if (!message.command.includes('dev')) { await this.client.db.insert('commandlog', insertDoc); }
+        await this.createCommandLog(message, response);
         console.log(`#${message.channelName}/${message.senderUsername} - ${message.command}`);
     }
 
@@ -123,25 +106,7 @@ class Logger {
                 }
             });
 
-        const currentDate = new Date();
-        const formattedDate = currentDate.toISOString().replace('T', ' ').substr(0, 19);
-
-        const insertDoc = {
-            messageid: message.messageID,
-            sentDate: message.serverTimestamp,
-            channel: message.channelName,
-            channelId: message.channelID,
-            user: message.senderUsername,
-            userId: message.senderUserID,
-            command: message.command,
-            content: message.messageText,
-            response: `/me ${response}`
-        };
-
-        // console.log(insertDoc);
-        // console.log('command log is off');
-        this.client.discord.logCommand(message, response);
-        if (!message.command.includes('dev')) { await this.client.db.insert('commandlog', insertDoc); }
+        await this.createCommandLog(message, '/me ' + response);
         console.log(`#${message.channelName}/${message.senderUsername} - ${message.command}`);
     }
 
