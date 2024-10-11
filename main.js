@@ -73,6 +73,7 @@ function onMessageHandler(message) {
     message.commandPrefix = process.env.ENV === 'prod' ? client.channelPrefixes[message.channelName] || '!' : '!!';
 
     message.isStreamer = message.badges.hasBroadcaster;
+    if (message.isStreamer) { message.isMod = true; } //consider streamer as mod
     message.isVip = message.badges.hasVIP;
     message.isFirstMsg = message.ircTags['first-msg'] === '1' ? true : false;
 
