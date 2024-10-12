@@ -24,14 +24,6 @@ class AFKInfo {
 const afkData =
     [
         {
-            "alias": ["montarpcgamerpoggers"],
-            "emoji": "😎🖥️",
-            "afk": "foi montar o seu novo pc gamer poggers demais",
-            "isafk": "montando o seu novo pc gamer poggers demais",
-            "returned": "montou o seu novo pc gamer poggers demais",
-            "rafk": "montando o seu novo pc gamer poggers demais"
-        },
-        {
             "alias": ["afk"],
             "emoji": "🏃⌨",
             "afk": "ficou afk",
