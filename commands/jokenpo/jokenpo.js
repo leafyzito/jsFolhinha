@@ -59,46 +59,46 @@ const jokenpoCommand = async (client, message) => {
         return;
     }
 
-    if (['show', 'mostrar', 'stats'].includes(gameTarget.toLowerCase())) {
-        const targetUser = message.messageText.split(' ')[2]?.replace(/^@/, '') || message.senderUsername;
-        let userStats = await client.db.get('jokenpo', { userId: await client.getUserID(targetUser) });
-        if (userStats.length === 0) {
-            client.log.logAndReply(message, `${targetUser} nunca jogou jokenpo`);
-            return;
-        }
+    // if (['show', 'mostrar', 'stats'].includes(gameTarget.toLowerCase())) {
+    //     const targetUser = message.messageText.split(' ')[2]?.replace(/^@/, '') || message.senderUsername;
+    //     let userStats = await client.db.get('jokenpo', { userId: await client.getUserID(targetUser) });
+    //     if (userStats.length === 0) {
+    //         client.log.logAndReply(message, `${targetUser} nunca jogou jokenpo`);
+    //         return;
+    //     }
 
-        userStats = userStats[0];
-        const winrate = userStats.wins / (userStats.wins + userStats.losses) * 100 || 0;
-        client.log.logAndReply(message, `${targetUser} já jogou ${userStats.wins + userStats.losses + userStats.ties} partidas de jokenpo - ${userStats.wins} vitórias, ${userStats.losses} derrotas e ${userStats.ties} empates - ${winrate.toFixed(2)}% winrate`);
-        return;
-    }
+    //     userStats = userStats[0];
+    //     const winrate = userStats.wins / (userStats.wins + userStats.losses) * 100 || 0;
+    //     client.log.logAndReply(message, `${targetUser} já jogou ${userStats.wins + userStats.losses + userStats.ties} partidas de jokenpo - ${userStats.wins} vitórias, ${userStats.losses} derrotas e ${userStats.ties} empates - ${winrate.toFixed(2)}% winrate`);
+    //     return;
+    // }
 
-    if (['top', 'ranking', 'rank', 'leaderboard', 'lb'].includes(gameTarget.toLowerCase())) {
-        let rankOption = message.messageText.split(' ')[2]?.toLowerCase() || 'wins';
-        if (!['wins', 'losses', 'ties'].includes(rankOption)) { return; }
-        let ranking = await client.db.get('jokenpo', {});
-        ranking.sort((a, b) => {
-            if (['win', 'wins'].includes(rankOption)) {
-                return b.wins - a.wins;
-            } else if (['loss', 'losses'].includes(rankOption)) {
-                return b.losses - a.losses;
-            } else if (['tie', 'ties', 'empate', 'empates'].includes(rankOption)) {
-                return b.ties - a.ties;
-            }
-        });
+    // if (['top', 'ranking', 'rank', 'leaderboard', 'lb'].includes(gameTarget.toLowerCase())) {
+    //     let rankOption = message.messageText.split(' ')[2]?.toLowerCase() || 'wins';
+    //     if (!['wins', 'losses', 'ties'].includes(rankOption)) { return; }
+    //     let ranking = await client.db.get('jokenpo', {});
+    //     ranking.sort((a, b) => {
+    //         if (['win', 'wins'].includes(rankOption)) {
+    //             return b.wins - a.wins;
+    //         } else if (['loss', 'losses'].includes(rankOption)) {
+    //             return b.losses - a.losses;
+    //         } else if (['tie', 'ties', 'empate', 'empates'].includes(rankOption)) {
+    //             return b.ties - a.ties;
+    //         }
+    //     });
 
-        const top5 = ranking.slice(0, 5);
-        let reply = `Top 5 ${rankOption}: `;
-        for (let i = 0; i < top5.length; i++) {
-            const username = await client.getUserByUserID(top5[i].userId);
-            reply += `${i + 1}º ${username}: (${Math.round(top5[i][rankOption])})`;
-            if (i !== top5.length - 1) {
-                reply += ', ';
-            }
-        }
-        await client.log.logAndReply(message, reply);
-        return;
-    }
+    //     const top5 = ranking.slice(0, 5);
+    //     let reply = `Top 5 ${rankOption}: `;
+    //     for (let i = 0; i < top5.length; i++) {
+    //         const username = await client.getUserByUserID(top5[i].userId);
+    //         reply += `${i + 1}º ${username}: (${Math.round(top5[i][rankOption])})`;
+    //         if (i !== top5.length - 1) {
+    //             reply += ', ';
+    //         }
+    //     }
+    //     await client.log.logAndReply(message, reply);
+    //     return;
+    // }
 
     if (gameTarget.toLowerCase() === 'folhinhabot') {
         client.log.logAndReply(message, `Quero não Stare`);
@@ -232,11 +232,7 @@ jokenpoCommand.shortDescription = 'Escolha um adversário para um jogo de jokenp
 jokenpoCommand.cooldown = 5000;
 jokenpoCommand.whisperable = true;
 jokenpoCommand.description = `Jogue uma partida de jokenpô com alguém do chat
-A sua jogada deve ser enviada para o susurro do bot dentro de 30 segundos - pedra, papel ou tesoura
-
-!Jokenpo show: Exibe estatísticas de jokenpo. Quando não mencionado um usuário, exibirá as estatísticas de quem realizou o comando.
-
-!Jokenpo top: Exibe os 5 usuários com mais vitórias, derrotas ou empates. Use "!jokenpo top win/loss/tie" para escolher o que será usado para classificar os usuários`;
+As jogadas devem ser enviadas para o susurro do bot dentro de 30 segundos - pedra, papel ou tesoura`;
 
 jokenpoCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${jokenpoCommand.commandName}/${jokenpoCommand.commandName}.js`;
 
