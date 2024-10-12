@@ -135,4 +135,26 @@ discordClient.logWhisperFrom = async function (message) {
         });
 }
 
+discordClient.logError = async function (content) {
+    const embed = new discordClient.EmbedBuilder()
+        .setTitle(`Error <@${process.env.DEV_DISCORD_ID}>`)
+        .addFields(
+            {
+                name: "Error:",
+                value: content,
+                inline: false
+            },
+        )
+        .setColor('#FF0000') // red
+        .setFooter({
+            text: `${getFormattedDateTime()}`,
+        });
+
+    const logChannel = await discordClient.channels.fetch(process.env.DISCORD_LOG_CHANNEL);
+    logChannel.send({ embeds: [embed] })
+        .catch((err) => {
+            console.error(`Erro ao enviar mensagem no discord logError: ${err}`);
+        });
+}
+
 module.exports = { discordClient };
