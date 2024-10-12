@@ -7,7 +7,10 @@ function commandHandler(client, message) {
         const commandsList = client.commandsList;
         if (command in commandsList) {
             commandsList[command](client, message)
-                .catch(err => { console.log(`Error in command ${command}: ${err}`); });
+                .catch(err => {
+                    console.log(`Error in command in #${message.channelName}/${message.senderUsername} - ${command}: ${err}`);
+                    client.discord.logError(`Error in command #${message.channelName}/${message.senderUsername} - ${command}: ${err}`);
+                });
         }
     }
 }
