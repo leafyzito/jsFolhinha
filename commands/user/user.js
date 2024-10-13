@@ -17,8 +17,10 @@ async function getUserInfo(targetUser) {
     const howLongAgo = timeSinceDT(data[0].createdAt)[0];
     const followers = data[0].followers;
     const isLive = data[0].stream !== null ? true : false;
+    const isBanned = data[0].banned;
+    const banReason = data[0].banReason || null;
 
-    return { displayName, userId, chatColor, badge, chatterCount, createdAt, howLongAgo, followers, isLive };
+    return { displayName, userId, chatColor, badge, chatterCount, createdAt, howLongAgo, followers, isLive, isBanned, banReason };
 }
 
 const userCommand = async (client, message) => {
@@ -33,7 +35,7 @@ const userCommand = async (client, message) => {
         return;
     }
 
-    client.log.logAndReply(message, `${userInfo.displayName} || ID: ${userInfo.userId} || Cor: ${userInfo.chatColor} || Badge: ${userInfo.badge} || Chatters: ${userInfo.chatterCount} || Seguidores: ${userInfo.followers} || Criado há ${userInfo.howLongAgo} (${userInfo.createdAt}) ${userInfo.isLive ? '|| 🔴 Em live agora' : ''}`);
+    client.log.logAndReply(message, `${userInfo.isBanned ? `🚫 Banido: ${userInfo.banReason} || ` : ''}  @${userInfo.displayName} || ID: ${userInfo.userId} || Cor: ${userInfo.chatColor} || Badge: ${userInfo.badge} || Chatters: ${userInfo.chatterCount} || Seguidores: ${userInfo.followers} || Criado há ${userInfo.howLongAgo} (${userInfo.createdAt}) ${userInfo.isLive ? '|| 🔴 Em live agora' : ''}`);
     return;
 };
 
