@@ -121,7 +121,8 @@ const jokenpoCommand = async (client, message) => {
     pendingPlayers.push(gameTarget.toLowerCase());
     const answers = await waitForJokenpoInputs(client, check, 30_000);
     if (!answers) {
-        client.log.logAndReply(message, `Pelo menos um dos jogadores não respondeu, ficou com medo`);
+        const emote = await client.emotes.getEmoteFromList(message.channelName, ['pfff', 'pffff', 'porvalo', 'mock', 'pointandlaugh'], '🤭');
+        client.log.logAndReply(message, `Pelo menos um dos jogadores não respondeu, ficou com medo ${emote}`);
         // remove players names from pendingPlayers
         pendingPlayers = pendingPlayers.filter(player => player !== message.senderUsername && player !== gameTarget.toLowerCase());
         return;
