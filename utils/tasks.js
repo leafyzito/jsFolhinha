@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { isStreamOnline } = require('./utils.js');
+const { isStreamOnline, timeSince } = require('./utils.js');
 
 async function createNewChannelConfig(client, userid) {
     const username = await client.getUserByUserID(userid);
@@ -177,6 +177,14 @@ async function rejoinDisconnectedChannels(client) {
     }
 }
 
+async function updateDiscordPresence(client) {
+    client.discord.user.setActivity({
+        type: 4,
+        name: 'Folhinha Uptime',
+        state: `Uptime: ${timeSince(client.startTime)} - ${[...client.joinedChannels].length}/${client.channelsToJoin.length}`,
+    });
+}
+
 function startPetTask(client) {
     // run every X time
     setInterval(() => petAttencionTask(client), 60_000); // 1 minute
@@ -192,10 +200,17 @@ function startRejoinDisconnectedChannelsTask(client) {
     setInterval(() => rejoinDisconnectedChannels(client), 30_000); // 30 seconds
 }
 
+function startDiscordPresenceTask(client) {
+    // run every X time
+    setInterval(() => updateDiscordPresence(client), 60_000); // 1 minute
+}
+
+
 
 module.exports = {
     dailyCookieResetTask,
     startPetTask,
     startFetchPendingJoinsTask,
-    startRejoinDisconnectedChannelsTask
+    startRejoinDisconnectedChannelsTask,
+    startDiscordPresenceTask
 };
