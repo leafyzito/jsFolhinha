@@ -2,7 +2,7 @@ require('dotenv').config();
 const { ChatClient } = require('@kararty/dank-twitch-irc');
 const { modifyClient } = require('./utils/startup.js');
 const { commandHandler, listenerHandler } = require('./utils/handlers.js');
-const { dailyCookieResetTask, startPetTask, startFetchPendingJoinsTask, startRejoinDisconnectedChannelsTask } = require('./utils/tasks.js');
+const { dailyCookieResetTask, startPetTask, startFetchPendingJoinsTask, startRejoinDisconnectedChannelsTask, startDiscordPresenceTask } = require('./utils/tasks.js');
 const cron = require('node-cron');
 
 
@@ -48,6 +48,7 @@ if (process.env.ENV == 'prod') {
     startFetchPendingJoinsTask(client);
 }
 startRejoinDisconnectedChannelsTask(client);
+startDiscordPresenceTask(client);
 
 
 // handlers
