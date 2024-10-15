@@ -15,7 +15,7 @@ const wikiCommand = async (client, message) => {
     const wiki = await getRandomWiki();
 
     const emote = await client.emotes.getEmoteFromList(message.channelName, ['nerd', 'nerdge', 'catnerd', 'dognerd', 'giganerd'], '🤓')
-    client.log.logAndReply(message, `${wiki} ${emote}`);
+    client.log.logAndReply(message, `${emote} ${wiki}`);
     return;
 };
 
