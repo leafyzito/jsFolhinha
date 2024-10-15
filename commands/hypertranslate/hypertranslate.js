@@ -13,17 +13,22 @@ async function translateText(textToTranslate, targetLanguage) {
 
 async function hypertranslateText(textToTranslate, numTranslations) {
     let currentText = textToTranslate;
+    let listOfTranslations = [];
 
     for (let i = 0; i < numTranslations; i++) {
         const randomLangCode = Object.keys(langs)[Math.floor(Math.random() * Object.keys(langs).length)];
         console.log(randomLangCode);
+
+        // add to listOfTranslations the name of the language
+        listOfTranslations.push(langs[randomLangCode]);
+
         const translation = await translateText(currentText, randomLangCode);
         currentText = translation.translatedText;
     }
 
     // Final translation back to pt
     const finalTranslation = await translateText(currentText, 'pt');
-    return finalTranslation.translatedText;
+    return { translatedText: finalTranslation.translatedText, listOfTranslations };
 }
 
 const hypertranslateCommand = async (client, message) => {
@@ -56,8 +61,10 @@ const hypertranslateCommand = async (client, message) => {
     const emote = await client.emotes.getEmoteFromList(message.channelName, ['pphop', 'ppcircle', 'waiting', 'ppdvd'], '🤖');
     client.log.reply(message, `Correndo ${numTranslations} traduções... ${emote}`);
     const hyperTranslatedText = await hypertranslateText(textToTranslate, numTranslations);
+    console.log(hyperTranslatedText.listOfTranslations);
+    client.discord.log(`* Lista de traduções: ${hyperTranslatedText.listOfTranslations.join(', ')}`);
 
-    client.log.logAndReply(message, `🤖 ${hyperTranslatedText}`);
+    client.log.logAndReply(message, `🤖 ${hyperTranslatedText.translatedText}`);
 };
 
 hypertranslateCommand.commandName = 'hypertranslate';
