@@ -21,11 +21,14 @@ function getFormattedRemainingTime(seconds) {
     return `${hours}h ${minutesLeft}m ${Math.round(secondsLeft)}s (${days} dias)`;
 }
 
-async function getMeiaUm(client, message) {
+async function getMeiaUm() {
     const api_url = "https://subathon.sekva.lol/";
     const response = await fetch(api_url);
-    const data = await response.json();
+    if (!response.ok) {
+        return null;
+    };
 
+    const data = await response.json();
     const msTimeLeft = data.time_left_ms;
     return getFormattedRemainingTime(msTimeLeft);
 }
@@ -34,7 +37,12 @@ const meiaUmCommand = async (client, message) => {
     message.command = 'meiaum';
     if (!await processCommand(5000, 'channel', message, client)) return;
 
-    const timeLeft = await getMeiaUm(client, message);
+    const timeLeft = await getMeiaUm();
+    if (!timeLeft) {
+        client.log.logAndReply(message, `A API do timer da subathon está morta, tente novamente mais tarde`);
+        return;
+    }
+
     const emote = await client.emotes.getEmoteFromList(message.channelName, ['meiaThon'], '');
     client.log.logAndReply(message, `Timer atual da subathon do MeiaUm: ${timeLeft} ${emote}`);
     return;
