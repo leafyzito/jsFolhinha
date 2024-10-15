@@ -66,7 +66,7 @@ const ttsCommand = async (client, message) => {
         return;
     }
 
-    client.log.logAndReply(message, tts);
+    client.log.logAndReply(message, `🤖 ${tts}`);
 };
 
 ttsCommand.commandName = 'text-to-speech';
