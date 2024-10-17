@@ -280,7 +280,7 @@ const remindCommand = async (client, message) => {
     const newRemindId = await newRemind(client, message, targetUserId, remindMessage, remindAt);
 
     const emote = await client.emotes.getEmoteFromList(message.channelName, ['noted'], '📝');
-    client.log.logAndReply(message, `${targetUser !== message.senderUsername ? `@${targetUser}` : 'Você'} vai ser lembrado disso ${totalSeconds ? `em ${days ? `${days} ` : ''}${hours ? `${hours} ` : ''}${minutes ? `${minutes} ` : ''}${seconds ? `${seconds} ` : ''}` : 'assim que falar no chat'} ${emote} (ID ${newRemindId})`);
+    client.log.logAndReply(message, `Vou lembrar ${targetUser !== message.senderUsername ? `@${targetUser}` : 'você'} disso ${totalSeconds ? `em ${days ? `${days} ` : ''}${hours ? `${hours} ` : ''}${minutes ? `${minutes} ` : ''}${seconds ? `${seconds} ` : ''}` : 'assim que falar no chat'} ${emote} (ID ${newRemindId})`);
     await client.reloadReminders();
     client.notifiedUsers = client.notifiedUsers.filter(id => id !== targetUserId); // Remove user from notifiedUsers
     return;
