@@ -20,6 +20,9 @@ const roletaCommand = async (client, message) => {
     if (isNaN(timeoutDuration)) {
         timeoutDuration = 10;
     }
+    if (parseInt(timeoutDuration) < 1) {
+        timeoutDuration = 1;
+    }
     if (parseInt(timeoutDuration) > 20160) {
         timeoutDuration = 20160;
     }
