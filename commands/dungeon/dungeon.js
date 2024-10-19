@@ -106,7 +106,10 @@ const dungeonCommand = async (client, message) => {
 
         if (['top', 'ranking', 'rank', 'leaderboard', 'lb'].includes(userOption)) {
             let rankOption = message.messageText.split(' ')[2]?.toLowerCase() || 'xp';
-            if (!['xp', 'level', 'lvl', 'win', 'wins', 'loss', 'losses'].includes(rankOption)) { return; }
+            if (!['xp', 'level', 'lvl', 'win', 'wins', 'loss', 'losses'].includes(rankOption)) {
+                rankOption = 'xp';
+            }
+
             let ranking = await client.db.get('dungeon', {});
             ranking.sort((a, b) => {
                 if (rankOption === 'xp') {
