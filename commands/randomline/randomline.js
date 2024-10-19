@@ -29,8 +29,8 @@ const randomLineCommand = async (client, message) => {
     message.command = 'randomline';
     if (!await processCommand(5000, 'channel', message, client)) return;
 
-    const targetUser = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
-    const targetId = targetUser.toLowerCase() === message.senderUsername ? message.senderUserID : await client.getUserID(targetUser);
+    const targetUser = message.messageText.split(' ')[1]?.replace(/^@/, '') || null;
+    const targetId = targetUser ? await client.getUserID(targetUser) : null;
     // if (!targetId) {
     //     client.log.logAndReply(message, `Esse usuário não existe`);
     //     return;
