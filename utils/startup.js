@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 const schedule = require('node-schedule');
 const { MongoUtils } = require('./mongo.js');
+const { TursoUtils } = require('./turso.js');
 const { Logger } = require('./log.js');
 const { Emotes } = require('./emotes.js');
 const { discordClient } = require('./discord.js');
@@ -126,6 +127,7 @@ async function modifyClient(client) {
 
     // load clients
     client.db = new MongoUtils();
+    client.turso = new TursoUtils();
     client.log = new Logger(client);
 
     // load prefixes
