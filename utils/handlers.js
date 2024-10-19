@@ -17,6 +17,9 @@ function commandHandler(client, message) {
 
 function listenerHandler(client, message) {
     if ([...client.knownUserAliases].length === 0) { return console.log('still loading users'); }
+
+    client.turso.logMessage(message);
+
     if (message.senderUsername == 'folhinhabot') { return; }
 
     replyMentionListener(client, message)
