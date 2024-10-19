@@ -95,6 +95,10 @@ const cookieCommand = async (client, message) => {
 
     if (['oferecer', 'gift', 'give', 'oferta', 'offer'].includes(targetCommand)) {
         const userCookieStats = await loadUserCookieStats(client, message.senderUserID);
+        if (!userCookieStats) {
+            client.log.logAndReply(message, `Você não tem cookies para oferecer. Use ${message.commandPrefix}cd para resgatar o seu cookie diário`);
+            return;
+        }
         if (userCookieStats.total <= 0) {
             client.log.logAndReply(message, `Você não tem cookies para oferecer. Use ${message.commandPrefix}cd para resgatar o seu cookie diário`);
             return;
