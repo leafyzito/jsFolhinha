@@ -16,6 +16,11 @@ function getFormattedTimeSince(date) {
 }
 
 async function getRandomLine(client, userid, channelid) {
+    if (!userid) {
+        const res = await client.turso.client.execute({ sql: `SELECT * FROM messagelog WHERE channelid = :channelid ORDER BY RANDOM() LIMIT 1`, args: { channelid: channelid } });
+        return res.rows[0];
+    }
+
     const res = await client.turso.client.execute({ sql: `SELECT * FROM messagelog WHERE userid = :userid AND channelid = :channelid ORDER BY RANDOM() LIMIT 1`, args: { userid: userid, channelid: channelid } });
     return res.rows[0];
 }
@@ -26,14 +31,18 @@ const randomLineCommand = async (client, message) => {
 
     const targetUser = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
     const targetId = targetUser.toLowerCase() === message.senderUsername ? message.senderUserID : await client.getUserID(targetUser);
-    if (!targetId) {
-        client.log.logAndReply(message, `Esse usuário não existe`);
-        return;
-    }
+    // if (!targetId) {
+    //     client.log.logAndReply(message, `Esse usuário não existe`);
+    //     return;
+    // }
 
     const randomLine = await getRandomLine(client, targetId, message.channelID);
-    if (!randomLine) {
+    if (!targetId && !randomLine) {
         client.log.logAndReply(message, `Nunca loguei uma mensagem desse usuário neste chat (contando desde 19/10/2024)`);
+        return;
+    }
+    if (!randomLine) { // this should never happen
+        client.log.logAndReply(message, `Nunca loguei uma mensagem neste chat (contando desde 19/10/2024)`);
         return;
     }
 
