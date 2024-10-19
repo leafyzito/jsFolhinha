@@ -1,6 +1,19 @@
-const { Message } = require("discord.js");
 const { processCommand } = require("../../utils/processCommand.js");
-const { timeSinceDT } = require("../../utils/utils.js");
+
+function getFormattedTimeSince(date) {
+    const currentDate = new Date();
+    const seconds = Math.floor((currentDate - date) / 1000);
+
+    const days = Math.floor(seconds / (24 * 60 * 60));
+    const hours = Math.floor((seconds % (24 * 60 * 60)) / (60 * 60));
+    const minutes = Math.floor((seconds % (60 * 60)) / 60);
+    const secondsLeft = seconds % 60;
+
+    if (days > 0) return `${days}d ${hours}h ${minutes}m`;
+    if (hours > 0) return `${hours}h ${minutes}m ${secondsLeft}s`;
+    if (minutes > 0) return `${minutes}m ${secondsLeft}s`;
+    return `${secondsLeft}s`;
+}
 
 async function getRandomLine(client, userid, channelid) {
     const res = await client.turso.client.execute({ sql: `SELECT * FROM messagelog WHERE userid = :userid AND channelid = :channelid ORDER BY RANDOM() LIMIT 1`, args: { userid: userid, channelid: channelid } });
@@ -24,7 +37,7 @@ const randomLineCommand = async (client, message) => {
         return;
     }
 
-    client.log.logAndReply(message, `(há ${timeSinceDT(randomLine.date)[0]}) ${randomLine.user}: ${randomLine.content}`);
+    client.log.logAndReply(message, `(há ${getFormattedTimeSince(randomLine.date)}) ${randomLine.user}: ${randomLine.content}`);
     return;
 };
 
