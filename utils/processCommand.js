@@ -67,18 +67,27 @@ function resetCooldown(identifier, type, command, originalCooldown = 5000, newCo
 }
 
 async function processCommand(cooldownDuration, type, message, client) {
+    isCooldownOver = manageCooldown(cooldownDuration, type, message);
+    if (!isCooldownOver) { return false; }
+
     // check perms to execute
     var currChannelConfigs = client.channelConfigs[message.channelName] || null;
     var currUserBans = client.bans[message.senderUserID];
 
     if (currUserBans && (currUserBans.includes('all') || currUserBans.includes(message.command))) { return false; }
     if (currChannelConfigs && currChannelConfigs.isPaused) { return false; }
-    if (currChannelConfigs && currChannelConfigs.disabledCommands.includes(message.command)) { return false; }
-    if (currChannelConfigs && currChannelConfigs.devBanCommands.includes(message.command)) { return false; }
+    if (currChannelConfigs && currChannelConfigs.disabledCommands.includes(message.command)) {
+        client.log.logAndReply(message, `⚠️ Esse comando foi desativado neste chat`);
+        return false;
+    }
+    if (currChannelConfigs && currChannelConfigs.devBanCommands.includes(message.command)) {
+        client.log.logAndReply(message, `⚠️ Esse comando foi desativado neste chat pelo dev`);
+        return false;
+    }
     if (currChannelConfigs && currChannelConfigs.offlineOnly && await isStreamOnline(message.channelName)) { return false; }
 
     // if all good to go, manage cooldown
-    return manageCooldown(cooldownDuration, type, message);
+    return true;
 }
 
 module.exports = {
