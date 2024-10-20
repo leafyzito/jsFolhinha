@@ -38,16 +38,26 @@ const replyMentionListener = async (client, message) => {
     }
 }
 
+let processingAfk = [];
 const afkUserListener = async (client, message) => {
     if (!client.afkUsers[message.channelName]) { return; }
     if (!client.afkUsers[message.channelName].includes(message.senderUsername)) { return; }
+    if (processingAfk.includes(message.senderUsername)) { return; }
+
+    processingAfk.push(message.senderUsername);
 
     var afkStats = await client.db.get('afk', { channel: message.channelName, user: message.senderUsername });
-    if (afkStats.length === 0) { return; }
+    if (afkStats.length === 0) {
+        processingAfk = processingAfk.filter(user => user !== message.senderUsername);
+        return;
+    }
 
     afkStats = afkStats[0];
 
-    if (!afkStats.is_afk) { return; } // should never happen but just in case
+    if (!afkStats.is_afk) { // should never happen but just in case
+        processingAfk = processingAfk.filter(user => user !== message.senderUsername);
+        return;
+    }
 
     const afkInfoObject = afkInfoObjects.find(afk => afk.alias.includes(afkStats.afk_type));
     const afkReturned = afkInfoObject.returned;
@@ -58,15 +68,23 @@ const afkUserListener = async (client, message) => {
     client.log.send(message.channelName, `${message.senderUsername} ${afkReturned} ${afkEmoji} ${afkMessage ? `: ${afkMessage}` : ''} (afk por ${afkSince})`);
     await client.db.update('afk', { channel: message.channelName, user: message.senderUsername }, { $set: { is_afk: false, afk_return: Math.floor(Date.now() / 1000) } });
     client.reloadAfkUsers();
+    processingAfk = processingAfk.filter(user => user !== message.senderUsername);
     return;
 }
 
+let processingReminder = [];
 const reminderListener = async (client, message) => {
     if (!client.usersWithPendingReminders.includes(message.senderUserID)) { return; }
     if (client.notifiedUsers.includes(message.senderUserID)) { return; }
+    if (processingReminder.includes(message.senderUsername)) { return; }
+
+    processingReminder.push(message.senderUsername);
 
     var reminders = await client.db.get('remind', { receiverId: message.senderUserID, beenRead: false, remindAt: null });
-    if (reminders.length === 0) { return; } // should never happen but just in case
+    if (reminders.length === 0) { // should never happen but just in case
+        processingReminder = processingReminder.filter(user => user !== message.senderUsername);
+        return;
+    }
 
     if (reminders.length <= 3) {
         var replyMsg = `${message.senderUsername}, você tem ${reminders.length} lembrete${reminders.length > 1 ? 's' : ''} pendente${reminders.length > 1 ? 's' : ''}: `;
@@ -80,6 +98,7 @@ const reminderListener = async (client, message) => {
         if (replyMsg.length > 480) {
             client.log.send(message.channelName, `${message.senderUsername}, você tem ${reminders.length} lembretes pendentes. Use o comando ${message.commandPrefix}remind <show> para ver os IDs dos lembretes`);
             client.notifiedUsers.push(message.senderUserID);
+            processingReminder = processingReminder.filter(user => user !== message.senderUsername);
             return;
         }
 
@@ -89,11 +108,13 @@ const reminderListener = async (client, message) => {
             await client.db.update('remind', { _id: reminder._id }, { $set: { beenRead: true } });
         }
         client.reloadReminders();
+        processingReminder = processingReminder.filter(user => user !== message.senderUsername);
         return;
     }
 
     client.log.send(message.channelName, `${message.senderUsername}, você tem ${reminders.length} lembretes pendentes. Use o comando ${message.commandPrefix}remind <show> para ver os IDs dos lembretes. Pode também usar ${message.commandPrefix}remind <show all> para ver todos os lembretes de uma vez`);
     client.notifiedUsers.push(message.senderUserID);
+    processingReminder = processingReminder.filter(user => user !== message.senderUsername);
     return;
 }
 
