@@ -72,7 +72,8 @@ class Emotes {
     }
 
     async getEmotes(channelId, channelName) {
-        const ttv = await this.getTtv(channelId).catch(() => []);
+        // const ttv = await this.getTtv(channelId).catch(() => []);
+        const ttv = [];
         const bttv = await this.getBttv(channelId).catch(() => []);
         const ffz = await this.getFfz(channelId).catch(() => []);
 
