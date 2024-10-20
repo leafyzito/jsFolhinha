@@ -25,7 +25,7 @@ class Emotes {
         }
         catch (err) {
             console.log(`* Error fetching 7tv emotes for ${channelId}: ${err}`);
-            this.client.discord.logError(`* Error fetching 7tv emotes for ${channelId}: ${err}`);
+            this.client.discord.logError(`Error fetching 7tv emotes for ${channelId}: ${err}`);
             return [];
         }
     }
@@ -45,7 +45,7 @@ class Emotes {
         }
         catch (err) {
             console.log(`* Error fetching bttv emotes for ${channelId}: ${err}`);
-            this.client.discord.logError(`* Error fetching bttv emotes for ${channelId}: ${err}`);
+            this.client.discord.logError(`Error fetching bttv emotes for ${channelId}: ${err}`);
             return [];
         }
     }
@@ -66,7 +66,7 @@ class Emotes {
         }
         catch (err) {
             console.log(`* Error fetching ffz emotes for ${channelId}: ${err}`);
-            this.client.discord.logError(`* Error fetching ffz emotes for ${channelId}: ${err}`);
+            this.client.discord.logError(`Error fetching ffz emotes for ${channelId}: ${err}`);
             return [];
         }
     }
