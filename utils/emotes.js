@@ -11,43 +11,64 @@ class Emotes {
     }
 
     async getTtv(channelId) {
-        var sevenTvEmotes = [];
-        const url = `https://7tv.io/v3/users/twitch/${channelId}`;
-        const response = await fetch(url);
-        const data = await response.json();
+        try {
+            var sevenTvEmotes = [];
+            const url = `https://7tv.io/v3/users/twitch/${channelId}`;
+            const response = await fetch(url);
+            const data = await response.json();
 
-        if (data.error_code === 404) {
-            return sevenTvEmotes;
+            if (data.error_code === 404) {
+                return sevenTvEmotes;
+            }
+
+            return data.emote_set.emotes.map(emote => emote.name);
         }
-
-        return data.emote_set.emotes.map(emote => emote.name);
+        catch (err) {
+            console.log(`* Error fetching 7tv emotes for ${channelId}: ${err}`);
+            this.client.discord.log(`* Error fetching 7tv emotes for ${channelId}: ${err}`);
+            return [];
+        }
     }
 
     async getBttv(channelId) {
-        var bttvEmotes = [];
-        const url = `https://api.betterttv.net/3/cached/users/twitch/${channelId}`;
-        const response = await fetch(url);
-        const data = await response.json();
+        try {
+            var bttvEmotes = [];
+            const url = `https://api.betterttv.net/3/cached/users/twitch/${channelId}`;
+            const response = await fetch(url);
+            const data = await response.json();
 
-        if (data.message) {
-            return bttvEmotes;
+            if (data.message) {
+                return bttvEmotes;
+            }
+
+            return data.channelEmotes.map(emote => emote.code);
         }
-
-        return data.channelEmotes.map(emote => emote.code);
+        catch (err) {
+            console.log(`* Error fetching bttv emotes for ${channelId}: ${err}`);
+            this.client.discord.log(`* Error fetching bttv emotes for ${channelId}: ${err}`);
+            return [];
+        }
     }
 
     async getFfz(channelId) {
-        var ffzEmotes = [];
-        const url = `https://api.frankerfacez.com/v1/room/id/${channelId}`;
-        const response = await fetch(url);
-        const data = await response.json();
+        try {
+            var ffzEmotes = [];
+            const url = `https://api.frankerfacez.com/v1/room/id/${channelId}`;
+            const response = await fetch(url);
+            const data = await response.json();
 
-        if (data.status === 404) {
-            return ffzEmotes;
+            if (data.status === 404) {
+                return ffzEmotes;
+            }
+
+            const setId = data.room.set;
+            return data.sets[setId].emoticons.map(emote => emote.name);
         }
-
-        const setId = data.room.set;
-        return data.sets[setId].emoticons.map(emote => emote.name);
+        catch (err) {
+            console.log(`* Error fetching ffz emotes for ${channelId}: ${err}`);
+            this.client.discord.log(`* Error fetching ffz emotes for ${channelId}: ${err}`);
+            return [];
+        }
     }
 
     async getEmotes(channelId, channelName) {
@@ -82,7 +103,7 @@ class Emotes {
                 possibleEmotes.push(originalCaseEmote);
             }
         });
-        
+
         return randomChoice(possibleEmotes) || defaultResponse;
     }
 
