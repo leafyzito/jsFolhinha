@@ -43,7 +43,7 @@ randomEmoteCommand.shortDescription = 'Mostra um emote aleatório do canal atual
 randomEmoteCommand.cooldown = 5000;
 randomEmoteCommand.whisperable = false;
 randomEmoteCommand.description = `Faça o bot escolher entre 1 e 50 emotes aleatórios do seu chat
-Estes emotes são apenas do FFZ/BTTV e 7TV
+Estes emotes são apenas do FFZ, BTTV e 7TV
 • Exemplo: !randomemote - O bot vai escolher 1 emote aleatório do seu chat
 • Exemplo: !randomemote 10 - O bot vai escolher 10 emotes aleatórios do seu chat`;
 
