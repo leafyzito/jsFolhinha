@@ -1,12 +1,20 @@
 const { processCommand } = require("../../utils/processCommand.js");
 
 async function getAscii(defaultChannel, input) {
-    // encode input
-    // if no "#" in input, add "&c=defaultChannel"
     if (input.includes('.avif')) {
         input = input.replace('.avif', '.webp');
     }
 
+    // if inoput is a link and doens't end with .avif or .webp, add .webp
+    if (input.includes('http') && !input.endsWith('.avif') && !input.endsWith('.webp')) {
+        // if it doesnt ends with / add it
+        if (!input.endsWith('/')) {
+            input = input + '/';
+        }
+        input = input + '4x.webp';
+    }
+
+    // if no "#" in input, add "&c=defaultChannel"
     if (!input.includes('#')) {
         input = `${input}&c=${defaultChannel}`;
     }
