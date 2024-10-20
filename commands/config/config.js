@@ -56,7 +56,7 @@ const configCommand = async (client, message) => {
         await client.db.update('config', { channelId: message.channelID }, { $push: { disabledCommands: commandName } });
         await client.reloadChannelConfigs();
 
-        client.log.logAndReply(message, `O comando ${commandName} foi desabilitado`);
+        client.log.logAndReply(message, `O comando ${commandName} foi desativado`);
         return;
     }
 
@@ -105,12 +105,12 @@ Caso queira trocar o prefixo do bot, pode usar o comando !config prefixo {prefix
 ?&%+*-=|@#$~\_,;<>
 • Exemplo: !config prefixo ? - Muda o prefixo do bot para "?"
 
-Caso deseje desabilitar algum comando no chat, pode usar !config ban {comando} ou !config unban {comando} para reabilitá-lo
-• Exemplo: !config ban piada - Desabilita o comando "piada" no canal
+Caso deseje desativar algum comando no chat, pode usar !config ban {comando} ou !config unban {comando} para reabilitá-lo
+• Exemplo: !config ban piada - Desativa o comando "piada" no canal
 • Exemplo: !config unban piada - Reabilita o comando "piada" no canal
 
 Caso queira que o bot apenas funcione quando o canal estiver offline, pode usar o comando !config offline
-Usar o comando !config offline alterna entre o estado ativado e desativado. Por padrão, esta função está desabilitada
+Usar o comando !config offline alterna entre o estado ativado e desativado. Por padrão, esta função está desativada
 
 Este comandos podem ser executados apenas pelo streamer ou os moderadores do canal`;
 configCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${configCommand.commandName}/${configCommand.commandName}.js`;
