@@ -11,8 +11,8 @@ const replyMentionListener = async (client, message) => {
 
     const msgContent = message.messageText.split(' ');
     if (msgContent.length === 1 && (msgContent[0].toLowerCase() === 'folhinha' || msgContent[0].toLowerCase() === 'folhinhabot')) {
-        const channelEmotes = await client.emotes.getChannelEmotes(message.channelName);
-        client.log.send(message.channelName, `${message.senderUsername} ${randomChoice(channelEmotes)}`);
+        const channelEmotes = await client.emotes.getChannelEmotes(message.channelName) || 'teste';
+        client.log.send(message.channelName, `${message.senderUsername} ${channelEmotes.length > 0 ? randomChoice(channelEmotes) : 'KonCha'}`);
         lastReplyTime[message.channelName] = currentTime;
         return;
     }
@@ -29,7 +29,7 @@ const replyMentionListener = async (client, message) => {
 
         const channelEmotes = await client.emotes.getChannelEmotes(message.channelName);
         if (!channelEmotes.some(emote => emote === otherWord)) {
-            otherWord = randomChoice(channelEmotes);
+            otherWord = channelEmotes.length > 0 ? randomChoice(channelEmotes) : 'KonCha';
         }
 
         client.log.send(message.channelName, `${message.senderUsername} ${otherWord}`);
