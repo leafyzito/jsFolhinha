@@ -477,7 +477,7 @@ class CreateRegex {
             { name: 'tos', check: () => this.tos.test(testString) },
             { name: 'tos2', check: () => this.tos2.test(testString) },
             { name: 'tos3', check: () => this.tos3.test(testString) },
-            { name: 'tos4', check: () => this.tos4.test(testString) },
+            // { name: 'tos4', check: () => this.tos4.test(testString) },
             { name: 'tos5', check: () => this.tos5.test(testString) },
             { name: 'tos6', check: () => this.tos6.test(testString) },
             { name: 'tos7', check: () => this.tos7.test(testString) }
