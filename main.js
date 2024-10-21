@@ -48,7 +48,7 @@ if (process.env.ENV == 'prod') {
     startFetchPendingJoinsTask(client);
 }
 startRejoinDisconnectedChannelsTask(client);
-// startDiscordPresenceTask(client);
+startDiscordPresenceTask(client);
 
 
 // handlers
