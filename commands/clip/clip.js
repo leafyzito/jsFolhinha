@@ -8,6 +8,7 @@ async function creteTwitchClip(channelId) {
     });
 
     const data = await response.json();
+    if (data.status === 403) { return 'forbidden'; };
     if (data.status === 404) { return null; };
 
     const clipId = data.data[0].id;
@@ -37,6 +38,10 @@ const clipCommand = async (client, message) => {
     const clip = await creteTwitchClip(targetId);
     if (!clip) {
         client.log.logAndReply(message, `O canal ${targetChannel} não está em live`);
+        return;
+    }
+    else if (clip === 'forbidden') {
+        client.log.logAndReply(message, `Esse canal não permite criar clipes durante a live`);
         return;
     }
     client.log.logAndReply(message, `🎬 https://clips.twitch.tv/${clip.id}`)
