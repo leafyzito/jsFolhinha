@@ -192,51 +192,50 @@ async function modifyClient(client) {
                 if (reminder.remindAt <= currentTime || reminder.remindAt > currentTime) {
                     try {
 
-                        console.log('skipping scheduled reminders');
-                        // if (!client.scheduledReminders.includes(reminder._id)) {
-                        //     const reminderDate = new Date(reminder.remindAt * 1000);
-                        //     client.scheduledReminders.push(reminder._id);
+                        if (!client.scheduledReminders.includes(reminder._id)) {
+                            const reminderDate = new Date(reminder.remindAt * 1000);
+                            client.scheduledReminders.push(reminder._id);
 
-                        //     if (reminder.remindAt && reminder.remindAt <= currentTime) {
-                        //         client.discord.log(`* Sending missed reminder for ${reminderDate.toLocaleString()}`);
-                        //         console.log('* Sending missed reminder for ' + reminderDate.toLocaleString());
+                            if (reminder.remindAt && reminder.remindAt <= currentTime) {
+                                client.discord.log(`* Sending missed reminder for ${reminderDate.toLocaleString()}`);
+                                console.log('* Sending missed reminder for ' + reminderDate.toLocaleString());
 
-                        //         const reminderSender = await client.getUserByUserID(reminder.senderId) || 'Usuário deletado';
-                        //         const receiverName = await client.getUserByUserID(reminder.receiverId) || 'Usuário deletado 2';
-                        //         const reminderMessage = timeSince(reminder.remindTime);
-                        //         let finalRes = reminderSender === receiverName
-                        //             ? `@${receiverName}, lembrete de você mesmo há ${reminderMessage}: ${reminder.remindMessage}`
-                        //             : `@${receiverName}, lembrete de @${reminderSender} há ${reminderMessage}: ${reminder.remindMessage}`;
+                                const reminderSender = await client.getUserByUserID(reminder.senderId) || 'Usuário deletado';
+                                const receiverName = await client.getUserByUserID(reminder.receiverId) || 'Usuário deletado 2';
+                                const reminderMessage = timeSince(reminder.remindTime);
+                                let finalRes = reminderSender === receiverName
+                                    ? `@${receiverName}, lembrete de você mesmo há ${reminderMessage}: ${reminder.remindMessage}`
+                                    : `@${receiverName}, lembrete de @${reminderSender} há ${reminderMessage}: ${reminder.remindMessage}`;
 
-                        //         if (finalRes.length > 480) { finalRes = await manageLongResponse(finalRes); }
+                                if (finalRes.length > 480) { finalRes = await manageLongResponse(finalRes); }
 
-                        //         const channelName = await client.getUserByUserID(reminder.fromChannelId);
-                        //         await client.log.send(channelName, finalRes);
-                        //         await client.db.update('remind', { _id: reminder._id }, { $set: { beenRead: true } });
+                                const channelName = await client.getUserByUserID(reminder.fromChannelId);
+                                await client.log.send(channelName, finalRes);
+                                await client.db.update('remind', { _id: reminder._id }, { $set: { beenRead: true } });
 
-                        //     } else if (reminder.remindAt > currentTime) {
-                        //         // client.discord.log(`* Setting timed reminder for ${reminderDate.toLocaleString()}`);
-                        //         console.log('* Setting timed reminder for ' + reminderDate.toLocaleString());
+                            } else if (reminder.remindAt > currentTime) {
+                                // client.discord.log(`* Setting timed reminder for ${reminderDate.toLocaleString()}`);
+                                console.log('* Setting timed reminder for ' + reminderDate.toLocaleString());
 
-                        //         const job = schedule.scheduleJob(new Date(reminder.remindAt * 1000), async function () {
-                        //             const reminderSender = await client.getUserByUserID(reminder.senderId) || 'Usuário deletado';
-                        //             const receiverName = await client.getUserByUserID(reminder.receiverId) || 'Usuário deletado 2';
-                        //             const reminderMessage = timeSince(reminder.remindTime);
-                        //             let finalRes = reminderSender === receiverName
-                        //                 ? `@${receiverName}, lembrete de você mesmo há ${reminderMessage}: ${reminder.remindMessage}`
-                        //                 : `@${receiverName}, lembrete de @${reminderSender} há ${reminderMessage}: ${reminder.remindMessage}`;
+                                const job = schedule.scheduleJob(new Date(reminder.remindAt * 1000), async function () {
+                                    const reminderSender = await client.getUserByUserID(reminder.senderId) || 'Usuário deletado';
+                                    const receiverName = await client.getUserByUserID(reminder.receiverId) || 'Usuário deletado 2';
+                                    const reminderMessage = timeSince(reminder.remindTime);
+                                    let finalRes = reminderSender === receiverName
+                                        ? `@${receiverName}, lembrete de você mesmo há ${reminderMessage}: ${reminder.remindMessage}`
+                                        : `@${receiverName}, lembrete de @${reminderSender} há ${reminderMessage}: ${reminder.remindMessage}`;
 
-                        //             if (finalRes.length > 480) { finalRes = await manageLongResponse(finalRes); }
+                                    if (finalRes.length > 480) { finalRes = await manageLongResponse(finalRes); }
 
-                        //             const channelName = await client.getUserByUserID(reminder.fromChannelId);
-                        //             await client.log.send(channelName, finalRes);
-                        //             await client.db.update('remind', { _id: reminder._id }, { $set: { beenRead: true } });
-                        //         });
+                                    const channelName = await client.getUserByUserID(reminder.fromChannelId);
+                                    await client.log.send(channelName, finalRes);
+                                    await client.db.update('remind', { _id: reminder._id }, { $set: { beenRead: true } });
+                                });
 
-                        //         // Store the job in a global object to associate it with the reminderId
-                        //         client.reminderJobs[reminder._id] = job;
-                        //     }
-                        // }
+                                // Store the job in a global object to associate it with the reminderId
+                                client.reminderJobs[reminder._id] = job;
+                            }
+                        }
 
                     } catch (err) {
                         console.log(`Error in reminder: ${err} // Reminder: ${reminder}`);
