@@ -397,6 +397,7 @@ const devJoinChannelCommand = async (client, message) => {
     if (authorId !== process.env.DEV_USERID) { return; }
 
     const targetChannel = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase() || null;
+    const announce = message.messageText.split(' ')[2] === 'true' ? true : false;
 
     if (!targetChannel) {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}devjoin <canal>`);
@@ -411,6 +412,10 @@ const devJoinChannelCommand = async (client, message) => {
     }
 
     client.join(targetChannel);
+    if (announce) {
+        const emote = await client.emotes.getEmoteFromList(targetChannel, ['peepohey', 'heyge'], 'KonCha');
+        client.log.send(targetChannel, `${emote} Oioi! Fui convidado para me juntar aqui! Para saber mais sobre mim, pode usar !ajuda ou !comandos`);
+    }
     client.log.logAndReply(message, `🤖 Criei config e entrei no canal ${targetChannel}`);
     return;
 }
@@ -424,7 +429,7 @@ const devPartChannelCommand = async (client, message) => {
     const targetChannel = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase() || null;
 
     if (!targetChannel) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}devpart <canal>`);
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}devpart < canal > `);
         return;
     }
 
@@ -434,7 +439,7 @@ const devPartChannelCommand = async (client, message) => {
     await client.reloadChannelPrefixes();
 
     client.part(targetChannel);
-    client.log.logAndReply(message, `🤖 Apaguei config a saí do canal ${targetChannel}`);
+    client.log.logAndReply(message, `🤖 Apaguei config a saí do canal ${targetChannel} `);
     return;
 }
 
@@ -446,7 +451,7 @@ const giveXpCommand = async (client, message) => {
 
     const targetUser = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase();
     if (!targetUser) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}givexp <usuário> <xp>`);
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix} givexp < usuário > <xp>`);
         return;
     }
     const targetUserId = await client.getUserID(targetUser);
