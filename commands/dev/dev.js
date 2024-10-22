@@ -106,18 +106,11 @@ const execCommand = async (client, message) => {
     const command = args.slice(1).join(' ');
 
     try {
-        if (command.includes('await')) {
-            const res = await eval(command);
-            console.log(res);
-            client.log.logAndReply(message, `🤖 ${res}`);
-            return;
-        }
-
-        const res = eval(command);
+        const AsyncFunction = Object.getPrototypeOf(async function () { }).constructor;
+        const asyncCommand = new AsyncFunction('client', 'message', `return ${command}`);
+        const res = await asyncCommand(client, message);
         console.log(res);
         client.log.logAndReply(message, `🤖 ${res}`);
-        return;
-
     } catch (err) {
         client.log.logAndReply(message, `🤖 Erro ao executar comando: ${err}`);
     }
