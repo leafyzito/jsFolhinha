@@ -41,6 +41,8 @@ class TursoUtils {
                 date: message.serverTimestampRaw, // date
                 rawBadges: message.badgesRaw // string
             }
+        }).catch((error) => {
+            console.log('Error on logMessage:', error);
         });
     }
 }
