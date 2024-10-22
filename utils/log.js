@@ -17,7 +17,8 @@ class Logger {
             userId: message.senderUserID,
             command: message.command,
             content: message.messageText,
-            response: response
+            response: response,
+            notes: message.notes || null,
         };
 
         this.client.discord.logCommand(message, response);
@@ -26,7 +27,8 @@ class Logger {
         }
     }
 
-    async logAndReply(message, response) {
+    async logAndReply(message, response, notes = null) {
+        message.notes = notes;
         if (regex.check(response, response.split(' '), message.channelName)) {
             console.log(`* Caught by regex in #${message.channelName}/${[message.senderUsername]} - original response: ${response}`);
             this.client.discord.log(`* Caught by regex in #${message.channelName}/${[message.senderUsername]} - original response: ${response}`);
@@ -54,7 +56,8 @@ class Logger {
         console.log(`#${message.channelName}/${message.senderUsername} - ${message.command}`);
     }
 
-    async logAndSay(message, response) {
+    async logAndSay(message, response, notes = null) {
+        message.notes = notes;
         if (regex.check(response, response.split(' '), message.channelName)) {
             console.log(`* Caught by regex - original response: ${response}`);
             this.client.discord.log(`* Caught by regex - original response: ${response}`);
@@ -82,7 +85,8 @@ class Logger {
         console.log(`#${message.channelName}/${message.senderUsername} - ${message.command}`);
     }
 
-    async logAndMeAction(message, response) {
+    async logAndMeAction(message, response, notes = null) {
+        message.notes = notes;
         if (regex.check(response, response.split(' '), message.channelName)) {
             console.log(`* Caught by regex - original response: ${response}`);
             this.client.discord.log(`* Caught by regex - original response: ${response}`);
@@ -110,7 +114,8 @@ class Logger {
         console.log(`#${message.channelName}/${message.senderUsername} - ${message.command}`);
     }
 
-    async logAndWhisper(message, response) {
+    async logAndWhisper(message, response, notes = null) {
+        message.notes = notes;
         if (regex.check(response, response.split(' '), message.senderUsername)) {
             console.log(`* Caught by regex - original response: ${response}`);
             this.client.discord.log(`* Caught by regex - original response: ${response}`);

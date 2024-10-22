@@ -47,12 +47,12 @@ const talkieCommand = async (client, message) => {
         joinedChannels = joinedChannels.filter(channel => channel !== targetChannel);
     } while (true);
 
-    client.discord.log(`* Talkie ${message.channelName} > ${targetChannel}`);
-    console.log(`* Talkie ${message.channelName} > ${targetChannel}`);
+    // client.discord.log(`* Talkie ${message.channelName} > ${targetChannel}`);
+    // console.log(`* Talkie ${message.channelName} > ${targetChannel}`);
     client.log.send(targetChannel, `🤖 ${msgContent}`);
 
     const emote = await client.emotes.getEmoteFromList(message.channelName, ['peepogiggle', 'peepogiggles'], '🤭');
-    client.log.logAndReply(message, `Mensagem enviada ${emote}`);
+    client.log.logAndReply(message, `Mensagem enviada ${emote}`, `${message.channelName} > ${targetChannel}`);
 };
 
 talkieCommand.commandName = 'talkie';

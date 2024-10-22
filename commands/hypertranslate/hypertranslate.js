@@ -61,10 +61,10 @@ const hypertranslateCommand = async (client, message) => {
     const emote = await client.emotes.getEmoteFromList(message.channelName, ['pphop', 'ppcircle', 'waiting', 'ppdvd'], '🤖');
     client.log.reply(message, `Correndo ${numTranslations} traduções... ${emote}`);
     const hyperTranslatedText = await hypertranslateText(textToTranslate, numTranslations);
-    console.log(hyperTranslatedText.listOfTranslations);
-    client.discord.log(`* Lista de traduções: ${hyperTranslatedText.listOfTranslations.join(', ')}`);
+    // console.log(hyperTranslatedText.listOfTranslations);
+    // client.discord.log(`* Lista de traduções: ${hyperTranslatedText.listOfTranslations.join(', ')}`);
 
-    client.log.logAndReply(message, `🤖 ${hyperTranslatedText.translatedText}`);
+    client.log.logAndReply(message, `🤖 ${hyperTranslatedText.translatedText}`, `Lista de traduções: ${hyperTranslatedText.listOfTranslations.join(', ')}`);
 };
 
 hypertranslateCommand.commandName = 'hypertranslate';
