@@ -6,12 +6,12 @@ const roletaCommand = async (client, message) => {
     if (!await processCommand(5000, 'channel', message, client)) return;
 
     if (message.senderUsername === message.channelName) {
-        client.log.logAndReply(message, `Eu não consigo te explodir, mas você consegue monkaS`);
+        client.log.logAndReply(message, `Você é o streamer, então não consegue jogar a roleta russa`);
         return;
     }
 
     if (message.isMod) {
-        client.log.logAndReply(message, `Infelizmente não consigo te explodir 😡`);
+        client.log.logAndReply(message, `Você é mod, então não consegue jogar a roleta russa`);
         return;
     }
 
