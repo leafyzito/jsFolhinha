@@ -43,7 +43,15 @@ discordClient.logCommand = async function (message, response) {
         .setColor(message.color ? colorToHexString(message.color) : '#008000')
         .setFooter({
             text: `${message.responseTime}ms • ${getFormattedDateTime()}`,
-        })
+        });
+
+    if (message.notes != null) {
+        embed.addFields({
+            name: "Notas:",
+            value: message.notes,
+            inline: false
+        });
+    }
 
     const logChannel = await discordClient.channels.fetch(process.env.DISCORD_LOG_CHANNEL);
     logChannel.send({ embeds: [embed] })
