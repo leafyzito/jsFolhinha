@@ -32,7 +32,7 @@ class Logger {
         if (regex.check(response, response.split(' '), message.channelName)) {
             console.log(`* Caught by regex in #${message.channelName}/${[message.senderUsername]} - original response: ${response}`);
             this.client.discord.log(`* Caught by regex in #${message.channelName}/${[message.senderUsername]} - original response: ${response}`);
-            this.send(process.env.DEV_TEST_CHANNEL, 'Regex apanhado, check logs @leafyzito');
+            this.send(process.env.DEV_TEST_CHANNEL, `Regex apanhado, check logs ${process.env.DEV_NICK}`);
             response = '⚠️ Mensagem retida por conter conteúdo banido, tente novamente ou mude um pouco o comando'
         }
 
@@ -61,7 +61,7 @@ class Logger {
         if (regex.check(response, response.split(' '), message.channelName)) {
             console.log(`* Caught by regex - original response: ${response}`);
             this.client.discord.log(`* Caught by regex - original response: ${response}`);
-            this.send(process.env.DEV_TEST_CHANNEL, 'Regex apanhado, check logs @leafyzito');
+            this.send(process.env.DEV_TEST_CHANNEL, `Regex apanhado, check logs ${process.env.DEV_NICK}`);
             response = '⚠️ Mensagem retida por conter conteúdo banido, tente novamente ou mude um pouco o comando'
         }
 
@@ -90,7 +90,7 @@ class Logger {
         if (regex.check(response, response.split(' '), message.channelName)) {
             console.log(`* Caught by regex - original response: ${response}`);
             this.client.discord.log(`* Caught by regex - original response: ${response}`);
-            this.send(process.env.DEV_TEST_CHANNEL, 'Regex apanhado, check logs @leafyzito');
+            this.send(process.env.DEV_TEST_CHANNEL, `Regex apanhado, check logs ${process.env.DEV_NICK}`);
             response = '⚠️ Mensagem retida por conter conteúdo banido, tente novamente ou mude um pouco o comando'
         }
 
@@ -130,7 +130,7 @@ class Logger {
         if (regex.check(content, content.split(' '), `By Folhinha to ${channel}`)) {
             console.log(`* Caught by regex - original content: ${content}`);
             this.client.discord.log(`* Caught by regex - original content: ${content}`);
-            this.send(process.env.DEV_TEST_CHANNEL, 'Regex apanhado, check logs @leafyzito');
+            this.send(process.env.DEV_TEST_CHANNEL, `Regex apanhado, check logs ${process.env.DEV_NICK}`);
             content = '⚠️ Mensagem retida por conter conteúdo banido, tente novamente ou mude um pouco o comando'
         }
 

@@ -30,6 +30,7 @@ client.on('ready', () => { onReadyHandler(); });
 client.on('JOIN', (channel) => { onJoinHandler(channel); });
 client.on("PRIVMSG", (msg) => { onMessageHandler(msg); });
 client.on('WHISPER', (msg) => { onWhisperHandler(msg); });
+client.on('CLEARCHAT', (msg) => { onClearChatHandler(msg); });
 
 // Join the channels
 const channelsToJoin = process.env.ENV == 'prod' ? client.getChannelsToJoin() : Promise.resolve(['gocrazybh']);
@@ -85,4 +86,12 @@ function onMessageHandler(message) {
 function onWhisperHandler(message) {
     // log whisper to discord
     client.discord.logWhisperFrom(message);
+}
+
+function onClearChatHandler(message) {
+    if (message.targetUsername === process.env.BOT_USERNAME) {
+        console.log(`* ${message.isTimeout() ? `Tomei timeout em #${message.channelName} por ${message.banDuration} segundos` : `Fui banido em #${message.channelName}`}`);
+        client.log.send(process.env.DEV_TEST_CHANNEL, `${message.isTimeout() ? `Tomei timeout em #${message.channelName} por ${message.banDuration} segundos` : `Fui banido em #${message.channelName}`} @${process.env.DEV_NICK}`);
+        client.discord.log(`* ${message.isTimeout() ? `Tomei timeout em #${message.channelName} por ${message.banDuration} segundos` : `Fui banido em #${message.channelName}`}`);
+    }
 }
