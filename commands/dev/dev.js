@@ -1,5 +1,5 @@
 const { exec } = require('child_process');
-const { shortenUrl } = require('../../utils/utils.js');
+const { shortenUrl, manageLongResponse } = require('../../utils/utils.js');
 
 
 async function createNewChannelConfig(client, user) {
@@ -108,7 +108,29 @@ const execCommand = async (client, message) => {
     try {
         const AsyncFunction = Object.getPrototypeOf(async function () { }).constructor;
         const asyncCommand = new AsyncFunction('client', 'message', `return ${command}`);
-        const res = await asyncCommand(client, message);
+        let res = await asyncCommand(client, message);
+        console.log(res);
+        if (typeof res === 'object') {
+            res = JSON.stringify(res);
+        }
+        client.log.logAndReply(message, `🤖 ${res.length > 490 ? await manageLongResponse(res) : res}`);
+    } catch (err) {
+        client.log.logAndReply(message, `🤖 Erro ao executar comando: ${err}`);
+    }
+};
+
+const sqlExecCommand = async (client, message) => {
+    message.command = 'dev sqlexec';
+
+    const authorId = message.senderUserID;
+    if (authorId !== process.env.DEV_USERID) { return; }
+
+    const args = message.messageText.split(' ');
+    const command = args.slice(1).join(' ');
+
+    try {
+        const query = await client.turso.client.execute(command);
+        const res = query.rows[0][0];
         console.log(res);
         client.log.logAndReply(message, `🤖 ${res}`);
     } catch (err) {
@@ -197,7 +219,7 @@ const reloadCommand = async (client, message) => {
         // Clear require cache for all command files
         Object.keys(require.cache).forEach((key) => {
             if (key.includes('\\commands\\') || key.includes('/commands/')) {
-                console.log(`deleting ${key}`);
+                console.log(`deleting ${key} `);
                 delete require.cache[key];
             }
         });
@@ -246,14 +268,14 @@ const reloadEmotesCommand = async (client, message) => {
         }
 
         const emote = await client.emotes.getEmoteFromList(message.channelName, ['joia', 'jumilhao'], '👍');
-        client.log.logAndReply(message, `Emotes recarregados em ${channelsToReload.length} canais ${emote}`);
+        client.log.logAndReply(message, `Emotes recarregados em ${channelsToReload.length} canais ${emote} `);
         return;
     }
     client.emotes.cachedEmotes[targetChannel] = null;
     await client.emotes.getChannelEmotes(targetChannel);
 
     const emote = await client.emotes.getEmoteFromList(message.channelName, ['joia', 'jumilhao'], '👍');
-    client.log.logAndReply(message, `Emotes recarregados ${emote}`);
+    client.log.logAndReply(message, `Emotes recarregados ${emote} `);
 }
 
 const allEmotesCommand = async (client, message) => {
@@ -269,11 +291,11 @@ const allEmotesCommand = async (client, message) => {
     // send all emotes in chunks of 490 characters
     let emoteMessage = "";
     for (let i = 0; i < channelEmotes.length; i++) {
-        if ((emoteMessage + ` ${channelEmotes[i]}`).length > 490) {
+        if ((emoteMessage + ` ${channelEmotes[i]} `).length > 490) {
             client.log.logAndSay(message, emoteMessage);
             emoteMessage = "";
         }
-        emoteMessage += ` ${channelEmotes[i]}`;
+        emoteMessage += ` ${channelEmotes[i]} `;
     }
     if (emoteMessage.length > 0) {
         client.log.logAndSay(message, emoteMessage);
@@ -289,7 +311,7 @@ const devBanCommand = async (client, message) => {
     const targetUser = message.messageText.split(' ')[1];
 
     if (!targetUser) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}devban <usuário> <all/comando>`);
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix} devban < usuário > <all /comando > `);
         return;
     }
 
@@ -361,12 +383,12 @@ const shortenCommand = async (client, message) => {
 
     const targetUrl = message.messageText.split(' ')[1];
     if (!targetUrl) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}shorten <url>`);
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix} shorten < url > `);
         return;
     }
 
     const shortenedUrl = await shortenUrl(targetUrl);
-    client.log.logAndReply(message, `🤖  ${shortenedUrl}`);
+    client.log.logAndReply(message, `🤖  ${shortenedUrl} `);
     return;
 }
 
@@ -469,6 +491,7 @@ botSayCommand.aliases = ['botsay', 'bsay'];
 forceJoinCommand.aliases = ['forcejoin', 'fjoin'];
 forcePartCommand.aliases = ['forcepart', 'fpart'];
 execCommand.aliases = ['exec', 'eval'];
+sqlExecCommand.aliases = ['sqlexec', 'sql'];
 getUserIdCommand.aliases = ['getuserid', 'uid'];
 restartCommand.aliases = ['restart'];
 resetPetCommand.aliases = ['resetpet', 'resetpat'];
@@ -490,6 +513,7 @@ module.exports = {
     forceJoinCommand,
     forcePartCommand,
     execCommand,
+    sqlExecCommand,
     getUserIdCommand,
     restartCommand,
     resetPetCommand,
