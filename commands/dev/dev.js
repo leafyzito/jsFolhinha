@@ -130,9 +130,9 @@ const sqlExecCommand = async (client, message) => {
 
     try {
         const query = await client.turso.client.execute(command);
-        const res = query.rows[0][0];
+        const res = JSON.stringify(query.rows);
         console.log(res);
-        client.log.logAndReply(message, `🤖 ${res}`);
+        client.log.logAndReply(message, `🤖 ${res.length > 490 ? await manageLongResponse(res) : res}`);
     } catch (err) {
         client.log.logAndReply(message, `🤖 Erro ao executar comando: ${err}`);
     }
