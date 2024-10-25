@@ -10,14 +10,14 @@ const replyMentionListener = async (client, message) => {
     if (timeDifference < 15000) { return; }
 
     const msgContent = message.messageText.split(' ');
-    if (msgContent.length === 1 && (msgContent[0].toLowerCase() === 'folhinha' || msgContent[0].toLowerCase() === 'folhinhabot')) {
-        const channelEmotes = await client.emotes.getChannelEmotes(message.channelName) || 'teste';
+    if (msgContent.length === 1 && (msgContent[0].toLowerCase() === 'folhinha' || msgContent[0].toLowerCase() === 'folhinhabot' || msgContent[0].toLowerCase() === '@folhinhabot' || msgContent[0].toLowerCase() === '@folhinhabot,')) {
+        const channelEmotes = await client.emotes.getChannelEmotes(message.channelName) || [];
         client.log.send(message.channelName, `${message.senderUsername} ${channelEmotes.length > 0 ? randomChoice(channelEmotes) : 'KonCha'}`);
         lastReplyTime[message.channelName] = currentTime;
         return;
     }
 
-    if (msgContent.length === 2 && ['folhinha', 'folhinhabot'].some(word => msgContent.some(msg => msg.toLowerCase() === word.toLowerCase()))) {
+    if (msgContent.length === 2 && ['folhinha', 'folhinhabot', '@folhinhabot', '@folhinhabot,'].some(word => msgContent.some(msg => msg.toLowerCase() === word.toLowerCase()))) {
         var otherWord = msgContent.find(msg => msg.toLowerCase() !== 'folhinha' && msg.toLowerCase() !== 'folhinhabot');
 
         if (['oi', 'ola', 'olá', 'opa'].some(word => word === otherWord.toLowerCase())) {
