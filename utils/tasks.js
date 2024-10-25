@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { exec } = require('child_process');
 const { isStreamOnline, timeSince } = require('./utils.js');
 
 async function createNewChannelConfig(client, userid) {
@@ -157,11 +158,20 @@ async function fetchPendingJoins(client) {
     // console.log('all good já FORA do for loop');
 }
 
+let counterToRestart = 0;
 async function rejoinDisconnectedChannels(client) {
     const channelsToJoin = client.channelsToJoin;
     let rejoinedChannels = [];
     channelsToJoin.forEach(async (channel) => {
         if (![...client.joinedChannels].includes(channel)) {
+            if ([...client.joinedChannels].length === 0) {
+                counterToRestart++;
+                if (counterToRestart >= 4) { // 2 minutes
+                    console.log(`* Restarting client`);
+                    client.discord.log(`* Restarting client`);
+                    exec('pm2 restart folhinhajs');
+                }
+            }
             console.log(`* Rejoining ${channel}`);
             // client.discord.log(`* Rejoining ${channel}`);
             rejoinedChannels.push(channel);
