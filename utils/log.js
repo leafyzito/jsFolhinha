@@ -37,6 +37,7 @@ class Logger {
         }
 
         message.responseTime = new Date().getTime() - message.serverTimestampRaw;
+        message.internalResponseTime = new Date().getTime() - message.internalTimestamp;
         this.client.reply(message.channelName, message.messageID, response)
             .catch((err) => {
                 if (err.message.includes('identical to the previous one')) {
@@ -66,6 +67,7 @@ class Logger {
         }
 
         message.responseTime = new Date().getTime() - message.serverTimestampRaw;
+        message.internalResponseTime = new Date().getTime() - message.internalTimestamp;
         this.client.say(message.channelName, response)
             .catch((err) => {
                 if (err.message.includes('identical to the previous one')) {
@@ -95,6 +97,7 @@ class Logger {
         }
 
         message.responseTime = new Date().getTime() - message.serverTimestampRaw;
+        message.internalResponseTime = new Date().getTime() - message.internalTimestamp;
         this.client.me(message.channelName, response)
             .catch((err) => {
                 if (err.message.includes('identical to the previous one')) {
