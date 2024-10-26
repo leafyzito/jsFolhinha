@@ -52,7 +52,7 @@ const translateCommand = async (client, message) => {
 };
 
 translateCommand.commandName = 'translate';
-translateCommand.aliases = ['translate', 'traduzir', 't'];
+translateCommand.aliases = ['traducao', 'traduçao', 'tradução', 'translate', 'traduzir', 't'];
 translateCommand.shortDescription = 'Traduza algum texto';
 translateCommand.cooldown = 5000;
 translateCommand.whisperable = true;
