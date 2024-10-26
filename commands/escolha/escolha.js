@@ -8,11 +8,13 @@ const escolhaCommand = async (client, message) => {
     const args = message.messageText.split(' ').slice(1);
 
     // remove all 'ou' and 'or' from the list of options
-    args.forEach((arg, index) => {
-        if (arg.toLowerCase() === 'ou' || arg.toLowerCase() === 'or') {
-            args.slice(index, 1);
+    for (let i = 0; i < args.length; i++) {
+        console.log(args);
+        if (args[i].toLowerCase() === 'ou' || args[i].toLowerCase() === 'or') {
+            args.splice(i, 1);
+            i--; // Adjust index after removal
         }
-    });
+    }
 
     if (args.length < 2) {
         client.log.logAndReply(message, `Intruduza pelo menos 2 elementos pra serem escolhidos`);
