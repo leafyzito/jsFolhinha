@@ -19,7 +19,7 @@ async function createUserDungeonBase(client, message) {
         userId: message.senderUserID,
         username: message.senderUsername,
         xp: 0,
-        level: 1,
+        level: 0,
         wins: 0,
         losses: 0,
         lastDungeon: 0,
