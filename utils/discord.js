@@ -42,7 +42,7 @@ discordClient.logCommand = async function (message, response) {
         )
         .setColor(message.color ? colorToHexString(message.color) : '#008000')
         .setFooter({
-            text: `${message.responseTime}ms • ${getFormattedDateTime()}`,
+            text: `${message.responseTime}ms/${message.internalResponseTime}ms • ${getFormattedDateTime()}`,
         });
 
     if (message.notes != null) {
