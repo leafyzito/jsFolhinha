@@ -63,7 +63,7 @@ asciiCommand.commandName = 'ascii';
 asciiCommand.aliases = ['ascii'];
 asciiCommand.shortDescription = 'Veja o ascii de algum emote';
 asciiCommand.cooldown = 5000;
-asciiCommand.whisperable = true;
+asciiCommand.whisperable = false;
 asciiCommand.description = `Exibe a arte ascii de algum emote fornecido
 Se fornecido um canal específico, o bot irá buscar o emote no canal
 Para emotes animados, o frame é escolhido aleatoriamente

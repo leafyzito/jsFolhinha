@@ -38,7 +38,7 @@ foundersCommand.commandName = 'founders';
 foundersCommand.aliases = ['founders'];
 foundersCommand.shortDescription = 'Mostra a lista de founders de algum canal';
 foundersCommand.cooldown = 5000;
-foundersCommand.whisperable = true;
+foundersCommand.whisperable = false;
 foundersCommand.description = `Exibe uma lista de founders do canal fornecido ou, caso nenhum canal seja fornecido, da canal onde o comando foi executado
 O comando funcionará mesmo em canais que o Folhinha não esteja presente
 • Exemplo: !founders - Exibe a lista de founders do canal atual

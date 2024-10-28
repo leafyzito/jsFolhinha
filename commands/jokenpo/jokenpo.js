@@ -231,7 +231,7 @@ jokenpoCommand.commandName = 'jokenpo';
 jokenpoCommand.aliases = ['jokenpo', 'jokenpô', 'pedrapapeltesoura', 'ppt'];
 jokenpoCommand.shortDescription = 'Escolha um adversário para um jogo de jokenpô';
 jokenpoCommand.cooldown = 5000;
-jokenpoCommand.whisperable = true;
+jokenpoCommand.whisperable = false;
 jokenpoCommand.description = `Jogue uma partida de jokenpô com alguém do chat
 As jogadas devem ser enviadas para o susurro do bot dentro de 30 segundos - pedra, papel ou tesoura`;
 
