@@ -158,12 +158,12 @@ discordClient.logError = async function (content) {
             text: `${getFormattedDateTime()}`,
         });
 
-    const logChannel = await discordClient.channels.fetch(process.env.DISCORD_LOG_CHANNEL);
+    const logChannel = await discordClient.channels.fetch(process.env.DISCORD_ERROR_LOG_CHANNEL);
     // mention the dev discord user
-    logChannel.send(`<@${process.env.DEV_DISCORD_ID}>`)
-        .catch((err) => {
-            console.error(`Erro ao enviar mensagem no discord logError mention: ${err}`);
-        });
+    // logChannel.send(`<@${process.env.DEV_DISCORD_ID}>`)
+    //     .catch((err) => {
+    //         console.error(`Erro ao enviar mensagem no discord logError mention: ${err}`);
+    //     });
     logChannel.send({ embeds: [embed] })
         .catch((err) => {
             console.error(`Erro ao enviar mensagem no discord logError: ${err}`);
