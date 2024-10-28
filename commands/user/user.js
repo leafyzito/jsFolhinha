@@ -43,7 +43,7 @@ userCommand.commandName = 'user';
 userCommand.aliases = ['user', 'u'];
 userCommand.shortDescription = 'Mostra informações gerais sobre um usuário';
 userCommand.cooldown = 5000;
-userCommand.whisperable = false;
+userCommand.whisperable = true;
 userCommand.description = `Exibe várias informações sobre quem executou o comando ou sobre o usuário fornecido
 Informações a serem exibidas: Nick, ID, Cor, Badge, Chatters no canal, Seguidores e Tempo de criação da conta`;
 userCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${userCommand.commandName}/${userCommand.commandName}.js`;
