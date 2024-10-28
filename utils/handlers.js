@@ -13,7 +13,7 @@ function commandHandler(client, message) {
                         client.discord.logError(`Error in command #${message.channelName}/${message.senderUsername} - ${command}: ${err}`);
                     });
             } else if (message.channelName == 'whisper' && !commandsList[command].whisperable) {
-                message.command = commandsList[command].commandName;
+                message.command = commandsList[command].aliases[0];
                 client.log.logAndReply(message, `⚠️ Este comando não pode ser usado em whispers`);
             }
         }
