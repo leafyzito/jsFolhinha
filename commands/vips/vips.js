@@ -38,7 +38,7 @@ vipsCommand.commandName = 'vips';
 vipsCommand.aliases = ['vips'];
 vipsCommand.shortDescription = 'Mostra a lista de vips de algum canal';
 vipsCommand.cooldown = 5000;
-vipsCommand.whisperable = true;
+vipsCommand.whisperable = false;
 vipsCommand.description = `Exibe uma lista de vips do canal fornecido ou, caso nenhum canal seja fornecido, da canal onde o comando foi executado
 O comando funcionará mesmo em canais que o Folhinha não esteja presente
 • Exemplo: !vips - Exibe a lista de vips do canal atual

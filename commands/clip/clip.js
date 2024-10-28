@@ -52,7 +52,7 @@ clipCommand.commandName = 'clip';
 clipCommand.aliases = ['clip', 'clipe'];
 clipCommand.shortDescription = 'Crie um clip de alguma live';
 clipCommand.cooldown = 5000;
-clipCommand.whisperable = true;
+clipCommand.whisperable = false;
 clipCommand.description = `Crie um clip de alguma live. Se nenhum canal for especificado, o comando irá criar um clip do canal onde o comando foi executado
 • Exemplo: !clip - O bot vai criar um clip do canal onde o comando foi executado
 • Exemplo: !clip @leafyzito - O bot vai criar um clip do canal do usuário @leafyzito, caso ele esteja em live`;

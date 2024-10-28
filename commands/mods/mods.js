@@ -38,7 +38,7 @@ modsCommand.commandName = 'mods';
 modsCommand.aliases = ['mods', 'moderadores', 'moderators'];
 modsCommand.shortDescription = 'Mostra a lista de mods de algum canal';
 modsCommand.cooldown = 5000;
-modsCommand.whisperable = true;
+modsCommand.whisperable = false;
 modsCommand.description = `Exibe uma lista de mods do canal fornecido ou, caso nenhum canal seja fornecido, da canal onde o comando foi executado
 O comando funcionará mesmo em canais que o Folhinha não esteja presente
 • Exemplo: !mods - Exibe a lista de mods do canal atual

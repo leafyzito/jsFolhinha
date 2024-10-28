@@ -13,7 +13,7 @@ async function getModList(user) {
     let totalPartners = 0;
     let totalAffiliates = 0;
     let totalFollowers = 0;
-    
+
     data.data.roles.mods.list.forEach((item) => {
         if (item.roles.isPartner) {
             totalPartners++;
@@ -45,7 +45,7 @@ const modListCommand = async (client, message) => {
         client.log.logAndReply(message, `O usuário ${targetUser} não é moderador em nenhum canal`);
         return;
     }
-    
+
     client.log.logAndReply(message, `${targetUser} é moderador em ${userModList.totalMods} canais | ${userModList.totalPartners} Parceiros | ${userModList.totalAffiliates} Afiliados | ${userModList.totalFollowers} Seguidores no total - https://roles.tv/u/${targetUser.toLowerCase()}`);
 
 };
@@ -54,7 +54,7 @@ modListCommand.commandName = 'modlist';
 modListCommand.aliases = ['modlist', 'modslist', 'ml'];
 modListCommand.shortDescription = 'Mostra a lista de canais que algum usuário modera';
 modListCommand.cooldown = 5000;
-modListCommand.whisperable = true;
+modListCommand.whisperable = false;
 modListCommand.description = `Exibe uma lista de canais onde o usuário fornecido é moderador, quantos desses canais são parceiros, afiliados e a soma total de seguidores de todos os canais
 • Exemplo: !modlist - Exibe a lista de canais que o usuário que executou o comando é moderador
 • Exemplo: !modlist {usuário} - Exibe a lista de canais que o usuário fornecido é moderador`;

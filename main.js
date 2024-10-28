@@ -84,8 +84,17 @@ function onMessageHandler(message) {
 }
 
 function onWhisperHandler(message) {
-    // log whisper to discord
-    client.discord.logWhisperFrom(message);
+    message.commandPrefix = '!';
+    message.internalTimestamp = new Date().getTime();
+    message.serverTimestamp = new Date();
+    message.serverTimestampRaw = new Date().getTime();
+    message.channelName = "whisper";
+
+
+    commandHandler(client, message);
+    if (!message.messageText.startsWith('!')) {
+        client.discord.logWhisperFrom(message);
+    }
 }
 
 function onClearChatHandler(message) {

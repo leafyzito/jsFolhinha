@@ -6,11 +6,16 @@ function commandHandler(client, message) {
 
         const commandsList = client.commandsList;
         if (command in commandsList) {
-            commandsList[command](client, message)
-                .catch(err => {
-                    console.log(`Error in command in #${message.channelName}/${message.senderUsername} - ${command}: ${err}`);
-                    client.discord.logError(`Error in command #${message.channelName}/${message.senderUsername} - ${command}: ${err}`);
-                });
+            if (message.channelName != 'whisper' || (message.channelName == 'whisper' && commandsList[command].whisperable)) {
+                commandsList[command](client, message)
+                    .catch(err => {
+                        console.log(`Error in command in #${message.channelName}/${message.senderUsername} - ${command}: ${err}`);
+                        client.discord.logError(`Error in command #${message.channelName}/${message.senderUsername} - ${command}: ${err}`);
+                    });
+            } else if (message.channelName == 'whisper' && !commandsList[command].whisperable) {
+                message.command = commandsList[command].commandName;
+                client.log.logAndReply(message, `⚠️ Este comando não pode ser usado em whispers`);
+            }
         }
     }
 }

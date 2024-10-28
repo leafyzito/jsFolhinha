@@ -13,7 +13,7 @@ async function getVipList(user) {
     let totalPartners = 0;
     let totalAffiliates = 0;
     let totalFollowers = 0;
-    
+
     data.data.roles.vips.list.forEach((item) => {
         if (item.roles.isPartner) {
             totalPartners++;
@@ -45,7 +45,7 @@ const vipListCommand = async (client, message) => {
         client.log.logAndReply(message, `O usuário ${targetUser} não é moderador em nenhum canal`);
         return;
     }
-    
+
     client.log.logAndReply(message, `${targetUser} é VIP em ${userVipList.totalVips} canais | ${userVipList.totalPartners} Parceiros | ${userVipList.totalAffiliates} Afiliados | ${userVipList.totalFollowers} Seguidores no total - https://roles.tv/u/${targetUser.toLowerCase()}`);
 
 };
@@ -54,7 +54,7 @@ vipListCommand.commandName = 'viplist';
 vipListCommand.aliases = ['viplist', 'vl'];
 vipListCommand.shortDescription = 'Mostra a lista de canais que algum usuário é vip';
 vipListCommand.cooldown = 5000;
-vipListCommand.whisperable = true;
+vipListCommand.whisperable = false;
 vipListCommand.description = `Exibe uma lista de canais onde o usuário fornecido é vip, quantos desses canais são parceiros, afiliados e a soma total de seguidores de todos os canais
 • Exemplo: !viplist - Exibe a lista de canais que o usuário que executou o comando é moderador
 • Exemplo: !viplist {usuário} - Exibe a lista de canais que o usuário fornecido é moderador`;
