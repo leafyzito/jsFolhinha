@@ -105,6 +105,7 @@ async function modifyClient(client) {
             });
         });
 
+        client.joinedChannelsIds = channelIdsToJoin;
         const channelsToJoin = client.getManyUsersByUserIDs(channelIdsToJoin);
         // client.channelsToJoin = channelsToJoin; for sake of local testing
 
