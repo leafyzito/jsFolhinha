@@ -19,7 +19,7 @@ async function modifyClient(client) {
         const response = await fetch(api_url, { headers });
         const data = await response.json();
 
-        if (data.data.length === 0) { return null; }
+        if (!response.ok || data.data.length === 0) { return null; }
         return data.data[0].id;
     }
 
