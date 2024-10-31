@@ -162,8 +162,16 @@ let counterToRestart = 0;
 async function rejoinDisconnectedChannels(client) {
     const channelsToJoin = client.channelsToJoin;
     let rejoinedChannels = [];
+
+
     channelsToJoin.forEach(async (channel) => {
         if (![...client.joinedChannels].includes(channel)) {
+            console.log(`* Rejoining ${channel}`);
+            // client.discord.log(`* Rejoining ${channel}`);
+            rejoinedChannels.push(channel);
+            client.join(channel);
+        }
+        else {
             if ([...client.joinedChannels].length === 0) {
                 counterToRestart++;
                 if (counterToRestart >= 4) { // 2 minutes
@@ -172,12 +180,6 @@ async function rejoinDisconnectedChannels(client) {
                     exec('pm2 restart folhinhajs');
                 }
             }
-            console.log(`* Rejoining ${channel}`);
-            // client.discord.log(`* Rejoining ${channel}`);
-            rejoinedChannels.push(channel);
-            client.join(channel);
-        }
-        else {
             // console.log('all good ' + client.channelsToJoin);
         }
     });
