@@ -7,10 +7,14 @@ async function getAscii(defaultChannel, input) {
 
     // if inoput is a link and doens't end with .avif or .webp, add .webp
     if (input.includes('http') && !input.endsWith('.avif') && !input.endsWith('.webp')) {
-        // if it doesnt ends with / add it
+        if (input.includes('//7tv.app/emotes/')) {
+            input = input.replace('7tv.app/emotes/', 'cdn.7tv.app/emote/');
+        }
+
         if (!input.endsWith('/')) {
             input = input + '/';
         }
+
         input = input + '4x.webp';
     }
 
