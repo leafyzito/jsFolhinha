@@ -9,7 +9,7 @@ class MongoUtils {
         this.client = clientMongo;
         this.db = db;
         this.cache = new Map(); // Cache storage
-        this.cacheTimeout = 2 * 60 * 60 * 1000; // 2 hours cache
+        this.cacheTimeout = 24 * 60 * 60 * 1000; // 24 hours cache
     }
 
     getCacheKey(collectionName, query) {
