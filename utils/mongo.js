@@ -40,11 +40,9 @@ class MongoUtils {
     }
 
     async get(collectionName, query) {
-        const safeQuery = query || {};
-
         if (!this.inMemoryDb.has(collectionName)) {
             // get from db
-            const docs = await this.db.collection(collectionName).find(safeQuery).toArray();
+            const docs = await this.db.collection(collectionName).find(query).toArray();
             this.inMemoryDb.set(collectionName, new Map());
             for (const doc of docs) {
                 this.inMemoryDb.get(collectionName).set(doc._id, doc);
@@ -53,7 +51,7 @@ class MongoUtils {
 
         const collectionMap = this.inMemoryDb.get(collectionName);
         return Array.from(collectionMap.values()).filter(doc => {
-            return Object.entries(safeQuery).every(([key, value]) => doc[key] === value);
+            return Object.entries(query).every(([key, value]) => doc[key] === value);
         });
     }
 
@@ -95,17 +93,13 @@ class MongoUtils {
     }
 
     async count(collectionName, query) {
-        const safeQuery = query || {};
         if (!this.inMemoryDb.has(collectionName)) {
-            // get from db
-            const count = await this.db.collection(collectionName).countDocuments(safeQuery);
-            this.inMemoryDb.set(collectionName, new Map());
-            return count;
+            return 0;
         }
 
         const collectionMap = this.inMemoryDb.get(collectionName);
         return Array.from(collectionMap.values()).filter(doc => {
-            return Object.entries(safeQuery).every(([key, value]) => doc[key] === value);
+            return Object.entries(query).every(([key, value]) => doc[key] === value);
         }).length;
     }
 }
