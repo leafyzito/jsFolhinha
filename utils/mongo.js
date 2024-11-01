@@ -75,14 +75,26 @@ class MongoUtils {
         await this.client.connect();
         const collection = this.db.collection(collectionName);
         await collection.updateOne(query, update);
-        this.invalidateCache(collectionName);
+
+        // Get updated document and update cache
+        const updatedDoc = await collection.find(query).toArray();
+        const cacheKey = this.getCacheKey(collectionName, query);
+        if (updatedDoc.length > 0) {
+            this.setCache(cacheKey, updatedDoc);
+        }
     }
 
     async updateMany(collectionName, query, update) {
         await this.client.connect();
         const collection = this.db.collection(collectionName);
         await collection.updateMany(query, update);
-        this.invalidateCache(collectionName);
+
+        // Get updated documents and update cache
+        const updatedDocs = await collection.find(query).toArray();
+        const cacheKey = this.getCacheKey(collectionName, query);
+        if (updatedDocs.length > 0) {
+            this.setCache(cacheKey, updatedDocs);
+        }
     }
 
     async delete(collectionName, query) {
