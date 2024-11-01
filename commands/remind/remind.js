@@ -290,6 +290,26 @@ const remindCommand = async (client, message) => {
     // await client.reloadReminders();
     // add userid to client.usersWithPendingReminders
     client.usersWithPendingReminders.push(targetUserId);
+
+    // if it is a scheduled remind, add it to client.reminderJobs
+    const remindCreateTime = Math.floor(Date.now() / 1000);
+    if (remindAt) {
+        const job = schedule.scheduleJob(new Date(remindAt * 1000), async function () {
+            const reminderSender = await client.getUserByUserID(message.senderUserID) || 'Usuário deletado';
+            const reminderTime = timeSince(remindCreateTime);
+            let finalRes = reminderSender === targetUser
+                ? `@${targetUser}, lembrete de você mesmo há ${reminderTime}: ${remindMessage}`
+                : `@${targetUser}, lembrete de @${reminderSender} há ${reminderTime}: ${remindMessage}`;
+
+            if (finalRes.length > 480) { finalRes = await manageLongResponse(finalRes); }
+
+            await client.log.send(message.channelName, finalRes);
+            await client.db.update('remind', { _id: newRemindId }, { $set: { beenRead: true } });
+        });
+
+        client.reminderJobs[newRemindId] = job;
+    }
+
     client.notifiedUsers = client.notifiedUsers.filter(id => id !== targetUserId); // Remove user from notifiedUsers
     return;
 };
