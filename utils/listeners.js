@@ -67,7 +67,9 @@ const afkUserListener = async (client, message) => {
 
     client.log.send(message.channelName, `${message.senderUsername} ${afkReturned} ${afkEmoji} ${afkMessage ? `: ${afkMessage}` : ''} (afk por ${afkSince})`);
     await client.db.update('afk', { channel: message.channelName, user: message.senderUsername }, { $set: { is_afk: false, afk_return: Math.floor(Date.now() / 1000) } });
-    client.reloadAfkUsers();
+    // client.reloadAfkUsers();
+    // remove user from client.afkUsers
+    client.afkUsers[message.channelName] = client.afkUsers[message.channelName].filter(user => user !== message.senderUsername);
     processingAfk = processingAfk.filter(user => user !== message.senderUsername);
     return;
 }
@@ -107,7 +109,9 @@ const reminderListener = async (client, message) => {
         for (const reminder of firstThreeReminders) {
             await client.db.update('remind', { _id: reminder._id }, { $set: { beenRead: true } });
         }
-        client.reloadReminders();
+        // client.reloadReminders();
+        // remove userid from client.usersWithPendingReminders
+        client.usersWithPendingReminders = client.usersWithPendingReminders.filter(id => id !== message.senderUserID);
         processingReminder = processingReminder.filter(user => user !== message.senderUsername);
         return;
     }

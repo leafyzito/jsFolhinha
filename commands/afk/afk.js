@@ -53,7 +53,12 @@ const afkCommand = async (client, message) => {
                 rafk_counter: 0
             }
         });
-    client.reloadAfkUsers();
+    // client.reloadAfkUsers();
+    // add user to client.afkUsers
+    if (!client.afkUsers[message.channelName]) {
+        client.afkUsers[message.channelName] = [];
+    }
+    client.afkUsers[message.channelName].push(message.senderUsername);
     return;
 };
 
@@ -90,7 +95,12 @@ const rafkCommand = async (client, message) => {
 
     client.log.logAndReply(message, `${message.senderUsername} voltou ${afkAction} ${afkEmoji} ${afkStats.afk_message ? `: ${afkStats.afk_message}` : ''}`);
     await client.db.update('afk', { channel: message.channelName, user: message.senderUsername }, { $set: { is_afk: true, rafk_counter: afkStats.rafk_counter + 1 } });
-    client.reloadAfkUsers();
+    // client.reloadAfkUsers();
+    // add user to client.afkUsers
+    if (!client.afkUsers[message.channelName]) {
+        client.afkUsers[message.channelName] = [];
+    }
+    client.afkUsers[message.channelName].push(message.senderUsername);
     return;
 };
 
