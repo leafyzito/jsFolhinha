@@ -11,9 +11,11 @@
   "license": "ISC",
   "dependencies": {
     "@kararty/dank-twitch-irc": "^6.2.0",
+    "@libsql/client": "^0.14.0",
     "discord.js": "^14.15.3",
     "dotenv": "^16.4.5",
     "google-translate-api-browser": "^5.0.0",
+    "lru-cache": "^11.0.2",
     "mongodb": "6.8",
     "node-cron": "^3.0.3",
     "node-schedule": "^2.1.1",
