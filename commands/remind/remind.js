@@ -58,7 +58,9 @@ const remindCommand = async (client, message) => {
         const emote = await client.emotes.getEmoteFromList(message.channelName, ['joia', 'jumilhao'], '👍');
         client.log.logAndReply(message, `Lembrete apagado ${emote}`);
         await client.db.update('remind', { _id: parseInt(reminderId) }, { $set: { beenRead: true } });
-        await client.reloadReminders();
+        // await client.reloadReminders();
+        // remove userid from client.usersWithPendingReminders
+        client.usersWithPendingReminders = client.usersWithPendingReminders.filter(id => id !== remindInfo.receiverId);
 
         // cancel the cron job
         if (client.reminderJobs[reminderId]) {
@@ -109,7 +111,9 @@ const remindCommand = async (client, message) => {
             pendingReminders = await createNewGist(pendingReminders);
             client.log.logAndReply(message, `Para ver todos os seus lembretes, acesse: ${pendingReminders}`);
             await client.db.updateMany('remind', { receiverId: message.senderUserID }, { $set: { beenRead: true } });
-            await client.reloadReminders();
+            // await client.reloadReminders();
+            // remove userid from client.usersWithPendingReminders
+            client.usersWithPendingReminders = client.usersWithPendingReminders.filter(id => id !== message.senderUserID);
             return;
         }
 
@@ -136,7 +140,9 @@ const remindCommand = async (client, message) => {
 
         client.log.logAndReply(message, finalRes);
         await client.db.update('remind', { _id: parseInt(reminderId) }, { $set: { beenRead: true } });
-        await client.reloadReminders();
+        // await client.reloadReminders();
+        // remove userid from client.usersWithPendingReminders
+        client.usersWithPendingReminders = client.usersWithPendingReminders.filter(id => id !== message.senderUserID);
         return;
     }
 
@@ -281,7 +287,9 @@ const remindCommand = async (client, message) => {
 
     const emote = await client.emotes.getEmoteFromList(message.channelName, ['noted'], '📝');
     client.log.logAndReply(message, `Vou lembrar ${targetUser !== message.senderUsername ? `@${targetUser}` : 'você'} disso ${totalSeconds ? `em ${days ? `${days} ` : ''}${hours ? `${hours} ` : ''}${minutes ? `${minutes} ` : ''}${seconds ? `${seconds} ` : ''}` : 'assim que falar no chat'} ${emote} (ID ${newRemindId})`);
-    await client.reloadReminders();
+    // await client.reloadReminders();
+    // add userid to client.usersWithPendingReminders
+    client.usersWithPendingReminders.push(targetUserId);
     client.notifiedUsers = client.notifiedUsers.filter(id => id !== targetUserId); // Remove user from notifiedUsers
     return;
 };
