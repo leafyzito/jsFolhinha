@@ -8,37 +8,21 @@ class MongoUtils {
     constructor() {
         this.client = clientMongo;
         this.db = db;
-        this.cache = new Map(); // Cache storage
-        this.cacheTimeout = 24 * 60 * 60 * 1000; // 24 hours cache
+        this.inMemoryDb = new Map(); // In-memory database storage
+        this.initializeInMemoryDb();
     }
 
-    getCacheKey(collectionName, query) {
-        return `${collectionName}-${JSON.stringify(query)}`;
-    }
+    async initializeInMemoryDb() {
+        await this.client.connect();
+        const collections = await this.db.listCollections().toArray();
 
-    setCache(key, data) {
-        this.cache.set(key, {
-            data,
-            timestamp: Date.now()
-        });
-    }
+        for (const collection of collections) {
+            const collectionName = collection.name;
+            const documents = await this.db.collection(collectionName).find({}).toArray();
+            this.inMemoryDb.set(collectionName, new Map());
 
-    getCache(key) {
-        const cached = this.cache.get(key);
-        if (!cached) return null;
-
-        if (Date.now() - cached.timestamp > this.cacheTimeout) {
-            this.cache.delete(key);
-            return null;
-        }
-
-        return cached.data;
-    }
-
-    invalidateCache(collectionName) {
-        for (const key of this.cache.keys()) {
-            if (key.startsWith(collectionName)) {
-                this.cache.delete(key);
+            for (const doc of documents) {
+                this.inMemoryDb.get(collectionName).set(doc._id, doc);
             }
         }
     }
@@ -46,29 +30,29 @@ class MongoUtils {
     async insert(collectionName, data) {
         await this.client.connect();
         const collection = this.db.collection(collectionName);
-        await collection.insertOne(data);
-        this.invalidateCache(collectionName);
+        const result = await collection.insertOne(data);
+
+        // Update in-memory db
+        if (!this.inMemoryDb.has(collectionName)) {
+            this.inMemoryDb.set(collectionName, new Map());
+        }
+        this.inMemoryDb.get(collectionName).set(data._id, data);
     }
 
     async get(collectionName, query) {
-        const cacheKey = this.getCacheKey(collectionName, query);
-        const cached = this.getCache(cacheKey);
-        if (cached) return cached;
-
-        await this.client.connect();
-        const collection = this.db.collection(collectionName);
-        const result = await collection.find(query).toArray().then((result, err) => {
-            if (err) {
-                console.log(err);
-                return;
+        if (!this.inMemoryDb.has(collectionName)) {
+            // get from db
+            const docs = await this.db.collection(collectionName).find(query).toArray();
+            this.inMemoryDb.set(collectionName, new Map());
+            for (const doc of docs) {
+                this.inMemoryDb.get(collectionName).set(doc._id, doc);
             }
-            return result;
-        });
-
-        if (result) {
-            this.setCache(cacheKey, result);
         }
-        return result;
+
+        const collectionMap = this.inMemoryDb.get(collectionName);
+        return Array.from(collectionMap.values()).filter(doc => {
+            return Object.entries(query).every(([key, value]) => doc[key] === value);
+        });
     }
 
     async update(collectionName, query, update) {
@@ -76,11 +60,11 @@ class MongoUtils {
         const collection = this.db.collection(collectionName);
         await collection.updateOne(query, update);
 
-        // Get updated document and update cache
-        const updatedDoc = await collection.find(query).toArray();
-        const cacheKey = this.getCacheKey(collectionName, query);
-        if (updatedDoc.length > 0) {
-            this.setCache(cacheKey, updatedDoc);
+        // Update in-memory db
+        const docs = await collection.find(query).toArray();
+        if (docs.length > 0) {
+            const doc = docs[0];
+            this.inMemoryDb.get(collectionName).set(doc._id, doc);
         }
     }
 
@@ -89,32 +73,34 @@ class MongoUtils {
         const collection = this.db.collection(collectionName);
         await collection.updateMany(query, update);
 
-        // Get updated documents and update cache
-        const updatedDocs = await collection.find(query).toArray();
-        const cacheKey = this.getCacheKey(collectionName, query);
-        if (updatedDocs.length > 0) {
-            this.setCache(cacheKey, updatedDocs);
+        // Update in-memory db
+        const docs = await collection.find(query).toArray();
+        for (const doc of docs) {
+            this.inMemoryDb.get(collectionName).set(doc._id, doc);
         }
     }
 
     async delete(collectionName, query) {
         await this.client.connect();
         const collection = this.db.collection(collectionName);
+        const docToDelete = await collection.findOne(query);
         await collection.deleteOne(query);
-        this.invalidateCache(collectionName);
+
+        // Update in-memory db
+        if (docToDelete) {
+            this.inMemoryDb.get(collectionName).delete(docToDelete._id);
+        }
     }
 
     async count(collectionName, query) {
-        const cacheKey = this.getCacheKey(collectionName + '-count', query);
-        const cached = this.getCache(cacheKey);
-        if (cached !== null) return cached;
+        if (!this.inMemoryDb.has(collectionName)) {
+            return 0;
+        }
 
-        await this.client.connect();
-        const collection = this.db.collection(collectionName);
-        const count = await collection.countDocuments(query);
-
-        this.setCache(cacheKey, count);
-        return count;
+        const collectionMap = this.inMemoryDb.get(collectionName);
+        return Array.from(collectionMap.values()).filter(doc => {
+            return Object.entries(query).every(([key, value]) => doc[key] === value);
+        }).length;
     }
 }
 
