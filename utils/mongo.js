@@ -4,23 +4,60 @@ const mongoUri = process.env.MONGO_URI;
 const clientMongo = new MongoClient(mongoUri);
 const db = clientMongo.db("folhinha");
 
-// create class with diverse commands like get, insert, update, delete
 class MongoUtils {
     constructor() {
         this.client = clientMongo;
         this.db = db;
+        this.cache = new Map(); // Cache storage
+        this.cacheTimeout = 2 * 60 * 60 * 1000; // 2 hours cache
+    }
+
+    getCacheKey(collectionName, query) {
+        return `${collectionName}-${JSON.stringify(query)}`;
+    }
+
+    setCache(key, data) {
+        this.cache.set(key, {
+            data,
+            timestamp: Date.now()
+        });
+    }
+
+    getCache(key) {
+        const cached = this.cache.get(key);
+        if (!cached) return null;
+
+        if (Date.now() - cached.timestamp > this.cacheTimeout) {
+            this.cache.delete(key);
+            return null;
+        }
+
+        return cached.data;
+    }
+
+    invalidateCache(collectionName) {
+        for (const key of this.cache.keys()) {
+            if (key.startsWith(collectionName)) {
+                this.cache.delete(key);
+            }
+        }
     }
 
     async insert(collectionName, data) {
         await this.client.connect();
         const collection = this.db.collection(collectionName);
         await collection.insertOne(data);
+        this.invalidateCache(collectionName);
     }
 
     async get(collectionName, query) {
+        const cacheKey = this.getCacheKey(collectionName, query);
+        const cached = this.getCache(cacheKey);
+        if (cached) return cached;
+
         await this.client.connect();
         const collection = this.db.collection(collectionName);
-        return await collection.find(query).toArray().then((result, err) => {
+        const result = await collection.find(query).toArray().then((result, err) => {
             if (err) {
                 console.log(err);
                 return;
@@ -28,30 +65,44 @@ class MongoUtils {
             return result;
         });
 
+        if (result) {
+            this.setCache(cacheKey, result);
+        }
+        return result;
     }
 
     async update(collectionName, query, update) {
         await this.client.connect();
         const collection = this.db.collection(collectionName);
         await collection.updateOne(query, update);
+        this.invalidateCache(collectionName);
     }
 
     async updateMany(collectionName, query, update) {
         await this.client.connect();
         const collection = this.db.collection(collectionName);
         await collection.updateMany(query, update);
+        this.invalidateCache(collectionName);
     }
 
     async delete(collectionName, query) {
         await this.client.connect();
         const collection = this.db.collection(collectionName);
         await collection.deleteOne(query);
+        this.invalidateCache(collectionName);
     }
 
     async count(collectionName, query) {
+        const cacheKey = this.getCacheKey(collectionName + '-count', query);
+        const cached = this.getCache(cacheKey);
+        if (cached !== null) return cached;
+
         await this.client.connect();
         const collection = this.db.collection(collectionName);
-        return await collection.countDocuments(query);
+        const count = await collection.countDocuments(query);
+
+        this.setCache(cacheKey, count);
+        return count;
     }
 }
 

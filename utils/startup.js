@@ -10,16 +10,34 @@ const { timeSince, manageLongResponse } = require('./utils.js');
 
 async function modifyClient(client) {
     client.ready = false;
+    client.userIdCache = new Map(); // Cache for user IDs
+    client.userIdCacheTimeout = 24 * 60 * 60 * 1000; // 24 hour cache timeout
+
     client.getUserID = async function (username) {
-        // Construct API URL
+        // Check cache first
+        const cached = client.userIdCache.get(username);
+        if (cached) {
+            if (Date.now() - cached.timestamp < client.userIdCacheTimeout) {
+                return cached.id;
+            }
+            // Cache expired, remove it
+            client.userIdCache.delete(username);
+        }
+
+        // Not in cache, make API request
         const api_url = `https://api.twitch.tv/helix/users?login=${username}`;
-        // Set headers with API credentials
         const headers = { "Client-ID": process.env.BOT_CLIENT_ID, "Authorization": `Bearer ${process.env.BOT_OAUTH_TOKEN}` };
-        // Make API request to fetch clips
         const response = await fetch(api_url, { headers });
         const data = await response.json();
 
         if (!response.ok || data.data.length === 0) { return null; }
+
+        // Cache the result
+        client.userIdCache.set(username, {
+            id: data.data[0].id,
+            timestamp: Date.now()
+        });
+
         return data.data[0].id;
     }
 
