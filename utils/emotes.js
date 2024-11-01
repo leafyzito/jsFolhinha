@@ -41,7 +41,7 @@ class Emotes {
                 return bttvEmotes;
             }
 
-            return data.channelEmotes.map(emote => emote.code);
+            return [...data.channelEmotes, ...data.sharedEmotes].map(emote => emote.code);
         }
         catch (err) {
             console.log(`* Error fetching bttv emotes for ${channelId}: ${err}`);
