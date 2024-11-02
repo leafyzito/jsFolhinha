@@ -61,29 +61,31 @@ class MongoUtils {
         });
     }
 
-    async get(collectionName, query) {
+    async get(collectionName, query, forceDb = false) {
         const cache = this.getCollectionCache(collectionName);
 
-        // Search cache for matching documents
-        const matches = [];
-        for (const [_, doc] of cache.entries()) {
-            let isMatch = true;
-            for (const [key, value] of Object.entries(query)) {
-                if (doc[key] !== value) {
-                    isMatch = false;
-                    break;
+        if (!forceDb) {
+            // Search cache for matching documents
+            const matches = [];
+            for (const [_, doc] of cache.entries()) {
+                let isMatch = true;
+                for (const [key, value] of Object.entries(query)) {
+                    if (doc[key] !== value) {
+                        isMatch = false;
+                        break;
+                    }
+                }
+                if (isMatch) {
+                    matches.push(doc);
                 }
             }
-            if (isMatch) {
-                matches.push(doc);
+
+            if (matches.length > 0) {
+                return matches;
             }
         }
 
-        if (matches.length > 0) {
-            return matches;
-        }
-
-        // If not in cache, fetch from DB and update cache
+        // If not in cache or forceDb=true, fetch from DB and update cache
         await this.client.connect();
         const collection = this.db.collection(collectionName);
         const results = await collection.find(query).toArray();

@@ -113,7 +113,7 @@ async function petAttencionTask(client) {
 }
 
 async function fetchPendingJoins(client) {
-    const pendingJoins = await client.db.get('pendingjoin', { status: 'pending' });
+    const pendingJoins = await client.db.get('pendingjoin', { status: 'pending' }, true);
     for (const channelToJoin of pendingJoins) {
         const userid = channelToJoin.userid;
         const username = await client.getUserByUserID(userid);
