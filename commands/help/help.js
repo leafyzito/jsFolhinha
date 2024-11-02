@@ -45,19 +45,19 @@ const statsCommand = async (client, message) => {
     client.log.logAndReply(message, `Uptime: ${uptime} | Canais: ${channelsCount} | RAM: ${Math.round(usedRam * 100) / 100}mb`);
 }
 
-const botStatsCommand = async (client, message) => {
-    message.command = 'botstats';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+// const botStatsCommand = async (client, message) => {
+//     message.command = 'botstats';
+//     if (!await processCommand(5000, 'channel', message, client)) return;
 
-    const currentDate = new Date();
-    const oneDayBefore = new Date(currentDate.getTime() - (24 * 60 * 60 * 1000));
-    const oneHourBefore = new Date(currentDate.getTime() - (60 * 60 * 1000));
+//     const currentDate = new Date();
+//     const oneDayBefore = new Date(currentDate.getTime() - (24 * 60 * 60 * 1000));
+//     const oneHourBefore = new Date(currentDate.getTime() - (60 * 60 * 1000));
 
-    const dayBeforeCommandsCount = await client.db.count('commandlog', { sentDate: { $gte: oneDayBefore } });
-    const hourBeforeCommandsCount = await client.db.count('commandlog', { sentDate: { $gte: oneHourBefore } });
+//     const dayBeforeCommandsCount = await client.db.count('commandlog', { sentDate: { $gte: oneDayBefore } });
+//     const hourBeforeCommandsCount = await client.db.count('commandlog', { sentDate: { $gte: oneHourBefore } });
 
-    client.log.logAndReply(message, `Comandos nas últimas 24h/1h: ${dayBeforeCommandsCount}/${hourBeforeCommandsCount} - https://shlink.mrchuw.com.br/jErVU`);
-};
+//     client.log.logAndReply(message, `Comandos nas últimas 24h/1h: ${dayBeforeCommandsCount}/${hourBeforeCommandsCount} - https://shlink.mrchuw.com.br/jErVU`);
+// };
 
 
 comandosCommand.commandName = 'comandos';
@@ -84,24 +84,24 @@ statsCommand.whisperable = true;
 statsCommand.description = 'Exibe algumas informações sobre o bot, como uptime, quantidade de canais ativos e RAM utilizada';
 statsCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/help/help.js`;
 
-botStatsCommand.commandName = 'botstats';
-botStatsCommand.aliases = ['botstats', 'bstats'];
-botStatsCommand.shortDescription = 'Mostra algumas informações extra sobre o bot';
-botStatsCommand.cooldown = 5000;
-botStatsCommand.whisperable = true;
-botStatsCommand.description = `Exibe algumas estatísticas extra sobre o bot, incluindo ranking de cookies em uma tabela
-Estatísticas que podem ser encontradas:
-• Total de mensagens
-• Total de comandos executados
-• Total de usuários vistos pelo bot
-• Total de mensagens por usuário
-• Total de canais com o Folhinha.
-• Gráfico com número de uso para cada comando`;
-botStatsCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/help/help.js`;
+// botStatsCommand.commandName = 'botstats';
+// botStatsCommand.aliases = ['botstats', 'bstats'];
+// botStatsCommand.shortDescription = 'Mostra algumas informações extra sobre o bot';
+// botStatsCommand.cooldown = 5000;
+// botStatsCommand.whisperable = true;
+// botStatsCommand.description = `Exibe algumas estatísticas extra sobre o bot, incluindo ranking de cookies em uma tabela
+// Estatísticas que podem ser encontradas:
+// • Total de mensagens
+// • Total de comandos executados
+// • Total de usuários vistos pelo bot
+// • Total de mensagens por usuário
+// • Total de canais com o Folhinha.
+// • Gráfico com número de uso para cada comando`;
+// botStatsCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/help/help.js`;
 
 module.exports = {
     comandosCommand,
     helpCommand,
     statsCommand,
-    botStatsCommand
+    // botStatsCommand
 };
