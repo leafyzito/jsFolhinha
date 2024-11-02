@@ -22,14 +22,14 @@ function getFormattedRemainingTime(seconds) {
 }
 
 async function getMeiaUm() {
-    const api_url = "https://subathon.sekva.lol/";
+    const api_url = "https://subathon-api.justdavi.dev/api/time-left";
     const response = await fetch(api_url);
     if (!response.ok) {
         return null;
     };
 
     const data = await response.json();
-    const msTimeLeft = data.time_left_ms;
+    const msTimeLeft = data.timeLeft;
     return getFormattedRemainingTime(msTimeLeft);
 }
 
@@ -49,7 +49,7 @@ const meiaUmCommand = async (client, message) => {
 };
 
 meiaUmCommand.commandName = 'meiaum';
-meiaUmCommand.aliases = ['meiaum', 'meiaumtimer'];
+meiaUmCommand.aliases = ['omeiaum', 'meiaum', 'meiaumtimer'];
 meiaUmCommand.shortDescription = 'Veja quanto tempo de live o meiaum ainda tem pela frente';
 meiaUmCommand.cooldown = 5000;
 meiaUmCommand.whisperable = true;
