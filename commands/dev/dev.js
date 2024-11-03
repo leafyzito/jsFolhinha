@@ -466,7 +466,7 @@ const giveXpCommand = async (client, message) => {
 
     const targetUser = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase();
     if (!targetUser) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix} givexp < usuário > <xp>`);
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}givexp <usuário> <xp>`);
         return;
     }
     const targetUserId = await client.getUserID(targetUser);
@@ -482,7 +482,8 @@ const giveXpCommand = async (client, message) => {
     }
 
     await client.db.update('dungeon', { userId: targetUserId }, { $inc: { xp: parseInt(xp) } });
-    client.log.logAndReply(message, `🤖 ${targetUser} recebeu ${xp} XP`);
+    const newXp = await client.db.get('dungeon', { userId: targetUserId });
+    client.log.logAndReply(message, `🤖 ${targetUser} XP modificado: [${xp.includes('-') ? `${xp}` : `+${xp}`} ⇒ ${newXp[0].xp}]`);
     return;
 }
 
