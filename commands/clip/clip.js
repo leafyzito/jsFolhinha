@@ -41,7 +41,7 @@ const clipCommand = async (client, message) => {
         return;
     }
     else if (clip === 'forbidden') {
-        client.log.logAndReply(message, `Esse canal não permite criar clipes durante a live`);
+        client.log.logAndReply(message, `Esse canal não permite criar clipes`);
         return;
     }
     client.log.logAndReply(message, `🎬 https://clips.twitch.tv/${clip.id}`)
