@@ -99,8 +99,13 @@ class MongoUtils {
 
     async update(collectionName, query, update) {
         // Get current document from cache or DB
-        const currentDoc = await this.get(collectionName, query);
-        if (!currentDoc || currentDoc.length === 0) return;
+        let currentDoc = await this.get(collectionName, query);
+        if (!currentDoc || currentDoc.length === 0) {
+            // if not in cache, fetch from DB
+            await this.client.connect();
+            const collection = this.db.collection(collectionName);
+            currentDoc = await collection.findOne(query);
+        }
 
         // Calculate updated document
         const doc = currentDoc[0];
