@@ -27,8 +27,11 @@ class MongoUtils {
             await this.client.connect();
             const collections = await this.db.listCollections().toArray();
 
+            const collectionsToIgnore = ['commandlog']; // for ram's sake
+
             for (const collection of collections) {
                 const collectionName = collection.name;
+                if (collectionsToIgnore.includes(collectionName)) continue;
                 const cache = new LRUCache(this.cacheOptions);
 
                 // Load all documents from collection
