@@ -19,10 +19,10 @@ class MongoUtils {
         };
 
         // Load initial data
-        this.initializeCache();
+        this.loadDbCache();
     }
 
-    async initializeCache() {
+    async loadDbCache() {
         try {
             await this.client.connect();
             const collections = await this.db.listCollections().toArray();
