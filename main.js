@@ -90,8 +90,9 @@ function onWhisperHandler(message) {
     message.serverTimestampRaw = new Date().getTime();
     message.channelName = "whisper";
 
-
-    commandHandler(client, message);
+    if (process.env.ENV == 'prod') {
+        commandHandler(client, message);
+    }
     if (!message.messageText.startsWith('!')) {
         client.discord.logWhisperFrom(message);
     }
