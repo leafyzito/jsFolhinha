@@ -55,6 +55,9 @@ async function petAttencionTask(client) {
         // if not connected to channel, skip (for the case the bot leaves the channel)
         if (![...client.joinedChannels].includes(channel)) { continue; }
 
+        // add 2 seconds pause to avoid timeouts
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
         const lastInteraction = pet.last_interaction;
         const warns = pet.warns;
         const currentTime = Math.floor(Date.now() / 1000);
