@@ -50,18 +50,17 @@ class MongoUtils {
     }
 
     async insert(collectionName, data) {
-        // Update cache immediately
-        const cache = this.getCollectionCache(collectionName);
-        cache.set(JSON.stringify(data._id), data);
+        // Insert into DB first to get _id
+        await this.client.connect();
+        const collection = this.db.collection(collectionName);
+        const result = await collection.insertOne(data);
 
-        // Update DB asynchronously
-        this.client.connect().then(() => {
-            const collection = this.db.collection(collectionName);
-            collection.insertOne(data).catch(err => {
-                console.error('Failed to insert into DB:', err);
-                cache.delete(JSON.stringify(data._id)); // Rollback cache on error
-            });
-        });
+        // Add _id to data object
+        const dataWithId = { ...data, _id: result.insertedId };
+
+        // Update cache with document containing _id
+        const cache = this.getCollectionCache(collectionName);
+        cache.set(JSON.stringify(result.insertedId), dataWithId);
     }
 
     async get(collectionName, query, forceDb = false) {
