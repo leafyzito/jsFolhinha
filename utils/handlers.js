@@ -11,6 +11,7 @@ function commandHandler(client, message) {
                     .catch(err => {
                         console.log(`Error in command in #${message.channelName}/${message.senderUsername} - ${command}: ${err}`);
                         client.discord.logError(`Error in command #${message.channelName}/${message.senderUsername} - ${command}: ${err}`);
+                        client.log.logAndReply(message, `⚠️ Ocorreu um erro ao executar o comando, tente novamente`);
                     });
             } else if (message.channelName == 'whisper' && !commandsList[command].whisperable) {
                 message.command = commandsList[command].aliases[0];
