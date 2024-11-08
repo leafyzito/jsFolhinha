@@ -14,6 +14,7 @@ async function modifyClient(client) {
     client.userIdCacheTimeout = 24 * 60 * 60 * 1000; // 24 hour cache timeout
 
     client.getUserID = async function (username) {
+        username = username.toLowerCase();
         // Check cache first
         const cached = client.userIdCache.get(username);
         if (cached) {
