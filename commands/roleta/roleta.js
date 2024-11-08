@@ -3,7 +3,7 @@ const { randomInt } = require("../../utils/utils.js");
 
 const roletaCommand = async (client, message) => {
     message.command = 'roleta';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!await processCommand(15_000, 'channel', message, client)) return;
 
     if (message.senderUsername === message.channelName) {
         client.log.logAndReply(message, `Você é o streamer, então não consegue jogar a roleta russa`);
