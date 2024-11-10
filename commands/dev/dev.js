@@ -5,7 +5,7 @@ const { shortenUrl, manageLongResponse } = require('../../utils/utils.js');
 async function createNewChannelConfig(client, user) {
     const newConfig = {
         channel: user,
-        channelId: client.getUserID(user),
+        channelId: await client.getUserID(user),
         prefix: '!',
         offlineOnly: false,
         isPaused: false,
