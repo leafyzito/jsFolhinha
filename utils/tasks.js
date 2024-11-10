@@ -164,8 +164,8 @@ async function fetchPendingJoins(client) {
 let counterToRestart = 0;
 async function rejoinDisconnectedChannels(client) {
     const channelsToJoin = client.channelsToJoin;
+    if (channelsToJoin.length === 0) { return; } // to avoid errors
     let rejoinedChannels = [];
-
 
     channelsToJoin.forEach(async (channel) => {
         if (![...client.joinedChannels].includes(channel)) {
