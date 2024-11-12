@@ -1,5 +1,40 @@
 const { processCommand } = require("../../utils/processCommand.js");
-const { shortenUrl } = require("../../utils/utils.js");
+const fetch = require('node-fetch');
+const FormData = require('form-data');
+
+async function uploadToFeridinha(content) {
+    const api_url = 'https://feridinha.com/upload';
+    const headers = { 'token': process.env.FERIDINHA_API_KEY };
+
+    const form = new FormData();
+    form.append('file', content, 'image.jpg');
+
+    const response = await fetch(api_url, {
+        method: 'POST',
+        headers: { 'token': headers.token, ...form.getHeaders() }, // Include FormData headers
+        body: form
+    });
+
+    if (response.ok) { // Check if status is 200-299
+        const resData = await response.json();
+
+        if (resData.success) {
+            return resData.message;
+        }
+
+        console.log(`Failed to upload to feridinha. resData: ${JSON.stringify(resData)}`);
+        return null;
+    } else {
+        console.log(`Error: ${response.status} ${response.statusText}`);
+        return null;
+    }
+}
+
+async function getImage(url) {
+    const response = await fetch(url);
+    const imageData = await response.buffer();
+    return await uploadToFeridinha(imageData);
+}
 
 async function getPreview(previewTarget) {
     const api_url = `https://api.twitch.tv/helix/streams?user_login=${previewTarget}`;
@@ -18,7 +53,7 @@ async function getPreview(previewTarget) {
     const thumbPreviewRaw = data.data[0].thumbnail_url;
     const thumbPreview = thumbPreviewRaw.replace("{width}x{height}", "1280x720");
 
-    return await shortenUrl(thumbPreview);
+    return await getImage(thumbPreview);
 }
 
 const previewCommand = async (client, message) => {
