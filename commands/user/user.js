@@ -35,7 +35,7 @@ const userCommand = async (client, message) => {
         return;
     }
 
-    client.log.logAndReply(message, `${userInfo.isBanned ? `🚫 Banido: ${userInfo.banReason} || ` : ''}  @${userInfo.displayName} || ID: ${userInfo.userId} || Cor: ${userInfo.chatColor} || Badge: ${userInfo.badge} || Chatters: ${userInfo.chatterCount} || Seguidores: ${userInfo.followers} || Criado há ${userInfo.howLongAgo} (${userInfo.createdAt}) ${userInfo.isLive ? '|| 🔴 Em live agora' : ''}`);
+    client.log.logAndReply(message, `${userInfo.isBanned ? `🚫 Banido: ${userInfo.banReason} • ` : ''}  @${userInfo.displayName} • ID: ${userInfo.userId} • Cor: ${userInfo.chatColor} • Badge: ${userInfo.badge} • Chatters: ${userInfo.chatterCount} • Seguidores: ${userInfo.followers} • Criado há ${userInfo.howLongAgo} (${userInfo.createdAt}) ${userInfo.isLive ? '• 🔴 Em live agora' : ''}`);
     return;
 };
 
