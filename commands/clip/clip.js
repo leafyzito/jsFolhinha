@@ -53,7 +53,7 @@ async function makeClip(channelName) {
         // Resolve the path to the "clips" folder inside "twitchClipper"
         const clipsFolder = path.resolve(__dirname, '..', '..', '..', '..', 'twitchClipper', 'clips');
         var clipPath = path.join(clipsFolder, data.path);
-
+        console.log(clipPath);
         // upload clip to feridinha
         const clipName = path.basename(clipPath);
         const clipContent = fs.readFileSync(clipPath);
