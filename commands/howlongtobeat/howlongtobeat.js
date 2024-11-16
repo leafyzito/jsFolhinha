@@ -6,7 +6,7 @@ var HLTB_ENDPOINT_HASH_KEY = "hltb-endpoint-hash";
 
 const FILE_PREFIX = "_next/static/chunks/pages";
 const FILE_HASH_REGEX = /static\/chunks\/pages\/(_app-\w+?\.js)/;
-const ENDPOINT_HASH_REGEX = /\/api\/search\/".concat\("(\w+)"\)/;
+const ENDPOINT_HASH_REGEX = /\/api\/search\/".concat\("(\w+)"\)\s*(.concat\("(\w+)"\))?/;
 
 async function fetchFileHash() {
     const headers = { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36" };
@@ -38,7 +38,7 @@ async function fetchEndpointHash(fileHash) {
 
     HLTB_ENDPOINT_HASH_KEY = match[1];
 
-    return match[1];
+    return (match[3]) ? `${match[1]}${match[3]}` : match[1];
 }
 
 async function hltbSearch(query) {
