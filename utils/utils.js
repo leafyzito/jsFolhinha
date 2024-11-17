@@ -80,7 +80,7 @@ async function createNewGist(content) {
     return null;
 }
 
-async function manageLongResponse(content) {
+async function manageLongResponse(content, sendOnlyLink = false) {
     const gist = await createNewGist(content);
     const lenOfGist = gist.length;
     const maxContentLength = 480 - lenOfGist - 10;
@@ -89,7 +89,7 @@ async function manageLongResponse(content) {
     const response = `${truncatedContent}... ${gist}`;
     console.log(gist);
 
-    return response;
+    return sendOnlyLink ? gist : response;
 }
 
 const timeSince = (lsDate) => {
