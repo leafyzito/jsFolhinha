@@ -26,8 +26,8 @@ class TursoUtils {
         // rawBadges VARCHAR(255)
 
         this.client.execute({
-            sql: `INSERT INTO messagelog (user, userid, channel, channelid, isStreamer, isMod, isVip, isFirstMsg, content, date, rawBadges) 
-                                VALUES (:user, :userid, :channel, :channelid, :isStreamer, :isMod, :isVip, :isFirstMsg, :content, :date, :rawBadges)`,
+            sql: `INSERT INTO messagelog (user, userid, channel, channelid, isStreamer, isMod, isVip, isFirstMsg, content, date, rawBadges, messageid) 
+                                VALUES (:user, :userid, :channel, :channelid, :isStreamer, :isMod, :isVip, :isFirstMsg, :content, :date, :rawBadges, :messageid)`,
             args: {
                 user: message.senderUsername, // string
                 userid: message.senderUserID, // string
@@ -39,7 +39,8 @@ class TursoUtils {
                 isFirstMsg: message.isFirstMsg, // boolean
                 content: message.messageText, // string
                 date: message.serverTimestampRaw, // date
-                rawBadges: message.badgesRaw // string
+                rawBadges: message.badgesRaw, // string
+                messageid: message.messageID // string
             }
         }).catch((error) => {
             console.log('Error on logMessage:', error);
