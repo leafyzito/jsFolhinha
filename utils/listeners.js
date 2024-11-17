@@ -199,7 +199,7 @@ const updateUserListener = async (client, message) => {
 
 const notifyDevMentionListener = async (client, message) => {
     const possibleDevMentions = process.env.DEV_POSSIBLE_MENTIONS.split(',');
-    if (possibleDevMentions.some(mention => message.messageText.toLowerCase() === mention.toLowerCase())) {
+    if (message.messageText.toLowerCase().split(' ').some(word => possibleDevMentions.some(mention => word === mention.toLowerCase()))) {
         client.discord.notifyDevMention(message);
     }
 }
