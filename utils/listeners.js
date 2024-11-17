@@ -197,10 +197,18 @@ const updateUserListener = async (client, message) => {
     client.knownUserAliases.push(message.senderUsername);
 }
 
+const notifyDevMentionListener = async (client, message) => {
+    const possibleDevMentions = process.env.DEV_POSSIBLE_MENTIONS.split(',');
+    if (possibleDevMentions.some(mention => message.messageText.toLowerCase().includes(mention.toLowerCase()))) {
+        client.discord.notifyDevMention(message);
+    }
+}
+
 
 module.exports = {
     replyMentionListener,
     afkUserListener,
     reminderListener,
     updateUserListener,
+    notifyDevMentionListener
 };

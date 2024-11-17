@@ -1,4 +1,4 @@
-const { replyMentionListener, afkUserListener, reminderListener, updateUserListener } = require('./listeners.js');
+const { replyMentionListener, afkUserListener, reminderListener, updateUserListener, notifyDevMentionListener } = require('./listeners.js');
 
 function commandHandler(client, message) {
     if (message.messageText.startsWith(message.commandPrefix)) {
@@ -50,6 +50,12 @@ function listenerHandler(client, message) {
         .catch(err => {
             console.log(`Error in update user listener: ${err}`);
             client.discord.log(`* Error in update user listener: ${err}`);
+        });
+
+    notifyDevMentionListener(client, message)
+        .catch(err => {
+            console.log(`Error in notify dev mention listener: ${err}`);
+            client.discord.log(`* Error in notify dev mention listener: ${err}`);
         });
 }
 

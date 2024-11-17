@@ -170,4 +170,20 @@ discordClient.logError = async function (content) {
         });
 }
 
+discordClient.notifyDevMention = async function (message) {
+    const embed = new discordClient.EmbedBuilder()
+        .setTitle(`#${message.channelName}/${message.displayName}`)
+        .setDescription(message.messageText)
+        .setColor(message.color ? colorToHexString(message.color) : '#008000')
+        .setFooter({
+            text: `${getFormattedDateTime()}`,
+        });
+
+    const devPingChannel = await discordClient.channels.fetch(process.env.DISCORD_MENTIONS_CHANNEL);
+    devPingChannel.send({ embeds: [embed] })
+        .catch((err) => {
+            console.error(`Erro ao enviar mensagem no discord notifyDevMention: ${err}`);
+        });
+}
+
 module.exports = { discordClient };
