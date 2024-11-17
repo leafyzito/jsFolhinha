@@ -26,6 +26,12 @@ function listenerHandler(client, message) {
 
     client.turso.logMessage(message);
 
+    notifyDevMentionListener(client, message)
+        .catch(err => {
+            console.log(`Error in notify dev mention listener: ${err}`);
+            client.discord.log(`* Error in notify dev mention listener: ${err}`);
+        });
+
     if (message.senderUsername == 'folhinhabot') { return; }
 
     replyMentionListener(client, message)
@@ -52,11 +58,6 @@ function listenerHandler(client, message) {
             client.discord.log(`* Error in update user listener: ${err}`);
         });
 
-    notifyDevMentionListener(client, message)
-        .catch(err => {
-            console.log(`Error in notify dev mention listener: ${err}`);
-            client.discord.log(`* Error in notify dev mention listener: ${err}`);
-        });
 }
 
 module.exports = {
