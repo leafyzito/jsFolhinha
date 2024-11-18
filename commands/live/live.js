@@ -21,7 +21,7 @@ async function getLive(liveTarget) {
         return {
             isLive: true,
             title: data[0].stream.title,
-            game: data[0].stream.game.displayName || '(sem categoria)',
+            game: data[0].stream.game ? data[0].stream.game.displayName : '(sem categoria)',
             viewers: data[0].stream.viewersCount,
             startedAt: data[0].stream.createdAt,
         };
