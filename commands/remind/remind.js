@@ -77,7 +77,7 @@ const remindCommand = async (client, message) => {
         }
 
         if (message.messageText.split(' ').length === 2) {
-            const remindInfo = await client.db.get('remind', { receiverId: message.senderUserID, beenRead: false });
+            const remindInfo = await client.db.get('remind', { receiverId: message.senderUserID, beenRead: false, remindAt: null });
 
             var pendingReminders = [];
             remindInfo.forEach((reminder) => {
