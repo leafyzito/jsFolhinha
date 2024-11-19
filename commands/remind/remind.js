@@ -141,8 +141,11 @@ const remindCommand = async (client, message) => {
         client.log.logAndReply(message, finalRes);
         await client.db.update('remind', { _id: parseInt(reminderId) }, { $set: { beenRead: true } });
         // await client.reloadReminders();
-        // remove userid from client.usersWithPendingReminders
-        client.usersWithPendingReminders = client.usersWithPendingReminders.filter(id => id !== message.senderUserID);
+        // remove userid from client.usersWithPendingReminders if there are no more pending reminders
+        const hasMorePendingReminders = await client.db.get('remind', { receiverId: message.senderUserID, beenRead: false });
+        if (hasMorePendingReminders.length === 0) {
+            client.usersWithPendingReminders = client.usersWithPendingReminders.filter(id => id !== message.senderUserID);
+        }
         return;
     }
 
