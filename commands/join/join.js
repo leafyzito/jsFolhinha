@@ -13,6 +13,7 @@ async function createNewConfig(client, message) {
         devBanCommands: []
     };
 
+    client.channelsToJoin.push(message.senderUsername);
     await client.db.insert('config', newConfig);
     await client.reloadChannelConfigs();
     await client.reloadChannelPrefixes();
