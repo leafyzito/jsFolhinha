@@ -213,33 +213,27 @@ const remindCommand = async (client, message) => {
     let totalSeconds = 0;
     let timeParts = message.messageText.split(' ');
     let timeIndex = timeParts[2]?.toLowerCase() === 'in' ? 3 : null;
-    if (timeIndex) {
-        let days = timeParts[timeIndex] && ['d', 'day', 'days'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
-        if (days && !isNaN(parseInt(days))) timeIndex++;
-        let hours = timeParts[timeIndex] && ['h', 'hrs', 'hour', 'hours'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
-        if (hours && !isNaN(parseInt(hours))) timeIndex++;
-        let minutes = timeParts[timeIndex] && ['m', 'min', 'mins', 'minute', 'minutes'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
-        if (minutes && !isNaN(parseInt(minutes))) timeIndex++;
-        let seconds = timeParts[timeIndex] && ['s', 'sec', 'secs', 'second', 'seconds'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
-        if (seconds && !isNaN(parseInt(seconds))) timeIndex++;
+    let days = timeParts[timeIndex] && ['d', 'day', 'days'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
+    if (days && !isNaN(parseInt(days))) timeIndex++;
+    let hours = timeParts[timeIndex] && ['h', 'hrs', 'hour', 'hours'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
+    if (hours && !isNaN(parseInt(hours))) timeIndex++;
+    let minutes = timeParts[timeIndex] && ['m', 'min', 'mins', 'minute', 'minutes'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
+    if (minutes && !isNaN(parseInt(minutes))) timeIndex++;
+    let seconds = timeParts[timeIndex] && ['s', 'sec', 'secs', 'second', 'seconds'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
+    if (seconds && !isNaN(parseInt(seconds))) timeIndex++;
 
-        if (days && !isNaN(parseInt(days))) totalSeconds += parseTime(days, 'd');
-        if (hours && !isNaN(parseInt(hours))) totalSeconds += parseTime(hours, 'h');
-        if (minutes && !isNaN(parseInt(minutes))) totalSeconds += parseTime(minutes, 'm');
-        if (seconds && !isNaN(parseInt(seconds))) totalSeconds += parseTime(seconds, 's');
-    }
+    if (days && !isNaN(parseInt(days))) totalSeconds += parseTime(days, 'd');
+    if (hours && !isNaN(parseInt(hours))) totalSeconds += parseTime(hours, 'h');
+    if (minutes && !isNaN(parseInt(minutes))) totalSeconds += parseTime(minutes, 'm');
+    if (seconds && !isNaN(parseInt(seconds))) totalSeconds += parseTime(seconds, 's');
 
     if (totalSeconds === NaN) {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind <usuário> in <tempo> <mensagem> (ex: in 10s/10m/10h/10d). Se o erro persistir, contacte o @${process.env.DEV_NICK}`);
         return;
     }
 
-    let remindMessage;
-    if (timeIndex === null) {
-        remindMessage = message.messageText.split(' ').slice(2).join(' ').trim();
-    } else {
-        remindMessage = message.messageText.split(' ').slice(timeIndex).join(' ').trim();
-    }
+    if (timeIndex === null) { timeIndex = 2; }
+    let remindMessage = message.messageText.split(' ').slice(timeIndex).join(' ').trim();
 
     const remindAt = totalSeconds ? Math.floor(Date.now() / 1000) + totalSeconds : null;
     console.log(Math.floor(Date.now() / 1000));
@@ -249,7 +243,7 @@ const remindCommand = async (client, message) => {
         remindMessage = '(sem mensagem)';
     }
 
-    if (timeParts.includes('in') && timeIndex && !totalSeconds) {
+    if (timeParts.includes('in') && (days || hours || minutes || seconds) && !totalSeconds) {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind <usuário> in <tempo> <mensagem> (ex: in 10s/10m/10h/10d).`);
         return;
     }
