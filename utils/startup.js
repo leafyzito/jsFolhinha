@@ -153,6 +153,7 @@ async function modifyClient(client) {
     // load prefixes
     client.channelPrefixes = {};
     client.reloadChannelPrefixes = async function () {
+        await new Promise(resolve => setTimeout(resolve, 1000));
         client.channelPrefixes = {};
         await client.db.get('config', {}, true).then((result) => {
             result.forEach((config) => {
@@ -166,6 +167,7 @@ async function modifyClient(client) {
     // load channel configs
     client.channelConfigs = {};
     client.reloadChannelConfigs = async function () {
+        await new Promise(resolve => setTimeout(resolve, 1000));
         client.channelConfigs = {};
         await client.db.get('config', {}, true).then((result) => {
             result.forEach((config) => {
