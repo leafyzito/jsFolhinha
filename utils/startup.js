@@ -154,7 +154,7 @@ async function modifyClient(client) {
     client.channelPrefixes = {};
     client.reloadChannelPrefixes = async function () {
         client.channelPrefixes = {};
-        await client.db.get('config', {}).then((result) => {
+        await client.db.get('config', {}, true).then((result) => {
             result.forEach((config) => {
                 client.channelPrefixes[config.channel] = config.prefix;
             });
@@ -167,7 +167,7 @@ async function modifyClient(client) {
     client.channelConfigs = {};
     client.reloadChannelConfigs = async function () {
         client.channelConfigs = {};
-        await client.db.get('config', {}).then((result) => {
+        await client.db.get('config', {}, true).then((result) => {
             result.forEach((config) => {
                 client.channelConfigs[config.channel] = config;
             });
