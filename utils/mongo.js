@@ -121,10 +121,6 @@ class MongoUtils {
             }
         }
 
-        // Update cache immediately
-        const cache = this.getCollectionCache(collectionName);
-        cache.set(JSON.stringify(doc._id), updatedDoc);
-
         // Update DB asynchronously
         this.client.connect().then(() => {
             const collection = this.db.collection(collectionName);
@@ -133,6 +129,10 @@ class MongoUtils {
                 cache.set(JSON.stringify(doc._id), doc); // Rollback cache on error
             });
         });
+
+        // Update cache immediately
+        const cache = this.getCollectionCache(collectionName);
+        cache.set(JSON.stringify(doc._id), updatedDoc);
 
         return updatedDoc;
     }
