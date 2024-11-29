@@ -66,7 +66,7 @@ async function hltbSearch(query) {
             searchOptions: {
                 filter: "",
                 games: {
-                    gameplay: { perspective: "", flow: "", genre: "" },
+                    gameplay: { perspective: "", flow: "", genre: "", subGenre: " " },
                     modifier: "",
                     platform: "",
                     rangeCategory: "main",
