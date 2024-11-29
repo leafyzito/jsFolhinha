@@ -49,7 +49,7 @@ const talkieCommand = async (client, message) => {
 
     // client.discord.log(`* Talkie ${message.channelName} > ${targetChannel}`);
     // console.log(`* Talkie ${message.channelName} > ${targetChannel}`);
-    client.log.send(targetChannel, `🤖 ${msgContent}`);
+    client.log.send(targetChannel, `🤖📞 ${msgContent}`);
 
     const emote = await client.emotes.getEmoteFromList(message.channelName, ['peepogiggle', 'peepogiggles'], '🤭');
     client.log.logAndReply(message, `Mensagem enviada ${emote}`, `${message.channelName} > ${targetChannel}`);
