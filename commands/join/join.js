@@ -18,6 +18,8 @@ async function createNewConfig(client, message) {
     await client.reloadChannelConfigs();
     await client.reloadChannelPrefixes();
 
+    client.discord.log(`* Joining to ${message.senderUsername} from join command`);
+
     fs.appendFile('channels.txt',
         `${message.senderUserID} ${message.senderUsername}\n`, (err) => {
             if (err) {
