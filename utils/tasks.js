@@ -187,8 +187,8 @@ async function rejoinDisconnectedChannels(client) {
         }
     });
     if (rejoinedChannels.length > 0) {
-        console.log(`* Rejoined ${rejoinedChannels.length} channels: ${rejoinedChannels}`);
-        client.discord.log(`* Rejoined ${rejoinedChannels.length} channels: ${rejoinedChannels}`);
+        console.log(`* Rejoining ${rejoinedChannels.length} channels`);
+        client.discord.log(`* Rejoining ${rejoinedChannels.length} channels`);
     }
 }
 
@@ -196,7 +196,7 @@ async function updateDiscordPresence(client) {
     client.discord.user.setActivity({
         type: 4,
         name: 'Folhinha Uptime',
-        state: `Uptime: ${timeSince(client.startTime)} - ${[...client.joinedChannels].length}/${client.channelsToJoin.length}`,
+        state: `Up: ${timeSince(client.startTime)} - ${[...client.joinedChannels].length}/${client.channelsToJoin.length}`,
     });
 }
 
