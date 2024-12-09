@@ -130,7 +130,7 @@ async function fetchPendingJoins(client) {
             }
 
             console.log(`* Joining ${username} to ${username}`);
-            client.discord.log(`* Joining to ${username} from website`);
+            client.discord.importantLog(`* Joining to ${username} from website`);
 
             client.join(username).catch((err) => {
                 console.error(`Erro ao entrar no chat ${username}: ${err}`);
