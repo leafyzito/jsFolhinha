@@ -99,6 +99,23 @@ discordClient.log = async function (content) {
     }
 }
 
+discordClient.importantLog = async function (content) {
+    try {
+        const logChannel = await discordClient.channels.fetch(process.env.DISCORD_IMPORTANT_LOGS_CHANNEL);
+        await logChannel.send(content);
+    } catch (err) {
+        console.log(`Erro ao enviar mensagem no discord log: ${err}`);
+        setTimeout(async () => {
+            try {
+                const logChannel = await discordClient.channels.fetch(process.env.DISCORD_IMPORTANT_LOGS_CHANNEL);
+                await logChannel.send(content);
+            } catch (secondErr) {
+                console.log(`Erro ao enviar mensagem no segundo envio no discord log: ${secondErr}`);
+            }
+        }, 5000);
+    }
+}
+
 discordClient.logWhisper = async function (recipient, content) {
     const embed = new discordClient.EmbedBuilder()
         .setTitle(`Whisper para #${recipient}`)
@@ -158,7 +175,7 @@ discordClient.logError = async function (content) {
             text: `${getFormattedDateTime()}`,
         });
 
-    const logChannel = await discordClient.channels.fetch(process.env.DISCORD_ERROR_LOG_CHANNEL);
+    const logChannel = await discordClient.channels.fetch(process.env.DISCORD_IMPORTANT_LOGS_CHANNEL);
     // mention the dev discord user
     // logChannel.send(`<@${process.env.DEV_DISCORD_ID}>`)
     //     .catch((err) => {
