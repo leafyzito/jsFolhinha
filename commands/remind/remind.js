@@ -336,13 +336,14 @@ Atenção que o formato de tempos devem ser sempre seguindo este padrão:
 10d - 10 dias; usar 10 days não vai funcionar
 10h 50s - 10 horas e 50 segundos; usar 10h50s ou 10h e 50s não vai funcionar
 
-Existe também o !remind show, que será apenas útil quando tiver múltiplos lembretes pendentes
-Juntamente do !remind show, existe o !remind show all que irá juntar todos os lembretes pendentes, sejam eles 5 ou 100, e irá mandar em um link com todos os lembretes
+Existe também o !remind show, que será apenas útil quando tiver múltiplos lembretes pendentes, que mostra uma lista de todos os lembretes pendentes
+Juntamente do !remind show, tem o !remind show {ID de algum lembrete pendente} que irá mostrar apenas o lembrete do ID fornecido
+Existe também o !remind show all que irá juntar todos os lembretes pendentes, sejam eles 5 ou 100, e irá mandar em um link com todos os lembretes em lista para poder lê-los a todos
 Se for necessário você usar este comando para ver os seus lembretes, o Folhinha irá lhe avisar disso
 
 Caso queira apagar algum lembrete, use o comando !remind delete {ID do lembrete}
 
-Por fim, se quiser bloquear lembretes de algum usuário em específico pode usar !remind block/unblock para o fazer`;
+Por fim, se quiser bloquear lembretes de algum usuário em específico basta usar !remind block/unblock`;
 remindCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${remindCommand.commandName}/${remindCommand.commandName}.js`;
 
 module.exports = {
