@@ -319,7 +319,7 @@ const remindCommand = async (client, message) => {
 
 remindCommand.commandName = 'remind';
 remindCommand.aliases = ['remind', 'lembrar'];
-remindCommand.shortDescription = 'Deixe um lembrete para a próxima vez que um usuário falar no chat';
+remindCommand.shortDescription = 'Deixe um lembrete para algum usuário do chat';
 remindCommand.cooldown = 5000;
 remindCommand.whisperable = false;
 remindCommand.description = `Use este comando para deixar um lembrete para a próxima vez que um usuário falar no chat
