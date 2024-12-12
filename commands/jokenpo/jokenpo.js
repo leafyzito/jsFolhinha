@@ -18,7 +18,7 @@ async function waitForJokenpoInputs(client, check, timeout = 30_000) {
     let answers = {};
     return new Promise((resolve) => {
         const timer = setTimeout(() => {
-            resolve(null);
+            resolve(answers);
         }, timeout);
 
         client.on('WHISPER', (msg) => {
@@ -120,9 +120,16 @@ const jokenpoCommand = async (client, message) => {
     pendingPlayers.push(message.senderUsername);
     pendingPlayers.push(gameTarget.toLowerCase());
     const answers = await waitForJokenpoInputs(client, check, 30_000);
-    if (!answers) {
+    if (Object.keys(answers).length !== 2) {
+        // check which player didn't answer
+        const players = [message.senderUsername, gameTarget.toLowerCase()];
+        const playerWhoDidntAnswer = players.find(player => !answers[player]);
         const emote = await client.emotes.getEmoteFromList(message.channelName, ['pfff', 'pffff', 'porvalo', 'mock', 'pointandlaugh'], '🤭');
-        client.log.logAndReply(message, `Pelo menos um dos jogadores não respondeu, ficou com medo ${emote}`);
+        if (playerWhoDidntAnswer) {
+            client.log.logAndReply(message, `${playerWhoDidntAnswer} não respondeu, ficou com medo ${emote}`);
+        } else {
+            client.log.logAndReply(message, `Nenhum dos jogadores respondeu, ficaram com medo ${emote}`);
+        }
         // remove players names from pendingPlayers
         pendingPlayers = pendingPlayers.filter(player => player !== message.senderUsername && player !== gameTarget.toLowerCase());
         return;
