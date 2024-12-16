@@ -29,14 +29,18 @@ async function createPetBase(client, message) {
     await client.db.insert('pet', insert_doc);
 }
 
-async function updatePet(client, message, petEmoji, petName) {
-    console.log('running updatePet');
+async function updatePetCreate(client, message, petEmoji, petName) {
+    console.log('running updatePetCreate');
     const update_doc = {
         $set: {
             pet_emoji: petEmoji,
             pet_name: petName,
             is_alive: true,
             warns: 0,
+            total_plays: 0,
+            total_pats: 0,
+            last_play: 0,
+            last_pat: 0,
             last_interaction: Math.floor(Date.now() / 1000),
             alive_since: Math.floor(Date.now() / 1000)
         }
@@ -87,7 +91,7 @@ const petCommand = async (client, message) => {
             await createPetBase(client, message);
         }
 
-        await updatePet(client, message, petEmoji, petName);
+        await updatePetCreate(client, message, petEmoji, petName);
 
         client.log.logAndReply(message, `Novo pet criado! Oioi ${petEmoji} ${petName}`);
         return;
