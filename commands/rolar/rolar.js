@@ -42,7 +42,7 @@ const rolarCommand = async (client, message) => {
 
     const sum = roladas.reduce((a, b) => a + b, 0);
 
-    client.log.logAndReply(message, `As suas roladas foram: ${roladas.join(', ')} (soma: ${sum}) 🎲`);
+    client.log.logAndReply(message, `As suas roladas foram: ${roladas.join(', ')}${roladas.length > 1 ? ` (soma: ${sum})` : ''} 🎲`);
 };
 
 rolarCommand.commandName = 'rolar';
