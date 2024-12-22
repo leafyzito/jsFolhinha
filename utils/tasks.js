@@ -106,7 +106,7 @@ async function petAttencionTask(client) {
                 continue;
             }
 
-            client.log.send(channel, `${pet.pet_emoji} ${pet.pet_name} foi embora! Ningúem deu atenção a ele e ele se foi...`);
+            client.log.send(channel, `${pet.pet_emoji} ${pet.pet_name} foi embora! Ninguém deu atenção a ele e ele se foi...`);
             await client.db.update('pet', { channelId: pet.channelId }, { $set: { is_alive: false, time_of_death: currentTime } });
             continue;
         }
