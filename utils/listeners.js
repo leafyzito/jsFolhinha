@@ -199,7 +199,11 @@ const updateUserListener = async (client, message) => {
 
 const notifyDevMentionListener = async (client, message) => {
     const possibleDevMentions = process.env.DEV_POSSIBLE_MENTIONS.split(',');
-    if (message.messageText.toLowerCase().split(' ').some(word => possibleDevMentions.some(mention => word === mention.toLowerCase()))) {
+    if (message.messageText.toLowerCase().split(' ').some(word => possibleDevMentions.some(mention => {
+        // Remove any non-alphanumeric characters from both the word and mention
+        const cleanWord = word.replace(/[^a-zA-Z0-9]/g, '');
+        return cleanWord === mention.toLowerCase();
+    }))) {
         client.discord.notifyDevMention(message);
     }
 }
