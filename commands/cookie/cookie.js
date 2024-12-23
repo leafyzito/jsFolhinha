@@ -294,7 +294,7 @@ const cookieCommand = async (client, message) => {
         } else {
             const emote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.sadEmotes, ':(');
             const currentJackpot = await client.db.get('cookie', { userId: process.env.BOT_USERID });
-            reply += `você apostou 1 cookie e ficou sem ele... (adicionado ao jackpot ⇒ ${currentJackpot[0].total}) ${emote}`;
+            reply += `você apostou 1 cookie e ficou sem ele... (adicionado ao jackpot ⇒ ${currentJackpot[0].total + 1}) ${emote}`;
             userCookieStats.total -= 1;
             userCookieStats.sloted += 1;
             userCookieStats.usedSlot = true;
