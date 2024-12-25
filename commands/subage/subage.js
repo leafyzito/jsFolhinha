@@ -1,4 +1,5 @@
 const { processCommand } = require("../../utils/processCommand.js");
+const { timeUntilDT } = require("../../utils/utils.js");
 
 async function getSubAge(user, channel) {
     const api_url = `https://api.ivr.fi/v2/twitch/subage/${user}/${channel}`;
@@ -28,7 +29,18 @@ async function getSubAge(user, channel) {
             subType = `de Presente Tier ${subTier}`;
         }
 
-        output = `${user} é sub de ${channel} há ${months} meses com Subscrição ${subType}`;
+        // if has streak, add it to the output
+        let streakPart = '';
+        if (data.streak) {
+            let streak = data.streak.months;
+            if (streak > 1) {
+                streakPart = `(Streak de ${streak} meses)`;
+            }
+        }
+
+        let endsAt = data.meta.endsAt;
+
+        output = `${user} é sub de ${channel} há ${months} meses ${streakPart} com Subscrição ${subType} - Termina em ${timeUntilDT(endsAt)[0]} (${timeUntilDT(endsAt)[1]})`;
     }
 
     let hasSubbed = data.cumulative !== null;

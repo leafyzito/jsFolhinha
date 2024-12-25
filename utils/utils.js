@@ -119,6 +119,33 @@ const timeSince = (lsDate) => {
     return formattedDeltaTime;
 };
 
+const timeUntil = (futureDate) => {
+    const deltaTime = futureDate - Math.floor(Date.now() / 1000);
+
+    const tdUntil = {
+        days: Math.floor(deltaTime / (3600 * 24)),
+        hours: Math.floor((deltaTime % (3600 * 24)) / 3600),
+        minutes: Math.floor((deltaTime % 3600) / 60),
+        seconds: Math.floor(deltaTime % 60)
+    };
+
+    let formattedDeltaTime;
+    if (tdUntil.days < 1 && tdUntil.hours < 1 && tdUntil.minutes < 1) {
+        formattedDeltaTime = `${tdUntil.seconds}s`;
+    } else if (tdUntil.days < 1 && tdUntil.hours < 1) {
+        formattedDeltaTime = `${tdUntil.minutes}m ${tdUntil.seconds}s`;
+    } else if (tdUntil.days < 1) {
+        formattedDeltaTime = `${tdUntil.hours}h ${tdUntil.minutes}m ${tdUntil.seconds}s`;
+    } else {
+        formattedDeltaTime = `${tdUntil.days}d ${tdUntil.hours}h ${tdUntil.minutes}m ${tdUntil.seconds}s`;
+    }
+
+    // clean up zeros
+    formattedDeltaTime = formattedDeltaTime.replace(/\b0[d|h|m|s]\b/g, '').trim();
+
+    return formattedDeltaTime;
+};
+
 function timeSinceDT(inputDate) {
     // Parse the given date and time string
     const given_datetime = new Date(inputDate);
@@ -174,6 +201,64 @@ function timeSinceDT(inputDate) {
 
     return [formatted_deltaTime, formattedDate];
 }
+
+function timeUntilDT(inputDate) {
+    // Parse the given date and time string
+    const future_datetime = new Date(inputDate);
+
+    // Get the current date and time
+    const current_datetime = new Date();
+
+    // Calculate the difference in years, months, days, hours, and minutes
+    let years = future_datetime.getFullYear() - current_datetime.getFullYear();
+    let months = future_datetime.getMonth() - current_datetime.getMonth();
+    let days = future_datetime.getDate() - current_datetime.getDate();
+    let hours = future_datetime.getHours() - current_datetime.getHours();
+    let minutes = future_datetime.getMinutes() - current_datetime.getMinutes();
+
+    // Adjust for when the future day is before the current day
+    if (days < 0) {
+        months--;
+        days += new Date(future_datetime.getFullYear(), future_datetime.getMonth(), 0).getDate();
+    }
+
+    // Adjust for when the future month is before the current month
+    if (months < 0) {
+        years--;
+        months += 12;
+    }
+
+    if (hours < 0) {
+        days--;
+        hours += 24;
+    }
+
+    if (minutes < 0) {
+        hours--;
+        minutes += 60;
+    }
+
+    // Format the time until string
+    let formatted_deltaTime;
+    if (years > 0) {
+        formatted_deltaTime = `${years}y ${months}m ${days}d ${hours}h ${minutes}m`;
+    } else if (months > 0) {
+        formatted_deltaTime = `${months}m ${days}d ${hours}h ${minutes}m`;
+    } else if (days > 0) {
+        formatted_deltaTime = `${days}d ${hours}h ${minutes}m`;
+    } else if (hours > 0) {
+        formatted_deltaTime = `${hours}h ${minutes}m`;
+    } else {
+        formatted_deltaTime = `${minutes}m`;
+    }
+
+    // Format the date string as "dd-mm-yyyy"
+    let formattedDate = future_datetime.toLocaleDateString("en-GB").replace(/\//g, '-');
+
+    return [formatted_deltaTime, formattedDate];
+}
+
+
 
 
 var streamer_status_cache = {};
@@ -275,6 +360,8 @@ module.exports = {
     manageLongResponse: manageLongResponse,
     timeSince: timeSince,
     timeSinceDT: timeSinceDT,
+    timeUntil: timeUntil,
+    timeUntilDT: timeUntilDT,
     isStreamOnline: isStreamOnline,
     parseTime: parseTime,
     capitalize: capitalize,
