@@ -66,7 +66,7 @@ const cookieCommand = async (client, message) => {
             const hours = Math.floor(timeLeft / (1000 * 60 * 60));
             const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
 
-            client.log.logAndReply(message, `Você já resgatou seu cookie diário hoje. Volte em ${hours}h ${minutes}m para resgatar o seu cookie diário de novo ⌛`);
+            client.log.logAndReply(message, `Você já resgatou o seu cookie diário hoje. Volte em ${hours}h ${minutes}m para resgatar o seu cookie diário de novo ⌛`);
             return;
         }
 
@@ -338,7 +338,7 @@ const cookieDiarioCommand = async (client, message) => {
         const hours = Math.floor(timeLeft / (1000 * 60 * 60));
         const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
 
-        client.log.logAndReply(message, `Você já resgatou seu cookie diário hoje. Volte em ${hours}h ${minutes}m para resgatar o seu cookie diário de novo ⌛`);
+        client.log.logAndReply(message, `Você já resgatou o seu cookie diário hoje. Volte em ${hours}h ${minutes}m para resgatar o seu cookie diário de novo ⌛`);
         return;
     }
 
