@@ -91,7 +91,7 @@ const bonkCommand = async (client, message) => {
     const bonkStrengh = randomInt(0, 100);
 
     if (bonkStrengh === 0) {
-        const emote = await client.emotes.getEmoteFromList(message.channelName, ['pfff', 'pffff', 'porvalo', 'mock', 'pointandlaugh'], '🤭');
+        const emote = await client.emotes.getEmoteFromList(message.channelName, ['pfff', 'pffff', 'pfft', 'porvalo', 'mock', 'pointandlaugh'], '🤭');
         client.log.logAndReply(message, `${message.senderUsername} tentou bonkar ${bonkTarget} mas acabou se auto-nocauteando (impacto de ${bonkStrengh}%) ${emote}`);
         return;
     }
