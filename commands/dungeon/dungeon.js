@@ -144,7 +144,7 @@ const dungeonCommand = async (client, message) => {
     const userDungeonStats = await loadUserDungeonStats(client, message);
     const [canDungeon, remainingTime] = await checkDungeonCooldown(client, message, userDungeonStats);
     if (!canDungeon) {
-        await client.log.logAndReply(message, `Você se sente cansado... Só vai se sentir capaz de explorar de novo em ${remainingTime} ⏰`);
+        await client.log.logAndReply(message, `Você se sente cansado... Só vai se sentir capaz de explorar novamente em ${remainingTime} ⏰`);
         return;
     }
 
@@ -211,7 +211,7 @@ const fastDungeonCommand = async (client, message) => {
     const userDungeonStats = await loadUserDungeonStats(client, message);
     const [canDungeon, remainingTime] = await checkDungeonCooldown(client, message, userDungeonStats);
     if (!canDungeon) {
-        await client.log.logAndReply(message, `Você se sente cansado... Só vai se sentir capaz de explorar de novo em ${remainingTime} ⏰`);
+        await client.log.logAndReply(message, `Você se sente cansado... Só vai se sentir capaz de explorar novamente em ${remainingTime} ⏰`);
         return;
     }
 
