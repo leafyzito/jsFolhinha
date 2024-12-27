@@ -25,7 +25,7 @@ const rolarCommand = async (client, message) => {
         return;
     }
 
-    if (isNaN(dice) || isNaN(sides)) {
+    if (isNaN(dice) || isNaN(sides) || dice < 1 || sides < 1) {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}rolar <quantos dados> <de quantos lados>`);
         return;
     }
