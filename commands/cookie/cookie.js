@@ -66,7 +66,7 @@ const cookieCommand = async (client, message) => {
             const hours = Math.floor(timeLeft / (1000 * 60 * 60));
             const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
 
-            client.log.logAndReply(message, `Você já resgatou o seu cookie diário hoje. Volte em ${hours}h ${minutes}m para resgatar o seu cookie diário de novo ⌛`);
+            client.log.logAndReply(message, `Você já resgatou o seu cookie diário hoje. Volte em ${hours}h ${minutes}m para resgatar o seu cookie diário novamente ⌛`);
             return;
         }
 
@@ -105,7 +105,7 @@ const cookieCommand = async (client, message) => {
         }
 
         if (userCookieStats.giftedToday) {
-            client.log.logAndReply(message, `Você já ofereceu um cookie hoje. Agora só pode oferecer de novo amanhã ⌛`);
+            client.log.logAndReply(message, `Você já ofereceu um cookie hoje. Agora só pode oferecer novamente amanhã ⌛`);
             return;
         }
 
@@ -270,7 +270,7 @@ const cookieCommand = async (client, message) => {
         }
 
         if (userCookieStats.usedSlot) {
-            client.log.logAndReply(message, `Você já apostou hoje. Agora só pode apostar de novo amanhã ⌛`);
+            client.log.logAndReply(message, `Você já apostou hoje. Agora só pode apostar novamente amanhã ⌛`);
             return;
         }
 
@@ -338,7 +338,7 @@ const cookieDiarioCommand = async (client, message) => {
         const hours = Math.floor(timeLeft / (1000 * 60 * 60));
         const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
 
-        client.log.logAndReply(message, `Você já resgatou o seu cookie diário hoje. Volte em ${hours}h ${minutes}m para resgatar o seu cookie diário de novo ⌛`);
+        client.log.logAndReply(message, `Você já resgatou o seu cookie diário hoje. Volte em ${hours}h ${minutes}m para resgatar o seu cookie diário novamente ⌛`);
         return;
     }
 
