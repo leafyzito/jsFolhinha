@@ -40,6 +40,9 @@ const rolarCommand = async (client, message) => {
         roladas.push(randomInt(1, parseInt(sides)));
     }
 
+    // sort roladas ascending
+    roladas.sort((a, b) => a - b);
+
     const sum = roladas.reduce((a, b) => a + b, 0);
 
     client.log.logAndReply(message, `${roladas.length === 1 ? 'A sua rolada foi:' : 'As suas roladas foram:'} ${roladas.join(', ')}${roladas.length > 1 ? ` (soma: ${sum})` : ''} 🎲`);
