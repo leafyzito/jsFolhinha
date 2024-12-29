@@ -15,7 +15,7 @@ async function get7tvUserid(twitchUid) {
 
 const presenceCommand = async (client, message) => {
     message.command = 'presence';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!await processCommand(5000, 'user', message, client)) return;
 
     const presenceTarget = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
     const presenceTargetTwitchUid = presenceTarget.toLowerCase() != message.senderUsername ? await client.getUserID(presenceTarget) : message.senderUserID;
