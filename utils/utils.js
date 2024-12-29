@@ -378,6 +378,11 @@ async function send7tvPresence(message, stv_uid) {
             })
         });
 
+        if (!response.ok) { // just to be sure
+            console.log('Error sending 7TV presence:', response);
+            return null;
+        }
+
         const data = await response.json();
         // console.log('7tv presence sent:', data);
         lastPresenceUpdate = now;
