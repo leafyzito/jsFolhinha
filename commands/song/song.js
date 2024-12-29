@@ -88,10 +88,12 @@ songCommand.aliases = ['song'];
 songCommand.shortDescription = 'Veja qual música alguém está ouvindo';
 songCommand.cooldown = 5000;
 songCommand.whisperable = false;
-songCommand.description = `Veja qual música alguém está ouvindo, de acordo com o Last.fm
+songCommand.description = `Mostre qual música você está ouvindo ou veja qual música alguém está ouvindo, de acordo com o Last.fm
 Se você não tem a sua conta do Last.fm configurada, faça-o para poder usar esse comando
 
-Caso já tenha a sua conta configurada, use !song set <nome_da_sua_conta_do_lastfm>`;
+Caso já tenha a sua conta configurada, use !song set {nome_da_sua_conta_do_lastfm}
+
+Pode também ver qual música outra pessoa está ouvindo usando !song {nome_da_pessoa}`;
 songCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${songCommand.commandName}/${songCommand.commandName}.js`;
 
 module.exports = {
