@@ -29,7 +29,7 @@ const presenceCommand = async (client, message) => {
         return;
     }
 
-    await send7tvPresence(message, sevenTvUserId);
+    await send7tvPresence(message, sevenTvUserId, true);
 
     const emote = await client.emotes.getEmoteFromList(message.channelName, ['joia', 'jumilhao'], 'FeelsOkayMan 👍');
     client.log.logAndReply(message, `Presence de 7TV atualizada ${emote}`);

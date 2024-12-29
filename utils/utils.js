@@ -353,10 +353,10 @@ async function waitForMessage(client, check, timeout = 30_000) {
 
 
 let lastPresenceUpdate = 0;
-async function send7tvPresence(message, stv_uid) {
+async function send7tvPresence(message, stv_uid, skip_cooldown = false) {
     // console.log('sending 7tv presence');
     const now = Date.now();
-    if (now - lastPresenceUpdate < 20000) {
+    if (!skip_cooldown && now - lastPresenceUpdate < 20000) {
         // console.log('not sending 7tv presence, too soon');
         return null;
     }
