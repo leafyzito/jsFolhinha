@@ -79,7 +79,7 @@ gptCommand.cooldown = 15000;
 gptCommand.whisperable = true;
 gptCommand.description = `Envie uma mensagem para o GPT com a personalidade do Folhinha
 Use esse comando para diversão apenas
-Caso deseje usar para perguntar alguma dúvida genuina, use o comando <a href="https://folhinhabot.com/comandos/gptserio">!gptserio</a> que lhe responderá de maneira mais acertiva e extensa, sem a personalidade brincalhona do !gpt normal`;
+Caso deseje usar para perguntar alguma dúvida genuina, use o comando <a href="https://folhinhabot.com/comandos/gptserio" style="color: #67e8f9">!gptserio</a> que lhe responderá de maneira mais acertiva e extensa, sem a personalidade brincalhona do !gpt normal`;
 gptCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${gptCommand.commandName}/${gptCommand.commandName}.js`;
 
 gptSerioCommand.commandName = 'gptserio';
