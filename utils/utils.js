@@ -351,6 +351,43 @@ async function waitForMessage(client, check, timeout = 30_000) {
     });
 }
 
+
+let lastPresenceUpdate = 0;
+async function send7tvPresence(message, stv_uid) {
+    // console.log('sending 7tv presence');
+    const now = Date.now();
+    if (now - lastPresenceUpdate < 20000) {
+        // console.log('not sending 7tv presence, too soon');
+        return null;
+    }
+
+    try {
+        const response = await fetch(`https://7tv.io/v3/users/${stv_uid}/presences`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                kind: 1,
+                passive: false,
+                session_id: undefined,
+                data: {
+                    platform: 'TWITCH',
+                    id: message.channelID
+                }
+            })
+        });
+
+        const data = await response.json();
+        // console.log('7tv presence sent:', data);
+        lastPresenceUpdate = now;
+        return data;
+    } catch (err) {
+        console.log('Error sending 7TV presence:', err);
+        return null;
+    }
+}
+
 module.exports = {
     isValidUser: isValidUser,
     shortenUrl: shortenUrl,
@@ -365,5 +402,6 @@ module.exports = {
     isStreamOnline: isStreamOnline,
     parseTime: parseTime,
     capitalize: capitalize,
-    waitForMessage: waitForMessage
+    waitForMessage: waitForMessage,
+    send7tvPresence: send7tvPresence
 };
