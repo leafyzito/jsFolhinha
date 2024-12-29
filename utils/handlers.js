@@ -1,4 +1,5 @@
 const { replyMentionListener, afkUserListener, reminderListener, updateUserListener, notifyDevMentionListener } = require('./listeners.js');
+const { send7tvPresence } = require('./utils.js');
 
 function commandHandler(client, message) {
     if (message.messageText.startsWith(message.commandPrefix)) {
@@ -17,6 +18,9 @@ function commandHandler(client, message) {
                 message.command = commandsList[command].aliases[0];
                 client.log.logAndReply(message, `⚠️ Este comando não pode ser usado em whispers`);
             }
+
+            // send 7tv presence
+            send7tvPresence(message, process.env.BOT_7TV_UID);
         }
     }
 }
