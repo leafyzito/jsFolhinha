@@ -34,7 +34,7 @@ const botSayCommand = async (client, message) => {
         for (const channel of client.joinedChannels) {
             setTimeout(() => {
                 client.log.send(channel, msgContent);
-            }, 3000);
+            }, 10_000); // maybe 10 seconds avoids the rate limit xd
         }
         client.log.logAndReply(message, `foi`);
         return;
