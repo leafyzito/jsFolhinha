@@ -31,11 +31,11 @@ const botSayCommand = async (client, message) => {
     const msgContent = args.slice(2).join(' ');
 
     if (targetChannel == 'all') {
-        for (const channel of client.joinedChannels) {
+        client.joinedChannels.forEach((channel, index) => {
             setTimeout(() => {
                 client.log.send(channel, msgContent);
-            }, 10_000); // maybe 10 seconds avoids the rate limit xd
-        }
+            }, index * 5_000); // 5 second interval between each message
+        });
         client.log.logAndReply(message, `foi`);
         return;
     }

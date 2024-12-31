@@ -13,9 +13,10 @@ const nicksCommand = async (client, message) => {
     }
 
     const aliases = userAliases[0].aliases.join(' → ');
+    const idFromDb = userAliases[0].userid;
     client.log.logAndReply(message,
         `${nicksTarget === message.senderUsername ? `O seu histórico de nicks é:`
-            : `O histórico de nicks de ${nicksTarget} é:`} ${aliases}`);
+            : `O histórico de nicks de ${nicksTarget} (uid: ${idFromDb}) é:`} ${aliases}`);
 };
 
 nicksCommand.commandName = 'nicks';
