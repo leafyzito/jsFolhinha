@@ -91,7 +91,7 @@ songCommand.whisperable = false;
 songCommand.description = `Mostre qual música você está ouvindo ou veja qual música alguém está ouvindo, de acordo com o Last.fm
 
 Se você não tem a sua conta do Last.fm configurada, faça-o para poder usar este comando:
-Crie uma conta no <a href="https://last.fm/join" target="_blank" style="color: #67e8f9">last.fm</a>
+Crie uma conta no <a href="https://last.fm/join" target="_blank" style="color: #67e8f9">Last.fm</a>
 Conecte a plataforma que usa para ouvir música ao Last.fm <a href="https://www.last.fm/about/trackmymusic" target="_blank" style="color: #67e8f9">aqui (https://www.last.fm/about/trackmymusic)</a>
 Por fim, use o comando !song set {nome_da_sua_conta_do_lastfm} para configurar a sua conta no bot
 
