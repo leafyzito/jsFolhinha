@@ -31,11 +31,12 @@ const botSayCommand = async (client, message) => {
     const msgContent = args.slice(2).join(' ');
 
     if (targetChannel == 'all') {
-        client.joinedChannels.forEach((channel, index) => {
-            setTimeout(() => {
-                client.log.send(channel, msgContent);
-            }, index * 5_000); // 5 second interval between each message
-        });
+        for (let i = 0; i < [...client.joinedChannels].length; i++) {
+            const channel = [...client.joinedChannels][i];
+            await new Promise(resolve => setTimeout(resolve, 2_500)); // 2.5 second interval between each message
+            // console.log(`sending to ${channel}`);
+            client.log.send(channel, msgContent);
+        }
         client.log.logAndReply(message, `foi`);
         return;
     }
