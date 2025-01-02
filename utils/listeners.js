@@ -162,7 +162,7 @@ const updateUserListener = async (client, message) => {
             await client.db.update('config', { channel: knownUsersDB[0].currAlias.toLowerCase() }, { $set: { channel: message.senderUsername } });
             client.part(knownUsersDB[0].currAlias);
             client.join(message.senderUsername);
-            client.log.send(message.senderUsername, `Troca de nick detetada (${knownUsersDB[0].currAlias} -> ${message.senderUsername})`);
+            client.log.send(message.senderUsername, `Troca de nick detetada: ${knownUsersDB[0].currAlias} -> ${message.senderUsername}`);
             await client.reloadChannelConfigs();
             await client.reloadChannelPrefixes();
 
