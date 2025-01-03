@@ -87,7 +87,7 @@ songCommand.commandName = 'song';
 songCommand.aliases = ['song'];
 songCommand.shortDescription = 'Veja qual música alguém está ouvindo';
 songCommand.cooldown = 5000;
-songCommand.whisperable = false;
+songCommand.whisperable = true;
 songCommand.description = `Mostre qual música você está ouvindo ou veja qual música alguém está ouvindo, de acordo com o Last.fm
 
 Se você não tem a sua conta do Last.fm configurada, faça-o para poder usar este comando:
