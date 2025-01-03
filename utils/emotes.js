@@ -94,6 +94,7 @@ class Emotes {
     }
 
     async getEmoteFromList(channelName, emoteList, defaultResponse = '') {
+        if (channelName === 'whisper') { return defaultResponse; }
         var channelEmotes = await this.getChannelEmotes(channelName);
         var possibleEmotes = [];
         emoteList.forEach((emote) => {
