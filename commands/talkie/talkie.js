@@ -32,8 +32,8 @@ const talkieCommand = async (client, message) => {
         if (targetChannel !== message.channelName
             && targetChannel !== 'folhinha'
             && targetChannel !== 'folhinhabot'
-            && !targetConfigs.disabledCommands.includes(message.command)
-            && !targetConfigs.devBanCommands.includes(message.command)
+            && (targetConfigs.disabledCommands && !targetConfigs.disabledCommands.includes(message.command))
+            && (targetConfigs.devBanCommands && !targetConfigs.devBanCommands.includes(message.command))
             && !targetConfigs.isPaused
             && !await isStreamOnline(targetChannel)
         ) {
