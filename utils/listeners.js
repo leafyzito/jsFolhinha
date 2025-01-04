@@ -20,7 +20,7 @@ const replyMentionListener = async (client, message) => {
     if (msgContent.length === 2 && !message.replyParentMessageID && ['folhinha', 'folhinhabot', '@folhinhabot', '@folhinhabot,'].some(word => msgContent.some(msg => msg.toLowerCase() === word.toLowerCase()))) {
         var otherWord = msgContent.find(msg => msg.toLowerCase() !== 'folhinha' && msg.toLowerCase() !== 'folhinhabot');
 
-        if (['oi', 'ola', 'olá', 'opa'].some(word => word === otherWord.toLowerCase())) {
+        if (['oi', 'ola', 'olá', 'opa', 'oioi'].some(word => word === otherWord.toLowerCase())) {
             const emote = await client.emotes.getEmoteFromList(message.channelName, ['peepohey', 'peeposhy', 'eba', 'ola'], 'KonCha');
             client.log.send(message.channelName, `Oioi ${message.senderUsername} ${emote}`);
             lastReplyTime[message.channelName] = currentTime;
