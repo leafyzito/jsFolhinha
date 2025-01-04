@@ -33,9 +33,9 @@ const weatherCodes = {
     99: "⛈️ Trovoada com Granizo Forte"
 };
 
-function formatarDirecaoVento(direcaoVento) {
-    const direcoes = ["N", "NE", "E", "SE", "S", "SO", "O", "NO"]; // should work xd
-    return direcoes[Math.floor(direcaoVento / 45)];
+function formatWindDirection(windDirection) {
+    const directions = ["N", "NE", "E", "SE", "S", "SO", "O", "NO"]; // should work xd
+    return directions[Math.floor(windDirection / 45)];
 }
 
 
