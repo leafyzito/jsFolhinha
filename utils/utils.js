@@ -379,7 +379,7 @@ async function send7tvPresence(message, stv_uid, skip_cooldown = false) {
         });
 
         if (!response.ok) { // just to be sure
-            console.log('Error sending 7TV presence:', response);
+            // console.log('Error sending 7TV presence:', response);
             return null;
         }
 
@@ -388,7 +388,7 @@ async function send7tvPresence(message, stv_uid, skip_cooldown = false) {
         lastPresenceUpdate = now;
         return data;
     } catch (err) {
-        console.log('Error sending 7TV presence:', err);
+        // console.log('Error sending 7TV presence:', err);
         return null;
     }
 }
