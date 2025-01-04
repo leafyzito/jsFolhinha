@@ -40,7 +40,7 @@ function formatWindDirection(windDirection) {
 
 
 async function getWeather(location) {
-    const api_url = `https://nominatim.openstreetmap.org/search?q=${location}&format=json&limit=1&addressdetails=1`;
+    const api_url = `https://nominatim.openstreetmap.org/search?q=${location}&format=json&limit=1&addressdetails=1&accept-language=pt-PT`;
     const response = await fetch(api_url);
 
     const data = await response.json();
