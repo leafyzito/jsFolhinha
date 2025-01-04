@@ -79,7 +79,7 @@ const songCommand = async (client, message) => {
         return;
     }
 
-    client.log.logAndReply(message, `${songTarget != message.senderUsername ? songTarget : 'Você'} está ouvindo ${songInfo.songArtist} - ${songInfo.songName} (Álbum: ${songInfo.albumName})`);
+    client.log.logAndReply(message, `${songTarget != message.senderUsername ? songTarget : 'Você'} está ouvindo ${songInfo.songArtist} - ${songInfo.songName} ${songInfo.albumName != '' ? `(Álbum: ${songInfo.albumName})` : ''}`);
     return;
 };
 
