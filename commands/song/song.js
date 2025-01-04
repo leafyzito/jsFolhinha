@@ -43,7 +43,7 @@ const songCommand = async (client, message) => {
         const matchFromDb = await client.db.get('lastfm', { twitch_uid: message.senderUserID });
         if (matchFromDb.length > 0) {
             // if already set, update
-            await client.db.update('lastfm', { twitch_uid: message.senderUserID }, { lastfm_user: lastfmUserToSet });
+            await client.db.update('lastfm', { twitch_uid: message.senderUserID }, { $set: { lastfm_user: lastfmUserToSet } });
         } else {
             // if not set, insert
             await client.db.insert('lastfm', { twitch_uid: message.senderUserID, lastfm_user: lastfmUserToSet });
