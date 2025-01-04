@@ -40,15 +40,17 @@ function formatWindDirection(windDirection) {
 
 
 async function getWeather(location) {
-    const api_url = `https://nominatim.openstreetmap.org/search?q=${location}&format=json&limit=1`;
+    const api_url = `https://nominatim.openstreetmap.org/search?q=${location}&format=json&limit=1&addressdetails=1`;
     const response = await fetch(api_url);
 
     const data = await response.json();
     if (data.length === 0) { return null; }
 
-    const displayName = data[0].display_name;
     const lat = data[0].lat;
     const lon = data[0].lon;
+    const city = Object.values(data[0].address)[0];
+    const country = data[0].address.country;
+    const displayName = city + ', ' + country;
 
     const weatherInfo = await getWeatherInfo(displayName, lat, lon);
 
