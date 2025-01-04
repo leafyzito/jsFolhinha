@@ -19,7 +19,8 @@
     "mongodb": "6.8",
     "node-cron": "^3.0.3",
     "node-schedule": "^2.1.1",
-    "openai": "^4.53.2"
+    "openai": "^4.53.2",
+    "openmeteo": "^1.1.4"
   },
   "description": "https://folhinhabot.com/"
 }
