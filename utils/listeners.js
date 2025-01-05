@@ -3,6 +3,9 @@ const { afkInfoObjects } = require('../commands/afk/afk_info_model.js');
 
 var lastReplyTime = {};
 const replyMentionListener = async (client, message) => {
+    // check if channel is paused or has reminders banned
+    if (client.channelConfigs[message.channelName].isPaused) { return; }
+
     if (message.messageText.startsWith(message.commandPrefix)) { return; }
 
     const currentTime = Date.now();
@@ -40,6 +43,10 @@ const replyMentionListener = async (client, message) => {
 
 let processingAfk = [];
 const afkUserListener = async (client, message) => {
+    // check if channel is paused or has reminders banned
+    if (client.channelConfigs[message.channelName].isPaused) { return; }
+    if (client.channelConfigs[message.channelName].disabledCommands.includes('afk')) { return; }
+
     if (!client.afkUsers[message.channelName]) { return; }
     if (!client.afkUsers[message.channelName].includes(message.senderUsername)) { return; }
     if (processingAfk.includes(message.senderUsername)) { return; }
@@ -76,6 +83,10 @@ const afkUserListener = async (client, message) => {
 
 let processingReminder = [];
 const reminderListener = async (client, message) => {
+    // check if channel is paused or has reminders banned
+    if (client.channelConfigs[message.channelName].isPaused) { return; }
+    if (client.channelConfigs[message.channelName].disabledCommands.includes('remind')) { return; }
+
     if (!client.usersWithPendingReminders.includes(message.senderUserID)) { return; }
     if (client.notifiedUsers.includes(message.senderUserID)) { return; }
     if (processingReminder.includes(message.senderUsername)) { return; }
