@@ -185,6 +185,32 @@ class Logger {
 
         this.client.discord.logSend(message.channelName, response);
     }
+
+    async whisper(targetUser, content) {
+        if (regex.check(content, content.split(' '), `By Folhinha to ${targetUser}`)) {
+            console.log(`* Caught by regex - original content: ${content}`);
+            this.client.discord.logError(`* Caught by regex - original content: ${content}`);
+            this.send(process.env.DEV_TEST_CHANNEL, `Regex apanhado, check logs ${process.env.DEV_NICK}`);
+            content = '⚠️ Mensagem retida por conter conteúdo banido, tente novamente ou mude um pouco o comando'
+        }
+
+        this.client.whisper(targetUser, content)
+            .catch((err) => {
+                if (err.message.includes('identical to the previous one')) {
+                    console.log('sending identical message error, ending here');
+                }
+                else if (err.message.includes('too quickly')) {
+                    console.log('sending messages too quickly error, retrying');
+                    setTimeout(() => { this.whisper(targetUser, content); }, 1500);
+                } else if (err.message.includes('waiting for response')) {
+                    console.log('waiting for response error, retrying');
+                    setTimeout(() => { this.whisper(targetUser, content); }, 1500);
+                } else {
+                    console.log('whisper error: ', err);
+                }
+            });
+        this.client.discord.logWhisper(targetUser, content);
+    }
 }
 
 module.exports = {
