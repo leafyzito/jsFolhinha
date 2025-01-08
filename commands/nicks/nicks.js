@@ -1,7 +1,7 @@
 const { processCommand } = require("../../utils/processCommand.js");
 
 const nicksCommand = async (client, message) => {
-    message.command = 'nicks';
+    message.command = 'nick';
     if (!await processCommand(5000, 'channel', message, client)) return;
 
     const nicksTarget = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase() || message.senderUsername;
@@ -19,7 +19,7 @@ const nicksCommand = async (client, message) => {
             : `O histórico de nicks de ${nicksTarget} (uid: ${idFromDb}) é:`} ${aliases}`);
 };
 
-nicksCommand.commandName = 'nicks';
+nicksCommand.commandName = 'nick';
 nicksCommand.aliases = ['nick', 'nicks', 'nicknames'];
 nicksCommand.shortDescription = 'Mostra o histórico de nicks de algum usuário';
 nicksCommand.cooldown = 5000;
