@@ -75,7 +75,7 @@ async function createTwitchClip(channelId, channelName) {
     });
 
     const data = await response.json();
-    if (data.status === 403) {
+    if (data.status === 403 || data.status === 503) {
         const createdClip = await makeClip(channelName);
         if (!createdClip) {
             return 'forbidden';
