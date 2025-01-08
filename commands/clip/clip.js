@@ -75,7 +75,7 @@ async function createTwitchClip(channelId, channelName) {
     });
 
     const data = await response.json();
-    if (data.status === 403 || data.status === 503) {
+    if (data.status === 403 || data.status === 503) { // 403 is for forbidden, 503 is for service unavailable (error in twitch api)
         const createdClip = await makeClip(channelName);
         if (!createdClip) {
             return 'forbidden';
