@@ -274,6 +274,11 @@ const cookieCommand = async (client, message) => {
             return;
         }
 
+        // TODO: add joker card 🃏 with a smaller chance
+        // - if 2 jokers, add 5% of current jackpot to jackpot
+        // - if 3 jokers, give 5% of current jackpot to user
+        const currentJackpot = await client.db.get('cookie', { userId: process.env.BOT_USERID });
+
         const slotResults = [randomChoice(['🍒', '🍊', '🍋', '🍇', '🍉', '🍓']), randomChoice(['🍒', '🍊', '🍋', '🍇', '🍉', '🍓']), randomChoice(['🍒', '🍊', '🍋', '🍇', '🍉', '🍓'])];
         let reply = `[${slotResults[0]}${slotResults[1]}${slotResults[2]}] `;
 
@@ -293,7 +298,6 @@ const cookieCommand = async (client, message) => {
             await client.db.update('cookie', { userId: message.senderUserID }, { $set: { total: userCookieStats.total, sloted: userCookieStats.sloted, usedSlot: userCookieStats.usedSlot } });
         } else {
             const emote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.sadEmotes, ':(');
-            const currentJackpot = await client.db.get('cookie', { userId: process.env.BOT_USERID });
             reply += `você apostou 1 cookie e ficou sem ele... (adicionado ao jackpot ⇒ ${currentJackpot[0].total + 1}) ${emote}`;
             userCookieStats.total -= 1;
             userCookieStats.sloted += 1;
