@@ -51,7 +51,7 @@ const roletaCommand = async (client, message) => {
 roletaCommand.commandName = 'roleta russa';
 roletaCommand.aliases = ['roleta', 'rr'];
 roletaCommand.shortDescription = 'Teste a sua sorte com a roleta-russa do timeout';
-roletaCommand.cooldown = 5000;
+roletaCommand.cooldown = 15_000;
 roletaCommand.whisperable = false;
 roletaCommand.description = `Teste a sua sorte (1 em 6) para uma chance de levar um timeout no chat
 O tempo do timeout pode ser customizado, sendo o tempo padrão 10 minutos
