@@ -1,6 +1,23 @@
 const { processCommand } = require("../../utils/processCommand.js");
 const { randomInt } = require("../../utils/utils.js");
 
+// foi de base, foi de comes e bebes, foi dessa pra melhor, bateu as botas, virou lenda, foi de F, caiu no Alt+F4, chapuletou
+const Frases = [
+    'Foi de arrasta pra cima',
+    'Foi de base',
+    'Foi de comes e bebes',
+    'Foi dessa pra melhor',
+    'Bateu as botas',
+    'Virou lenda',
+    'Foi de F',
+    'Caiu no Alt+F4',
+    'Chapuletou',
+    'Foi jogar no Vasco',
+    'Foi pro modo espectador',
+    'Foi de americanas',
+    'Foi de berço',
+];
+
 const roletaCommand = async (client, message) => {
     message.command = 'roleta';
     if (!await processCommand(15_000, 'channel', message, client)) return;
@@ -44,8 +61,9 @@ const roletaCommand = async (client, message) => {
         return;
     }
 
+    const randomPhrase = Frases[randomInt(0, Frases.length - 1)];
     const emote = await client.emotes.getEmoteFromList(message.channelName, ['ripbozo'], ':tf:');
-    client.log.logAndSay(message, `BANG! Foi de arrasta pra cima ${emote}`);
+    client.log.logAndSay(message, `BANG! ${randomPhrase} ${emote}`);
 };
 
 roletaCommand.commandName = 'roleta russa';
