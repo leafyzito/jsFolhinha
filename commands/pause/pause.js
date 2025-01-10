@@ -7,7 +7,8 @@ const pauseCommand = async (client, message) => {
     if (message.isStreamer || message.isMod || message.senderUsername === process.env.DEV_NICK) {
 
         await client.db.update('config', { channel: message.channelName }, { $set: { isPaused: true } });
-        await client.reloadChannelConfigs();
+        // await client.reloadChannelConfigs();
+        client.channelConfigs[message.channelName].isPaused = true;
         const emote = await client.emotes.getEmoteFromList(message.channelName, ['joia', 'jumilhao'], '👍');
         client.log.logAndReply(message, `pausado ${emote}`)
     }
@@ -20,7 +21,8 @@ const unpauseCommand = async (client, message) => {
     if (message.isStreamer || message.isMod || message.senderUsername === process.env.DEV_NICK) {
 
         await client.db.update('config', { channel: message.channelName }, { $set: { isPaused: false } });
-        await client.reloadChannelConfigs();
+        // await client.reloadChannelConfigs();
+        client.channelConfigs[message.channelName].isPaused = false;
         const emote = await client.emotes.getEmoteFromList(message.channelName, ['joia', 'jumilhao'], '👍');
         client.log.logAndReply(message, `despausado ${emote}`)
     }
