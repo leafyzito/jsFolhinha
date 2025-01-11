@@ -48,7 +48,7 @@ const hypertranslateCommand = async (client, message) => {
     } else {
         // check if there is number argument and text to be translated
         if (args.length < 3) {
-            client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}hypertranslate (<número de traduções>) <texto para traduzir>`);
+            client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}hypertranslate <número de traduções> <texto para traduzir>`);
             return;
         }
 
