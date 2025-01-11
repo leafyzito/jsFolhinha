@@ -1,6 +1,8 @@
 const { processCommand } = require("../../utils/processCommand.js");
 const fetch = require('node-fetch');
 const FormData = require('form-data');
+const path = require('path');
+const fs = require('fs');
 
 async function uploadToFeridinha(content) {
     const api_url = 'https://feridinha.com/upload';
