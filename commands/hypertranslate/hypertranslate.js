@@ -46,6 +46,12 @@ const hypertranslateCommand = async (client, message) => {
     if (isNaN(numTranslations)) {
         numTranslations = 10; // Set default number of translations
     } else {
+        // check if there is number argument and text to be translated
+        if (args.length < 3) {
+            client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}hypertranslate (<número de traduções>) <texto para traduzir>`);
+            return;
+        }
+
         if (numTranslations < 2) {
             client.log.logAndReply(message, `O número de traduções deve ser pelo menos 2`);
             return;
