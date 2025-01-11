@@ -143,47 +143,56 @@ const jokenpoCommand = async (client, message) => {
     switch (user1Answer.toLowerCase()) {
         case 'pedra':
             if (user2Answer.toLowerCase() === 'papel') {
-                client.log.logAndReply(message, `${message.senderUsername} usou pedra 🪨 e ${gameTarget} usou papel 📄! ${gameTarget} é o vencedor! 🏆`);
+                // client.log.logAndReply(message, `${message.senderUsername} usou pedra 🪨 e ${gameTarget} usou papel 📄! ${gameTarget} é o vencedor! 🏆`);
+                client.log.logAndReply(message, `${message.senderUsername} 🪨 X 📄 ${gameTarget} - ${gameTarget} é o vencedor! 🏆`);
                 winner = gameTarget;
                 looser = message.senderUsername;
             }
             if (user2Answer.toLowerCase() === 'tesoura') {
-                client.log.logAndReply(message, `${message.senderUsername} usou pedra 🪨 e ${gameTarget} usou tesoura ✂️! ${message.senderUsername} é o vencedor! 🏆`);
+                // client.log.logAndReply(message, `${message.senderUsername} usou pedra 🪨 e ${gameTarget} usou tesoura ✂️! ${message.senderUsername} é o vencedor! 🏆`);
+                client.log.logAndReply(message, `${message.senderUsername} 🪨 X ✂️ ${gameTarget} - ${message.senderUsername} é o vencedor! 🏆`);
                 winner = message.senderUsername;
                 looser = gameTarget;
             }
             if (user2Answer.toLowerCase() === 'pedra') {
-                client.log.logAndReply(message, `${message.senderUsername} usou pedra 🪨 e ${gameTarget} usou pedra 🪨! É um empate!`);
+                // client.log.logAndReply(message, `${message.senderUsername} usou pedra 🪨 e ${gameTarget} usou pedra 🪨! É um empate!`);
+                client.log.logAndReply(message, `${message.senderUsername} 🪨 X 🪨 ${gameTarget} - É um empate!`);
             }
             break;
         case 'papel':
             if (user2Answer.toLowerCase() === 'tesoura') {
-                client.log.logAndReply(message, `${message.senderUsername} usou papel 📄 e ${gameTarget} usou tesoura ✂️! ${gameTarget} é o vencedor! 🏆`);
+                // client.log.logAndReply(message, `${message.senderUsername} usou papel 📄 e ${gameTarget} usou tesoura ✂️! ${gameTarget} é o vencedor! 🏆`);
+                client.log.logAndReply(message, `${message.senderUsername} 📄 X ✂️ ${gameTarget} - ${gameTarget} é o vencedor! 🏆`);
                 winner = gameTarget;
                 looser = message.senderUsername;
             }
             if (user2Answer.toLowerCase() === 'pedra') {
-                client.log.logAndReply(message, `${message.senderUsername} usou papel 📄 e ${gameTarget} usou pedra 🪨! ${message.senderUsername} é o vencedor! 🏆`);
+                // client.log.logAndReply(message, `${message.senderUsername} usou papel 📄 e ${gameTarget} usou pedra 🪨! ${message.senderUsername} é o vencedor! 🏆`);
+                client.log.logAndReply(message, `${message.senderUsername} 📄 X 🪨 ${gameTarget} - ${message.senderUsername} é o vencedor! 🏆`);
                 winner = message.senderUsername;
                 looser = gameTarget;
             }
             if (user2Answer.toLowerCase() === 'papel') {
-                client.log.logAndReply(message, `${message.senderUsername} usou papel 📄 e ${gameTarget} usou papel 📄! É um empate!`);
+                // client.log.logAndReply(message, `${message.senderUsername} usou papel 📄 e ${gameTarget} usou papel 📄! É um empate!`);
+                client.log.logAndReply(message, `${message.senderUsername} 📄 X 📄 ${gameTarget} - É um empate!`);
             }
             break;
         case 'tesoura':
             if (user2Answer.toLowerCase() === 'pedra') {
-                client.log.logAndReply(message, `${message.senderUsername} usou tesoura ✂️ e ${gameTarget} usou pedra 🪨! ${gameTarget} é o vencedor! 🏆`);
+                // client.log.logAndReply(message, `${message.senderUsername} usou tesoura ✂️ e ${gameTarget} usou pedra 🪨! ${gameTarget} é o vencedor! 🏆`);
+                client.log.logAndReply(message, `${message.senderUsername} ✂️ X 🪨 ${gameTarget} - ${gameTarget} é o vencedor! 🏆`);
                 winner = gameTarget;
                 looser = message.senderUsername;
             }
             if (user2Answer.toLowerCase() === 'papel') {
-                client.log.logAndReply(message, `${message.senderUsername} usou tesoura ✂️ e ${gameTarget} usou papel 📄! ${message.senderUsername} é o vencedor! 🏆`);
+                // client.log.logAndReply(message, `${message.senderUsername} usou tesoura ✂️ e ${gameTarget} usou papel 📄! ${message.senderUsername} é o vencedor! 🏆`);
+                client.log.logAndReply(message, `${message.senderUsername} ✂️ X 📄 ${gameTarget} - ${message.senderUsername} é o vencedor! 🏆`);
                 winner = message.senderUsername;
                 looser = gameTarget;
             }
             if (user2Answer.toLowerCase() === 'tesoura') {
-                client.log.logAndReply(message, `${message.senderUsername} usou tesoura ✂️ e ${gameTarget} usou tesoura ✂️! É um empate!`);
+                // client.log.logAndReply(message, `${message.senderUsername} usou tesoura ✂️ e ${gameTarget} usou tesoura ✂️! É um empate!`);
+                client.log.logAndReply(message, `${message.senderUsername} ✂️ X ✂️ ${gameTarget} - É um empate!`);
             }
             break;
         default:
