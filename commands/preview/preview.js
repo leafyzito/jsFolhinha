@@ -30,6 +30,32 @@ async function uploadToFeridinha(content) {
     }
 }
 
+async function makePreview(channelName) {
+    try {
+        const response = await fetch(`http://localhost:8989/preview/${channelName}`);
+        const data = await response.json();
+
+        if (!response.ok) {
+            return null;
+        }
+
+        // Resolve the path to the "clips" folder inside "twitchClipper"
+        const previewsFolder = path.resolve('/home/leafy/twitchClipper/previews');
+        var previewPath = path.join(previewsFolder, data.path);
+        console.log(previewPath);
+        // upload clip to feridinha
+        const previewName = path.basename(previewPath);
+        const previewContent = fs.readFileSync(previewPath);
+        const previewUrl = await uploadToFeridinha(previewContent, previewName);
+
+        return previewUrl;
+
+    } catch (error) {
+        console.log('Error making clip:', error);
+        return null;
+    }
+}
+
 async function getImage(url) {
     const response = await fetch(url);
     const imageData = await response.buffer();
@@ -49,6 +75,12 @@ async function getPreview(previewTarget) {
     if ("error" in data) { return 'não existe'; }
 
     if (data.data.length === 0) { return null; }
+
+    // make preview
+    const preview = await makePreview(previewTarget);
+    if (preview) {
+        return preview;
+    }
 
     const thumbPreviewRaw = data.data[0].thumbnail_url;
     const thumbPreview = thumbPreviewRaw.replace("{width}x{height}", "1280x720");
