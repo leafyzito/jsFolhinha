@@ -44,9 +44,8 @@ async function makePreview(channelName) {
         var previewPath = path.join(previewsFolder, data.path);
         console.log(previewPath);
         // upload clip to feridinha
-        const previewName = path.basename(previewPath);
         const previewContent = fs.readFileSync(previewPath);
-        const previewUrl = await uploadToFeridinha(previewContent, previewName);
+        const previewUrl = await uploadToFeridinha(previewContent);
 
         return previewUrl;
 
