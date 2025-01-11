@@ -125,7 +125,7 @@ const jokenpoCommand = async (client, message) => {
         const players = [message.senderUsername, gameTarget.toLowerCase()];
         const playerWhoDidntAnswer = players.find(player => !answers[player]);
         const emote = await client.emotes.getEmoteFromList(message.channelName, ['pfff', 'pffff', 'pfft', 'porvalo', 'mock', 'pointandlaugh'], '🤭');
-        if (playerWhoDidntAnswer) {
+        if (Object.keys(answers).length === 1 && playerWhoDidntAnswer) {
             client.log.logAndReply(message, `${playerWhoDidntAnswer} não respondeu, ficou com medo ${emote}`);
         } else {
             client.log.logAndReply(message, `Nenhum dos jogadores respondeu, ficaram com medo ${emote}`);
