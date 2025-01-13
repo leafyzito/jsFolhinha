@@ -84,7 +84,7 @@ const remindCommand = async (client, message) => {
                 pendingReminders.push(`${reminder._id}`);
             });
 
-            var finalRes = `Você tem estes lembretes pendentes: ${pendingReminders.join(', ')}`;
+            var finalRes = `Você tem estes lembretes: ${pendingReminders.join(', ')}`;
             if (finalRes.length > 480) { finalRes = await manageLongResponse(finalRes); }
 
             client.log.logAndReply(message, finalRes);
