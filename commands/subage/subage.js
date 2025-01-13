@@ -39,8 +39,12 @@ async function getSubAge(user, channel) {
         }
 
         let endsAt = data.meta.endsAt;
+        let endsAtPart = '';
+        if (endsAt !== null) {
+            endsAtPart = ` - Termina em ${timeUntilDT(endsAt)[0]} (${timeUntilDT(endsAt)[1]})`;
+        }
 
-        output = `${user} é sub de ${channel} há ${months} meses ${streakPart} com Subscrição ${subType} - Termina em ${timeUntilDT(endsAt)[0]} (${timeUntilDT(endsAt)[1]})`;
+        output = `${user} é sub de ${channel} há ${months} meses ${streakPart} com Subscrição ${subType} ${endsAtPart}`;
     }
 
     let hasSubbed = data.cumulative !== null;
