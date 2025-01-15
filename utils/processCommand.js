@@ -76,6 +76,7 @@ async function processCommand(cooldownDuration, type, message, client) {
 
     if (currUserBans && (currUserBans.includes('all') || currUserBans.includes(message.command))) { return false; }
     if (currChannelConfigs && currChannelConfigs.isPaused) { return false; }
+    if (currChannelConfigs && currChannelConfigs.offlineOnly && await isStreamOnline(message.channelName)) { return false; }
     if (currChannelConfigs && currChannelConfigs.disabledCommands.includes(message.command)) {
         client.log.logAndReply(message, `⚠️ Esse comando foi desativado neste chat`);
         return false;
@@ -84,7 +85,6 @@ async function processCommand(cooldownDuration, type, message, client) {
         client.log.logAndReply(message, `⚠️ Esse comando foi desativado neste chat pelo dev`);
         return false;
     }
-    if (currChannelConfigs && currChannelConfigs.offlineOnly && await isStreamOnline(message.channelName)) { return false; }
 
     // if all good to go, manage cooldown
     return true;
