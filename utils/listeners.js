@@ -1,10 +1,12 @@
 const { timeSince, randomChoice } = require('../utils/utils.js');
 const { afkInfoObjects } = require('../commands/afk/afk_info_model.js');
+const { isStreamOnline } = require('../utils/utils.js');
 
 var lastReplyTime = {};
 const replyMentionListener = async (client, message) => {
     // check if channel is paused or has reminders banned
     if (client.channelConfigs[message.channelName].isPaused) { return; }
+    if (client.channelConfigs[message.channelName].offlineOnly && await isStreamOnline(message.channelName)) { return; }
 
     if (message.messageText.startsWith(message.commandPrefix)) { return; }
 
@@ -46,6 +48,7 @@ const afkUserListener = async (client, message) => {
     // check if channel is paused or has reminders banned
     if (client.channelConfigs[message.channelName].isPaused) { return; }
     if (client.channelConfigs[message.channelName].disabledCommands.includes('afk')) { return; }
+    if (client.channelConfigs[message.channelName].offlineOnly && await isStreamOnline(message.channelName)) { return; }
 
     if (!client.afkUsers[message.channelName]) { return; }
     if (!client.afkUsers[message.channelName].includes(message.senderUsername)) { return; }
@@ -86,6 +89,7 @@ const reminderListener = async (client, message) => {
     // check if channel is paused or has reminders banned
     if (client.channelConfigs[message.channelName].isPaused) { return; }
     if (client.channelConfigs[message.channelName].disabledCommands.includes('remind')) { return; }
+    if (client.channelConfigs[message.channelName].offlineOnly && await isStreamOnline(message.channelName)) { return; }
 
     if (!client.usersWithPendingReminders.includes(message.senderUserID)) { return; }
     if (client.notifiedUsers.includes(message.senderUserID)) { return; }
