@@ -242,14 +242,24 @@ async function modifyClient(client) {
                                 const job = schedule.scheduleJob(new Date(reminder.remindAt * 1000), async function () {
                                     const reminderSender = await client.getUserByUserID(reminder.senderId) || 'Usuário deletado';
                                     const receiverName = await client.getUserByUserID(reminder.receiverId) || 'Usuário deletado 2';
-                                    const reminderMessage = timeSince(reminder.remindTime);
+                                    const howLongAgo = timeSince(reminder.remindTime);
                                     let finalRes = reminderSender === receiverName
-                                        ? `@${receiverName}, lembrete de você mesmo há ${reminderMessage}: ${reminder.remindMessage}`
-                                        : `@${receiverName}, lembrete de @${reminderSender} há ${reminderMessage}: ${reminder.remindMessage}`;
+                                        ? `@${receiverName}, lembrete de você mesmo há ${howLongAgo}: ${reminder.remindMessage}`
+                                        : `@${receiverName}, lembrete de @${reminderSender} há ${howLongAgo}: ${reminder.remindMessage}`;
 
                                     if (finalRes.length > 480) { finalRes = await manageLongResponse(finalRes); }
 
                                     const channelName = await client.getUserByUserID(reminder.fromChannelId);
+                                    // // check if channel is still in configs and check for if it's paused, reminds are banned and offlineOnly
+                                    // if (!client.channelConfigs[channelName] ||
+                                    //     client.channelConfigs[channelName].isPaused ||
+                                    //     client.channelConfigs[channelName].disabledCommands.includes('remind') ||
+                                    //     (client.channelConfigs[channelName].offlineOnly && await isStreamOnline(channelName))) {
+                                    //     // send in whisper to receiverName
+                                    //     await client.log.whisper(receiverName, finalRes);
+                                    //     await client.db.update('remind', { _id: reminder._id }, { $set: { beenRead: true } });
+                                    //     return;
+                                    // }
                                     await client.log.send(channelName, finalRes);
                                     await client.db.update('remind', { _id: reminder._id }, { $set: { beenRead: true } });
                                 });
