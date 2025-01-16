@@ -1,7 +1,10 @@
 const { processCommand } = require("../../utils/processCommand.js");
 
 async function getMath(expression) {
+    // replace commas with dots
     expression = expression.replace(/,/g, '.');
+    // replace × with *
+    expression = expression.replace(/×/g, '*');
     const api_url = 'http://api.mathjs.org/v4/';
     const headers = { 'Content-Type': 'application/json' };
     const payload = JSON.stringify({ expr: expression });
