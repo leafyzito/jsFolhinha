@@ -42,7 +42,7 @@ const randomLineCommand = async (client, message) => {
         return;
     }
     if (!randomLine) { // this should never happen
-        client.log.logAndReply(message, `Nunca loguei uma mensagem neste chat (contando desde 19/10/2024)`);
+        client.log.logAndReply(message, `Nunca loguei uma mensagem desse usuário neste chat (contando desde 19/10/2024)`);
         return;
     }
 
