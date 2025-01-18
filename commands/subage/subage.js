@@ -62,7 +62,7 @@ async function getSubAge(user, channel) {
 }
 
 const subAgeCommand = async (client, message) => {
-    message.command = 'followage';
+    message.command = 'subage';
     if (!await processCommand(5000, 'channel', message, client)) return;
 
     let saTarget = message.senderUsername;
