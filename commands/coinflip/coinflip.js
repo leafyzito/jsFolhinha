@@ -15,10 +15,10 @@ const coinflipCommand = async (client, message) => {
 
     const coin = randomInt(0, 1);
     if (coin === 0) {
-        client.log.logAndReply(message, 'Cara (sim)');
+        client.log.logAndReply(message, '🪙 Cara (sim)');
         return;
     } else {
-        client.log.logAndReply(message, 'Coroa (não)');
+        client.log.logAndReply(message, '🪙 Coroa (não)');
         return;
     }
 
