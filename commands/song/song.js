@@ -43,11 +43,6 @@ const songCommand = async (client, message) => {
             client.log.logAndReply(message, `Esse usuário não existe no Last.fm. Se estiver com dúvidas sobre o comando, acesse https://folhinhabot.com/comandos/song 😁`);
             return;
         }
-        if (lastfmUserExists === 'private') {
-            client.log.logAndReply(message, `Esse usuário tem o perfil privado (se não for o caso, avise o dev)`);
-            return;
-        }
-
 
         // check if lastfm user is already set in db
         const matchFromDb = await client.db.get('lastfm', { twitch_uid: message.senderUserID });
@@ -86,6 +81,11 @@ const songCommand = async (client, message) => {
 
     if (songInfo === false) {
         client.log.logAndReply(message, `${songTarget} não está ouvindo nada no momento`);
+        return;
+    }
+
+    if (songInfo === 'private') {
+        client.log.logAndReply(message, `Esse usuário tem o perfil privado no Last.fm`);
         return;
     }
 
