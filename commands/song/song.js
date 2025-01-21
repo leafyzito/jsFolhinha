@@ -5,8 +5,13 @@ async function getSongInfo(lastfmUser) {
     const response = await fetch(api_url);
     const data = await response.json();
 
-    if (data.error && data.error === 6) {
-        return null;
+    if (data.error) {
+        if (data.error === 6) {
+            return null;
+        }
+        if (data.error === 17) {
+            return 'private';
+        }
     }
 
     if (data.recenttracks.track.length === 0) {
@@ -38,6 +43,11 @@ const songCommand = async (client, message) => {
             client.log.logAndReply(message, `Esse usuário não existe no Last.fm. Se estiver com dúvidas sobre o comando, acesse https://folhinhabot.com/comandos/song 😁`);
             return;
         }
+        if (lastfmUserExists === 'private') {
+            client.log.logAndReply(message, `Esse usuário tem o perfil privado (se não for o caso, avise o dev)`);
+            return;
+        }
+
 
         // check if lastfm user is already set in db
         const matchFromDb = await client.db.get('lastfm', { twitch_uid: message.senderUserID });
