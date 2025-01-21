@@ -85,7 +85,7 @@ const songCommand = async (client, message) => {
     }
 
     if (songInfo === 'private') {
-        client.log.logAndReply(message, `Esse usuário tem o perfil privado no Last.fm`);
+        client.log.logAndReply(message, `Esse usuário tem o perfil privado no Last.fm (se não for o caso, avise o dev)`);
         return;
     }
 
