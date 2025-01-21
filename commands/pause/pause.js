@@ -10,7 +10,7 @@ const pauseCommand = async (client, message) => {
         // await client.reloadChannelConfigs();
         client.channelConfigs[message.channelName].isPaused = true;
         const emote = await client.emotes.getEmoteFromList(message.channelName, ['joia', 'jumilhao'], '👍');
-        client.log.logAndReply(message, `pausado ${emote}`)
+        client.log.logAndReply(message, `Pausado ${emote}`)
     }
 };
 
@@ -24,7 +24,7 @@ const unpauseCommand = async (client, message) => {
         // await client.reloadChannelConfigs();
         client.channelConfigs[message.channelName].isPaused = false;
         const emote = await client.emotes.getEmoteFromList(message.channelName, ['joia', 'jumilhao'], '👍');
-        client.log.logAndReply(message, `despausado ${emote}`)
+        client.log.logAndReply(message, `Despausado ${emote}`)
     }
 };
 
