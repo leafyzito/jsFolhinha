@@ -40,7 +40,7 @@ const songCommand = async (client, message) => {
         // check if lastfm user exists
         const lastfmUserExists = await getSongInfo(lastfmUserToSet);
         if (lastfmUserExists === null) {
-            client.log.logAndReply(message, `Esse usuário não existe no Last.fm. Se estiver com dúvidas sobre o comando, acesse https://folhinhabot.com/comandos/song 😁`);
+            client.log.logAndReply(message, `O usuário ${lastfmUserToSet} não existe no Last.fm. Se estiver com dúvidas sobre o comando, acesse https://folhinhabot.com/comandos/song 😁`);
             return;
         }
 
@@ -75,7 +75,7 @@ const songCommand = async (client, message) => {
 
     const songInfo = await getSongInfo(lastfmUser);
     if (songInfo === null) {
-        client.log.logAndReply(message, 'Esse usuário não está registrado no Last.fm. Se estiver com dúvidas sobre o comando, acesse https://folhinhabot.com/comandos/song 😁');
+        client.log.logAndReply(message, `O usuário ${songTarget} não está registrado no Last.fm. Se estiver com dúvidas sobre o comando, acesse https://folhinhabot.com/comandos/song 😁`);
         return;
     }
 
@@ -85,7 +85,7 @@ const songCommand = async (client, message) => {
     }
 
     if (songInfo === 'private') {
-        client.log.logAndReply(message, `Esse usuário tem o perfil privado no Last.fm (se não for o caso, avise o dev)`);
+        client.log.logAndReply(message, `O usuário ${songTarget} tem o perfil privado no Last.fm (se não for o caso, avise o dev)`);
         return;
     }
 
