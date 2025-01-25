@@ -80,7 +80,7 @@ const songCommand = async (client, message) => {
     }
 
     if (songInfo === false) {
-        client.log.logAndReply(message, `${songTarget} não está ouvindo nada no momento`);
+        client.log.logAndReply(message, `${songTarget != message.senderUsername ? songTarget : 'Você'} não está ouvindo nada no momento`);
         return;
     }
 
