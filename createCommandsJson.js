@@ -30,7 +30,7 @@ const loadCommands2 = () => {
 
         console.log(commandName, aliases, shortDescription, cooldown, whisperable, description, code);
 
-        if (!commandName || !aliases || !shortDescription || !cooldown || whisperable == null || !description || !code) {
+        if (!commandName || !aliases || !shortDescription || (!cooldown && cooldown != 0) || whisperable == null || !description || !code) {
             console.log('não existe, skipping');
             continue;
         }
