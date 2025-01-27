@@ -12,7 +12,7 @@ const configCommand = async (client, message) => {
     }
 
     if (message.messageText.split(" ").length === 1) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}config <prefixo/ban ou unban/offline>`);
+        client.log.logAndReply(message, `Se estiver com dúvidas sobre o comando, acesse https://folhinhabot.com/comandos/config 😁`);
         return;
     }
 
