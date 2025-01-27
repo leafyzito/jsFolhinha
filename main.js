@@ -90,10 +90,18 @@ function onWhisperHandler(message) {
     message.serverTimestampRaw = new Date().getTime();
     message.channelName = "whisper";
 
+    // if the message starts with any valid prefix, replace it with "!"
+    const validPrefixes = ['?', '&', '%', '+', '*', '-', '=', '|', '@', '#', '$', '~', '\\', '_', ',', ';', '<', '>'];
+    for (const prefix of validPrefixes) {
+        if (message.messageText.startsWith(prefix)) {
+            message.messageText = message.messageText.replace(prefix, message.commandPrefix);
+        }
+    }
+
     if (process.env.ENV == 'prod') {
         commandHandler(client, message);
     }
-    if (!message.messageText.startsWith('!')) {
+    if (!message.messageText.startsWith(message.commandPrefix)) {
         client.discord.logWhisperFrom(message);
     }
 }
