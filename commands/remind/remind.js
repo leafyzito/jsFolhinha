@@ -306,8 +306,20 @@ const remindCommand = async (client, message) => {
 
             if (finalRes.length > 480) { finalRes = await manageLongResponse(finalRes); }
 
-            await client.log.send(message.channelName, finalRes);
-            await client.db.update('remind', { _id: newRemindId }, { $set: { beenRead: true } });
+            // check if channel is still in configs and check for if it's paused, reminds are banned and offlineOnly
+            if (!client.channelConfigs[message.channelName] ||
+                client.channelConfigs[message.channelName].isPaused ||
+                client.channelConfigs[message.channelName].disabledCommands.includes('remind') ||
+                (client.channelConfigs[message.channelName].offlineOnly && await isStreamOnline(message.channelName))) {
+                // send in whisper to receiverName if channel is paused, reminds are banned or offlineOnly with stream online
+                await client.log.whisper(targetUser, finalRes);
+                await client.db.update('remind', { _id: newRemindId }, { $set: { beenRead: true } });
+            }
+            else {
+                // send in channel if channel is not paused, reminds are not banned and not offlineOnly
+                await client.log.send(message.channelName, finalRes);
+                await client.db.update('remind', { _id: newRemindId }, { $set: { beenRead: true } });
+            }
         });
 
         client.reminderJobs[newRemindId] = job;

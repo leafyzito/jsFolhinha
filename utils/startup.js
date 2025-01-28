@@ -250,18 +250,20 @@ async function modifyClient(client) {
                                     if (finalRes.length > 480) { finalRes = await manageLongResponse(finalRes); }
 
                                     const channelName = await client.getUserByUserID(reminder.fromChannelId);
-                                    // // check if channel is still in configs and check for if it's paused, reminds are banned and offlineOnly
-                                    // if (!client.channelConfigs[channelName] ||
-                                    //     client.channelConfigs[channelName].isPaused ||
-                                    //     client.channelConfigs[channelName].disabledCommands.includes('remind') ||
-                                    //     (client.channelConfigs[channelName].offlineOnly && await isStreamOnline(channelName))) {
-                                    //     // send in whisper to receiverName
-                                    //     await client.log.whisper(receiverName, finalRes);
-                                    //     await client.db.update('remind', { _id: reminder._id }, { $set: { beenRead: true } });
-                                    //     return;
-                                    // }
-                                    await client.log.send(channelName, finalRes);
-                                    await client.db.update('remind', { _id: reminder._id }, { $set: { beenRead: true } });
+                                    // check if channel is still in configs and check for if it's paused, reminds are banned and offlineOnly
+                                    if (!client.channelConfigs[channelName] ||
+                                        client.channelConfigs[channelName].isPaused ||
+                                        client.channelConfigs[channelName].disabledCommands.includes('remind') ||
+                                        (client.channelConfigs[channelName].offlineOnly && await isStreamOnline(channelName))) {
+                                        // send in whisper to receiverName if channel is paused, reminds are banned or offlineOnly with stream online
+                                        await client.log.whisper(receiverName, finalRes);
+                                        await client.db.update('remind', { _id: reminder._id }, { $set: { beenRead: true } });
+                                    }
+                                    else {
+                                        // send in channel if channel is not paused, reminds are not banned and not offlineOnly
+                                        await client.log.send(channelName, finalRes);
+                                        await client.db.update('remind', { _id: reminder._id }, { $set: { beenRead: true } });
+                                    }
                                 });
 
                                 // Store the job in a global object to associate it with the reminderId
