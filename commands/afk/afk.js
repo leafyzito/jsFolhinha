@@ -142,13 +142,13 @@ afkCommand.aliases = [...afkAliasList];
 afkCommand.shortDescription = 'Fique com status afk para contar quanto tempo esteve fora no canal atual';
 afkCommand.cooldown = 5000;
 afkCommand.whisperable = false;
-afkCommand.description = `Registra seu status como AFK no canal onde o comando foi realizado. Após você enviar qualquer mensagem no canal ficou AFK, o Folhinha responderá indicando quanto tempo você esteve ausente juntamente com uma mensagem, caso tenha deixado uma
+afkCommand.description = `Registra seu status como AFK no canal onde o comando foi realizado. Após você enviar qualquer mensagem no canal ficou AFK, o Folhinha responderá indicando quanto tempo você esteve ausente juntamente com a sua mensagem, caso tenha deixado uma
 
 Esse comando não afetará seu estado de AFK em outros canais
 
-Além de AFK, você poderá escolher entre uma variedade de ações, como !ler ou !desenhar, que terão o mesmo efeito do AFK, mas com uma mensagem diferentes.
+Além de AFK, você poderá escolher entre uma variedade de ações, como !ler ou !desenhar, que terão o mesmo efeito do AFK, mas com uma mensagem diferente.
 
-Nos aliases do comando você poderá ver todas as opções de ações disponíveis`;
+Nos aliases do comando poderá ver todas as opções de ações disponíveis`;
 afkCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${afkCommand.commandName}/${afkCommand.commandName}.js`;
 
 rafkCommand.commandName = 'resumeafk';
