@@ -28,7 +28,7 @@ function getFormattedDateTime() {
 discordClient.logCommand = async function (message, response) {
     const channelName = message.channelName == 'whisper' ? '📨 Whisper' : `#${message.channelName}`;
     const embed = new discordClient.EmbedBuilder()
-        .setTitle(`${channelName} - ${message.command}`)
+        .setTitle(`${channelName}/${message.displayName} - ${message.command}`)
         .addFields(
             {
                 name: "Comando:",
