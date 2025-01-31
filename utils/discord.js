@@ -26,8 +26,9 @@ function getFormattedDateTime() {
 
 
 discordClient.logCommand = async function (message, response) {
+    const channelName = message.channelName == 'whisper' ? '📨 Whisper' : `#${message.channelName}`;
     const embed = new discordClient.EmbedBuilder()
-        .setTitle(`#${message.channelName}/${message.displayName} - ${message.command}`)
+        .setTitle(`${channelName} - ${message.command}`)
         .addFields(
             {
                 name: "Comando:",
@@ -118,7 +119,7 @@ discordClient.importantLog = async function (content) {
 
 discordClient.logWhisper = async function (recipient, content) {
     const embed = new discordClient.EmbedBuilder()
-        .setTitle(`Whisper para #${recipient}`)
+        .setTitle(`📨 Whisper para #${recipient}`)
         .addFields(
             {
                 name: "Conteúdo:",
@@ -140,7 +141,7 @@ discordClient.logWhisper = async function (recipient, content) {
 
 discordClient.logWhisperFrom = async function (message) {
     const embed = new discordClient.EmbedBuilder()
-        .setTitle(`Whisper recebido de #${message.senderUsername}`)
+        .setTitle(`📩 Whisper recebido de #${message.senderUsername}`)
         .addFields(
             {
                 name: "Conteúdo:",
