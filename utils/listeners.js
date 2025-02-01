@@ -113,7 +113,8 @@ const reminderListener = async (client, message) => {
         }
 
         if (replyMsg.length > 480) {
-            client.log.send(message.channelName, `${message.senderUsername}, você tem ${reminders.length} lembretes. Use o comando "${message.commandPrefix}remind show" para ver os IDs ou "${message.commandPrefix}remind show all" para ver todos de uma vez`);
+            // client.log.send(message.channelName, `${message.senderUsername}, você tem ${reminders.length} lembretes. Use o comando "${message.commandPrefix}remind show" para ver os IDs ou "${message.commandPrefix}remind show all" para ver todos de uma vez`);
+            client.log.send(message.channelName, `${message.senderUsername}, você tem ${reminders.length} lembretes. Acesse https://folhinhabot.com/reminders para ver os seus lembretes pendentes`);
             client.notifiedUsers.push(message.senderUserID);
             processingReminder = processingReminder.filter(user => user !== message.senderUsername);
             return;
@@ -131,7 +132,8 @@ const reminderListener = async (client, message) => {
         return;
     }
 
-    client.log.send(message.channelName, `${message.senderUsername}, você tem ${reminders.length} lembretes. Use o comando "${message.commandPrefix}remind show" para ver os IDs ou "${message.commandPrefix}remind show all" para ver todos de uma vez`);
+    // client.log.send(message.channelName, `${message.senderUsername}, você tem ${reminders.length} lembretes. Use o comando "${message.commandPrefix}remind show" para ver os IDs ou "${message.commandPrefix}remind show all" para ver todos de uma vez`);
+    client.log.send(message.channelName, `${message.senderUsername}, você tem ${reminders.length} lembretes. Acesse https://folhinhabot.com/reminders para ver os seus lembretes pendentes`);
     client.notifiedUsers.push(message.senderUserID);
     processingReminder = processingReminder.filter(user => user !== message.senderUsername);
     return;
