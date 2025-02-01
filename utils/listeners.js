@@ -97,7 +97,7 @@ const reminderListener = async (client, message) => {
 
     processingReminder.push(message.senderUsername);
 
-    var reminders = await client.db.get('remind', { receiverId: message.senderUserID, beenRead: false, remindAt: null });
+    var reminders = await client.db.get('remind', { receiverId: message.senderUserID, beenRead: false, remindAt: null }, true);
     if (reminders.length === 0) { // should never happen but just in case
         processingReminder = processingReminder.filter(user => user !== message.senderUsername);
         return;
