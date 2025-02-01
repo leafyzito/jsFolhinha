@@ -240,6 +240,10 @@ async function modifyClient(client) {
                                 console.log('* Setting timed reminder for ' + reminderDate.toLocaleString());
 
                                 const job = schedule.scheduleJob(new Date(reminder.remindAt * 1000), async function () {
+                                    // verify the remind has not been deleted on website, force check in db
+                                    const remindDeletionCheck = await client.db.get('remind', { _id: reminder._id }, true);
+                                    if (remindDeletionCheck.length != 0 && remindDeletionCheck[0].beenRead) { return; }
+
                                     const reminderSender = await client.getUserByUserID(reminder.senderId) || 'Usuário deletado';
                                     const receiverName = await client.getUserByUserID(reminder.receiverId) || 'Usuário deletado 2';
                                     const howLongAgo = timeSince(reminder.remindTime);
