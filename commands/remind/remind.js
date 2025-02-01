@@ -298,6 +298,10 @@ const remindCommand = async (client, message) => {
     const remindCreateTime = Math.floor(Date.now() / 1000);
     if (remindAt) {
         const job = schedule.scheduleJob(new Date(remindAt * 1000), async function () {
+            // verify the remind has not been deleted on website, force check in db
+            const remindDeletionCheck = await client.db.get('remind', { _id: newRemindId }, true);
+            if (remindDeletionCheck.length != 0 && remindDeletionCheck[0].beenRead) { return; }
+
             const reminderSender = await client.getUserByUserID(message.senderUserID) || 'Usuário deletado';
             const reminderTime = timeSince(remindCreateTime);
             let finalRes = reminderSender === targetUser
