@@ -158,7 +158,13 @@ const dungeonCommand = async (client, message) => {
     const dungeon = dungeonData[Math.floor(Math.random() * dungeonData.length)];
     await client.log.reply(message, `${capitalize(dungeon.quote)} você quer ${dungeon['1'].option} ou ${dungeon['2'].option}? Tem 10 segundos para responder (1 ou 2)`);
     const response = await waitForMessage(client, check, 10_000);
-    if (!response) { return; } // end it here if no response
+    if (!response) {
+        // if user level is 0, delete the dungeon stats
+        if (userDungeonStats.level === 0) {
+            await client.db.delete('dungeon', { userId: message.senderUserID });
+        }
+        return;
+    } // end it here if no response
 
     // set new cooldown, only after response
     const currentTime = Math.floor(Date.now() / 1000);
