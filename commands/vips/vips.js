@@ -1,15 +1,15 @@
 const { processCommand } = require("../../utils/processCommand.js");
 
-async function getVips(channel) {
+async function getChannelVips(channel) {
     const api_url = `https://roles.tv/api/channel/login/${channel}`;
     const response = await fetch(api_url);
     const data = await response.json();
 
-    if (data.statusCode === 404) {
+    if (data.error && data.error != null) {
         return null;
     }
 
-    const totalVips = data.data.roles.vips.total;
+    const totalVips = data.data.roles.vips;
 
     return totalVips;
 }
@@ -19,7 +19,7 @@ const vipsCommand = async (client, message) => {
     if (!await processCommand(5000, 'channel', message, client)) return;
 
     const targetChannel = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.channelName;
-    const vips = await getVips(targetChannel);
+    const vips = await getChannelVips(targetChannel);
 
     if (vips === null) {
         client.log.logAndReply(message, `Esse canal não existe`);
@@ -31,7 +31,7 @@ const vipsCommand = async (client, message) => {
         return;
     }
 
-    client.log.logAndReply(message, `Existem ${vips} vips em #${targetChannel} - https://roles.tv/c/${targetChannel.toLowerCase()}`);
+    client.log.logAndReply(message, `Existem ${vips} VIPs em #${targetChannel} - https://roles.tv/c/${targetChannel.toLowerCase()}`);
 };
 
 vipsCommand.commandName = 'vips';

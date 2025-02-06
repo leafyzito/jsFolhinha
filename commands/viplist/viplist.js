@@ -1,30 +1,18 @@
 const { processCommand } = require("../../utils/processCommand.js");
 
 async function getVipList(user) {
-    const api_url = `https://roles.tv/api/user/login/${user}`;
+    const api_url = `https://roles.tv/api/summary/vips/login/${user}`;
     const response = await fetch(api_url);
     const data = await response.json();
 
-    if (data.statusCode === 404) {
+    if (data.error && data.error != null) {
         return null;
     }
 
-    const totalVips = data.data.roles.vips.total;
-    let totalPartners = 0;
-    let totalAffiliates = 0;
-    let totalFollowers = 0;
-
-    data.data.roles.vips.list.forEach((item) => {
-        if (item.roles.isPartner) {
-            totalPartners++;
-        }
-        if (item.roles.isAffiliate) {
-            totalAffiliates++;
-        }
-        if (item.followers) {
-            totalFollowers += item.followers;
-        }
-    });
+    const totalVips = data.data.channels;
+    const totalPartners = data.data.partners;
+    const totalAffiliates = data.data.affiliates;
+    const totalFollowers = data.data.channelsTotalFollowers;
 
     return { totalPartners, totalVips, totalAffiliates, totalFollowers: totalFollowers.toLocaleString('en-US') };
 }
@@ -36,13 +24,13 @@ const vipListCommand = async (client, message) => {
     const targetUser = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
     const userVipList = await getVipList(targetUser);
 
-    if (userVipList.totalVips === null) {
+    if (userVipList === null) {
         client.log.logAndReply(message, `Esse usuário não existe`);
         return;
     }
 
     if (userVipList.totalVips === 0) {
-        client.log.logAndReply(message, `O usuário ${targetUser} não é moderador em nenhum canal`);
+        client.log.logAndReply(message, `O usuário ${targetUser} não é vip em nenhum canal`);
         return;
     }
 
@@ -51,7 +39,7 @@ const vipListCommand = async (client, message) => {
 };
 
 vipListCommand.commandName = 'viplist';
-vipListCommand.aliases = ['viplist', 'vl'];
+vipListCommand.aliases = ['viplist', 'vipslist', 'vl'];
 vipListCommand.shortDescription = 'Mostra a lista de canais que algum usuário é vip';
 vipListCommand.cooldown = 5000;
 vipListCommand.whisperable = false;

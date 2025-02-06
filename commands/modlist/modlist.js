@@ -1,30 +1,18 @@
 const { processCommand } = require("../../utils/processCommand.js");
 
 async function getModList(user) {
-    const api_url = `https://roles.tv/api/user/login/${user}`;
+    const api_url = `https://roles.tv/api/summary/moderators/login/${user}`;
     const response = await fetch(api_url);
     const data = await response.json();
 
-    if (data.statusCode === 404) {
+    if (data.error && data.error != null) {
         return null;
     }
 
-    const totalMods = data.data.roles.mods.total;
-    let totalPartners = 0;
-    let totalAffiliates = 0;
-    let totalFollowers = 0;
-
-    data.data.roles.mods.list.forEach((item) => {
-        if (item.roles.isPartner) {
-            totalPartners++;
-        }
-        if (item.roles.isAffiliate) {
-            totalAffiliates++;
-        }
-        if (item.followers) {
-            totalFollowers += item.followers;
-        }
-    });
+    const totalMods = data.data.channels;
+    const totalPartners = data.data.partners;
+    const totalAffiliates = data.data.affiliates;
+    const totalFollowers = data.data.channelsTotalFollowers;
 
     return { totalPartners, totalMods, totalAffiliates, totalFollowers: totalFollowers.toLocaleString('en-US') };
 }
@@ -36,7 +24,7 @@ const modListCommand = async (client, message) => {
     const targetUser = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
     const userModList = await getModList(targetUser);
 
-    if (userModList.totalMods === null) {
+    if (userModList === null) {
         client.log.logAndReply(message, `Esse usuário não existe`);
         return;
     }

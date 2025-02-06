@@ -1,15 +1,15 @@
 const { processCommand } = require("../../utils/processCommand.js");
 
-async function getFounders(channel) {
+async function getChannelFounders(channel) {
     const api_url = `https://roles.tv/api/channel/login/${channel}`;
     const response = await fetch(api_url);
     const data = await response.json();
 
-    if (data.statusCode === 404) {
+    if (data.error && data.error != null) {
         return null;
     }
 
-    const totalFounders = data.data.roles.founders.total;
+    const totalFounders = data.data.roles.founders;
 
     return totalFounders;
 }
@@ -19,7 +19,7 @@ const foundersCommand = async (client, message) => {
     if (!await processCommand(5000, 'channel', message, client)) return;
 
     const targetChannel = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.channelName;
-    const founders = await getFounders(targetChannel);
+    const founders = await getChannelFounders(targetChannel);
 
     if (founders === null) {
         client.log.logAndReply(message, `Esse canal não existe`);
@@ -27,15 +27,15 @@ const foundersCommand = async (client, message) => {
     }
 
     if (founders === 0) {
-        client.log.logAndReply(message, `O canal #${targetChannel} não tem nenhum founder`);
+        client.log.logAndReply(message, `O canal #${targetChannel} não tem nenhum fundador`);
         return;
     }
 
-    client.log.logAndReply(message, `Total de founders em #${targetChannel}: ${founders} - https://roles.tv/c/${targetChannel.toLowerCase()}`);
+    client.log.logAndReply(message, `Existem ${founders} fundadores em #${targetChannel} - https://roles.tv/c/${targetChannel.toLowerCase()}`);
 };
 
 foundersCommand.commandName = 'founders';
-foundersCommand.aliases = ['founders'];
+foundersCommand.aliases = ['founders', 'fundadores'];
 foundersCommand.shortDescription = 'Mostra a lista de founders de algum canal';
 foundersCommand.cooldown = 5000;
 foundersCommand.whisperable = false;

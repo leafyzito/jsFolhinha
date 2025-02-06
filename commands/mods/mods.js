@@ -1,15 +1,15 @@
 const { processCommand } = require("../../utils/processCommand.js");
 
-async function getMods(channel) {
+async function getChannelMods(channel) {
     const api_url = `https://roles.tv/api/channel/login/${channel}`;
     const response = await fetch(api_url);
     const data = await response.json();
 
-    if (data.statusCode === 404) {
+    if (data.error && data.error != null) {
         return null;
     }
 
-    const totalMods = data.data.roles.mods.total;
+    const totalMods = data.data.roles.moderators;
 
     return totalMods;
 }
@@ -19,7 +19,7 @@ const modsCommand = async (client, message) => {
     if (!await processCommand(5000, 'channel', message, client)) return;
 
     const targetChannel = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.channelName;
-    const mods = await getMods(targetChannel);
+    const mods = await getChannelMods(targetChannel);
 
     if (mods === null) {
         client.log.logAndReply(message, `Esse canal não existe`);
