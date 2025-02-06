@@ -13,6 +13,7 @@ class TursoUtils {
     }
 
     async logMessage(message) {
+        if (process.env.ENV != 'prod') { return; }
         // user VARCHAR(255) NOT NULL,
         // userid VARCHAR(255) NOT NULL,
         // channel VARCHAR(255) NOT NULL,
