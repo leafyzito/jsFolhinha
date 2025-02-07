@@ -44,11 +44,13 @@ async function fetchEndpointHash(fileHash) {
 async function hltbSearch(query) {
     const fileHash = await fetchFileHash();
     if (!fileHash) {
+        throw new Error('file error');
         return 'file error';
     }
 
     const endpointHash = await fetchEndpointHash(fileHash);
     if (!endpointHash) {
+        throw new Error('endpoint error');
         return 'endpoint error';
     }
 
