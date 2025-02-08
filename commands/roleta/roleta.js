@@ -62,7 +62,7 @@ const roletaCommand = async (client, message) => {
     }
 
     const randomPhrase = Frases[randomInt(0, Frases.length - 1)];
-    const emote = await client.emotes.getEmoteFromList(message.channelName, ['ripbozo'], ':tf:');
+    const emote = await client.emotes.getEmoteFromList(message.channelName, ['ripbozo', 'o7'], ':tf:');
     client.log.logAndSay(message, `BANG! ${randomPhrase} ${emote}`);
 };
 
