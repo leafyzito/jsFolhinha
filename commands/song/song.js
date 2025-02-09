@@ -1,4 +1,5 @@
 const { processCommand } = require("../../utils/processCommand.js");
+const { timeSince } = require("../../utils/utils.js");
 
 async function getSongInfo(lastfmUser) {
     const api_url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${lastfmUser}&limit=1&api_key=${process.env.LASTFM_API_KEY}&format=json`;
@@ -20,14 +21,15 @@ async function getSongInfo(lastfmUser) {
 
     const currentTrack = data.recenttracks.track[0];
     const isNowPlaying = currentTrack['@attr'] ? currentTrack['@attr'].nowplaying : false;
-    if (!isNowPlaying) { return false; }
 
     const songArtist = currentTrack.artist['#text'];
     const songName = currentTrack.name;
     const albumName = currentTrack.album['#text'];
+    const timestamp = currentTrack.date ? currentTrack.date.uts : null;
 
-    return { songArtist, songName, albumName };
+    return { isNowPlaying, songArtist, songName, albumName, timestamp };
 }
+
 
 const songCommand = async (client, message) => {
     message.command = 'song';
@@ -80,7 +82,7 @@ const songCommand = async (client, message) => {
     }
 
     if (songInfo === false) {
-        client.log.logAndReply(message, `${songTarget != message.senderUsername ? songTarget : 'Você'} não está ouvindo nada no momento`);
+        client.log.logAndReply(message, `${songTarget != message.senderUsername ? songTarget : 'Você'} ainda não escutou nenhuma música`);
         return;
     }
 
@@ -89,7 +91,12 @@ const songCommand = async (client, message) => {
         return;
     }
 
-    client.log.logAndReply(message, `${songTarget != message.senderUsername ? songTarget : 'Você'} está ouvindo ${songInfo.songArtist} - ${songInfo.songName} ${songInfo.albumName != '' ? `(Álbum: ${songInfo.albumName})` : ''}`);
+    if (songInfo.isNowPlaying) {
+        client.log.logAndReply(message, `${songTarget != message.senderUsername ? songTarget : 'Você'} está ouvindo ${songInfo.songArtist} - ${songInfo.songName} ${songInfo.albumName != '' ? `(Álbum: ${songInfo.albumName})` : ''}`);
+    } else {
+        const timeAgo = timeSince(songInfo.timestamp);
+        client.log.logAndReply(message, `${songTarget != message.senderUsername ? songTarget : 'Você'} ouviu por último ${songInfo.songArtist} - ${songInfo.songName} ${songInfo.albumName != '' ? `(Álbum: ${songInfo.albumName})` : ''} há ${timeAgo}`);
+    }
     return;
 };
 
