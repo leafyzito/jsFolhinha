@@ -2,11 +2,11 @@ const fs = require('fs');
 const { exec } = require('child_process');
 const { isStreamOnline, timeSince } = require('./utils.js');
 
-async function createNewChannelConfig(client, userid) {
-    const username = await client.getUserByUserID(userid);
+async function createNewChannelConfig(client, channelId) {
+    const channelName = await client.getUserByUserID(channelId);
     const newConfig = {
-        channel: username,
-        channelId: userid,
+        channel: channelName,
+        channelId: channelId,
         prefix: '!',
         offlineOnly: false,
         isPaused: false,
@@ -19,10 +19,10 @@ async function createNewChannelConfig(client, userid) {
     await client.reloadChannelPrefixes();
 
     fs.appendFile('channels.txt',
-        `${userid} ${username}\n`,
+        `${channelId} ${channelName}\n`,
         (err) => {
             if (err) {
-                console.error(`Erro ao adicionar ${username} ao channels.txt: ${err}`);
+                console.error(`Erro ao adicionar ${channelName} ao channels.txt: ${err}`);
                 return;
             }
             console.log('Data appended to channels.txt');
@@ -118,41 +118,48 @@ async function petAttencionTask(client) {
 async function fetchPendingJoins(client) {
     const pendingJoins = await client.db.get('pendingjoin', { status: 'pending' }, true);
     for (const channelToJoin of pendingJoins) {
-        const userid = channelToJoin.userid;
-        const username = await client.getUserByUserID(userid);
-        if (username) {
+        // channel to join info
+        const channelId = channelToJoin.channelid;
+        const channelName = await client.getUserByUserID(channelId);
+        // person who invited the bot info
+        const inviterId = channelToJoin.inviterid;
+        const inviterName = await client.getUserByUserID(inviterId);
+
+        if (channelName) {
             // this should never happen, but let's test it    
             const alreadyJoinedChannels = [...client.joinedChannels];
-            if (alreadyJoinedChannels.includes(username)) {
-                console.log(`* ${username} is already joined`);
+            if (alreadyJoinedChannels.includes(channelName)) {
+                console.log(`* ${channelName} is already joined`);
                 await client.db.update('pendingjoin', { _id: channelToJoin._id }, { $set: { status: 'joined' } });
                 continue;
             }
 
-            console.log(`* Joining ${username} to ${username}`);
-            client.discord.importantLog(`* Joining to ${username} from website`);
+            console.log(`* Joining ${channelName} to ${channelName}`);
+            client.discord.importantLog(`* Joining to ${channelName} from website (inviter: ${inviterName})`);
 
-            client.join(username).catch((err) => {
-                console.error(`Erro ao entrar no chat ${username}: ${err}`);
-                client.discord.log(`* Error joining ${username} from website: ${err}`);
-                client.log.send(username, `Erro ao entrar no chat ${username}. Contacte o @${process.env.DEV_NICK}`);
+            client.join(channelName).catch((err) => {
+                console.error(`Erro ao entrar no chat ${channelName}: ${err}`);
+                client.discord.importantLog(`* Error joining ${channelName} from website: ${err}`);
+                client.log.send(channelName, `Erro ao entrar no chat ${channelName}. Por favor contacte o @${process.env.DEV_NICK}`);
+                client.log.whisper(inviterName, `Erro ao entrar no chat ${channelName}. Por favor contacte o @${process.env.DEV_NICK}`);
                 return;
             });
 
             // create config
-            createNewChannelConfig(client, userid);
-            client.channelsToJoin.push(username);
+            createNewChannelConfig(client, channelId);
+            client.channelsToJoin.push(channelName);
 
-            const emote = await client.emotes.getEmoteFromList(username, ['peepohey', 'heyge'], 'KonCha');
-            client.log.send(username, `${emote} Oioi! Fui convidado para me juntar aqui! Para saber mais sobre mim, pode usar !ajuda ou !comandos`);
-            client.log.whisper(username, `Caso tenha follow-mode ativado no seu chat, me dê cargo de moderador ou vip para conseguir falar lá :D`);
+            const emote = await client.emotes.getEmoteFromList(channelName, ['peepohey', 'heyge'], 'KonCha');
+            const inviterPart = inviterName != channelName ? ` por @${inviterName}` : '';
+            client.log.send(channelName, `${emote} Oioi! Fui convidado para me juntar aqui${inviterPart}! Para saber mais sobre mim, pode usar !ajuda ou !comandos`);
+            client.log.whisper(inviterName, `Caso tenha follow-mode ativado no chat para o qual me convidou, me dê cargo de moderador ou vip para conseguir falar lá :D`);
 
 
             await client.db.update('pendingjoin', { _id: channelToJoin._id }, { $set: { status: 'joined' } });
         }
         else {
             console.log(`* ${channelToJoin.userid} not found from website`);
-            client.discord.log(`* ${channelToJoin.userid} not found from website`);
+            client.discord.importantLog(`* ${channelToJoin.userid} not found from website`);
             await client.db.update('pendingjoin', { _id: channelToJoin._id }, { $set: { status: 'user not found' } });
         }
 
