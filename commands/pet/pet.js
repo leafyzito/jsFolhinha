@@ -54,7 +54,7 @@ const petCommand = async (client, message) => {
     if (!await processCommand(5000, 'channel', message, client)) return;
 
     if (message.messageText.split(' ').length === 1) {
-        client.log.logAndReply(message, `Para saber mais sobre os comando de pet, acesse https://folhinhabot.com/comandos/pet 😁 `);
+        client.log.logAndReply(message, `Para saber mais sobre os comandos de pet, acesse https://folhinhabot.com/comandos/pet 😁 `);
         return;
     }
 
