@@ -130,7 +130,7 @@ async function fetchPendingJoins(client) {
             const alreadyJoinedChannels = [...client.joinedChannels];
             if (alreadyJoinedChannels.includes(channelName)) {
                 console.log(`* ${channelName} is already joined`);
-                await client.db.update('pendingjoin', { _id: channelToJoin._id }, { $set: { status: 'joined' } });
+                await client.db.update('pendingjoin', { _id: channelToJoin._id }, { $set: { status: 'duplicate' } });
                 continue;
             }
 
