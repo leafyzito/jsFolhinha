@@ -70,7 +70,7 @@ const ttsCommand = async (client, message) => {
 };
 
 ttsCommand.commandName = 'text-to-speech';
-ttsCommand.aliases = ['tts'];
+ttsCommand.aliases = ['tts', 'text-to-speech'];
 ttsCommand.shortDescription = 'Crie um TTS com algum texto';
 ttsCommand.cooldown = 5000;
 ttsCommand.whisperable = true;
