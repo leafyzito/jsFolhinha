@@ -191,11 +191,24 @@ discordClient.logError = async function (content) {
 discordClient.notifyDevMention = async function (message) {
     const embed = new discordClient.EmbedBuilder()
         .setTitle(`#${message.channelName}/${message.displayName}`)
-        .setDescription(message.messageText)
         .setColor(message.color ? colorToHexString(message.color) : '#008000')
         .setFooter({
             text: `${getFormattedDateTime()}`,
         });
+
+    if (message.replyParentMessageID) {
+        embed.addFields({
+            name: "Respondendo a:",
+            value: message.replyParentMessageBody,
+            inline: false
+        });
+    }
+
+    embed.addFields({
+        name: "Mensagem:",
+        value: message.messageText,
+        inline: false
+    });
 
     const devPingChannel = await discordClient.channels.fetch(process.env.DISCORD_DEV_MENTIONS_CHANNEL);
     devPingChannel.send({ embeds: [embed] })
