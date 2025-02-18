@@ -34,12 +34,12 @@ const helpCommand = async (client, message) => {
 
 };
 
-const statsCommand = async (client, message) => {
+const statsCommand = async (client, message, anonClient) => {
     message.command = 'stats';
     if (!await processCommand(5000, 'channel', message, client)) return;
 
     const uptime = timeSince(client.startTime);
-    const channelsCount = [...client.joinedChannels].length;
+    const channelsCount = [...anonClient.joinedChannels].length;
     const usedRam = process.memoryUsage().heapUsed / 1024 / 1024;
 
     client.log.logAndReply(message, `Uptime: ${uptime} | Canais: ${channelsCount} | RAM: ${Math.round(usedRam * 100) / 100}mb`);
