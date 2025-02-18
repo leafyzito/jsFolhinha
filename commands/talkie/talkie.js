@@ -22,7 +22,7 @@ const talkieCommand = async (client, message) => {
         return;
     }
 
-    var joinedChannels = [...client.joinedChannels]; // tirar daqui depois de tentado 1 vez
+    var joinedChannels = [...client.channelsToJoin]; // tirar daqui depois de tentado 1 vez
     let targetChannel;
     let i = 0;
     do {
