@@ -274,9 +274,20 @@ const cookieCommand = async (client, message) => {
             return;
         }
 
-        // TODO: add joker card 🃏 with a smaller chance
+        // Current chances: https://f.feridinha.com/Hk1Am.png
+        // TODO: add joker card 🃏 with 1% chance of appearing
         // - if 2 jokers, add 5% of current jackpot to jackpot
         // - if 3 jokers, give 5% of current jackpot to user
+        const getSlotSymbol = () => {
+            // 1% chance for joker, 99% chance for regular symbols
+            const isJoker = Math.random() < 0.01;
+            if (isJoker) {
+                return '🃏';
+            }
+            return randomChoice(['🍒', '🍊', '🍋', '🍇', '🍉', '🍓']);
+        };
+        const slotResults2 = [getSlotSymbol(), getSlotSymbol(), getSlotSymbol()];
+
         const currentJackpot = await client.db.get('cookie', { userId: process.env.BOT_USERID });
 
         const slotResults = [randomChoice(['🍒', '🍊', '🍋', '🍇', '🍉', '🍓']), randomChoice(['🍒', '🍊', '🍋', '🍇', '🍉', '🍓']), randomChoice(['🍒', '🍊', '🍋', '🍇', '🍉', '🍓'])];
