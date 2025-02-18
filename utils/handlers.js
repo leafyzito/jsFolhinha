@@ -1,7 +1,7 @@
 const { replyMentionListener, afkUserListener, reminderListener, updateUserListener, notifyDevMentionListener } = require('./listeners.js');
 const { send7tvPresence } = require('./utils.js');
 
-function commandHandler(client, message) {
+function commandHandler(client, message, anonClient) {
     if (message.messageText.startsWith(message.commandPrefix)) {
         // Remove zero-width characters from message text - needed because twitch adds random zero-width characters to dupplicated messages
         message.messageText = message.messageText.replace(/\u200B|\u200C|\u200D|\u200E|\u200F|\u{E0000}/gu, '');
@@ -12,7 +12,7 @@ function commandHandler(client, message) {
         const commandsList = client.commandsList;
         if (command in commandsList) {
             if (message.channelName != 'whisper' || (message.channelName == 'whisper' && commandsList[command].whisperable)) {
-                commandsList[command](client, message)
+                commandsList[command](client, message, anonClient)
                     .catch(err => {
                         console.log(`Error in command in #${message.channelName}/${message.senderUsername} - ${command}: ${err}`);
                         client.discord.logError(`Error in command #${message.channelName}/${message.senderUsername} - ${command}: ${err}`);

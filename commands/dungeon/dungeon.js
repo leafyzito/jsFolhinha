@@ -81,7 +81,7 @@ async function setNewCooldown(client, message, winOrLose) {
     return getFormattedRemainingTime(newCooldown);
 }
 
-const dungeonCommand = async (client, message) => {
+const dungeonCommand = async (client, message, anonClient) => {
     message.command = 'dungeon';
     if (!await processCommand(12_000, 'user', message, client)) return;
 
@@ -157,7 +157,7 @@ const dungeonCommand = async (client, message) => {
 
     const dungeon = dungeonData[Math.floor(Math.random() * dungeonData.length)];
     await client.log.reply(message, `${capitalize(dungeon.quote)} você quer ${dungeon['1'].option} ou ${dungeon['2'].option}? Tem 10 segundos para responder (1 ou 2)`);
-    const response = await waitForMessage(client, check, 10_000);
+    const response = await waitForMessage(anonClient, check, 10_000);
     if (!response) {
         // if user level is 0, delete the dungeon stats
         if (userDungeonStats.level === 0) {

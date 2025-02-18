@@ -5,8 +5,7 @@ const { commandHandler, listenerHandler } = require('./utils/handlers.js');
 const { dailyCookieResetTask, startPetTask, startFetchPendingJoinsTask, startRejoinDisconnectedChannelsTask, startDiscordPresenceTask } = require('./utils/tasks.js');
 const cron = require('node-cron');
 
-
-// Create a client
+// Create the main bot client for sending messages
 const client = new ChatClient({
     username: process.env.BOT_USERNAME,
     password: process.env.BOT_IRC_TOKEN,
@@ -19,24 +18,42 @@ const client = new ChatClient({
     }
 });
 
-// Modify the client with custom functions
-modifyClient(client);
+// Create anonymous client for reading messages
+const anonClient = new ChatClient({
+    username: 'justinfan12345', // Anonymous username
+    password: 'kappa123',  // Any password works for anonymous login
 
-// Connect to Twitch
+    ignoreUnhandledPromiseRejections: true,
+    maxChannelCountPerConnection: 100,
+    connectionRateLimits: {
+        parallelConnections: 5,
+        releaseTime: 1000
+    }
+});
+
+// Modify the main client with custom functions
+modifyClient(client, anonClient);
+
+// Connect both clients to Twitch
 client.connect();
+anonClient.connect();
 
-// Register event handlers
-client.on('ready', () => { onReadyHandler(); });
-client.on('JOIN', (channel) => { onJoinHandler(channel); });
-client.on("PRIVMSG", (msg) => { onMessageHandler(msg); });
+// Register event handlers on the anonymous client for reading messages
+anonClient.on('ready', () => { onReadyHandler(); });
+anonClient.on('JOIN', (channel) => { onJoinHandler(channel); });
+anonClient.on("PRIVMSG", (msg) => { onMessageHandler(msg); });
+anonClient.on('CLEARCHAT', (msg) => { onClearChatHandler(msg); });
+
+// Register whisper handler on main client (since anon can't receive whispers)
 client.on('WHISPER', (msg) => { onWhisperHandler(msg); });
-client.on('CLEARCHAT', (msg) => { onClearChatHandler(msg); });
 
-// Join the channels
+// Join the channels with both clients
 const channelsToJoin = process.env.ENV == 'prod' ? client.getChannelsToJoin() : Promise.resolve(['gocrazybh']);
 channelsToJoin.then((channels) => {
     client.channelsToJoin = channels;
-    client.joinAll(channels);
+    anonClient.channelsToJoin = channels;
+    // client.joinAll(channels);
+    anonClient.joinAll(channels);
 }).catch((error) => {
     console.log('Error on getting channelsToJoin:', error);
 });
@@ -45,12 +62,11 @@ channelsToJoin.then((channels) => {
 if (process.env.ENV == 'prod') {
     console.log('* Starting tasks');
     cron.schedule('0 9 * * *', async () => { await dailyCookieResetTask(client); });
-    startPetTask(client);
-    startFetchPendingJoinsTask(client);
+    startPetTask(client, anonClient);
+    startFetchPendingJoinsTask(client, anonClient);
 }
-startRejoinDisconnectedChannelsTask(client);
-startDiscordPresenceTask(client);
-
+startRejoinDisconnectedChannelsTask(client, anonClient);
+startDiscordPresenceTask(client, anonClient);
 
 // handlers
 function onJoinHandler(channel) {
@@ -79,8 +95,9 @@ function onMessageHandler(message) {
     message.isVip = message.badges.hasVIP;
     message.isFirstMsg = message.ircTags['first-msg'] === '1' ? true : false;
 
+    // Pass both clients to handlers - anon for reading, main for sending
     listenerHandler(client, message);
-    commandHandler(client, message);
+    commandHandler(client, message, anonClient);
 }
 
 function onWhisperHandler(message) {
@@ -99,7 +116,7 @@ function onWhisperHandler(message) {
     }
 
     if (process.env.ENV == 'prod') {
-        commandHandler(client, message);
+        commandHandler(client, message, anonClient);
     }
     if (!message.messageText.startsWith(message.commandPrefix)) {
         client.discord.logWhisperFrom(message);

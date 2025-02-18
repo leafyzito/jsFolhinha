@@ -8,7 +8,7 @@ const { discordClient } = require('./discord.js');
 const { loadCommands } = require('../commands/commandsList.js');
 const { timeSince, manageLongResponse } = require('./utils.js');
 
-async function modifyClient(client) {
+async function modifyClient(client, anonClient) {
     client.ready = false;
     client.userIdCache = new Map(); // Cache for user IDs
     client.userIdCacheTimeout = 24 * 60 * 60 * 1000; // 24 hour cache timeout
