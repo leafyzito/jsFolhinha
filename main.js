@@ -24,10 +24,10 @@ const anonClient = new ChatClient({
     password: 'kappa123',  // Any password works for anonymous login
 
     ignoreUnhandledPromiseRejections: true,
-    maxChannelCountPerConnection: 100,
+    maxChannelCountPerConnection: 200, // Doubled since anon client has less restrictions
     connectionRateLimits: {
-        parallelConnections: 5,
-        releaseTime: 1000
+        parallelConnections: 10, // Doubled since anon client has less restrictions
+        releaseTime: 500 // Halved since anon client has less restrictions
     }
 });
 
