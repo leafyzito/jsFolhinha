@@ -21,6 +21,10 @@ class Emotes {
                 return sevenTvEmotes;
             }
 
+            if (data.emote_set === null) {
+                return sevenTvEmotes;
+            }
+
             return data.emote_set.emotes.map(emote => emote.name);
         }
         catch (err) {
