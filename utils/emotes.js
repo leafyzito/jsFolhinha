@@ -1,3 +1,4 @@
+const { underline } = require('discord.js');
 const { randomChoice } = require('./utils.js');
 const fetch = require('node-fetch');
 
@@ -21,7 +22,7 @@ class Emotes {
                 return sevenTvEmotes;
             }
 
-            if (data.emote_set === null) {
+            if (data.emote_set === null || data.emote_set === undefined) {
                 return sevenTvEmotes;
             }
 
