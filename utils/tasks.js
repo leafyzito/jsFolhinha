@@ -49,7 +49,7 @@ async function petAttencionTask(client, anonClient) {
     // Your async code here
     // console.log("* Running pet attention task");
 
-    const pets = await client.db.get('pet', { is_alive: true });
+    const pets = await client.db.get('pet', { is_alive: true }, true);
     for (const pet of pets) {
         const channel = await client.getUserByUserID(pet.channelId);
         // if not connected to channel, skip (for the case the bot leaves the channel)
