@@ -35,6 +35,9 @@ const hypertranslateCommand = async (client, message) => {
     message.command = 'hypertranslate';
     if (!await processCommand(20_000, 'channel', message, client)) return;
 
+    client.log.logAndReply(message, `Este comando foi desabilitado temporariamente por fazer o bot crashar. Um dia ele volta`);
+    return;
+
     const args = message.messageText.split(' ');
     if (args.length < 2) {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}hypertranslate (<número de traduções>) <texto para traduzir>`);
