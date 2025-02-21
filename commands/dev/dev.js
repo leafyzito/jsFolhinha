@@ -239,7 +239,7 @@ const reloadDbCommand = async (client, message) => {
     if (authorId !== process.env.DEV_USERID) { return; }
 
     await client.db.loadDbCache();
-    client.log.logAndReply(message, `Database recarregada 👍`);
+    client.log.logAndReply(message, `Base de dados recarregada 👍`);
 }
 
 const gitPullCommand = async (client, message) => {
