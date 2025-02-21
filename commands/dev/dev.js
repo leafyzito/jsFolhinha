@@ -232,6 +232,16 @@ const reloadCommand = async (client, message) => {
     });
 };
 
+const reloadDbCommand = async (client, message) => {
+    message.command = 'dev reloaddb';
+
+    const authorId = message.senderUserID;
+    if (authorId !== process.env.DEV_USERID) { return; }
+
+    await client.db.loadDbCache();
+    client.log.logAndReply(message, `Database recarregada 👍`);
+}
+
 const gitPullCommand = async (client, message) => {
     message.command = 'dev gitpull';
 
@@ -499,6 +509,7 @@ restartCommand.aliases = ['restart'];
 resetPetCommand.aliases = ['resetpet', 'resetpat'];
 resetCdCommand.aliases = ['resetcd'];
 reloadCommand.aliases = ['reload'];
+reloadDbCommand.aliases = ['reloaddb', 'reloadbd'];
 gitPullCommand.aliases = ['gitpull', 'gpull'];
 reloadEmotesCommand.aliases = ['reloademotes'];
 allEmotesCommand.aliases = ['allemotes'];
@@ -521,6 +532,7 @@ module.exports = {
     resetPetCommand,
     resetCdCommand,
     reloadCommand,
+    reloadDbCommand,
     gitPullCommand,
     reloadEmotesCommand,
     allEmotesCommand,
