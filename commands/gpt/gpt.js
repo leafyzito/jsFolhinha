@@ -73,7 +73,7 @@ const gptSerioCommand = async (client, message) => {
 }
 
 gptCommand.commandName = 'gpt';
-gptCommand.aliases = ['gpt'];
+gptCommand.aliases = ['gpt', 'chatgpt'];
 gptCommand.shortDescription = 'Faça uma pergunta para o ChatGPT';
 gptCommand.cooldown = 15000;
 gptCommand.whisperable = true;
@@ -83,7 +83,7 @@ Caso deseje usar para perguntar alguma dúvida genuina, use o comando <a href="h
 gptCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${gptCommand.commandName}/${gptCommand.commandName}.js`;
 
 gptSerioCommand.commandName = 'gptserio';
-gptSerioCommand.aliases = ['gptserio', 'gptsério'];
+gptSerioCommand.aliases = ['gptserio', 'gptsério', 'chatgptserio', 'chatgptsério'];
 gptSerioCommand.shortDescription = 'Faça uma pergunta para o ChatGPT sério';
 gptSerioCommand.cooldown = 15000;
 gptSerioCommand.whisperable = true;
