@@ -126,7 +126,7 @@ function onWhisperHandler(message) {
 function onClearChatHandler(message) {
     if (message.targetUsername === process.env.BOT_USERNAME) {
         console.log(`* ${message.isTimeout() ? `Tomei timeout em #${message.channelName} por ${message.banDuration} segundos` : `Fui banido em #${message.channelName}`}`);
-        client.log.send(process.env.DEV_TEST_CHANNEL, `${message.isTimeout() ? `Tomei timeout em #${message.channelName} por ${message.banDuration} segundos` : `Fui banido em #${message.channelName} @${process.env.DEV_NICK}`}`);
+        // client.log.send(process.env.DEV_TEST_CHANNEL, `${message.isTimeout() ? `Tomei timeout em #${message.channelName} por ${message.banDuration} segundos` : `Fui banido em #${message.channelName} @${process.env.DEV_NICK}`}`);
         client.discord.importantLog(`* ${message.isTimeout() ? `Tomei timeout em #${message.channelName} por ${message.banDuration} segundos` : `Fui banido em #${message.channelName}`}`);
     }
 }
