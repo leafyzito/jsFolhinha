@@ -74,18 +74,17 @@ const rafkCommand = async (client, message) => {
     }
     afkStats = afkStats[0];
 
-    if (afkStats.rafk_counter >= 4) { return; }
-    if (afkStats.rafk_counter >= 3) {
-        client.log.logAndReply(message, `Você só pode usar o comando ${message.commandPrefix}rafk 3 vezes seguidas`);
-        await client.db.update('afk', { channel: message.channelName, user: message.senderUsername }, { $set: { rafk_counter: afkStats.rafk_counter + 1 } });
-        return;
-    }
-
-    const fiveMinutes = 5 * 60 * 1000; // 5 minutes in milliseconds
     const currentTime = Math.floor(Date.now() / 1000);
     var deltaTime = currentTime - afkStats.afk_return;
     if (deltaTime > 300) {
         client.log.logAndReply(message, `Já se passaram mais de 5 minutos desde que você voltou`);
+        return;
+    }
+
+    if (afkStats.rafk_counter >= 4) { return; }
+    if (afkStats.rafk_counter >= 3) {
+        client.log.logAndReply(message, `Você só pode usar o comando ${message.commandPrefix}rafk 3 vezes seguidas`);
+        await client.db.update('afk', { channel: message.channelName, user: message.senderUsername }, { $set: { rafk_counter: afkStats.rafk_counter + 1 } });
         return;
     }
 
