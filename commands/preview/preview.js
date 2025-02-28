@@ -63,6 +63,27 @@ async function getImage(url) {
     return await uploadToFeridinha(imageData);
 }
 
+async function getOfflineImage(previewTarget) {
+    const api_url = `https://api.twitch.tv/helix/users?login=${previewTarget}`;
+    const headers = {
+        "Client-ID": process.env.BOT_CLIENT_ID,
+        "Authorization": `Bearer ${process.env.BOT_OAUTH_TOKEN}`
+    };
+    const response = await fetch(api_url, { headers });
+    const data = await response.json();
+
+    if (data.data.length === 0) {
+        return null;
+    }
+
+    const offlineImage = data.data[0].offline_image_url;
+    if (!offlineImage || offlineImage === '') {
+        return null;
+    }
+
+    return await getImage(offlineImage);
+}
+
 async function getPreview(previewTarget) {
     const api_url = `https://api.twitch.tv/helix/streams?user_login=${previewTarget}`;
     const headers = {
@@ -75,18 +96,23 @@ async function getPreview(previewTarget) {
 
     if ("error" in data) { return 'não existe'; }
 
-    if (data.data.length === 0) { return null; }
+    if (data.data.length === 0) {
+        // if offline, return the offline image
+        const offlineImage = await getOfflineImage(previewTarget);
+        return { isLive: false, image: offlineImage };
+    }
 
     // make preview
     const preview = await makePreview(previewTarget);
     if (preview) {
-        return preview;
+        return { isLive: true, image: preview };
     }
 
     const thumbPreviewRaw = data.data[0].thumbnail_url;
     const thumbPreview = thumbPreviewRaw.replace("{width}x{height}", "1280x720");
+    const thumbPreviewUrl = await getImage(thumbPreview);
 
-    return await getImage(thumbPreview);
+    return { isLive: true, image: thumbPreviewUrl };
 }
 
 const previewCommand = async (client, message) => {
@@ -96,17 +122,24 @@ const previewCommand = async (client, message) => {
     const previewTarget = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.channelName;
     const preview = await getPreview(previewTarget);
 
-    if (!preview) {
-        client.log.logAndReply(message, `O canal ${previewTarget} não está em live`);
-        return;
-    }
-
     if (preview === 'não existe') {
         client.log.logAndReply(message, `O canal ${previewTarget} não existe`);
         return;
     }
 
-    client.log.logAndReply(message, `Preview da live de ${previewTarget}: ${preview}`);
+    if (!preview.isLive && preview.image === null) {
+        client.log.logAndReply(message, `O canal ${previewTarget} não está em live`);
+        return;
+    }
+
+    if (!preview.isLive && preview.image !== null) {
+        client.log.logAndReply(message, `O canal ${previewTarget} não está em live, aqui está a tela offline: ${preview.image}`);
+        return;
+    }
+
+    if (preview.isLive) {
+        client.log.logAndReply(message, `Preview da live de ${previewTarget}: ${preview.image}`);
+    }
 };
 
 previewCommand.commandName = 'preview';
