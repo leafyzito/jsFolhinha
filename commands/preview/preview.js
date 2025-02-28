@@ -147,7 +147,7 @@ previewCommand.aliases = ['preview', 'prev', 'thumb', 'thumbnail'];
 previewCommand.shortDescription = 'Mostra uma imagem do momento atual de uma live';
 previewCommand.cooldown = 5000;
 previewCommand.whisperable = false;
-previewCommand.description = `Exibe uma imagem do momento atual da live do canal fornecido
+previewCommand.description = `Exibe uma imagem do momento atual da live do canal fornecido ou a tela offline caso não esteja em live
 • Exemplo: !preview omeiaum - Se o canal "omeiaum" estiver ao vivo, o bot vai enviar uma imagem do momento atual da live`;
 previewCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${previewCommand.commandName}/${previewCommand.commandName}.js`;
 
