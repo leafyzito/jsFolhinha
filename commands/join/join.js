@@ -32,12 +32,12 @@ async function createNewConfig(client, message) {
     return;
 }
 
-const joinCommand = async (client, message) => {
+const joinCommand = async (client, message, anonClient) => {
     message.command = 'join';
     if (!await processCommand(5000, 'user', message, client)) return;
 
     const channelToJoin = message.senderUsername;
-    const alreadyJoinedChannels = [...client.joinedChannels];
+    const alreadyJoinedChannels = [...anonClient.joinedChannels];
 
     if (alreadyJoinedChannels.includes(channelToJoin)) {
         client.log.logAndReply(message, `Eu já estou no seu chat! O meu prefixo lá é ${client.channelPrefixes[channelToJoin] || '!'}`);

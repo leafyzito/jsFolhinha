@@ -1,7 +1,7 @@
 const { processCommand } = require("../../utils/processCommand.js");
 const { randomChoice, isStreamOnline } = require("../../utils/utils.js");
 
-const talkieCommand = async (client, message) => {
+const talkieCommand = async (client, message, anonClient) => {
     message.command = 'talkie';
     if (!await processCommand(15_000, 'channel', message, client)) return;
 
@@ -22,7 +22,7 @@ const talkieCommand = async (client, message) => {
         return;
     }
 
-    var joinedChannels = [...client.channelsToJoin]; // tirar daqui depois de tentado 1 vez
+    var joinedChannels = [...anonClient.channelsToJoin]; // tirar daqui depois de tentado 1 vez
     let targetChannel;
     let i = 0;
     do {
