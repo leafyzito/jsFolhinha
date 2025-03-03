@@ -53,7 +53,8 @@ async function main() {
             const highestRegistry = registries.reduce((highest, current) => {
                 return highest.msgCount.total > current.msgCount.total ? highest : current;
             });
-            console.log(`Will delete ${registries.length - 1} registries for user ${userId} (keeping id: ${highestRegistry._id})`);
+            const registriesToDelete = registries.filter(r => r._id !== highestRegistry._id);
+            console.log(`Will delete ${registries.length - 1} registries for user ${userId} (keeping id: ${highestRegistry._id} (msgCount: ${highestRegistry.msgCount.total}), deleting ids: ${registriesToDelete.map(r => `${r._id} (msgCount: ${r.msgCount.total})`).join(', ')})`);
         }
 
         // Ask for confirmation
