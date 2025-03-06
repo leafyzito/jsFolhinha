@@ -1,28 +1,36 @@
 const { processCommand } = require("../../utils/processCommand.js");
+const { timeSince } = require("../../utils/utils.js");
 
-function getFormattedTimeSince(date) {
-    const currentDate = new Date();
-    const seconds = Math.floor((currentDate - date) / 1000);
-
-    const days = Math.floor(seconds / (24 * 60 * 60));
-    const hours = Math.floor((seconds % (24 * 60 * 60)) / (60 * 60));
-    const minutes = Math.floor((seconds % (60 * 60)) / 60);
-    const secondsLeft = seconds % 60;
-
-    if (days > 0) return `${days}d ${hours}h ${minutes}m`;
-    if (hours > 0) return `${hours}h ${minutes}m ${secondsLeft}s`;
-    if (minutes > 0) return `${minutes}m ${secondsLeft}s`;
-    return `${secondsLeft}s`;
-}
-
-async function getRandomLine(client, userid, channelid) {
+async function getRandomLine(userid, channelid) {
     if (!userid) {
-        const res = await client.turso.client.execute({ sql: `SELECT * FROM messagelog WHERE channelid = :channelid ORDER BY RANDOM() LIMIT 1`, args: { channelid: channelid } });
-        return res.rows[0];
+        const url = `http://localhost:8025/channelid/${channelid}/random`
+        const headers = { accept: 'application/json' }
+        const response = await fetch(url, { headers })
+        // console.log(data)
+    } else {
+        const url = `http://localhost:8025/channelid/${channelid}/userid/${userid}/random`
+        const headers = { accept: 'application/json' }
+        const response = await fetch(url, { headers })
+        // console.log(data)
     }
+    if (response.status !== 200) {
+        return null;
+    }
+    const data = await response.text()
+    // Parse the log line into components
+    const regex = /\[(.*?)\] #(.*?) (.*?): (.*)/;
+    const [_, timestamp, channelName, user, message] = data.match(regex);
 
-    const res = await client.turso.client.execute({ sql: `SELECT * FROM messagelog WHERE userid = :userid AND channelid = :channelid ORDER BY RANDOM() LIMIT 1`, args: { userid: userid, channelid: channelid } });
-    return res.rows[0];
+    // Convert timestamp to Unix time (assuming timestamp is in format "YYYY-MM-DD HH:mm:ss")
+    const unixTimestamp = Math.floor(new Date(timestamp).getTime() / 1000);
+    const timeSince = timeSince(unixTimestamp);
+
+    return {
+        channel: channelName,
+        user: user,
+        message: message,
+        timeSince: timeSince
+    }
 }
 
 const randomLineCommand = async (client, message) => {
@@ -36,17 +44,17 @@ const randomLineCommand = async (client, message) => {
     //     return;
     // }
 
-    const randomLine = await getRandomLine(client, targetId, message.channelID);
+    const randomLine = await getRandomLine(targetId, message.channelID);
     if (!targetId && !randomLine) {
         client.log.logAndReply(message, `Nunca loguei uma mensagem desse usuário neste chat (contando desde 19/10/2024)`);
         return;
     }
     if (!randomLine) { // this should never happen
-        client.log.logAndReply(message, `Nunca loguei uma mensagem desse usuário neste chat (contando desde 19/10/2024)`);
+        client.log.logAndReply(message, `Nunca loguei uma mensagem neste chat (contando desde 06/03/2025)`);
         return;
     }
 
-    client.log.logAndReply(message, `(há ${getFormattedTimeSince(randomLine.date)}) ${randomLine.user}: ${randomLine.content}`);
+    client.log.logAndReply(message, `(há ${randomLine.timeSince}) ${randomLine.user}: ${randomLine.message}`);
     return;
 };
 
