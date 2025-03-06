@@ -2,15 +2,16 @@ const { processCommand } = require("../../utils/processCommand.js");
 const { timeSince } = require("../../utils/utils.js");
 
 async function getRandomLine(userid, channelid) {
+    let response;
     if (!userid) {
         const url = `http://localhost:8025/channelid/${channelid}/random`
         const headers = { accept: 'application/json' }
-        const response = await fetch(url, { headers })
+        response = await fetch(url, { headers })
         // console.log(data)
     } else {
         const url = `http://localhost:8025/channelid/${channelid}/userid/${userid}/random`
         const headers = { accept: 'application/json' }
-        const response = await fetch(url, { headers })
+        response = await fetch(url, { headers })
         // console.log(data)
     }
     if (response.status !== 200) {
@@ -23,13 +24,12 @@ async function getRandomLine(userid, channelid) {
 
     // Convert timestamp to Unix time (assuming timestamp is in format "YYYY-MM-DD HH:mm:ss")
     const unixTimestamp = Math.floor(new Date(timestamp).getTime() / 1000);
-    const timeSince = timeSince(unixTimestamp);
 
     return {
         channel: channelName,
         user: user,
         message: message,
-        timeSince: timeSince
+        timeSince: timeSince(unixTimestamp)
     }
 }
 
