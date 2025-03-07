@@ -1,6 +1,6 @@
 const { exec } = require('child_process');
 const { shortenUrl, manageLongResponse } = require('../../utils/utils.js');
-
+const { addChannelToJustlog } = require('../../utils/justlog.js');
 
 async function createNewChannelConfig(client, user) {
     const newConfig = {
@@ -498,6 +498,60 @@ const giveXpCommand = async (client, message) => {
     return;
 }
 
+const justlogAddCommand = async (client, message) => {
+    message.command = 'dev justlogadd';
+
+    const authorId = message.senderUserID;
+    if (authorId !== process.env.DEV_USERID) { return; }
+
+    const targetChannel = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase() || null;
+    if (!targetChannel) {
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}justlogadd <canal>`);
+        return;
+    }
+
+    const targetChannelId = await client.getUserID(targetChannel);
+    if (!targetChannelId) {
+        client.log.logAndReply(message, `Esse canal não existe`);
+        return;
+    }
+
+    const success = await addChannelToJustlog(client, targetChannelId);
+    if (!success) {
+        client.log.logAndReply(message, `Erro ao adicionar canal ao justlog`);
+        return;
+    }
+    client.log.logAndReply(message, `🤖 Canal adicionado ao justlog: ${targetChannel}`);
+    return;
+}
+
+const justlogRemoveCommand = async (client, message) => {
+    message.command = 'dev justlogremove';
+
+    const authorId = message.senderUserID;
+    if (authorId !== process.env.DEV_USERID) { return; }
+
+    const targetChannel = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase() || null;
+    if (!targetChannel) {
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}justlogremove <canal>`);
+        return;
+    }
+
+    const targetChannelId = await client.getUserID(targetChannel);
+    if (!targetChannelId) {
+        client.log.logAndReply(message, `Esse canal não existe`);
+        return;
+    }
+
+    const success = await removeChannelFromJustlog(client, targetChannelId);
+    if (!success) {
+        client.log.logAndReply(message, `Erro ao remover canal do justlog`);
+        return;
+    }
+    client.log.logAndReply(message, `🤖 Canal removido do justlog: ${targetChannel}`);
+    return;
+}
+
 
 botSayCommand.aliases = ['botsay', 'bsay'];
 forceJoinCommand.aliases = ['forcejoin', 'fjoin'];
@@ -520,6 +574,8 @@ joinedChannelsCommand.aliases = ['joinedchannels', 'jchannels'];
 devJoinChannelCommand.aliases = ['devjoin', 'djoin'];
 devPartChannelCommand.aliases = ['devpart', 'dpart'];
 giveXpCommand.aliases = ['devgivexp', 'givexp'];
+justlogAddCommand.aliases = ['justlogadd', 'jladd'];
+justlogRemoveCommand.aliases = ['justlogremove', 'jlremove', 'jldelete', 'jldel'];
 
 module.exports = {
     botSayCommand,
@@ -543,4 +599,6 @@ module.exports = {
     devJoinChannelCommand,
     devPartChannelCommand,
     giveXpCommand,
+    justlogAddCommand,
+    justlogRemoveCommand
 };

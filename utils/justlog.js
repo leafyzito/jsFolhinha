@@ -6,7 +6,7 @@ async function addChannelToJustlog(client, channelId) {
             'X-API-Key': `${process.env.JUSTLOG_API_KEY}`
         },
         body: JSON.stringify({
-            channels: channelId
+            channels: [channelId]
         })
     });
 
