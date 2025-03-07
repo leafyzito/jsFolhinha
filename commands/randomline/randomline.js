@@ -50,7 +50,7 @@ const randomLineCommand = async (client, message) => {
         return;
     }
     if (!randomLine) { // this should never happen
-        client.log.logAndReply(message, `Nunca loguei uma mensagem neste chat (contando desde 06/03/2025)`);
+        client.log.logAndReply(message, `Nunca loguei uma mensagem desse usuário neste chat (contando desde 06/03/2025)`);
         return;
     }
 
