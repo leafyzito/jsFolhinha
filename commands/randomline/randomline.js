@@ -46,7 +46,7 @@ const randomLineCommand = async (client, message) => {
 
     const randomLine = await getRandomLine(targetId, message.channelID);
     if (!targetId && !randomLine) {
-        client.log.logAndReply(message, `Nunca loguei uma mensagem desse usuário neste chat (contando desde 19/10/2024)`);
+        client.log.logAndReply(message, `Nunca loguei uma mensagem desse usuário neste chat (contando desde 06/03/2025)`);
         return;
     }
     if (!randomLine) { // this should never happen
@@ -67,7 +67,7 @@ randomLineCommand.description = `Receba uma mensagem aleatória de um usuário f
 • Exemplo: !randomline - O bot vai mostrar uma mensagem aleatória de quem executou o comando no chat onde o comando foi executado
 • Exemplo: !randomline @leafyzito - O bot vai mostrar uma mensagem aleatória de @leafyzito no chat onde o comando foi executado
 
-Começou a contar desde 19/10/2024`;
+Começou a contar desde 06/03/2025`;
 randomLineCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${randomLineCommand.commandName}/${randomLineCommand.commandName}.js`;
 
 module.exports = {
