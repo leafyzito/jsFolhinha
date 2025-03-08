@@ -1,5 +1,5 @@
 const { processCommand } = require("../../utils/processCommand.js");
-const { manageLongResponse, createNewGist, timeSince, parseTime } = require("../../utils/utils.js");
+const { manageLongResponse, createNewGist, timeSince, parseTime, isStreamOnline } = require("../../utils/utils.js");
 const schedule = require('node-schedule');
 
 async function newRemind(client, message, targetId, remindMessage, remindAt) {
