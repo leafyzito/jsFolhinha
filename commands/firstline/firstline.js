@@ -17,14 +17,11 @@ async function getFirstLine(userid, channelid) {
     const regex = /\[(.*?)\] #(.*?) (.*?): (.*)/;
     const [_, timestamp, channelName, user, message] = firstLine.match(regex);
 
-    // Convert timestamp to Unix time (assuming timestamp is in format "YYYY-MM-DD HH:mm:ss")
-    const unixTimestamp = Math.floor(new Date(timestamp).getTime() / 1000);
-
     return {
         channel: channelName,
         user: user,
         message: message,
-        timeSince: timeSince(unixTimestamp)
+        date: timestamp
     }
 }
 
@@ -42,7 +39,7 @@ const firstLineCommand = async (client, message) => {
         return;
     }
 
-    client.log.logAndReply(message, `(há ${firstLine.timeSince}) ${firstLine.user}: ${firstLine.message}`);
+    client.log.logAndReply(message, `${targetUser === message.senderUsername.toLowerCase() ? 'A sua primeira' : `A primeira mensagem de ${firstLine.user}`} neste chat foi em (${firstLine.date}): ${firstLine.message}`);
     return;
 };
 
