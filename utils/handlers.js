@@ -32,7 +32,7 @@ function commandHandler(client, message, anonClient) {
 function listenerHandler(client, message) {
     if ([...client.knownUserAliases].length === 0) { return console.log('still loading users'); }
 
-    client.turso.logMessage(message);
+    // client.turso.logMessage(message);
 
     notifyDevMentionListener(client, message)
         .catch(err => {
