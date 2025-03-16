@@ -7,6 +7,19 @@ class Logger {
         this.client = client;
     }
 
+    checkRegexAndHandle(content, channelContext, message = null) {
+        if (regex.check(content, content.split(' '), channelContext)) {
+            console.log(`* Caught by regex - original content: ${content}`);
+            this.client.discord.importantLog(`* Caught by regex - original content: ${content}`);
+            // this.send(process.env.DEV_TEST_CHANNEL, `Regex apanhado, check logs ${process.env.DEV_NICK}`);
+            content = '⚠️ Mensagem retida por conter conteúdo banido, tente novamente ou mude um pouco o comando';
+            if (message && message.notes) {
+                message.notes = message.notes + ' Original content: ' + content;
+            }
+        }
+        return content;
+    }
+
     async createCommandLog(message, response) {
         const insertDoc = {
             messageid: message.messageID,
@@ -29,12 +42,7 @@ class Logger {
 
     async logAndReply(message, response, notes = null) {
         message.notes = notes;
-        if (regex.check(response, response.split(' '), message.channelName)) {
-            console.log(`* Caught by regex in #${message.channelName}/${[message.senderUsername]} - original response: ${response}`);
-            this.client.discord.logError(`* Caught by regex in #${message.channelName}/${[message.senderUsername]} - original response: ${response}`);
-            this.send(process.env.DEV_TEST_CHANNEL, `Regex apanhado, check logs ${process.env.DEV_NICK}`);
-            response = '⚠️ Mensagem retida por conter conteúdo banido, tente novamente ou mude um pouco o comando'
-        }
+        response = this.checkRegexAndHandle(response, message.channelName, message);
 
         message.responseTime = new Date().getTime() - message.serverTimestampRaw;
         message.internalResponseTime = new Date().getTime() - message.internalTimestamp;
@@ -65,12 +73,7 @@ class Logger {
 
     async logAndSay(message, response, notes = null) {
         message.notes = notes;
-        if (regex.check(response, response.split(' '), message.channelName)) {
-            console.log(`* Caught by regex - original response: ${response}`);
-            this.client.discord.logError(`* Caught by regex - original response: ${response}`);
-            this.send(process.env.DEV_TEST_CHANNEL, `Regex apanhado, check logs ${process.env.DEV_NICK}`);
-            response = '⚠️ Mensagem retida por conter conteúdo banido, tente novamente ou mude um pouco o comando'
-        }
+        response = this.checkRegexAndHandle(response, message.channelName, message);
 
         message.responseTime = new Date().getTime() - message.serverTimestampRaw;
         message.internalResponseTime = new Date().getTime() - message.internalTimestamp;
@@ -95,12 +98,7 @@ class Logger {
 
     async logAndMeAction(message, response, notes = null) {
         message.notes = notes;
-        if (regex.check(response, response.split(' '), message.channelName)) {
-            console.log(`* Caught by regex - original response: ${response}`);
-            this.client.discord.logError(`* Caught by regex - original response: ${response}`);
-            this.send(process.env.DEV_TEST_CHANNEL, `Regex apanhado, check logs ${process.env.DEV_NICK}`);
-            response = '⚠️ Mensagem retida por conter conteúdo banido, tente novamente ou mude um pouco o comando'
-        }
+        response = this.checkRegexAndHandle(response, message.channelName, message);
 
         message.responseTime = new Date().getTime() - message.serverTimestampRaw;
         message.internalResponseTime = new Date().getTime() - message.internalTimestamp;
@@ -125,23 +123,14 @@ class Logger {
 
     async logAndWhisper(message, response, notes = null) {
         message.notes = notes;
-        if (regex.check(response, response.split(' '), message.senderUsername)) {
-            console.log(`* Caught by regex - original response: ${response}`);
-            this.client.discord.logError(`* Caught by regex - original response: ${response}`);
-            return;
-        }
+        response = this.checkRegexAndHandle(response, message.senderUsername, message);
 
         this.client.whisper(message.senderUsername, response);
         this.client.discord.logWhisper(message.senderUsername, response);
     }
 
     async send(channel, content) {
-        if (regex.check(content, content.split(' '), `By Folhinha to ${channel}`)) {
-            console.log(`* Caught by regex - original content: ${content}`);
-            this.client.discord.logError(`* Caught by regex - original content: ${content}`);
-            this.send(process.env.DEV_TEST_CHANNEL, `Regex apanhado, check logs ${process.env.DEV_NICK}`);
-            content = '⚠️ Mensagem retida por conter conteúdo banido, tente novamente ou mude um pouco o comando'
-        }
+        content = this.checkRegexAndHandle(content, channel);
 
         this.client.say(channel, content)
             .catch((err) => {
@@ -162,11 +151,7 @@ class Logger {
     }
 
     async reply(message, response) {
-        if (regex.check(response, response.split(' '), message.channelName)) {
-            console.log(`* Caught by regex in #${message.channelName}/${[message.senderUsername]} - original response: ${response}`);
-            this.client.discord.logError(`* Caught by regex in #${message.channelName}/${[message.senderUsername]} - original response: ${response}`);
-            response = '⚠️ Mensagem retida por conter conteúdo banido, tente novamente ou mude um pouco o comando'
-        }
+        response = this.checkRegexAndHandle(response, message.channelName, message);
 
         this.client.reply(message.channelName, message.messageID, response)
             .catch((err) => {
@@ -187,12 +172,7 @@ class Logger {
     }
 
     async whisper(targetUser, content) {
-        if (regex.check(content, content.split(' '), `By Folhinha to ${targetUser}`)) {
-            console.log(`* Caught by regex - original content: ${content}`);
-            this.client.discord.logError(`* Caught by regex - original content: ${content}`);
-            this.send(process.env.DEV_TEST_CHANNEL, `Regex apanhado, check logs ${process.env.DEV_NICK}`);
-            content = '⚠️ Mensagem retida por conter conteúdo banido, tente novamente ou mude um pouco o comando'
-        }
+        content = this.checkRegexAndHandle(content, targetUser);
 
         this.client.whisper(targetUser, content)
             .catch((err) => {
