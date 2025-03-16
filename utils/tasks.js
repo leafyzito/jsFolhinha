@@ -59,9 +59,6 @@ async function petAttencionTask(client, anonClient) {
         // if not connected to channel, skip (for the case the bot leaves the channel)
         if (![...anonClient.joinedChannels].includes(channel)) { continue; }
 
-        // add 2 seconds pause to avoid timeouts
-        await new Promise(resolve => setTimeout(resolve, 2000));
-
         const lastInteraction = pet.last_interaction;
         const warns = pet.warns;
         const currentTime = Math.floor(Date.now() / 1000);
@@ -79,6 +76,7 @@ async function petAttencionTask(client, anonClient) {
             }
 
             client.log.send(channel, `${pet.pet_emoji} ${pet.pet_name} está pedindo atenção! Se ninguém interagir com ele, ele vai ficar rabugento!`);
+            await new Promise(resolve => setTimeout(resolve, 2000)); // Add delay after sending message to avoid timeouts
             await client.db.update('pet', { channelId: pet.channelId }, { $set: { warns: 1 } });
             continue;
         }
@@ -95,6 +93,7 @@ async function petAttencionTask(client, anonClient) {
             }
 
             client.log.send(channel, `${pet.pet_emoji} ${pet.pet_name} ficou rabugento! Já se passaram mais de 24 horas desde a última interação!`);
+            await new Promise(resolve => setTimeout(resolve, 2000)); // Add delay after sending message to avoid timeouts
             await client.db.update('pet', { channelId: pet.channelId }, { $set: { warns: 2 } });
             continue;
         }
@@ -111,6 +110,7 @@ async function petAttencionTask(client, anonClient) {
             }
 
             client.log.send(channel, `${pet.pet_emoji} ${pet.pet_name} foi embora! Ninguém deu atenção a ele e ele se foi...`);
+            await new Promise(resolve => setTimeout(resolve, 2000)); // Add delay after sending message to avoid timeouts
             await client.db.update('pet', { channelId: pet.channelId }, { $set: { is_alive: false, time_of_death: currentTime } });
             continue;
         }
