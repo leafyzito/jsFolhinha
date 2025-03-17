@@ -13,7 +13,8 @@ class Logger {
             this.client.discord.importantLog(`* Caught by regex - original content: ${content}`);
             // this.send(process.env.DEV_TEST_CHANNEL, `Regex apanhado, check logs ${process.env.DEV_NICK}`);
             content = '⚠️ Mensagem retida por conter conteúdo banido, tente novamente ou mude um pouco o comando';
-            if (message && message.notes) {
+            if (message) {
+                if (!message.notes) message.notes = '';
                 message.notes = message.notes + ' Original content: ' + content;
             }
         }
