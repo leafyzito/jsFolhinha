@@ -63,7 +63,7 @@ const petCommand = async (client, message) => {
     var petStats = await client.db.get('pet', { channelId: message.channelID });
     petStats = petStats[0];
 
-    if (['criar', 'create'].includes(args[0])) {
+    if (['criar', 'create'].includes(args[0].toLowerCase())) {
         if (!message.isMod) {
             client.log.logAndReply(message, `Apenas o streamer e os mods podem criar um pet para o chat`);
             return;
@@ -97,7 +97,7 @@ const petCommand = async (client, message) => {
         return;
     }
 
-    if (['kill', 'matar'].includes(args[0])) {
+    if (['kill', 'matar'].includes(args[0].toLowerCase())) {
         if (!message.isMod) {
             client.log.logAndReply(message, `Apenas o streamer e os mods podem matar um pet`);
             return;
@@ -121,7 +121,7 @@ const petCommand = async (client, message) => {
         return;
     }
 
-    if (['stats', 'status'].includes(args[0])) {
+    if (['stats', 'status'].includes(args[0].toLowerCase())) {
         if (!petStats || !petStats.is_alive) {
             client.log.logAndReply(message, `Não existe um pet para este chat. Para criar um pet, use ${message.commandPrefix}pet criar`);
             return;
