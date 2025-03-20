@@ -5,6 +5,19 @@ const regex = new CreateRegex();
 class Logger {
     constructor(client) {
         this.client = client;
+        this.channelMsgCooldowns = new Map(); // Track last message timestamp per channel
+    }
+
+    async manageChannelMsgCooldown(channel) {
+        const now = Date.now();
+        const lastMessageTime = this.channelMsgCooldowns.get(channel) || 0;
+        const timeSinceLastMessage = now - lastMessageTime;
+
+        if (timeSinceLastMessage < 1500) { // 1.5 seconds cooldown
+            await new Promise(resolve => setTimeout(resolve, 1500 - timeSinceLastMessage));
+        }
+
+        this.channelMsgCooldowns.set(channel, Date.now());
     }
 
     checkRegexAndHandle(content, channelContext, message = null) {
@@ -50,8 +63,8 @@ class Logger {
 
         if (message.channelName == 'whisper') {
             this.client.whisper(message.senderUsername, response);
-            // this.client.discord.logWhisper(message.senderUsername, response);
         } else {
+            await this.manageChannelMsgCooldown(message.channelName);
             this.client.reply(message.channelName, message.messageID, response)
                 .catch((err) => {
                     if (err.message.includes('identical to the previous one')) {
@@ -78,6 +91,8 @@ class Logger {
 
         message.responseTime = new Date().getTime() - message.serverTimestampRaw;
         message.internalResponseTime = new Date().getTime() - message.internalTimestamp;
+
+        await this.manageChannelMsgCooldown(message.channelName);
         this.client.say(message.channelName, response)
             .catch((err) => {
                 if (err.message.includes('identical to the previous one')) {
@@ -103,6 +118,8 @@ class Logger {
 
         message.responseTime = new Date().getTime() - message.serverTimestampRaw;
         message.internalResponseTime = new Date().getTime() - message.internalTimestamp;
+
+        await this.manageChannelMsgCooldown(message.channelName);
         this.client.me(message.channelName, response)
             .catch((err) => {
                 if (err.message.includes('identical to the previous one')) {
@@ -133,6 +150,7 @@ class Logger {
     async send(channel, content) {
         content = this.checkRegexAndHandle(content, channel);
 
+        await this.manageChannelMsgCooldown(channel);
         this.client.say(channel, content)
             .catch((err) => {
                 if (err.message.includes('identical to the previous one')) {
@@ -154,6 +172,7 @@ class Logger {
     async reply(message, response) {
         response = this.checkRegexAndHandle(response, message.channelName, message);
 
+        await this.manageChannelMsgCooldown(message.channelName);
         this.client.reply(message.channelName, message.messageID, response)
             .catch((err) => {
                 if (err.message.includes('identical to the previous one')) {
