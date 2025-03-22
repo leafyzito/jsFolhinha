@@ -38,7 +38,11 @@ const songCommand = async (client, message) => {
     const songTarget = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
 
     if (songTarget.toLowerCase() === 'set') {
-        const lastfmUserToSet = message.messageText.split(' ')[2].replace(/^@/, '');
+        const lastfmUserToSet = message.messageText.split(' ')[2].replace(/^@/, '') || null;
+        if (!lastfmUserToSet) {
+            client.log.logAndReply(message, `Você precisa especificar o nome do usuário do Last.fm que deseja configurar. Se estiver com dúvidas sobre o comando, acesse https://folhinhabot.com/comandos/song 😁`);
+            return;
+        }
         // check if lastfm user exists
         const lastfmUserExists = await getSongInfo(lastfmUserToSet);
         if (lastfmUserExists === null) {
