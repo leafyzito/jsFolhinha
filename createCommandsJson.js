@@ -27,6 +27,7 @@ const loadCommands2 = () => {
         const description = value.description;
         const code = value.code;
         const emojis = value.emojis ? value.emojis : null;
+        const langCodes = value.langCodes ? value.langCodes : null;
 
         console.log(commandName, aliases, shortDescription, cooldown, whisperable, description, code);
 
@@ -52,6 +53,9 @@ const loadCommands2 = () => {
         };
         if (emojis) {
             agoraVai[commandName]['emojis'] = emojis;
+        }
+        if (langCodes) {
+            agoraVai[commandName]['langCodes'] = langCodes;
         }
 
     }
