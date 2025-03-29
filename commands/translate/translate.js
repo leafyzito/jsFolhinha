@@ -98,10 +98,10 @@ translateCommand.description = `Forneça um texto para o bot traduzir para portu
 • Exemplo: !translate to:es Hello World - O bot irá traduzir "Hello World" para espanhol
 • Exemplo: !translate to:spanish Hello World - O bot irá traduzir "Hello World" para espanhol
 
-A percentagem na resposta do bot é a confiança da tradução, ou seja, a probabilidade de a tradução estar correta.
+A percentagem na resposta do bot é a confiança da tradução, ou seja, a probabilidade de a tradução estar correta
 
 A língua fornecida deve ser o seu código ou o nome do idioma em inglês
-Pode ver uma lista de idiomas suportados <a href="https://folhinhabot.com/comandos/traduzir" style="color: #67e8f9">aqui</a>`;
+Pode ver uma lista de idiomas suportados <a href="https://folhinhabot.com/linguagens" style="color: #67e8f9">aqui</a>`;
 translateCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${translateCommand.commandName}/${translateCommand.commandName}.js`;
 
 module.exports = {
