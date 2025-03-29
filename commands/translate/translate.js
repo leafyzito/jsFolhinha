@@ -1,22 +1,48 @@
 const { processCommand } = require("../../utils/processCommand.js");
-const { translate, isLanguageSupported } = require("google-translate-api-browser");
-const langs = require('./langs.json');
+const { LANGUAGE_MAPPINGS } = require('./langs.js');
 
-async function translateText(textToTranslate, targetLanguage) {
-    const translatedText = await translate(textToTranslate, { to: targetLanguage });
+async function translateText(targetLanguage, textToTranslate) {
+    const params = new URLSearchParams({
+        client: "gtx",
+        dt: "t",
+        ie: "UTF-8",
+        oe: "UTF-8",
+        sl: 'auto',
+        tl: targetLanguage,
+        q: textToTranslate
+    });
 
-    return {
-        fromLanguage: translatedText.from.language.iso,
-        translatedText: translatedText.text,
-    };
+    const response = await fetch(`https://translate.googleapis.com/translate_a/single?${params}`, {
+        method: "GET",
+        headers: {
+            "User-Agent": "Mozilla/5.0",
+            "Accept": "application/json"
+        }
+    });
+
+    const data = await response.json();
+    const translatedText = data[0][0][0];
+    const fromLanguage = data[2];
+    const toLanguage = data[3];
+    const confidence = Math.round(data[6] * 100);
+    return { translatedText, fromLanguage, toLanguage, confidence };
+}
+
+function isLanguageSupported(language) {
+    // Handle direct language codes (e.g. "pt")
+    if (Object.values(LANGUAGE_MAPPINGS).includes(language)) {
+        return true;
+    }
+    // Handle language names (e.g. "portuguese")
+    return LANGUAGE_MAPPINGS[language.toLowerCase()] !== undefined;
 }
 
 const translateCommand = async (client, message) => {
     message.command = 'translate';
     if (!await processCommand(5000, 'channel', message, client)) return;
 
-    client.log.logAndReply(message, `Este comando foi desabilitado temporariamente por fazer o bot crashar. Um dia ele volta`);
-    return;
+    // client.log.logAndReply(message, `Este comando foi desabilitado temporariamente por fazer o bot crashar. Um dia ele volta`);
+    // return;
 
     const args = message.messageText.split(' ');
     if (args.length < 2) {
@@ -28,8 +54,8 @@ const translateCommand = async (client, message) => {
     for (const word of args.slice(1)) {
         if (word.startsWith('to:')) {
             const languageQuery = word.split(':')[1].toLowerCase();
-            targetLanguage = Object.keys(langs).find(key =>
-                key.toLowerCase() === languageQuery || langs[key].toLowerCase() === languageQuery
+            targetLanguage = Object.keys(LANGUAGE_MAPPINGS).find(key =>
+                key.toLowerCase() === languageQuery || LANGUAGE_MAPPINGS[key].toLowerCase() === languageQuery
             ) || languageQuery;
             args.splice(args.indexOf(word), 1);
         }
@@ -44,14 +70,18 @@ const translateCommand = async (client, message) => {
     }
 
     const textToTranslate = args.slice(1).join(' ');
-    const translatedText = await translateText(textToTranslate, targetLanguage);
+    const translatedText = await translateText(targetLanguage, textToTranslate);
     const translateFrom = translatedText.fromLanguage;
 
     // match language to language code from json file
-    const targetLanguageCode = langs[targetLanguage] || targetLanguage;
-    const fromLanguageCode = langs[translateFrom] || translateFrom;
+    const fromLanguageFullname = Object.keys(LANGUAGE_MAPPINGS).find(key =>
+        LANGUAGE_MAPPINGS[key].toLowerCase() === translateFrom.toLowerCase()
+    ) || translateFrom;
+    const targetLanguageFullname = Object.keys(LANGUAGE_MAPPINGS).find(key =>
+        LANGUAGE_MAPPINGS[key].toLowerCase() === targetLanguage.toLowerCase()
+    ) || targetLanguage;
 
-    client.log.logAndReply(message, `${fromLanguageCode} → ${targetLanguageCode}: ${translatedText.translatedText}`);
+    client.log.logAndReply(message, `${fromLanguageFullname} → ${targetLanguageFullname}${translatedText.confidence != 100 ? ` (${translatedText.confidence}%)` : ''}: ${translatedText.translatedText}`);
 };
 
 translateCommand.commandName = 'translate';
