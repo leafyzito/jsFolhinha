@@ -89,13 +89,17 @@ translateCommand.aliases = ['traducao', 'traduçao', 'tradução', 'translate', 
 translateCommand.shortDescription = 'Traduza algum texto';
 translateCommand.cooldown = 5000;
 translateCommand.whisperable = true;
+translateCommand.langCodes = Object.entries(LANGUAGE_MAPPINGS).map(([language, code]) => ({
+    language,
+    code
+}));
 translateCommand.description = `Forneça um texto para o bot traduzir para português, ou, caso especificado, para outra língua
-• Exemplo: !translate Hello World - O bot irá traduzir "Hello World" para o português
+• Exemplo: !translate Hello World - O bot irá traduzir "Hello World" para português
 • Exemplo: !translate to:es Hello World - O bot irá traduzir "Hello World" para espanhol
 • Exemplo: !translate to:spanish Hello World - O bot irá traduzir "Hello World" para espanhol
 
 A língua fornecida deve ser o seu código ou o nome do idioma em inglês
-Mais tarde possivelmente existirá uma página com as possibilidades de códigos dos idiomas e nomes respectivamente`;
+Pode ver uma lista de idiomas suportados <a href="https://folhinhabot.com/comandos/traduzir" style="color: #67e8f9">aqui</a>`;
 translateCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${translateCommand.commandName}/${translateCommand.commandName}.js`;
 
 module.exports = {
