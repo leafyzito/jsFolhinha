@@ -1,4 +1,5 @@
 const { processCommand } = require("../../utils/processCommand.js");
+const { capitalize } = require("../../utils/utils.js");
 const { LANGUAGE_MAPPINGS } = require('./langs.js');
 
 async function translateText(targetLanguage, textToTranslate) {
@@ -81,7 +82,7 @@ const translateCommand = async (client, message) => {
         LANGUAGE_MAPPINGS[key].toLowerCase() === targetLanguage.toLowerCase()
     ) || targetLanguage;
 
-    client.log.logAndReply(message, `${fromLanguageFullname} → ${targetLanguageFullname}${translatedText.confidence != 100 ? ` (${translatedText.confidence}%)` : ''}: ${translatedText.translatedText}`);
+    client.log.logAndReply(message, `${capitalize(fromLanguageFullname)} → ${capitalize(targetLanguageFullname)}${translatedText.confidence != 100 ? ` (${translatedText.confidence}%)` : ''}: ${translatedText.translatedText}`);
 };
 
 translateCommand.commandName = 'translate';
