@@ -16,11 +16,12 @@ class Emotes {
             var sevenTvEmotes = [];
             const url = `https://7tv.io/v3/users/twitch/${channelId}`;
             const response = await fetch(url);
-            const data = await response.json();
 
             if (!response.ok) {
                 return sevenTvEmotes;
             }
+
+            const data = await response.json();
 
             if (data.error_code === 404) {
                 return sevenTvEmotes;
