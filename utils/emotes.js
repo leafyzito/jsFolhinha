@@ -18,6 +18,10 @@ class Emotes {
             const response = await fetch(url);
             const data = await response.json();
 
+            if (!response.ok) {
+                return sevenTvEmotes;
+            }
+
             if (data.error_code === 404) {
                 return sevenTvEmotes;
             }
