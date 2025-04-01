@@ -240,7 +240,7 @@ const cookieCommand = async (client, message) => {
         for (let i = 0; i < top5.length; i++) {
             const user = top5[i];
             const username = await client.getUserByUserID(user.userId);
-            reply += `${i + 1}º ${username}: (${user.total})`;
+            reply += `${i + 1}º ${username}: (${user.total}00)`;
             if (i !== top5.length - 1) {
                 reply += ', ';
             }
