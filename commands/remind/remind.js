@@ -290,7 +290,7 @@ const remindCommand = async (client, message) => {
 
     const emote = await client.emotes.getEmoteFromList(message.channelName, ['noted'], '📝');
     client.log.logAndReply(message, `Vou lembrar ${targetUser !== message.senderUsername ? `@${targetUser}` : 'você'} disso ${totalSeconds ? `em ${days ? `${days} ` : ''}${hours ? `${hours} ` : ''}${minutes ? `${minutes} ` : ''}${seconds ? `${seconds} ` : ''}` : 'assim que falar no chat'} ${emote} (ID ${newRemindId})`,
-        new Date(remindAt * 1000).toLocaleString()
+        new Date(remindAt * 1000).toLocaleString('pt-PT', { timeZone: 'Europe/Lisbon' })
     );
     // await client.reloadReminders();
     // add userid to client.usersWithPendingReminders
