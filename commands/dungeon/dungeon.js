@@ -195,11 +195,11 @@ const dungeonCommand = async (client, message, anonClient) => {
             const emote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.pogEmotes, 'PogChamp');
             await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { xp: experienceGain, wins: 1, level: 1 } });
             const timeToWait = await setNewCooldown(client, message, result);
-            await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [+${Math.round(experienceGain)} ⇒ ${Math.round(userDungeonStats.xp + experienceGain)} XP] ⬆ subiu para o nível ${userDungeonStats.level + 1}! ${emote} (descanse por ${timeToWait} ⏰)`);
+            await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [+${Math.round(experienceGain)}00 ⇒ ${Math.round(userDungeonStats.xp + experienceGain)} XP] ⬆ subiu para o nível ${userDungeonStats.level + 1}! ${emote} (descanse por ${timeToWait} ⏰)`);
         } else {
             await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { xp: experienceGain, wins: 1 } });
             const timeToWait = await setNewCooldown(client, message, result);
-            await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [+${Math.round(experienceGain)} ⇒ ${Math.round(userDungeonStats.xp + experienceGain)} XP] (descanse por ${timeToWait} ⏰)`);
+            await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [+${Math.round(experienceGain)}00 ⇒ ${Math.round(userDungeonStats.xp + experienceGain)} XP] (descanse por ${timeToWait} ⏰)`);
         }
     } else {
         await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { losses: 1 } });
@@ -236,11 +236,11 @@ const fastDungeonCommand = async (client, message) => {
             const emote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.pogEmotes, 'PogChamp');
             await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { xp: experienceGain, wins: 1, level: 1 } });
             const timeToWait = await setNewCooldown(client, message, result);
-            responseMessage += `${dungeon[option][result]}! [+${Math.round(experienceGain)} ⇒ ${Math.round(userDungeonStats.xp + experienceGain)} XP] ⬆ subiu para o nível ${userDungeonStats.level + 1}! ${emote} (descanse por ${timeToWait} ⏰)`;
+            responseMessage += `${dungeon[option][result]}! [+${Math.round(experienceGain)}00 ⇒ ${Math.round(userDungeonStats.xp + experienceGain)} XP] ⬆ subiu para o nível ${userDungeonStats.level + 1}! ${emote} (descanse por ${timeToWait} ⏰)`;
         } else {
             await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { xp: experienceGain, wins: 1 } });
             const timeToWait = await setNewCooldown(client, message, result);
-            responseMessage += `${dungeon[option][result]}! [+${Math.round(experienceGain)} ⇒ ${Math.round(userDungeonStats.xp + experienceGain)} XP] (descanse por ${timeToWait} ⏰)`;
+            responseMessage += `${dungeon[option][result]}! [+${Math.round(experienceGain)}00 ⇒ ${Math.round(userDungeonStats.xp + experienceGain)} XP] (descanse por ${timeToWait} ⏰)`;
         }
     } else {
         await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { losses: 1 } });

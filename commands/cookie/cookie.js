@@ -295,14 +295,14 @@ const cookieCommand = async (client, message) => {
 
         if (slotResults[0] === slotResults[1] && slotResults[0] === slotResults[2]) {
             const emote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.pogEmotes, 'PogChamp');
-            reply += `você apostou 1 cookie e ganhou 10 cookies! ${emote}`;
+            reply += `você apostou 1 cookie e ganhou 100 cookies! ${emote}`;
             userCookieStats.total += 9;
             userCookieStats.sloted += 1;
             userCookieStats.usedSlot = true;
             await client.db.update('cookie', { userId: message.senderUserID }, { $set: { total: userCookieStats.total, sloted: userCookieStats.sloted, usedSlot: userCookieStats.usedSlot } });
 
         } else if (slotResults[0] === slotResults[1] || slotResults[0] === slotResults[2] || slotResults[1] === slotResults[2]) {
-            reply += `você apostou 1 cookie e ganhou 3 cookies!`;
+            reply += `você apostou 1 cookie e ganhou 30 cookies!`;
             userCookieStats.total += 2;
             userCookieStats.sloted += 1;
             userCookieStats.usedSlot = true;
@@ -360,7 +360,7 @@ const cookieDiarioCommand = async (client, message) => {
     userCookieStats.total += 1;
     userCookieStats.claimedToday = true;
     await client.db.update('cookie', { userId: message.senderUserID }, { $set: { total: userCookieStats.total, claimedToday: userCookieStats.claimedToday } });
-    client.log.logAndReply(message, `Você resgatou seu cookie diário e agora tem ${userCookieStats.total} cookies! 🍪`);
+    client.log.logAndReply(message, `Você resgatou seu cookie diário e agora tem ${userCookieStats.total}00 cookies! 🍪`);
     return;
 };
 
