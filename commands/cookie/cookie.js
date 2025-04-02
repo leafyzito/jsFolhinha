@@ -161,7 +161,7 @@ const cookieCommand = async (client, message) => {
         const gifted = userCookieStats.gifted;
         const beenGifted = userCookieStats.beenGifted;
         const sloted = userCookieStats.sloted;
-        client.log.logAndReply(message, `${targetUser} tem ${total}00 cookies, 🥠 abriu ${opened}00, 🎁 ofereceu ${gifted}00, 🎁 foi presenteado com ${beenGifted}00 e 🎰 apostou ${sloted}00`);
+        client.log.logAndReply(message, `${targetUser} tem ${total} cookies, 🥠 abriu ${opened}, 🎁 ofereceu ${gifted}, 🎁 foi presenteado com ${beenGifted} e 🎰 apostou ${sloted}`);
         return;
     }
 
@@ -240,7 +240,7 @@ const cookieCommand = async (client, message) => {
         for (let i = 0; i < top5.length; i++) {
             const user = top5[i];
             const username = await client.getUserByUserID(user.userId);
-            reply += `${i + 1}º ${username}: (${user.total}00)`;
+            reply += `${i + 1}º ${username}: (${user.total})`;
             if (i !== top5.length - 1) {
                 reply += ', ';
             }
@@ -295,14 +295,14 @@ const cookieCommand = async (client, message) => {
 
         if (slotResults[0] === slotResults[1] && slotResults[0] === slotResults[2]) {
             const emote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.pogEmotes, 'PogChamp');
-            reply += `você apostou 1 cookie e ganhou 100 cookies! ${emote}`;
+            reply += `você apostou 1 cookie e ganhou 10 cookies! ${emote}`;
             userCookieStats.total += 9;
             userCookieStats.sloted += 1;
             userCookieStats.usedSlot = true;
             await client.db.update('cookie', { userId: message.senderUserID }, { $set: { total: userCookieStats.total, sloted: userCookieStats.sloted, usedSlot: userCookieStats.usedSlot } });
 
         } else if (slotResults[0] === slotResults[1] || slotResults[0] === slotResults[2] || slotResults[1] === slotResults[2]) {
-            reply += `você apostou 1 cookie e ganhou 30 cookies!`;
+            reply += `você apostou 1 cookie e ganhou 3 cookies!`;
             userCookieStats.total += 2;
             userCookieStats.sloted += 1;
             userCookieStats.usedSlot = true;
@@ -360,7 +360,7 @@ const cookieDiarioCommand = async (client, message) => {
     userCookieStats.total += 1;
     userCookieStats.claimedToday = true;
     await client.db.update('cookie', { userId: message.senderUserID }, { $set: { total: userCookieStats.total, claimedToday: userCookieStats.claimedToday } });
-    client.log.logAndReply(message, `Você resgatou seu cookie diário e agora tem ${userCookieStats.total}00 cookies! 🍪`);
+    client.log.logAndReply(message, `Você resgatou seu cookie diário e agora tem ${userCookieStats.total} cookies! 🍪`);
     return;
 };
 
