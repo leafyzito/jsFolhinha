@@ -13,8 +13,8 @@ class Logger {
         const lastMessageTime = this.channelMsgCooldowns.get(channel) || 0;
         const timeSinceLastMessage = now - lastMessageTime;
 
-        if (timeSinceLastMessage < 1500) { // 1.5 seconds cooldown
-            await new Promise(resolve => setTimeout(resolve, 1500 - timeSinceLastMessage));
+        if (timeSinceLastMessage < 2000) { // 2 seconds cooldown
+            await new Promise(resolve => setTimeout(resolve, 2000 - timeSinceLastMessage));
         }
 
         this.channelMsgCooldowns.set(channel, Date.now());
