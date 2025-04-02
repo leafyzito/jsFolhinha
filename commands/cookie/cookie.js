@@ -309,11 +309,12 @@ const cookieCommand = async (client, message) => {
             await client.db.update('cookie', { userId: message.senderUserID }, { $set: { total: userCookieStats.total, sloted: userCookieStats.sloted, usedSlot: userCookieStats.usedSlot } });
         } else {
             const emote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.sadEmotes, ':(');
-            reply += `você apostou 1 cookie e ficou sem ele... (adicionado ao jackpot ⇒ ${currentJackpot[0].total + 1}) ${emote}`;
+            // reply += `você apostou 1 cookie e ficou sem ele... (adicionado ao jackpot ⇒ ${currentJackpot[0].total + 1}) ${emote}`;
+            reply += `você apostou 1 cookie e ficou sem ele... ${emote}`;
             userCookieStats.total -= 1;
             userCookieStats.sloted += 1;
             userCookieStats.usedSlot = true;
-            await client.db.update('cookie', { userId: message.senderUserID }, { $set: { total: userCookieStats.total, sloted: userCookieStats.sloted, usedSlot: userCookieStats.usedSlot } });
+            // await client.db.update('cookie', { userId: message.senderUserID }, { $set: { total: userCookieStats.total, sloted: userCookieStats.sloted, usedSlot: userCookieStats.usedSlot } });
 
             // increase jackpot by adding 1 cookie to folhinhabot
             await client.db.update('cookie', { userId: process.env.BOT_USERID }, { $inc: { total: 1 } });
