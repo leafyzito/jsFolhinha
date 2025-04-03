@@ -31,8 +31,8 @@ class CreateRegex {
             ['0', '⓿'],
             ['1', '11⓵➊⑴¹𝟏𝟙１𝟷𝟣⒈𝟭1➀₁①❶⥠'],
             ['2', '⓶⒉⑵➋ƻ²ᒿ𝟚２𝟮𝟤ᒾ𝟸Ƨ𝟐②ᴤ₂➁❷ᘝƨ'],
-            ['3', '³ȝჳⳌꞫ𝟑ℨ𝟛𝟯𝟥Ꝫ➌ЗȜ⓷ӠƷ３𝟹⑶⒊ʒʓǯǮƺ𝕴ᶾзᦡ➂③₃ᶚᴣᴟ❸ҘҙӬӡӭӟӞ'],
-            ['4', '𝟰𝟺𝟦𝟒➍ҶᏎ𝟜ҷ⓸ҸҹӴӵᶣ４чㄩ⁴➃₄④❹Ӌ⑷⒋'],
+            ['3', '³ȝჳⳌꞫ𝟓ℨ𝟛𝟯𝟥Ꝫ➌ЗȜ⓷ӠƷ３𝟹⑶⒊ʒʓǯǮƺ𝕴ᶾзᦡ➂③₃ᶚᴣᴟ❸ҘҙӬӡӭӟӞ'],
+            ['4', '𝟰𝟺𝟦𝟔➍ҶᏎ𝟜ҷ⓸ҸҹӴӵᶣ４чㄩ⁴➃₄④❹Ӌ⑷⒋'],
             ['5', '𝟱⓹➎Ƽ𝟓𝟻𝟝𝟧５➄₅⑤⁵❺ƽ⑸⒌'],
             ['6', 'Ⳓ🄇𝟼Ꮾ𝟲𝟞𝟨𝟔➏⓺Ϭϭ⁶б６ᧈ⑥➅₆❻⑹⒍'],
             ['7', '𝟕𝟟𝟩𝟳𝟽🄈⓻𐓒➐７⁷⑦₇❼➆⑺⒎'],
@@ -465,26 +465,27 @@ class CreateRegex {
         const moreCleansedText = this.normalizeUnicode(cleansedText);
         const testString = this.replaceConfusables(moreCleansedText);
         const tests = [
-            { name: 'racism', check: () => this.racism.test(testString) },
-            { name: 'racism2', check: () => this.racism2.test(testString) },
-            { name: 'racism3', check: () => this.racism3.test(testString) },
-            { name: 'racism5', check: () => this.racism5.test(testString) },
-            { name: 'slurs', check: () => this.slurs.test(testString) },
-            { name: 'slurs2', check: () => this.slurs2.test(testString) },
-            { name: 'slurs3', check: () => this.slurs3.test(testString) },
-            { name: 'slurs4', check: () => this.slurs4.test(testString) },
-            { name: 'slurs5', check: () => this.slurs5.test(testString) },
-            { name: 'tos', check: () => this.tos.test(testString) },
-            { name: 'tos2', check: () => this.tos2.test(testString) },
-            { name: 'tos3', check: () => this.tos3.test(testString) },
+            { name: 'racism', check: () => this.racism.test(testString), match: () => testString.match(this.racism)?.[0] },
+            { name: 'racism2', check: () => this.racism2.test(testString), match: () => testString.match(this.racism2)?.[0] },
+            { name: 'racism3', check: () => this.racism3.test(testString), match: () => testString.match(this.racism3)?.[0] },
+            { name: 'racism5', check: () => this.racism5.test(testString), match: () => testString.match(this.racism5)?.[0] },
+            { name: 'slurs', check: () => this.slurs.test(testString), match: () => testString.match(this.slurs)?.[0] },
+            { name: 'slurs2', check: () => this.slurs2.test(testString), match: () => testString.match(this.slurs2)?.[0] },
+            { name: 'slurs3', check: () => this.slurs3.test(testString), match: () => testString.match(this.slurs3)?.[0] },
+            { name: 'slurs4', check: () => this.slurs4.test(testString), match: () => testString.match(this.slurs4)?.[0] },
+            { name: 'slurs5', check: () => this.slurs5.test(testString), match: () => testString.match(this.slurs5)?.[0] },
+            { name: 'tos', check: () => this.tos.test(testString), match: () => testString.match(this.tos)?.[0] },
+            { name: 'tos2', check: () => this.tos2.test(testString), match: () => testString.match(this.tos2)?.[0] },
+            { name: 'tos3', check: () => this.tos3.test(testString), match: () => testString.match(this.tos3)?.[0] },
             // { name: 'tos4', check: () => this.tos4.test(testString) },
-            { name: 'tos5', check: () => this.tos5.test(testString) },
-            { name: 'tos6', check: () => this.tos6.test(testString) },
-            { name: 'tos7', check: () => this.tos7.test(testString) }
+            { name: 'tos5', check: () => this.tos5.test(testString), match: () => testString.match(this.tos5)?.[0] },
+            { name: 'tos6', check: () => this.tos6.test(testString), match: () => testString.match(this.tos6)?.[0] },
+            { name: 'tos7', check: () => this.tos7.test(testString), match: () => testString.match(this.tos7)?.[0] }
         ];
         /** @todo pass full regexp object, check first, the find matches if true for better logging */
-        for (const { name, check } of tests) {
+        for (const { name, check, match } of tests) {
             if (check()) {
+                const matchedWord = match();
                 const caughtPhrase = channelID
                     ? `Found blacklisted content (Caught by: '${name}') in ${channelID}`
                     : `Found blacklisted content (Caught by: '${name}')`;
@@ -492,7 +493,7 @@ class CreateRegex {
                 console.log(caughtPhrase, testString);
                 // pb.cord.misc(caughtPhrase, `Message: ${testString}`, '16744576');
                 console.log(caughtPhrase, `Message: ${testString}`);
-                return { caught: true, caughtCategory: name };
+                return { caught: true, caughtCategory: name, matchedWord };
             }
         }
         return { caught: false };
