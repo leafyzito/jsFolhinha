@@ -492,10 +492,10 @@ class CreateRegex {
                 console.log(caughtPhrase, testString);
                 // pb.cord.misc(caughtPhrase, `Message: ${testString}`, '16744576');
                 console.log(caughtPhrase, `Message: ${testString}`);
-                return true;
+                return { caught: true, caughtCategory: name };
             }
         }
-        return false;
+        return { caught: false };
     }
 }
 exports.CreateRegex = CreateRegex;
