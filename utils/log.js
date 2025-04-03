@@ -23,12 +23,12 @@ class Logger {
     checkRegexAndHandle(content, channelContext, message = null) {
         const result = regex.check(content, content.split(' '), channelContext);
         if (result.caught) {
-            console.log(`* Caught by ${result.caughtCategory} - original content: ${content}`);
-            this.client.discord.importantLog(`* Caught by ${result.caughtCategory} - original content: ${content}`);
+            console.log(`* Caught by ${result.caughtCategory} (${result.matchedWord}) - original content: ${content}`);
+            this.client.discord.importantLog(`* Caught by ${result.caughtCategory} (${result.matchedWord}) - original content: ${content}`);
             // this.send(process.env.DEV_TEST_CHANNEL, `Regex apanhado, check logs ${process.env.DEV_NICK}`);
             if (message) {
                 if (!message.notes) message.notes = '';
-                message.notes = message.notes + `Caught by: ${result.caughtCategory} - Original content: ${content}`;
+                message.notes = message.notes + `Caught by: ${result.caughtCategory} (${result.matchedWord}) - Original content: ${content}`;
             }
             content = '⚠️ Mensagem retida por conter conteúdo banido, tente novamente ou mude um pouco o comando';
         }
