@@ -45,7 +45,7 @@ const translateCommand = async (client, message) => {
     // client.log.logAndReply(message, `Este comando foi desabilitado temporariamente por fazer o bot crashar. Um dia ele volta`);
     // return;
 
-    const args = message.messageText.split(' ');
+    let args = message.messageText.split(' ');
     if (args.length < 2) {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}translate <texto para traduzir>`);
         return;
