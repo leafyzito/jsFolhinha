@@ -96,7 +96,7 @@ function onMessageHandler(message) {
     message.isFirstMsg = message.ircTags['first-msg'] === '1' ? true : false;
 
     // Pass both clients to handlers - anon for reading, main for sending
-    listenerHandler(client, message);
+    listenerHandler(client, message, anonClient);
     commandHandler(client, message, anonClient);
 }
 

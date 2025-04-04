@@ -159,7 +159,7 @@ async function updateLastSeen(client, message) {
     return;
 }
 
-const updateUserListener = async (client, message) => {
+const updateUserListener = async (client, message, anonClient) => {
     if (message.senderUsername === 'folhinhabot') { return; }
 
     if ([...client.knownUserAliases].includes(message.senderUsername)) { return await updateLastSeen(client, message); }
@@ -177,8 +177,8 @@ const updateUserListener = async (client, message) => {
             client.discord.log(`* Updating channel config for ${knownUsersDB[0].currAlias} -> ${message.senderUsername}`);
             console.log(`Updating channel config for ${knownUsersDB[0].currAlias} -> ${message.senderUsername}`);
             await client.db.update('config', { channel: knownUsersDB[0].currAlias.toLowerCase() }, { $set: { channel: message.senderUsername } });
-            client.part(knownUsersDB[0].currAlias);
-            client.join(message.senderUsername);
+            anonClient.part(knownUsersDB[0].currAlias);
+            anonClient.join(message.senderUsername);
             client.log.send(message.senderUsername, `Troca de nick detetada: ${knownUsersDB[0].currAlias} -> ${message.senderUsername}`);
             await client.reloadChannelConfigs();
             await client.reloadChannelPrefixes();
