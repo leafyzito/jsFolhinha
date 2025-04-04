@@ -353,8 +353,10 @@ const cookieDiarioCommand = async (client, message) => {
         const timeLeft = nextNineAM - now;
         const hours = Math.floor(timeLeft / (1000 * 60 * 60));
         const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+        const timeLeftString = hours == 0 && minutes == 0 ? `${seconds}s` : `${hours}h ${minutes}m`;
 
-        client.log.logAndReply(message, `Você já resgatou o seu cookie diário hoje. Volte em ${hours}h ${minutes}m para resgatar o seu cookie diário novamente ⌛`);
+        client.log.logAndReply(message, `Você já resgatou o seu cookie diário hoje. Volte em ${timeLeftString} para resgatar o seu cookie diário novamente ⌛`);
         return;
     }
 
