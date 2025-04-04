@@ -22,7 +22,7 @@ async function translateText(targetLanguage, textToTranslate) {
     });
 
     const data = await response.json();
-    const translatedText = data[0][0][0];
+    const translatedText = data[0].map(segment => segment[0]).join('');
     const fromLanguage = data[2];
     const toLanguage = data[3];
     const confidence = Math.round(data[6] * 100);
@@ -45,7 +45,7 @@ const translateCommand = async (client, message) => {
     // client.log.logAndReply(message, `Este comando foi desabilitado temporariamente por fazer o bot crashar. Um dia ele volta`);
     // return;
 
-    let args = message.messageText.split(' ');
+    const args = message.messageText.split(' ');
     if (args.length < 2) {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}translate <texto para traduzir>`);
         return;
