@@ -1,3 +1,4 @@
+// https://tv.supa.sh/logs?c=channelName&u=userName
 const { processCommand } = require("../../utils/processCommand.js");
 
 const getLogsLink = async (channelName, userName) => {

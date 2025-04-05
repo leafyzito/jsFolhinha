@@ -6,35 +6,12 @@ const { Logger } = require('./log.js');
 const { Emotes } = require('./emotes.js');
 const { discordClient } = require('./discord.js');
 const { loadCommands } = require('../commands/commandsList.js');
-const { timeSince, manageLongResponse, isStreamOnline } = require('./utils.js');
+const { timeSince, manageLongResponse } = require('./utils.js');
 
 async function modifyClient(client, anonClient) {
-    client.getBearerToken = async function () {
-
-        const response = await fetch('https://id.twitch.tv/oauth2/token', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams({
-                client_id: process.env.BOT_CLIENT_ID,
-                client_secret: process.env.BOT_CLIENT_SECRET,
-                grant_type: 'client_credentials',
-            }),
-        });
-
-        const data = await response.json();
-        const newToken = data.access_token;
-        process.env.BOT_OAUTH_TOKEN = newToken;
-        return newToken;
-    }
-
-    client.getBearerToken(); // get the bearer token
-
     client.ready = false;
     client.userIdCache = new Map(); // Cache for user IDs
     client.userIdCacheTimeout = 24 * 60 * 60 * 1000; // 24 hour cache timeout
-
 
     client.getUserID = async function (username) {
         username = username.toLowerCase();
