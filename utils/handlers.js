@@ -2,6 +2,7 @@ const { replyMentionListener, afkUserListener, reminderListener, updateUserListe
 const { send7tvPresence } = require('./utils.js');
 
 function commandHandler(client, message, anonClient) {
+    if (message.senderUsername == process.env.BOT_USERNAME) { return; }
     if (message.messageText.startsWith(message.commandPrefix)) {
         // Remove zero-width characters from message text - needed because twitch adds random zero-width characters to dupplicated messages
         message.messageText = message.messageText.replace(/\u200B|\u200C|\u200D|\u200E|\u200F|\u{E0000}/gu, '');
@@ -40,7 +41,7 @@ function listenerHandler(client, message) {
             client.discord.log(`* Error in notify dev mention listener: ${err}`);
         });
 
-    if (message.senderUsername == 'folhinhabot') { return; }
+    if (message.senderUsername == process.env.BOT_USERNAME) { return; }
 
     replyMentionListener(client, message)
         .catch(err => {
