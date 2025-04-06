@@ -206,7 +206,7 @@ Pode também fazer download apenas do audio (mp3), utilizando o formato !downloa
 • Exemplo: !download audio https://www.youtube.com/watch?v=dQw4w9WgXcQ
 
 Sites mais famosos suportados: Youtube, Instagram, Facebook, Reddit, Tiktok, Twitter, clipes da Twitch
-Para mais informações sobre a API utilizada, acesse https://github.com/imputnet/cobalt`;
+Para mais informações sobre a API utilizada, acesse <a href="https://github.com/imputnet/cobalt/tree/main/api#supported-services" target="_blank" style="color: #67e8f9">aqui</a>`;
 downloadCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${downloadCommand.commandName}/${downloadCommand.commandName}.js`;
 
 module.exports = {
