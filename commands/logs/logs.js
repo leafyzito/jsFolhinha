@@ -2,6 +2,10 @@
 const { processCommand } = require("../../utils/processCommand.js");
 
 const getLogsLink = async (channelName, userName) => {
+    if (!userName) {
+        const url = `https://tv.supa.sh/logs?c=${channelName}`;
+        return url;
+    }
     const url = `https://tv.supa.sh/logs?c=${channelName}&u=${userName}`;
     return url;
 };
@@ -12,7 +16,7 @@ const logsCommand = async (client, message) => {
 
     const messageParts = message.messageText.split(' ');
     const targetChannel = messageParts.length === 2 ? message.channelName : messageParts[1]?.replace(/^@/, '') || message.channelName;
-    const targetUser = messageParts.length === 2 ? messageParts[1]?.replace(/^@/, '') : messageParts[2]?.replace(/^@/, '') || message.senderUsername;
+    const targetUser = messageParts.length === 2 ? messageParts[1]?.replace(/^@/, '') : messageParts[2]?.replace(/^@/, '') || null;
     const logsLink = await getLogsLink(targetChannel, targetUser);
 
     client.log.logAndReply(message, `Logs: ${logsLink}`);
