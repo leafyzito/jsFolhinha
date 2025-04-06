@@ -1,5 +1,44 @@
 const { processCommand } = require("../../utils/processCommand.js");
 const { shortenUrl } = require("../../utils/utils.js");
+const FormData = require('form-data');
+const fetch = require('node-fetch');
+
+async function uploadToFeridinha(content, fileName) {
+    const api_url = 'https://feridinha.com/upload';
+    const headers = { 'token': process.env.FERIDINHA_API_KEY };
+
+    const form = new FormData();
+    form.append('file', content, {
+        filename: fileName,
+        contentType: 'video/mp4'
+    });
+
+    try {
+        const response = await fetch(api_url, {
+            method: 'POST',
+            headers: {
+                'token': headers.token,
+                ...form.getHeaders()
+            },
+            body: form
+        });
+
+        if (response.ok) {
+            const resData = await response.json();
+            if (resData.success) {
+                return resData.message;
+            }
+            console.log(`Failed to upload to feridinha. resData: ${JSON.stringify(resData)}`);
+        } else {
+            console.log(`Error: ${response.status} ${response.statusText}`);
+            const errorText = await response.text();
+            console.log(`Error details: ${errorText}`);
+        }
+    } catch (error) {
+        console.log('Upload error:', error);
+    }
+    return null;
+}
 
 async function getVideoDownload(urlToDownload) {
     const apiUrl = 'http://localhost:9000/'; // https://cobalt.tools/ local instance
@@ -20,11 +59,23 @@ async function getVideoDownload(urlToDownload) {
         });
         const resData = await response.json();
         let resUrl = resData.url;
-        resUrl = await shortenUrl(resUrl);
-        return resUrl;
+
+        // Download the video content
+        const videoResponse = await fetch(resUrl);
+        const videoContent = await videoResponse.buffer();
+
+        // Upload to feridinha
+        const fileName = `video_${Date.now()}.mp4`;
+        const feridinhaUrl = await uploadToFeridinha(videoContent, fileName);
+
+        if (!feridinhaUrl) {
+            console.log('Failed to upload to feridinha, falling back to original URL');
+            return await shortenUrl(resUrl);
+        }
+
+        return feridinhaUrl;
     } catch (e) {
         console.log(`erro no getVideoDownload: ${e}`);
-        console.log(`resData: ${resData}`);
         try {
             const errorText = resData.text;
             if ('connect to the service api' in errorText) {
@@ -33,7 +84,7 @@ async function getVideoDownload(urlToDownload) {
                 return null;
             }
         } catch (e2) {
-            console.log(`erro no try-catch do getAudioDownload: ${e2}`);
+            console.log(`erro no try-catch do getVideoDownload: ${e2}`);
             console.log(resData);
             return null;
         }
@@ -41,29 +92,42 @@ async function getVideoDownload(urlToDownload) {
 }
 
 async function getAudioDownload(urlToDownload) {
-    const apiUrl = 'https://co.wuk.sh/api/json';
+    const apiUrl = 'http://localhost:9000/'; // https://cobalt.tools/ local instance
     const headers = {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'ApiKey ' + process.env.COBALT_API_KEY
     };
-    const data = {
+    const payload = {
         'url': urlToDownload,
-        'isAudioOnly': true
+        'downloadMode': 'audio'
     };
 
     try {
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: headers,
-            body: JSON.stringify(data)
+            body: JSON.stringify(payload)
         });
         const resData = await response.json();
         let resUrl = resData.url;
-        resUrl = await shortenUrl(resUrl);
-        return resUrl;
+
+        // Download the audio content
+        const audioResponse = await fetch(resUrl);
+        const audioContent = await audioResponse.buffer();
+
+        // Upload to feridinha
+        const fileName = `audio_${Date.now()}.mp3`;
+        const feridinhaUrl = await uploadToFeridinha(audioContent, fileName);
+
+        if (!feridinhaUrl) {
+            console.log('Failed to upload to feridinha, falling back to original URL');
+            return await shortenUrl(resUrl);
+        }
+
+        return feridinhaUrl;
     } catch (e) {
         console.log(`erro no getAudioDownload: ${e}`);
-        console.log(`resData: ${resData}`);
         try {
             const errorText = resData.text;
             if ('connect to the service api' in errorText) {
