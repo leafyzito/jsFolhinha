@@ -2,10 +2,11 @@ const { processCommand } = require("../../utils/processCommand.js");
 const { shortenUrl } = require("../../utils/utils.js");
 
 async function getVideoDownload(urlToDownload) {
-    const apiUrl = 'https://api.cobalt.tools/api/json'; // https://cobalt.tools/
+    const apiUrl = 'http://localhost:9000/'; // https://cobalt.tools/ local instance
     const headers = {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'ApiKey ' + process.env.COBALT_API_KEY
     };
     const payload = {
         'url': urlToDownload
