@@ -2,7 +2,7 @@ const { processCommand } = require("../../utils/processCommand.js");
 const { timeSince } = require("../../utils/utils.js");
 
 async function getFirstLineDate(channelid, usernameid) {
-    const apiUrl = `http://localhost:8025/list?channelid=${channelid}&userid=${usernameid}`;
+    const apiUrl = `https://logs.zonian.dev/list?channelid=${channelid}&userid=${usernameid}`;
 
     const response = await fetch(apiUrl, {
         method: 'GET',
@@ -18,7 +18,7 @@ async function getFirstLineDate(channelid, usernameid) {
     const availableLogsLen = data.availableLogs.length;
     const firstAvailableLog = data.availableLogs[availableLogsLen - 1];
 
-    const logUrl = `http://localhost:8025/channelid/${channelid}/userid/${usernameid}/${firstAvailableLog.year}/${firstAvailableLog.month}`;
+    const logUrl = `https://logs.zonian.dev/channelid/${channelid}/userid/${usernameid}/${firstAvailableLog.year}/${firstAvailableLog.month}`;
 
     return logUrl;
 }
@@ -80,9 +80,7 @@ firstLineCommand.cooldown = 5000;
 firstLineCommand.whisperable = false;
 firstLineCommand.description = `Receba a primeira mensagem de um usuário fornecido ou, caso nenhum seja fornecido, da pessoa que executou o comando
 • Exemplo: !firstline - O bot vai mostrar a primeira mensagem de quem executou o comando no chat onde o comando foi executado
-• Exemplo: !firstline @leafyzito - O bot vai mostrar a primeira mensagem de @leafyzito no chat onde o comando foi executado
-
-Começou a contar desde 06/03/2025`;
+• Exemplo: !firstline @leafyzito - O bot vai mostrar a primeira mensagem de @leafyzito no chat onde o comando foi executado`;
 firstLineCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${firstLineCommand.commandName}/${firstLineCommand.commandName}.js`;
 
 module.exports = {
