@@ -8,8 +8,7 @@ const meCommand = async (client, message) => {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}me <mensagem>`);
         return;
     }
-
-    var msgContent = message.messageText.split(' ').slice(1).join(' ');
+    var msgContent = message.messageText.split(' ').slice(1).join(' ').trim();
 
     const otherPrefixes = ['$', '*', '!', '|', '+', '?', '%', '=', '&', '/', '#', '.', ',', '<', '>', '@', '⠀', '-', '\\', '\\'];
     while (otherPrefixes.some(char => msgContent.startsWith(char))) {
