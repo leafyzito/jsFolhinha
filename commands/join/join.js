@@ -59,7 +59,7 @@ const joinCommand = async (client, message, anonClient) => {
 
     const happyEmote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.happyEmotes);
     client.log.logAndReply(message, `Entrei no chat ${message.senderUsername} com sucesso! Tô lá te esperando! ${happyEmote} Caso tenha follow-mode ativado, me dê cargo de moderador no seu chat para conseguir falar lá`);
-    client.log.logAndWhisper(message, `Caso tenha follow-mode ativado no seu chat, me dê cargo de moderador ou vip para conseguir falar lá :D`);
+    client.log.logAndWhisper(message, `Caso tenha follow-mode ativado no seu chat, me dê cargo de moderador para conseguir falar lá :D`);
     return;
 };
 
