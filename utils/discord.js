@@ -45,7 +45,7 @@ discordClient.logCommand = async function (message, response) {
             },
             {
                 name: "Resposta:",
-                value: response,
+                value: response + `\n[Logs](${getLogsUrl(message.channelName)})`,
                 inline: false
             },
         )
