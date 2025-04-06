@@ -9,7 +9,7 @@ const fillCommand = async (client, message) => {
         return;
     }
 
-    var textToRepeat = message.messageText.split(' ').slice(1).join(' ');
+    var textToRepeat = message.messageText.split(' ').slice(1).join(' ').trim();
 
     const otherPrefixes = ['$', '*', '!', '|', '+', '?', '%', '=', '&', '/', '#', '.', ',', '<', '>', '@', '⠀', '-', '\\', '\\'];
     while (otherPrefixes.some(char => textToRepeat.startsWith(char))) {

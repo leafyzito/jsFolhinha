@@ -10,7 +10,7 @@ const talkieCommand = async (client, message, anonClient) => {
         return;
     }
 
-    var msgContent = message.messageText.split(' ').slice(1).join(' ');
+    var msgContent = message.messageText.split(' ').slice(1).join(' ').trim();
 
     const otherPrefixes = ['$', '*', '!', '|', '+', '?', '%', '=', '&', '/', '#', '.', ',', '<', '>', '@', '⠀', '-', '\\', '\\'];
     while (otherPrefixes.some(char => msgContent.startsWith(char))) {
