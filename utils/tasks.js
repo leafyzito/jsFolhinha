@@ -152,6 +152,7 @@ async function fetchPendingJoins(client, anonClient) {
             // create config
             createNewChannelConfig(client, channelId);
             client.channelsToJoin.push(channelName);
+            anonClient.channelsToJoin.push(channelName);
             client.joinedChannelsIds.push(channelId);
 
             const emote = await client.emotes.getEmoteFromList(channelName, ['peepohey', 'heyge'], 'KonCha');
