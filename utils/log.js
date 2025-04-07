@@ -20,6 +20,42 @@ class Logger {
         this.channelMsgCooldowns.set(channel, Date.now());
     }
 
+    handleSendError(err, channel, content, retryMethod, retryCount = 0, lastResortWhisperTarger = null) {
+        // console.log('handleSendError: ', err);
+
+        // Handle identical message error - no retries needed
+        if (err.message.includes('identical to the previous one')) {
+            console.log('sending identical message error, ending here');
+        }
+
+        // Check if we've hit max retries
+        if (retryCount >= 3) {
+            // send whisper to user as last resort
+            if (lastResortWhisperTarger) {
+                console.log('Max retries reached, whispering response to user');
+                this.client.discord.log(`* Dropped message in #${channel}, whispering response to ${lastResortWhisperTarger}`);
+                this.client.whisper(lastResortWhisperTarger, content);
+                return;
+            }
+            console.log('Max retries reached, dropping message');
+            this.client.discord.log(`* Dropped message in #${channel}`);
+            return;
+        }
+
+        // Handle retryable errors
+        const isRetryableError = err.message.includes('too quickly') || err.message.includes('waiting for response');
+        const errorType = err.message.includes('too quickly') ? 'sending messages too quickly' : 'waiting for response';
+
+        if (isRetryableError) {
+            console.log(`${errorType} error, retrying (${retryCount + 1}/3)`);
+            setTimeout(() => { retryMethod(channel, content, retryCount + 1); }, 1500);
+            return;
+        }
+
+        // Handle any other errors
+        console.log('send error: ', err);
+    }
+
     checkRegexAndHandle(content, channelContext, message = null) {
         const result = regex.check(content, content.split(' '), channelContext);
         if (result.caught) {
@@ -67,26 +103,20 @@ class Logger {
         } else {
             await this.manageChannelMsgCooldown(message.channelName);
             this.client.reply(message.channelName, message.messageID, response)
-                .catch((err) => {
-                    if (err.message.includes('identical to the previous one')) {
-                        console.log('sending identical message error, ending here');
-                    } else if (err.message.includes('too quickly')) {
-                        console.log('sending messages too quickly error, retrying');
-                        setTimeout(() => { this.send(message.channelName, response); }, 1500);
-                    } else if (err.message.includes('waiting for response')) {
-                        console.log('waiting for response error, retrying');
-                        setTimeout(() => { this.send(message.channelName, response); }, 1500);
-                    } else {
-                        console.log('logAndReply error: ', err);
-                    }
-                });
+                .catch((err) => this.handleSendError(err,
+                    message.channelName,
+                    response,
+                    this.send.bind(this),
+                    0,
+                    message.senderUsername
+                ));
         }
 
         await this.createCommandLog(message, response);
         console.log(`#${message.channelName}/${message.senderUsername} - ${message.command}`);
     }
 
-    async logAndSay(message, response, notes = null) {
+    async logAndSay(message, response, notes = null, retryCount = 0) {
         message.notes = notes;
         response = this.checkRegexAndHandle(response, message.channelName, message);
 
@@ -95,25 +125,19 @@ class Logger {
 
         await this.manageChannelMsgCooldown(message.channelName);
         this.client.say(message.channelName, response)
-            .catch((err) => {
-                if (err.message.includes('identical to the previous one')) {
-                    console.log('sending identical message error, ending here');
-                } else if (err.message.includes('too quickly')) {
-                    console.log('sending messages too quickly error, retrying');
-                    setTimeout(() => { this.logAndSay(message, response); }, 1500);
-                } else if (err.message.includes('waiting for response')) {
-                    console.log('waiting for response error, retrying');
-                    setTimeout(() => { this.send(message.channelName, content); }, 1500);
-                } else {
-                    console.log('logAndSay error: ', err);
-                }
-            });
+            .catch((err) => this.handleSendError(
+                err,
+                message.channelName,
+                response,
+                this.logAndSay.bind(this), retryCount,
+                message.senderUsername
+            ));
 
         await this.createCommandLog(message, response);
         console.log(`#${message.channelName}/${message.senderUsername} - ${message.command}`);
     }
 
-    async logAndMeAction(message, response, notes = null) {
+    async logAndMeAction(message, response, notes = null, retryCount = 0) {
         message.notes = notes;
         response = this.checkRegexAndHandle(response, message.channelName, message);
 
@@ -122,19 +146,12 @@ class Logger {
 
         await this.manageChannelMsgCooldown(message.channelName);
         this.client.me(message.channelName, response)
-            .catch((err) => {
-                if (err.message.includes('identical to the previous one')) {
-                    console.log('sending identical message error, ending here');
-                } else if (err.message.includes('too quickly')) {
-                    console.log('sending messages too quickly error, retrying');
-                    setTimeout(() => { this.logAndMeAction(message, response); }, 1500);
-                } else if (err.message.includes('waiting for response')) {
-                    console.log('waiting for response error, retrying');
-                    setTimeout(() => { this.send(message.channelName, content); }, 1500);
-                } else {
-                    console.log('logAndMeAction error: ', err);
-                }
-            });
+            .catch((err) => this.handleSendError(err,
+                message.channelName,
+                response,
+                this.logAndMeAction.bind(this), retryCount,
+                null
+            ));
 
         await this.createCommandLog(message, '/me ' + response);
         console.log(`#${message.channelName}/${message.senderUsername} - ${message.command}`);
@@ -148,68 +165,49 @@ class Logger {
         this.client.discord.logWhisper(message.senderUsername, response);
     }
 
-    async send(channel, content) {
+    async send(channel, content, retryCount = 0) {
         content = this.checkRegexAndHandle(content, channel);
 
         await this.manageChannelMsgCooldown(channel);
         this.client.say(channel, content)
-            .catch((err) => {
-                if (err.message.includes('identical to the previous one')) {
-                    console.log('sending identical message error, ending here');
-                }
-                else if (err.message.includes('too quickly')) {
-                    console.log('sending messages too quickly error, retrying');
-                    setTimeout(() => { this.send(channel, content); }, 1500);
-                } else if (err.message.includes('waiting for response')) {
-                    console.log('waiting for response error, retrying');
-                    setTimeout(() => { this.send(channel, content); }, 1500);
-                } else {
-                    console.log('send error: ', err);
-                }
-            });
+            .catch((err) => this.handleSendError(err,
+                channel,
+                content,
+                this.send.bind(this),
+                retryCount,
+                null
+            ));
+
         this.client.discord.logSend(channel, content);
     }
 
-    async reply(message, response) {
+    async reply(message, response, retryCount = 0) {
         response = this.checkRegexAndHandle(response, message.channelName, message);
 
         await this.manageChannelMsgCooldown(message.channelName);
         this.client.reply(message.channelName, message.messageID, response)
-            .catch((err) => {
-                if (err.message.includes('identical to the previous one')) {
-                    console.log('sending identical message error, ending here');
-                } else if (err.message.includes('too quickly')) {
-                    console.log('sending messages too quickly error, retrying');
-                    setTimeout(() => { this.send(message.channelName, response); }, 1500);
-                } else if (err.message.includes('waiting for response')) {
-                    console.log('waiting for response error, retrying');
-                    setTimeout(() => { this.send(message.channelName, response); }, 1500);
-                } else {
-                    console.log('logAndReply error: ', err);
-                }
-            });
+            .catch((err) => this.handleSendError(err,
+                message.channelName,
+                response,
+                this.send.bind(this), retryCount,
+                message.senderUsername
+            ));
 
         this.client.discord.logSend(message.channelName, response);
     }
 
-    async whisper(targetUser, content) {
+    async whisper(targetUser, content, retryCount = 0) {
         content = this.checkRegexAndHandle(content, targetUser);
 
         this.client.whisper(targetUser, content)
-            .catch((err) => {
-                if (err.message.includes('identical to the previous one')) {
-                    console.log('sending identical message error, ending here');
-                }
-                else if (err.message.includes('too quickly')) {
-                    console.log('sending messages too quickly error, retrying');
-                    setTimeout(() => { this.whisper(targetUser, content); }, 1500);
-                } else if (err.message.includes('waiting for response')) {
-                    console.log('waiting for response error, retrying');
-                    setTimeout(() => { this.whisper(targetUser, content); }, 1500);
-                } else {
-                    console.log('whisper error: ', err);
-                }
-            });
+            .catch((err) => this.handleSendError(err,
+                targetUser,
+                content,
+                this.whisper.bind(this),
+                retryCount,
+                null
+            ));
+
         this.client.discord.logWhisper(targetUser, content);
     }
 }
