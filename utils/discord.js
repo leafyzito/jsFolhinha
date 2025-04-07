@@ -75,7 +75,7 @@ discordClient.logSend = async function (channel, content) {
         .addFields(
             {
                 name: "Conteúdo:",
-                value: content,
+                value: content + `\n[Logs](${getLogsUrl(channel)})`,
                 inline: false
             },
         )
