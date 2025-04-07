@@ -46,7 +46,7 @@ const botSayCommand = async (client, message) => {
     return;
 };
 
-const forceJoinCommand = async (client, message) => {
+const forceJoinCommand = async (client, message, anonClient) => {
     message.command = 'dev forcejoin';
 
     const authorId = message.senderUserID;
@@ -56,7 +56,7 @@ const forceJoinCommand = async (client, message) => {
     const targetChannel = args[1].toLowerCase();
     const announce = args[2] === 'true' ? true : false;
 
-    client.join(targetChannel)
+    anonClient.join(targetChannel)
         .then(() => {
             client.log.logAndReply(message, `Joined ${targetChannel}`);
             if (announce) {
@@ -65,6 +65,7 @@ const forceJoinCommand = async (client, message) => {
 
             // add channel to channelsToJoin array
             client.channelsToJoin.push(targetChannel);
+            anonClient.channelsToJoin.push(targetChannel);
         })
         .catch((err) => {
             client.log.logAndReply(message, `Não foi, check logs`);
