@@ -37,13 +37,14 @@ async function getImage(url) {
 }
 
 async function getAvatar(avatarTarget) {
-    const api_url = `https://api.ivr.fi/v2/twitch/user?login=${avatarTarget}`;
-    const response = await fetch(api_url);
+    const api_url = `https://api.twitch.tv/helix/users?login=${avatarTarget}`;
+    const headers = { "Client-ID": process.env.BOT_CLIENT_ID, "Authorization": `Bearer ${process.env.BOT_OAUTH_TOKEN}` };
+    const response = await fetch(api_url, { headers });
     const data = await response.json();
 
-    if (data.length === 0) { return null; }
+    if (!response.ok || data.data.length === 0) { return null; }
 
-    return await getImage(data[0]["logo"]);
+    return await getImage(data.data[0].profile_image_url);
 }
 
 const avatarCommand = async (client, message) => {
