@@ -48,7 +48,7 @@ class Logger {
 
         if (isRetryableError) {
             console.log(`${errorType} error, retrying (${retryCount + 1}/3)`);
-            setTimeout(() => { retryMethod(channel, content, retryCount + 1); }, 1500);
+            setTimeout(() => { retryMethod(channel, content, retryCount + 1, lastResortWhisperTarger); }, 1500);
             return;
         }
 
@@ -91,7 +91,7 @@ class Logger {
         }
     }
 
-    async logAndReply(message, response, notes = null) {
+    async logAndReply(message, response, notes = null, retryCount = 0) {
         message.notes = notes;
         response = this.checkRegexAndHandle(response, message.channelName, message);
 
@@ -106,8 +106,8 @@ class Logger {
                 .catch((err) => this.handleSendError(err,
                     message.channelName,
                     response,
-                    this.send.bind(this),
-                    0,
+                    (channel, content, retryCount, senderUsername) => this.send(channel, content, retryCount, senderUsername),
+                    retryCount,
                     message.senderUsername
                 ));
         }
@@ -129,7 +129,8 @@ class Logger {
                 err,
                 message.channelName,
                 response,
-                this.logAndSay.bind(this), retryCount,
+                (channel, content, retryCount, senderUsername) => this.send(channel, content, retryCount, senderUsername),
+                retryCount,
                 message.senderUsername
             ));
 
@@ -149,8 +150,8 @@ class Logger {
             .catch((err) => this.handleSendError(err,
                 message.channelName,
                 response,
-                this.logAndMeAction.bind(this), retryCount,
-                null
+                (channel, content, retryCount, senderUsername) => this.send(channel, content, retryCount, senderUsername), retryCount,
+                message.senderUsername
             ));
 
         await this.createCommandLog(message, '/me ' + response);
@@ -165,7 +166,7 @@ class Logger {
         this.client.discord.logWhisper(message.senderUsername, response);
     }
 
-    async send(channel, content, retryCount = 0) {
+    async send(channel, content, retryCount = 0, senderUsername = null) {
         content = this.checkRegexAndHandle(content, channel);
 
         await this.manageChannelMsgCooldown(channel);
@@ -173,9 +174,9 @@ class Logger {
             .catch((err) => this.handleSendError(err,
                 channel,
                 content,
-                this.send.bind(this),
+                (channel, content, retryCount, senderUsername) => this.send(channel, content, retryCount, senderUsername),
                 retryCount,
-                null
+                senderUsername
             ));
 
         this.client.discord.logSend(channel, content);
@@ -189,7 +190,8 @@ class Logger {
             .catch((err) => this.handleSendError(err,
                 message.channelName,
                 response,
-                this.send.bind(this), retryCount,
+                (channel, content, retryCount, senderUsername) => this.send(channel, content, retryCount, senderUsername),
+                retryCount,
                 message.senderUsername
             ));
 
