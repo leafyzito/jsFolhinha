@@ -147,7 +147,6 @@ async function modifyClient(client, anonClient) {
 
     // load clients
     client.db = new MongoUtils();
-    client.turso = new TursoUtils();
     client.log = new Logger(client);
 
     // load prefixes
