@@ -2,7 +2,7 @@ const { processCommand } = require("../../utils/processCommand.js");
 const { randomChoice } = require("../../utils/utils.js");
 const fs = require('fs');
 
-const Curiosidades = fs.readFileSync('data/curiosidades.txt', 'utf8');
+const Curiosidades = fs.readFileSync('./commands/curiosidade/curiosidades.txt', 'utf8');
 
 const curiosidadeCommand = async (client, message) => {
     message.command = 'curiosidade';
