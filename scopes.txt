@@ -13,3 +13,4 @@ user:write:chat
 user:manage:whispers
 chat:read
 chat:edit
+user:read:moderated_channels
