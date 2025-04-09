@@ -11,7 +11,7 @@ class Emotes {
         this.pogEmotes = ['pog', 'pogu', 'pagbounce', 'pogg', 'pogs', 'noway', 'nowaying', 'nowaycat', 'eba'];
     }
 
-    async getTtv(channelId) {
+    async get7tv(channelId) {
         try {
             var sevenTvEmotes = [];
             const url = `https://7tv.io/v3/users/twitch/${channelId}`;
@@ -82,7 +82,7 @@ class Emotes {
     }
 
     async getEmotes(channelId, channelName) {
-        const ttv = await this.getTtv(channelId).catch(() => []);
+        const ttv = await this.get7tv(channelId).catch(() => []);
         const bttv = await this.getBttv(channelId).catch(() => []);
         const ffz = await this.getFfz(channelId).catch(() => []);
 
