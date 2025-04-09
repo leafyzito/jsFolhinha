@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
-    "start": "node main.js",
+    "start": "cross-env ENV=prod node main.js",
+    "dev": "cross-env ENV=dev node main.js",
     "test": "node testes.js"
   },
   "keywords": [],
@@ -12,6 +13,7 @@
   "dependencies": {
     "@kararty/dank-twitch-irc": "^6.2.0",
     "cheerio": "^1.0.0",
+    "cross-env": "^7.0.3",
     "discord.js": "^14.15.3",
     "dotenv": "^16.4.5",
     "google-translate-api-browser": "^5.0.0",
