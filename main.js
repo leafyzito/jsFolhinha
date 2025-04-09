@@ -21,14 +21,22 @@ const client = new ChatClient({
 // Create anonymous client for reading messages
 const anonClient = new ChatClient({
     username: 'justinfan12345', // Anonymous username
-    password: 'kappa123',  // Any password works for anonymous login
+    password: undefined, // No password needed for anonymous login
 
-    ignoreUnhandledPromiseRejections: true,
-    maxChannelCountPerConnection: 200, // Doubled since anon client has less restrictions
+    // Optimized for anonymous connection
+    rateLimits: "default", // Using default limits since we're anonymous
+    connection: {
+        type: "websocket",
+        secure: true, // Use secure websocket connection
+    },
+    maxChannelCountPerConnection: 200, // Maximum allowed for anonymous connections
     connectionRateLimits: {
-        parallelConnections: 10, // Doubled since anon client has less restrictions
-        releaseTime: 500 // Halved since anon client has less restrictions
-    }
+        parallelConnections: 10, // Maximum parallel connections for anonymous
+        releaseTime: 100, // Reduced wait time between connections
+    },
+    requestMembershipCapability: false, // Disable membership capability for faster joins
+    installDefaultMixins: false, // Disable mixins for better performance
+    ignoreUnhandledPromiseRejections: true,
 });
 
 // Modify the main client with custom functions
@@ -41,7 +49,7 @@ anonClient.connect();
 // Register event handlers on the anonymous client for reading messages
 anonClient.on('ready', () => { onReadyHandler(); });
 anonClient.on('JOIN', (channel) => { onJoinHandler(channel); });
-anonClient.on("PRIVMSG", (msg) => { onMessageHandler(msg); });
+// anonClient.on("PRIVMSG", (msg) => { onMessageHandler(msg); });
 anonClient.on('CLEARCHAT', (msg) => { onClearChatHandler(msg); });
 
 // Register whisper handler on main client (since anon can't receive whispers)
