@@ -49,7 +49,7 @@ anonClient.connect();
 // Register event handlers on the anonymous client for reading messages
 anonClient.on('ready', () => { onReadyHandler(); });
 anonClient.on('JOIN', (channel) => { onJoinHandler(channel); });
-// anonClient.on("PRIVMSG", (msg) => { onMessageHandler(msg); });
+anonClient.on("PRIVMSG", (msg) => { onMessageHandler(msg); });
 anonClient.on('CLEARCHAT', (msg) => { onClearChatHandler(msg); });
 
 // Register whisper handler on main client (since anon can't receive whispers)
