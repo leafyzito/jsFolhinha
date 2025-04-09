@@ -67,7 +67,16 @@ async function makeClip(channelName) {
     }
 }
 
-async function createTwitchClip(channelId, channelName) {
+async function createTwitchClip(channelId, channelName, forceMakeClip = false) {
+    // If forceMakeClip is true, try makeClip first
+    if (forceMakeClip) {
+        const createdClip = await makeClip(channelName);
+        if (createdClip) {
+            return createdClip;
+        }
+        // If makeClip fails, continue to try Twitch API
+    }
+
     const api_url = `https://api.twitch.tv/helix/clips?broadcaster_id=${channelId}&has_delay=true`;
     const response = await fetch(api_url, {
         method: 'POST',
@@ -76,11 +85,7 @@ async function createTwitchClip(channelId, channelName) {
 
     const data = await response.json();
     if (data.status === 403 || data.status === 503) { // 403 is for forbidden, 503 is for service unavailable (error in twitch api)
-        const createdClip = await makeClip(channelName);
-        if (!createdClip) {
-            return 'forbidden';
-        }
-        return createdClip;
+        return 'error';
     };
     if (data.status === 404) { return null; };
 
@@ -108,9 +113,13 @@ const clipCommand = async (client, message) => {
         return;
     }
 
-    const clip = await createTwitchClip(targetId, targetChannel);
+    const clip = await createTwitchClip(targetId, targetChannel, true);
     if (!clip) {
         client.log.logAndReply(message, `O canal ${targetChannel} não está em live`);
+        return;
+    }
+    else if (clip === 'error') {
+        client.log.logAndReply(message, `⚠️ Erro ao criar clip, tente novamente`);
         return;
     }
     else if (clip === 'forbidden') {
