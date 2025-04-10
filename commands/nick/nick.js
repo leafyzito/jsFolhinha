@@ -15,7 +15,7 @@ const nicksCommand = async (client, message) => {
     if (!await processCommand(5000, 'channel', message, client)) return;
 
     const nicksTarget = message.messageText.split(' ').slice(1).find(arg => !arg.startsWith('-'))?.replace(/^@/, '').toLowerCase() || message.senderUsername;
-    const targetId = nicksTarget === message.senderUsername ? message.senderID : await client.getUserID(nicksTarget);
+    const targetId = nicksTarget === message.senderUsername ? message.senderUserID : await client.getUserID(nicksTarget);
     const allNicks = await getAllNicks(targetId);
     const aliases = allNicks.join(' → ');
 
