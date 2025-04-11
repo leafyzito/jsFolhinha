@@ -33,7 +33,7 @@ const isDownCommand = async (client, message) => {
 
     const { scan, warnings } = check;
     if (scan?.error) {
-        client.log.logAndReply(message, `⚠️ Não foi possível verificar o status do site! ${scan.error}`);
+        client.log.logAndReply(message, `⚠️ Não foi possível verificar o status do site: ${scan.error}`);
         return;
     }
 
@@ -44,7 +44,7 @@ const isDownCommand = async (client, message) => {
     if (Array.isArray(warnings?.scan_failed)) {
         const error = warnings.scan_failed[0].msg;
         if (error === "Host not found") {
-            client.log.logAndReply(message, `⚠️ O site fornecido não foi encontrado!`);
+            client.log.logAndReply(message, `⚠️ O site fornecido não foi encontrado`);
             return;
         }
         else {
