@@ -38,7 +38,8 @@ const isDownCommand = async (client, message) => {
     }
 
     const lastScan = new Date(scan.last_scan);
-    const timeSinceLastScan = timeSince(lastScan);
+    const timeSinceLastScan = timeSince(Math.floor(lastScan.getTime() / 1000));
+    console.log(scan.last_scan, lastScan, timeSinceLastScan);
 
     if (Array.isArray(warnings?.scan_failed)) {
         const error = warnings.scan_failed[0].msg;
@@ -47,12 +48,12 @@ const isDownCommand = async (client, message) => {
             return;
         }
         else {
-            client.log.logAndReply(message, `⚠️ O site está fora do ar: ${error ?? "(N/A)"}. Última verificação ${timeSinceLastScan}.`);
+            client.log.logAndReply(message, `⚠️ O site está fora do ar: ${error ?? "(N/A)"}. Última verificação há ${timeSinceLastScan}.`);
             return;
         }
     }
 
-    client.log.logAndReply(message, `✅ O site está online e disponível. Última verificação ${timeSinceLastScan}.`);
+    client.log.logAndReply(message, `✅ O site está online e disponível. Última verificação há ${timeSinceLastScan}.`);
     return;
 };
 
