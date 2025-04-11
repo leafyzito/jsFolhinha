@@ -1,4 +1,4 @@
-- se mais pessoas contribuirem para o mod e quiserem se tornar um "admin", criar niveis de perms para os dev commands
+- se mais pessoas contribuirem para o bot e quiserem se tornar um "admin", criar niveis de perms para os dev commands
 - pegar oauth token com scopes corretos on startup, para nao ter que estar a trocar o token every X time
 - pegar events da twitch tipo mudança de nick para fazer o bot reconectar no canal com novo nick na hora da troca de forma correta
 - arranjar forma de saber se o bot é ou não mod do canal onde vai falar, e deixar sempre atualizado, para ter comandos por exemplo !piramide que requer o bot spamar (https://dev.twitch.tv/docs/api/reference/#get-moderators)
