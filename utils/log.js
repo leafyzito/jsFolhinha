@@ -33,12 +33,12 @@ class Logger {
             // send whisper to user as last resort
             if (lastResortWhisperTarger) {
                 console.log('Max retries reached, whispering response to user');
-                this.client.discord.log(`* Dropped message in #${channel}, whispering response to ${lastResortWhisperTarger}`);
+                this.client.discord.log(`* Dropped message in #${channel}, whispering response to ${lastResortWhisperTarger}: ${content}`);
                 this.client.whisper(lastResortWhisperTarger, content);
                 return;
             }
             console.log('Max retries reached, dropping message');
-            this.client.discord.log(`* Dropped message in #${channel}`);
+            this.client.discord.log(`* Dropped message in #${channel}: ${content}`);
             return;
         }
 
