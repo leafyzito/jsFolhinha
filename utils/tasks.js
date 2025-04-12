@@ -185,7 +185,7 @@ async function rejoinDisconnectedChannels(client, anonClient) {
             console.log(`* Rejoining ${channel}`);
             // client.discord.log(`* Rejoining ${channel}`);
             rejoinedChannels.push(channel);
-            // anonClient.join(channel);
+            anonClient.join(channel);
         }
         else {
             if ([...anonClient.joinedChannels].length === 0) {
@@ -200,7 +200,6 @@ async function rejoinDisconnectedChannels(client, anonClient) {
         }
     });
     if (rejoinedChannels.length > 0) {
-        anonClient.joinAll(rejoinedChannels);
         console.log(`* Rejoining ${rejoinedChannels.length} channels`);
         client.discord.log(`* Rejoining ${rejoinedChannels.length} channels`);
     }
