@@ -73,7 +73,7 @@ const forceJoinCommand = async (client, message, anonClient) => {
         });
 };
 
-const forcePartCommand = async (client, message) => {
+const forcePartCommand = async (client, message, anonClient) => {
     message.command = 'dev forcepart';
 
     const authorId = message.senderUserID;
@@ -83,7 +83,7 @@ const forcePartCommand = async (client, message) => {
     const targetChannel = args[1];
     const announce = args[2] === 'announce' ? true : false;
 
-    client.part(targetChannel)
+    anonClient.part(targetChannel)
         .then(() => {
             client.log.logAndReply(message, `Parted ${targetChannel}`);
             if (announce) {
@@ -417,7 +417,7 @@ const joinedChannelsCommand = async (client, message) => {
     return;
 }
 
-const devJoinChannelCommand = async (client, message) => {
+const devJoinChannelCommand = async (client, message, anonClient) => {
     message.command = 'dev join';
 
     const authorId = message.senderUserID;
@@ -438,7 +438,7 @@ const devJoinChannelCommand = async (client, message) => {
         createNewChannelConfig(client, targetChannel);
     }
 
-    client.join(targetChannel);
+    anonClient.join(targetChannel);
     if (announce) {
         const emote = await client.emotes.getEmoteFromList(targetChannel, ['peepohey', 'heyge'], 'KonCha');
         client.log.send(targetChannel, `${emote} Oioi! Fui convidado para me juntar aqui! Para saber mais sobre mim, pode usar !ajuda ou !comandos`);
@@ -447,7 +447,7 @@ const devJoinChannelCommand = async (client, message) => {
     return;
 }
 
-const devPartChannelCommand = async (client, message) => {
+const devPartChannelCommand = async (client, message, anonClient) => {
     message.command = 'dev part';
 
     const authorId = message.senderUserID;
@@ -465,7 +465,7 @@ const devPartChannelCommand = async (client, message) => {
     await client.reloadChannelConfigs();
     await client.reloadChannelPrefixes();
 
-    client.part(targetChannel);
+    anonClient.part(targetChannel);
     client.log.logAndReply(message, `🤖 Apaguei config a saí do canal ${targetChannel} `);
     return;
 }
