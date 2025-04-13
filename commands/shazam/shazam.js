@@ -193,7 +193,7 @@ const shazamCommand = async (client, message) => {
             return;
         }
         else if (clip === 'error') {
-            throw new Error(`Shazam - Check logs`);
+            throw new Error(`Shazam makeClip - Check logs`);
             return;
         }
         urlToShazam = clip;
@@ -202,7 +202,7 @@ const shazamCommand = async (client, message) => {
     const result = await shazamIt(urlToShazam);
 
     if (!result) {
-        throw new Error(`Shazam - Check logs`);
+        throw new Error(`Shazam shazamIt - Check logs`);
         return;
     }
 
