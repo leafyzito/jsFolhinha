@@ -21,6 +21,7 @@
     "mongodb": "6.8",
     "node-cron": "^3.0.3",
     "node-schedule": "^2.1.1",
+    "node-shazam": "^1.2.7",
     "openai": "^4.53.2",
     "uwuifier": "^4.2.2"
   },
