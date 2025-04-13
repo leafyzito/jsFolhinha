@@ -132,7 +132,7 @@ async function shazamIt(url) {
         if (!isDirectFileUrl(url)) {
             console.log('URL is not a direct file URL, getting video download...');
             url = await getVideoCobalt(url);
-            if (!url) { return null; } // if it's not a direct file URL, and the getVideoCobalt fails, return null
+            if (!url) { return 'cobalt-error'; } // if it's not a direct file URL, and the getVideoCobalt fails, return null
         }
 
         console.log(`Downloading audio content from ${url}...`);
@@ -200,9 +200,13 @@ const shazamCommand = async (client, message) => {
     }
 
     const result = await shazamIt(urlToShazam);
-
     if (!result) {
         throw new Error(`Shazam shazamIt - Check logs`);
+        return;
+    }
+
+    if (result === 'cobalt-error') {
+        throw new Error(`Shazam shazamIt cobalt-error - Check logs`);
         return;
     }
 
