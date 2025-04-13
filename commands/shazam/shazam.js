@@ -201,7 +201,8 @@ const shazamCommand = async (client, message) => {
 
     const result = await shazamIt(urlToShazam);
     if (!result) {
-        throw new Error(`Shazam shazamIt - Check logs`);
+        // throw new Error(`Shazam shazamIt - Check logs`);
+        client.log.logAndReply(message, `Não consegui identificar a música desse link`);
         return;
     }
 
