@@ -232,6 +232,7 @@ Identifica músicas de algum link fornecido ou de uma live da Twitch:
 • Exemplo: !shazam https://x.com/billieeilishtrs/status/1839682299673096667 - O bot vai fazer o download do vídeo e depois identificar a música (peguei um video aleatório do twitter não me julga)
 • Exemplo: !shazam https://f.feridinha.com/okjxM.mp4 - O bot vai identificar a música do vídeo fornecido
 • Exemplo: !shazam www.twitch.tv/xql - O bot vai criar um clip e depois identificar a música do clip`;
+shazamCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${shazamCommand.commandName}/${shazamCommand.commandName}.js`;
 
 module.exports = {
     shazamCommand,
