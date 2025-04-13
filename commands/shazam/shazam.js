@@ -82,7 +82,7 @@ async function getVideoCobalt(urlToDownload) {
             return resUrl;
         }
 
-        console.log(feridinhaUrl);
+        // console.log(feridinhaUrl);
         return feridinhaUrl;
     } catch (e) {
         console.log(`erro no getVideoDownload: ${e}`);
@@ -95,7 +95,6 @@ async function getVideoCobalt(urlToDownload) {
             }
         } catch (e2) {
             console.log(`erro no try-catch do getVideoDownload: ${e2}`);
-            console.log(resData);
             return null;
         }
     }
@@ -113,7 +112,7 @@ async function makeClip(channelName) {
         // Resolve the path to the "clips" folder inside "twitchClipper"
         const clipsFolder = path.resolve('/home/leafy/twitchClipper/clips');
         var clipPath = path.join(clipsFolder, data.path);
-        console.log(clipPath);
+        // console.log(clipPath);
         // upload clip to feridinha
         const clipName = path.basename(clipPath);
         const clipContent = fs.readFileSync(clipPath);
@@ -154,7 +153,7 @@ async function shazamIt(url) {
         console.log('Using Shazam to recognize audio...');
         // Use the file path with Shazam
         const recognition = await shazam.recognise(tempFile, 'en-US');
-        console.log(recognition);
+        // console.log(recognition);
 
         // Clean up the temporary file
         fs.unlinkSync(tempFile);
