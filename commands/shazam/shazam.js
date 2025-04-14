@@ -195,8 +195,8 @@ const shazamCommand = async (client, message) => {
         // Create clip
         const clip = await makeClip(channelName);
         if (!clip) {
-            console.log(`Esse canal não está em live (se não for o caso, avise o dev)`);
-            client.log.logAndReply(message, `Esse canal não está em live (se não for o caso, avise o dev)`);
+            console.log(`Não deu pra criar clip com o makeClip`);
+            client.log.logAndReply(message, `Não consegui criar um clip para identificar a música, tente novamente. Se o problema persistir, avise o dev.`);
             return;
         }
         else if (clip === 'error') {
