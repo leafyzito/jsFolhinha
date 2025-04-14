@@ -177,6 +177,13 @@ const shazamCommand = async (client, message) => {
 
     let urlToShazam = args[1];
 
+    // Validate if it's a URL
+    const urlPattern = /^(https?:\/\/)?(www\.)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
+    if (!urlPattern.test(urlToShazam)) {
+        client.log.logAndReply(message, `Por favor, forneça um link válido. Use o formato: ${message.commandPrefix}shazam <link>. Se estiver com dúvidas sobre o comando, acesse https://folhinhabot.com/comandos/shazam 😁`);
+        return;
+    }
+
     // Check if it's a Twitch channel URL or a clip URL
     const twitchChannelMatch = urlToShazam.match(/twitch\.tv\/([^\/\?]+)(?:\?|$)/);
     const twitchClipMatch = urlToShazam.match(/twitch\.tv\/[^\/]+\/clip\//);
