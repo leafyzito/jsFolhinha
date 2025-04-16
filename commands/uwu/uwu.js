@@ -10,7 +10,7 @@ const uwuCommand = async (client, message) => {
     const textToUwuify = message.messageText.split(' ').slice(1).join(' ');
     const uwuifiedText = uwuifier.uwuifySentence(textToUwuify);
 
-    client.log.logAndReply(message, uwuifiedText);
+    client.log.logAndReply(message, `🤖 ${uwuifiedText}`);
     return;
 };
 
