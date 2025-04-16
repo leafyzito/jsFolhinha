@@ -14,7 +14,6 @@ async function createNewConfig(client, message) {
         devBanCommands: []
     };
 
-    client.channelsToJoin.push(message.senderUsername);
     await client.db.insert('config', newConfig);
     await client.reloadChannelConfigs();
     await client.reloadChannelPrefixes();
@@ -47,8 +46,10 @@ const joinCommand = async (client, message, anonClient) => {
         return;
     }
 
+    client.channelsToJoin.push(channelToJoin);
+    anonClient.channelsToJoin.push(channelToJoin);
     await createNewConfig(client, message);
-    client.join(channelToJoin).catch((err) => {
+    anonClient.join(channelToJoin).catch((err) => {
         console.error(`Erro ao entrar no chat ${channelToJoin}: ${err}`);
         client.log.logAndReply(message, `Erro ao entrar no chat ${channelToJoin}. Contacte o @${process.env.DEV_NICK}`);
         return;
