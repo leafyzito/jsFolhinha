@@ -186,6 +186,8 @@ const updateUserListener = async (client, message, anonClient) => {
             // update channelsToJoin
             client.channelsToJoin = client.channelsToJoin.filter(channel => channel !== knownUsersDB[0].currAlias);
             client.channelsToJoin.push(message.senderUsername);
+            anonClient.channelsToJoin = anonClient.channelsToJoin.filter(channel => channel !== knownUsersDB[0].currAlias);
+            anonClient.channelsToJoin.push(message.senderUsername);
         }
 
         await updateLastSeen(client, message);
