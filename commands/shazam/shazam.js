@@ -196,7 +196,7 @@ const shazamCommand = async (client, message) => {
         const clip = await makeClip(channelName);
         if (!clip) {
             console.log(`Não deu pra criar clip com o makeClip`);
-            client.log.logAndReply(message, `Não consegui criar um clip para identificar a música, tente novamente. Se o problema persistir, avise o dev.`);
+            client.log.logAndReply(message, `Não consegui criar um clip para identificar a música, tente novamente. Se o problema persistir, avise o dev`);
             return;
         }
         else if (clip === 'error') {
@@ -233,7 +233,7 @@ shazamCommand.aliases = ['shazam'];
 shazamCommand.shortDescription = 'Identifica músicas através do Shazam';
 shazamCommand.cooldown = 10_000;
 shazamCommand.whisperable = true;
-shazamCommand.description = `Este comando pode estar um pouco instável. Qualquer problema, por favor avise o dev.
+shazamCommand.description = `Este comando pode estar um pouco instável. Qualquer problema, por favor avise o dev
 
 Identifica músicas de algum link fornecido ou de uma live da Twitch:
 • Exemplo: !shazam https://x.com/billieeilishtrs/status/1839682299673096667 - O bot vai fazer o download do vídeo e depois identificar a música (peguei um video aleatório do twitter não me julga)
