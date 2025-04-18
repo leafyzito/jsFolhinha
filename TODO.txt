@@ -1,3 +1,5 @@
+- IMPORTANTE: adicionar cooldown global individual para cada chat, no matter the cooldown type, para os comandos - para evitar TO global
+
 - se mais pessoas contribuirem para o bot e quiserem se tornar um "admin", criar niveis de perms para os dev commands
 - pegar oauth token com scopes corretos on startup, para nao ter que estar a trocar o token every X time
 - pegar events da twitch tipo mudança de nick para fazer o bot reconectar no canal com novo nick na hora da troca de forma correta
