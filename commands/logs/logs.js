@@ -28,7 +28,11 @@ logsCommand.aliases = ['logs', 'log', 'logs'];
 logsCommand.shortDescription = 'Veja os logs do chat';
 logsCommand.cooldown = 5000;
 logsCommand.whisperable = false;
-logsCommand.description = `Obtenha um link para os logs de chat de um determinado par de canal e usuário. Usa a API best-logs do @ZonianMidian para pesquisar todas as instâncias conhecidas e o frontend do @Supelle para visualização dos logs.`;
+logsCommand.description = `Obtenha um link para os logs de chat de um determinado par de canal e usuário. Usa a API best-logs do @ZonianMidian para pesquisar todas as instâncias conhecidas e o frontend do @Supelle para visualização dos logs
+
+• Exemplo: !logs - Mostra os logs do canal atual
+• Exemplo: !logs @usuario - Mostra os logs do usuário no canal atual
+• Exemplo: !logs @canal @usuario - Mostra os logs do usuário no canal especificado`;
 logsCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${logsCommand.commandName}/${logsCommand.commandName}.js`;
 
 module.exports = {
