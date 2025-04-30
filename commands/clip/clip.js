@@ -67,9 +67,9 @@ async function makeClip(channelName) {
     }
 }
 
-async function createTwitchClip(channelId, channelName, forceMakeClip = false) {
-    // If forceMakeClip is true, try makeClip first
-    if (forceMakeClip) {
+async function createTwitchClip(channelId, channelName, forceTwitchClip = false) {
+    // If forceTwitchClip is false, try makeClip first
+    if (!forceTwitchClip) {
         const createdClip = await makeClip(channelName);
         if (createdClip) {
             return createdClip;
@@ -113,7 +113,10 @@ const clipCommand = async (client, message) => {
         return;
     }
 
-    const clip = await createTwitchClip(targetId, targetChannel, true);
+    // flag to force the creation of the clip using the twitch api over makeClip
+    const forceTwitchClip = message.messageText.includes('-twitch');
+
+    const clip = await createTwitchClip(targetId, targetChannel, forceTwitchClip);
     if (!clip) {
         client.log.logAndReply(message, `O canal ${targetChannel} não está em live`);
         return;
@@ -141,7 +144,8 @@ clipCommand.cooldown = 5000;
 clipCommand.whisperable = false;
 clipCommand.description = `Crie um clip de alguma live. Se nenhum canal for especificado, o comando irá criar um clip do canal onde o comando foi executado
 • Exemplo: !clip - O bot vai criar um clip do canal onde o comando foi executado
-• Exemplo: !clip @leafyzito - O bot vai criar um clip do canal do usuário @leafyzito, caso ele esteja em live`;
+• Exemplo: !clip @leafyzito - O bot vai criar um clip do canal do usuário @leafyzito, caso ele esteja em live
+• Exemplo: !clip @leafyzito -twitch - O bot vai criar um clip do canal do usuário @leafyzito, caso ele esteja em live, usando a api do twitch ao invés de upar o clip para o feridinha`;
 clipCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${clipCommand.commandName}/${clipCommand.commandName}.js`;
 
 module.exports = {
