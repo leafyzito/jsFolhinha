@@ -37,6 +37,7 @@ discordClient.logCommand = async function (message, response) {
     const channelName = message.channelName == 'whisper' ? '📨 Whisper' : `#${message.channelName}`;
     const embed = new discordClient.EmbedBuilder()
         .setTitle(`${channelName}/${message.displayName} - ${message.command}`)
+        .setURL(`${getLogsUrl(message.channelName)}`)
         .addFields(
             {
                 name: "Comando:",
@@ -45,7 +46,7 @@ discordClient.logCommand = async function (message, response) {
             },
             {
                 name: "Resposta:",
-                value: response + `\n[Logs](${getLogsUrl(message.channelName)})`,
+                value: response,
                 inline: false
             },
         )
@@ -72,10 +73,11 @@ discordClient.logCommand = async function (message, response) {
 discordClient.logSend = async function (channel, content) {
     const embed = new discordClient.EmbedBuilder()
         .setTitle(`Enviado para #${channel}`)
+        .setURL(`${getLogsUrl(channel)}`)
         .addFields(
             {
                 name: "Conteúdo:",
-                value: content + `\n[Logs](${getLogsUrl(channel)})`,
+                value: content,
                 inline: false
             },
         )
@@ -199,6 +201,7 @@ discordClient.logError = async function (content) {
 discordClient.notifyDevMention = async function (message) {
     const embed = new discordClient.EmbedBuilder()
         .setTitle(`#${message.channelName}/${message.displayName}`)
+        .setURL(`${getLogsUrl(message.channelName)}`)
         .setColor(message.color ? colorToHexString(message.color) : '#008000')
         .setFooter({
             text: `${getFormattedDateTime()}`,
@@ -214,7 +217,7 @@ discordClient.notifyDevMention = async function (message) {
 
     embed.addFields({
         name: "Mensagem:",
-        value: message.messageText + `\n[Logs](${getLogsUrl(message.channelName)})`,
+        value: message.messageText,
         inline: false
     });
 
