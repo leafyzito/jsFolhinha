@@ -168,7 +168,7 @@ const downloadCommand = async (client, message) => {
             client.log.logAndReply(message, `Não foi possível fazer o download desse link`);
             return;
         }
-        client.log.logAndReply(message, `Link do download: ${downloadUrl}`);
+        client.log.logAndReply(message, `💾 ${downloadUrl}`);
         return;
     }
 
@@ -187,7 +187,7 @@ const downloadCommand = async (client, message) => {
             client.log.logAndReply(message, `Não foi possível fazer o download desse link`);
             return;
         }
-        client.log.logAndReply(message, `Link do download de audio: ${downloadUrl}`);
+        client.log.logAndReply(message, `💾 ${downloadUrl}`);
         return;
     }
 
