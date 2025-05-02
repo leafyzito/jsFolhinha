@@ -209,7 +209,7 @@ async function updateDiscordPresence(client, anonClient) {
     client.discord.user.setActivity({
         type: 4,
         name: 'Folhinha Uptime',
-        state: `Up: ${timeSince(client.startTime)} - ${[...anonClient.joinedChannels].length}/${client.channelsToJoin.length}`,
+        state: `Up: ${timeSince(client.startTime)} - ${[...anonClient.joinedChannels].length}/${[...anonClient.channelsToJoin].length}`,
     });
 }
 
