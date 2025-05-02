@@ -11,7 +11,7 @@
   "author": "leafyzito",
   "license": "ISC",
   "dependencies": {
-    "@kararty/dank-twitch-irc": "^6.2.0",
+    "@mastondzn/dank-twitch-irc": "^7.2.1",
     "cheerio": "^1.0.0",
     "cross-env": "^7.0.3",
     "discord.js": "^14.15.3",
