@@ -404,14 +404,14 @@ const shortenCommand = async (client, message) => {
     return;
 }
 
-const joinedChannelsCommand = async (client, message) => {
+const joinedChannelsCommand = async (client, message, anonClient) => {
     message.command = 'dev joinedchannels';
 
     const authorId = message.senderUserID;
     if (authorId !== process.env.DEV_USERID) { return; }
 
-    const joinedChannels = [...client.joinedChannels].length;
-    const channelsToJoin = client.channelsToJoin.length;
+    const joinedChannels = [...anonClient.joinedChannels].length;
+    const channelsToJoin = [...anonClient.channelsToJoin].length;
 
     client.log.logAndReply(message, `🤖 ${joinedChannels}/${channelsToJoin}`);
     return;
