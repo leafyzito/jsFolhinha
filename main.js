@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { ChatClient } = require('@kararty/dank-twitch-irc');
+const { ChatClient } = require('@mastondzn/dank-twitch-irc');
 const { modifyClient } = require('./utils/startup.js');
 const { commandHandler, listenerHandler } = require('./utils/handlers.js');
 const { dailyCookieResetTask, startPetTask, startFetchPendingJoinsTask, startRejoinDisconnectedChannelsTask, startDiscordPresenceTask } = require('./utils/tasks.js');
@@ -24,7 +24,7 @@ const anonClient = new ChatClient({
     password: undefined, // No password needed for anonymous login
 
     // Optimized for anonymous connection
-    rateLimits: "default", // Using default limits since we're anonymous
+    rateLimits: "verifiedBot", // Anon connections are allowed higher limits
     connection: {
         type: "websocket",
         secure: true, // Use secure websocket connection

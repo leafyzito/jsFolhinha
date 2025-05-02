@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
-const { colorToHexString } = require('@kararty/dank-twitch-irc');
+const { colorToHexString } = require('@mastondzn/dank-twitch-irc');
 
 const allIntents = Object.values(GatewayIntentBits).reduce((acc, p) => acc | p, 0);
 const discordClient = new Client({ intents: allIntents });
