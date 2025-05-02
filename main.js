@@ -24,7 +24,7 @@ const anonClient = new ChatClient({
     password: undefined, // No password needed for anonymous login
 
     // Optimized for anonymous connection
-    rateLimits: "default", // Using default limits since we're anonymous
+    rateLimits: "verifiedBot", // Anon connections are allowed higher limits
     connection: {
         type: "websocket",
         secure: true, // Use secure websocket connection
