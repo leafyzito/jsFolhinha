@@ -6,7 +6,12 @@ async function getAllNicks(userId) {
     const response = await fetch(api_url);
     const data = await response.json();
 
-    const nicks = data.map(nick => nick.user_login);
+    // Sort the data by first_timestamp in ascending order
+    const sortedData = data.sort((a, b) =>
+        new Date(a.first_timestamp) - new Date(b.first_timestamp)
+    );
+
+    const nicks = sortedData.map(nick => nick.user_login);
     return nicks;
 }
 
