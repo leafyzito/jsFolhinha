@@ -51,7 +51,7 @@ const filmeCommand = async (client, message) => {
     if (movie.genre) replyParts.push(`Gênero: ${movie.genre}`);
     if (movie.grossed) replyParts.push(`Bilheteria: ${movie.grossed}`);
     if (movie.ratings) replyParts.push(`Avaliações: ${movie.ratings}`);
-    if (movie.imdbID) replyParts.push(`IMDB: https://www.imdb.com/title/${movie.imdbID}`);
+    if (movie.imdbID) replyParts.push(`IMDd: https://www.imdb.com/title/${movie.imdbID}`);
 
     let reply = replyParts.join(' ● ');
     if (reply.length > 490) { reply = await manageLongResponse(reply); }
