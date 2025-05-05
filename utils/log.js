@@ -24,7 +24,7 @@ class Logger {
         // console.log('handleSendError: ', err);
 
         // Handle identical message error - no retries needed
-        if (err.message.includes('identical to the previous one')) {
+        if (err.cause.message.includes('identical to the previous one')) {
             console.log('sending identical message error, ending here');
         }
 
@@ -43,8 +43,8 @@ class Logger {
         }
 
         // Handle retryable errors
-        const isRetryableError = err.message.includes('too quickly') || err.message.includes('waiting for response');
-        const errorType = err.message.includes('too quickly') ? 'sending messages too quickly' : 'waiting for response';
+        const isRetryableError = err.cause.message.includes('too quickly') || err.cause.message.includes('waiting for response');
+        const errorType = err.cause.message.includes('too quickly') ? 'sending messages too quickly' : 'waiting for response';
 
         if (isRetryableError) {
             console.log(`${errorType} error, retrying (${retryCount + 1}/3)`);
