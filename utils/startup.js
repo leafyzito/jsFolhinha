@@ -5,7 +5,7 @@ const { Logger } = require('./log.js');
 const { Emotes } = require('./emotes.js');
 const { discordClient } = require('./discord.js');
 const { loadCommands } = require('../commands/commandsList.js');
-const { timeSince, manageLongResponse } = require('./utils.js');
+const { timeSince, manageLongResponse, isStreamOnline } = require('./utils.js');
 
 async function modifyClient(client, anonClient) {
     client.ready = false;
