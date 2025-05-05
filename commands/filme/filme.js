@@ -1,5 +1,5 @@
 const { processCommand } = require("../../utils/processCommand.js");
-const { capitalize, shortenUrl, manageLongResponse } = require("../../utils/utils.js");
+const { capitalize, manageLongResponse } = require("../../utils/utils.js");
 
 async function getOMDBd(targetTitle) {
     const response = await fetch(`https://www.omdbapi.com/?t=${targetTitle}&apikey=${process.env.OMDB_API_KEY}`);
@@ -19,7 +19,7 @@ async function getOMDBd(targetTitle) {
         genre: data.Genre,
         grossed: data.BoxOffice,
         ratings: data.Ratings.length > 0 ? data.Ratings.map(rating => `${rating.Source}: ${rating.Value}`).join(", ") : null,
-        poster: data.Poster
+        imdbID: data.imdbID
     };
 
     // filter out N/A values
@@ -51,7 +51,7 @@ const filmeCommand = async (client, message) => {
     if (movie.genre) replyParts.push(`Gênero: ${movie.genre}`);
     if (movie.grossed) replyParts.push(`Bilheteria: ${movie.grossed}`);
     if (movie.ratings) replyParts.push(`Avaliações: ${movie.ratings}`);
-    if (movie.poster) replyParts.push(`Poster: ${await shortenUrl(movie.poster)}`);
+    if (movie.imdbID) replyParts.push(`IMDB: https://www.imdb.com/title/${movie.imdbID}`);
 
     let reply = replyParts.join(' ● ');
     if (reply.length > 490) { reply = await manageLongResponse(reply); }
