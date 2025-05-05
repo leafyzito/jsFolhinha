@@ -5,6 +5,10 @@ async function getOMDBd(targetTitle) {
     const response = await fetch(`https://www.omdbapi.com/?t=${targetTitle}&apikey=${process.env.OMDB_API_KEY}`);
     const data = await response.json();
 
+    if (data.Response === "False") {
+        return null;
+    }
+
     const movieData = {
         title: data.Title,
         plot: data.Plot.length > 100 ? data.Plot.substring(0, 100) + '...' : data.Plot,
@@ -30,6 +34,11 @@ const filmeCommand = async (client, message) => {
 
     const targetTitle = message.messageText.split(' ').slice(1).join(' ').trim();
     const movie = await getOMDBd(targetTitle);
+
+    if (!movie) {
+        client.log.logAndReply(message, "⚠️ Filme não encontrado");
+        return;
+    }
 
     const replyParts = [];
 
