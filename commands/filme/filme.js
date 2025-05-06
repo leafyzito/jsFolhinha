@@ -33,8 +33,12 @@ const filmeCommand = async (client, message) => {
     if (!await processCommand(5000, 'channel', message, client)) return;
 
     const targetTitle = message.messageText.split(' ').slice(1).join(' ').trim();
-    const movie = await getOMDBd(targetTitle);
+    if (!targetTitle) {
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}filme <filme ou série>`);
+        return;
+    }
 
+    const movie = await getOMDBd(targetTitle);
     if (!movie) {
         client.log.logAndReply(message, "⚠️ Filme não encontrado");
         return;
