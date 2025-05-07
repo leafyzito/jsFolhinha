@@ -11,6 +11,7 @@ async function getOMDBd(targetTitle) {
 
     const movieData = {
         title: data.Title,
+        year: data.Year,
         plot: data.Plot.length > 100 ? data.Plot.substring(0, 100) + '...' : data.Plot,
         rated: data.Rated,
         released: data.Released,
@@ -46,7 +47,7 @@ const filmeCommand = async (client, message) => {
 
     const replyParts = [];
 
-    if (movie.title) replyParts.push(`Título: ${movie.title}`);
+    if (movie.title) replyParts.push(`Título: ${movie.title} (${movie.year})`);
     if (movie.plot) replyParts.push(`Sinopse: ${movie.plot}`);
     if (movie.rated) replyParts.push(`Classificação: ${movie.rated}`);
     if (movie.released) replyParts.push(`Lançamento: ${movie.released}`);
