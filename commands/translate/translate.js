@@ -21,6 +21,8 @@ async function translateText(targetLanguage, textToTranslate) {
         }
     });
 
+    console.log(response.status);
+
     const data = await response.json();
     const translatedText = data[0].map(segment => segment[0]).join('');
     const fromLanguage = data[2];
@@ -52,18 +54,21 @@ const translateCommand = async (client, message) => {
     }
 
     var targetLanguage = null;
+    var targetLanguageCode = null;
     for (const word of args.slice(1)) {
         if (word.startsWith('to:')) {
             const languageQuery = word.split(':')[1].toLowerCase();
             targetLanguage = Object.keys(LANGUAGE_MAPPINGS).find(key =>
                 key.toLowerCase() === languageQuery || LANGUAGE_MAPPINGS[key].toLowerCase() === languageQuery
             ) || languageQuery;
+            targetLanguageCode = LANGUAGE_MAPPINGS[targetLanguage];
             args.splice(args.indexOf(word), 1);
         }
     }
 
     if (!targetLanguage) {
         targetLanguage = 'pt';
+        targetLanguageCode = 'pt';
     }
     if (!isLanguageSupported(targetLanguage)) {
         client.log.logAndReply(message, `O idioma "${targetLanguage}" não é válido. Tente colocar o código do idioma ou em inglês, por exemplo: "pt" ou "portuguese"`);
@@ -71,7 +76,7 @@ const translateCommand = async (client, message) => {
     }
 
     const textToTranslate = args.slice(1).join(' ');
-    const translatedText = await translateText(targetLanguage, textToTranslate);
+    const translatedText = await translateText(targetLanguageCode, textToTranslate);
     const translateFrom = translatedText.fromLanguage;
 
     // match language to language code from json file
@@ -107,4 +112,5 @@ translateCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/comma
 
 module.exports = {
     translateCommand,
+    translateText
 };
