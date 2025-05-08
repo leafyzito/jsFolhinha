@@ -17,7 +17,7 @@ async function getUserInfo(targetUser) {
     const howLongAgo = timeSinceDT(data[0].createdAt)[0];
     const followers = data[0].followers;
     const isLive = data[0].stream !== null ? true : false;
-    const lastStream = timeSinceDT(data[0].lastBroadcast.startedAt)[0];
+    const lastStream = data[0].lastBroadcast.startedAt ? timeSinceDT(data[0].lastBroadcast.startedAt)[0] : null;
     const isBanned = data[0].banned;
     const banReason = data[0].banReason || null;
 
