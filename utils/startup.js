@@ -55,23 +55,32 @@ async function modifyClient(client, anonClient) {
     }
 
     client.getManyUsersByUserIDs = async function (userIds) {
-        var userIdsToUrl = userIds.join('&id=');
+        // Split userIds into chunks of 100
+        const chunkSize = 100;
+        const chunks = [];
+        for (let i = 0; i < userIds.length; i += chunkSize) {
+            chunks.push(userIds.slice(i, i + chunkSize));
+        }
 
-        const api_url = `https://api.twitch.tv/helix/users?id=${userIdsToUrl}`;
-        // Set headers with API credentials
-        const headers = { "Client-ID": process.env.BOT_CLIENT_ID, "Authorization": `Bearer ${process.env.BOT_OAUTH_TOKEN}` };
-        // Make API request to fetch clips
-        const response = await fetch(api_url, { headers });
-        const data = await response.json();
-        // console.log(data);
+        let allUsers = [];
 
-        if (!response.ok || data.data.length === 0) { return null; }
+        // Process each chunk
+        for (const chunk of chunks) {
+            const userIdsToUrl = chunk.join('&id=');
+            const api_url = `https://api.twitch.tv/helix/users?id=${userIdsToUrl}`;
+            const headers = { "Client-ID": process.env.BOT_CLIENT_ID, "Authorization": `Bearer ${process.env.BOT_OAUTH_TOKEN}` };
 
-        var listOfUsers = [];
-        data.data.forEach((user) => {
-            listOfUsers.push(user.login);
-        });
-        return listOfUsers;
+            const response = await fetch(api_url, { headers });
+            const data = await response.json();
+
+            if (response.ok && data.data.length > 0) {
+                data.data.forEach((user) => {
+                    allUsers.push(user.login);
+                });
+            }
+        }
+
+        return allUsers.length > 0 ? allUsers : null;
     }
 
 
