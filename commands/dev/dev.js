@@ -439,6 +439,7 @@ const devJoinChannelCommand = async (client, message, anonClient) => {
     }
 
     anonClient.join(targetChannel);
+    anonClient.channelsToJoin.push(targetChannel);
     if (announce) {
         const emote = await client.emotes.getEmoteFromList(targetChannel, ['peepohey', 'heyge'], 'KonCha');
         client.log.send(targetChannel, `${emote} Oioi! Fui convidado para me juntar aqui! Para saber mais sobre mim, pode usar !ajuda ou !comandos`);
@@ -466,6 +467,7 @@ const devPartChannelCommand = async (client, message, anonClient) => {
     await client.reloadChannelPrefixes();
 
     anonClient.part(targetChannel);
+    anonClient.channelsToJoin = anonClient.channelsToJoin.filter(channel => channel !== targetChannel);
     client.log.logAndReply(message, `🤖 Apaguei config a saí do canal ${targetChannel} `);
     return;
 }
