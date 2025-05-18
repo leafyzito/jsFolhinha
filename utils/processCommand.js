@@ -11,6 +11,11 @@ function manageCooldown(cooldownDuration, type, message) {
     var identifier = message.senderUsername;
     var command = message.command;
 
+    // if channel is whisper, set type to user, no matter what type is passed
+    if (message.channelName === 'whisper') {
+        type = 'user';
+    }
+
     // Determine the cooldown object based on the type
     let cooldowns;
     if (type === 'user') {
