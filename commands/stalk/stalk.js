@@ -42,7 +42,7 @@ const stalkCommand = async (client, message) => {
     var lsChannel = userInfo[0].lsChannel;
     const lsChannelId = await client.getUserID(lsChannel);
     const lsChannelInfo = await client.db.get('users', { userid: lsChannelId });
-    if (lsChannelInfo.length !== 0 && lsChannelInfo[0].optoutOwnChannel) {
+    if (lsChannelInfo.length !== 0 && lsChannelInfo[0].optoutOwnChannel && lsChannel != message.channelName) {
         lsChannel = '***';
     }
 
