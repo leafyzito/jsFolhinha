@@ -19,7 +19,7 @@ async function uploadToFeridinha(content, fileName) {
     const form = new FormData();
     form.append('file', content, {
         filename: fileName,
-        contentType: 'audio/mpeg'
+        contentType: 'video/mp4'
     });
 
     try {
