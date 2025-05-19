@@ -57,7 +57,7 @@ async function getVideoCobalt(urlToDownload) {
         'Authorization': 'ApiKey ' + process.env.COBALT_API_KEY
     };
     const payload = {
-        'url': urlToDownload'
+        'url': urlToDownload
     };
 
     try {
