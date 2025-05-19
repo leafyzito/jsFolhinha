@@ -19,7 +19,7 @@ async function uploadToFeridinha(content, fileName) {
     const form = new FormData();
     form.append('file', content, {
         filename: fileName,
-        contentType: 'video/mp4'
+        contentType: 'audio/mpeg'
     });
 
     try {
@@ -70,20 +70,19 @@ async function getVideoCobalt(urlToDownload) {
         const resData = await response.json();
         let resUrl = resData.url;
 
-        // Download the video content
-        const videoResponse = await fetch(resUrl);
-        const videoContent = await videoResponse.buffer();
+        // Download the audio content
+        const audioResponse = await fetch(resUrl);
+        const audioContent = await audioResponse.buffer();
 
         // Upload to feridinha
-        const fileName = `video_${Date.now()}.mp4`;
-        const feridinhaUrl = await uploadToFeridinha(videoContent, fileName);
+        const fileName = `audio_${Date.now()}.mp3`;
+        const feridinhaUrl = await uploadToFeridinha(audioContent, fileName);
 
         if (!feridinhaUrl) {
             console.log('Failed to upload to feridinha, falling back to original URL');
             return resUrl;
         }
 
-        // console.log(feridinhaUrl);
         return feridinhaUrl;
     } catch (e) {
         console.log(`erro no getVideoDownload: ${e}`);
