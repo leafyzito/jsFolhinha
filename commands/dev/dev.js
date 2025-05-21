@@ -17,6 +17,8 @@ async function createNewChannelConfig(client, user) {
     await client.reloadChannelConfigs();
     await client.reloadChannelPrefixes();
 
+    await addChannelToJustlog(client, newConfig.channelId);
+
     return;
 }
 
