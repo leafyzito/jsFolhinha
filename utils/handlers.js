@@ -30,7 +30,7 @@ function commandHandler(client, message, anonClient) {
     }
 }
 
-function listenerHandler(client, message) {
+function listenerHandler(client, message, anonClient) {
     if ([...client.knownUserAliases].length === 0) { return console.log('still loading users'); }
 
     // client.turso.logMessage(message);
@@ -61,7 +61,7 @@ function listenerHandler(client, message) {
             client.discord.log(`* Error in reminder listener: ${err}`);
         });
 
-    updateUserListener(client, message)
+    updateUserListener(client, message, anonClient)
         .catch(err => {
             console.log(`Error in update user listener: ${err}`);
             client.discord.log(`* Error in update user listener: ${err}`);
