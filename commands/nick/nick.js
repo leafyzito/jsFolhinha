@@ -20,31 +20,22 @@ const nicksCommand = async (client, message) => {
     if (!await processCommand(5000, 'channel', message, client)) return;
 
     const nicksTarget = message.messageText.split(' ').slice(1).find(arg => !arg.startsWith('-'))?.replace(/^@/, '').toLowerCase() || message.senderUsername;
-    const targetId = nicksTarget === message.senderUsername ? message.senderUserID : await client.getUserID(nicksTarget);
-    const allNicks = await getAllNicks(targetId);
-    const aliases = allNicks.join(' → ');
+    let targetId = null;
 
-    // if any of the message args is "-all" or "-todos", get all nicks
-    // if (message.messageText.includes('-all') || message.messageText.includes('-todos')) {
-    //     console.log(nicksTarget);
-    //     const targetId = await client.getUserID(nicksTarget);
-    //     if (!targetId) {
-    //         client.log.logAndReply(message, `Esse usuário não existe`);
-    //         return;
-    //     }
-    //     const allNicks = await getAllNicks(targetId);
-    //     const aliases = allNicks.join(' → ');
-    //     client.log.logAndReply(message, `O histórico de nicks de ${nicksTarget} (id: ${targetId}) é: ${aliases}`);
-    //     return;
-    // }
+    // to allow searching for old nicks
+    const userDbInfo = await client.db.get('users', { aliases: nicksTarget });
+    if (userDbInfo.length > 0) {
+        targetId = userDbInfo[0].userid;
+    } else {
+        targetId = await client.getUserID(nicksTarget);
+    }
 
-    // if (userAliases.length === 0) {
-    //     client.log.logAndReply(message, `Nunca vi esse usuário`);
-    //     return;
-    // }
+    if (!targetId) {
+        client.log.logAndReply(message, `Esse usuário não existe`);
+        return;
+    }
 
-    // const aliases = userAliases[0].aliases.join(' → ');
-    // const idFromDb = userAliases[0].userid;
+    const aliases = (await getAllNicks(targetId)).join(' → ');
 
     let response = `${nicksTarget === message.senderUsername ? `O seu histórico de nicks é:` : `O histórico de nicks de ${nicksTarget} (id: ${targetId}) é:`} ${aliases}`
     if (response.length > 490) {
