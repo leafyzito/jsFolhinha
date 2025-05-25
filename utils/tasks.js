@@ -176,7 +176,7 @@ async function fetchPendingJoins(client, anonClient) {
 
 let counterToRestart = 0;
 async function rejoinDisconnectedChannels(client, anonClient) {
-    const channelsToJoin = client.channelsToJoin;
+    const channelsToJoin = [...new Set([...client.channelsToJoin, ...anonClient.channelsToJoin])]; // remove duplicates
     if (!channelsToJoin || channelsToJoin.length === 0) { return; } // to avoid errors
     let rejoinedChannels = [];
 
