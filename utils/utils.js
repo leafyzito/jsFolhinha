@@ -36,6 +36,11 @@ async function shortenUrl(url) {
         body: JSON.stringify(payload),
     });
 
+    if (!response.ok) {
+        console.log('Error shortening url:', response);
+        return url;
+    }
+
     const jsonRes = await response.json();
     if (jsonRes != null) {
         // console.log(jsonRes['shortUrl']);
