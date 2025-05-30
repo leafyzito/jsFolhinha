@@ -1,23 +1,32 @@
 # [FolhinhaBot](https://folhinhabot.com/)
 
 ## Setup
-1. Clone and install:
+
+### First Steps
+1. Clone the repository and initialize submodules:
 ```bash
 git clone https://github.com/leafyzito/jsFolhinha.git
 cd jsFolhinha
 git submodule update --init --recursive
-npm install
 ```
 
 2. Copy `.env.example` to `.env` and fill in your credentials
 
-3. Run:
+### Development Mode
+For development and testing without all services:
+
+1. Install dependencies:
 ```bash
-npm start
+npm install
 ```
 
-## Docker Setup
-To run the application using Docker Compose:
+2. Run the application:
+```bash
+npm run dev
+```
+
+### Production Mode (Docker)
+For running the complete application with all services (including Cobalt[https://github.com/imputnet/cobalt/] and Twitch Clipper[https://github.com/leafyzito/twitch-clipper]):
 
 1. Make sure you have Docker and Docker Compose installed
 
@@ -40,6 +49,3 @@ docker compose down
 
 ## Contributing
 Feel free to contribute to the project by opening issues or submitting pull requests with your ideas.
-
-## License
-ISC License (idk im new at this)
