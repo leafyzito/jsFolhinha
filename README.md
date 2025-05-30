@@ -48,4 +48,4 @@ docker compose down
 - `twitchClipper/` - Submodule for Twitch clipping functionality
 
 ## Contributing
-Feel free to contribute to the project by opening issues or submitting pull requests with your ideas.
+Feel free to contribute to the project by opening issues or submitting pull requests with your ideas :)
