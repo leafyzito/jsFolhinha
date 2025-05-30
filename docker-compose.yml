@@ -1,0 +1,48 @@
+version: '3.8'
+name: folhinha
+
+services:
+  jsfolhinha:
+    container_name: folhinha-bot
+    network_mode: "host"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - ENV=dev
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - twitchclipper
+      - cobalt
+
+  twitchclipper:
+    container_name: twitch-clipper
+    build:
+      context: ./twitchClipper
+      dockerfile: Dockerfile
+    volumes:
+      - ./twitchClipper/clips:/app/clips
+    ports:
+      - "8989:8989"
+    networks:
+      - app-network
+
+  cobalt:
+    container_name: cobalt
+    image: ghcr.io/imputnet/cobalt:11
+    environment:
+      - API_URL=http://cobalt:9000
+      - COBALT_API_KEY=folhinhacobalt123
+    ports:
+      - "9000:9000"
+    networks:
+      - app-network
+    read_only: true
+    init: true
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
