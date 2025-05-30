@@ -9,6 +9,7 @@ services:
       dockerfile: Dockerfile
     environment:
       - ENV=prod
+      - TZ=Europe/Lisbon
     volumes:
       - .:/app
       - /app/node_modules
@@ -23,6 +24,8 @@ services:
     build:
       context: ./twitchClipper
       dockerfile: Dockerfile
+    environment:
+      - TZ=Europe/Lisbon
     volumes:
       - ./twitchClipper/clips:/app/clips
       - ./twitchClipper/previews:/app/previews
@@ -38,6 +41,7 @@ services:
     environment:
       - API_URL=http://cobalt:9000
       - COBALT_API_KEY=folhinhacobalt123
+      - TZ=Europe/Lisbon
     ports:
       - "9000:9000"
     networks:
