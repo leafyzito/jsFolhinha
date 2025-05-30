@@ -42,8 +42,8 @@ async function makePreview(channelName) {
         }
 
         // Resolve the path to the "clips" folder inside "twitchClipper"
-        const previewsFolder = path.resolve('/home/leafy/twitchClipper/previews');
-        var previewPath = path.join(previewsFolder, data.path);
+        const previewsFolder = path.join(process.cwd(), 'twitchClipper/previews');
+        var previewPath = path.join(previewsFolder, data.path.replace(/^\//, ''));
         console.log(previewPath);
         // upload clip to feridinha
         const previewContent = fs.readFileSync(previewPath);

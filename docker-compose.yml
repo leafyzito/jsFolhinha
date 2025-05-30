@@ -24,6 +24,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./twitchClipper/clips:/app/clips
+      - ./twitchClipper/previews:/app/previews
     ports:
       - "8989:8989"
     networks:
