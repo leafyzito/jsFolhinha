@@ -2,6 +2,10 @@ FROM node:18-alpine
 
 WORKDIR /app
 
+# Install git, docker and docker-compose
+RUN apk add --no-cache git docker-cli docker-compose && \
+    git config --global --add safe.directory /app
+
 COPY package*.json ./
 RUN npm install
 
