@@ -26,7 +26,7 @@ npm run dev
 ```
 
 ### Production Mode (Docker)
-For running the complete application with all services (including Cobalt[https://github.com/imputnet/cobalt/] and Twitch Clipper[https://github.com/leafyzito/twitch-clipper]):
+For running the complete application with all services (including [Cobalt](https://github.com/imputnet/cobalt/) and [Twitch Clipper](https://github.com/leafyzito/twitch-clipper)):
 
 1. Make sure you have Docker and Docker Compose installed
 
