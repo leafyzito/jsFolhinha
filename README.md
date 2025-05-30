@@ -30,7 +30,9 @@ For running the complete application with all services (including [Cobalt](https
 
 1. Make sure you have Docker and Docker Compose installed
 
-2. Start the application:
+2. Ensure the environment variable ENV is set to 'prod' in docker-compose.yml (or 'dev' for testing)
+
+3. Start the application:
 ```bash
 docker compose up -d
 ```
