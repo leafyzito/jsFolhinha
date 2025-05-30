@@ -190,8 +190,14 @@ class MongoUtils {
         });
     }
 
-    async count(collectionName, query = {}) {
+    async count(collectionName, query = {}, skipCache = false) {
         const cache = this.getCollectionCache(collectionName);
+
+        if (skipCache) {
+            await this.client.connect();
+            const collection = this.db.collection(collectionName);
+            return await collection.countDocuments(query);
+        }
 
         if (!query || Object.keys(query).length === 0) {
             return cache.size;
