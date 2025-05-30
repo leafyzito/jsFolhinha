@@ -57,6 +57,12 @@ async function getVideoDownload(urlToDownload) {
             headers: headers,
             body: JSON.stringify(payload)
         });
+
+        if (!response.ok) {
+            console.log(`Error: ${response.status} ${response.statusText}`);
+            return 'apiError';
+        }
+
         const resData = await response.json();
         let resUrl = resData.url;
 
@@ -77,7 +83,7 @@ async function getVideoDownload(urlToDownload) {
     } catch (e) {
         console.log(`erro no getVideoDownload: ${e}`);
         try {
-            const errorText = resData.text;
+            const errorText = e.message;
             if ('connect to the service api' in errorText) {
                 return 'apiError';
             } else {
