@@ -589,6 +589,28 @@ const justlogRemoveCommand = async (client, message) => {
     return;
 }
 
+const revivePetCommand = async (client, message) => {
+    message.command = 'dev revivepet';
+
+    const authorId = message.senderUserID;
+    if (authorId !== process.env.DEV_USERID) { return; }
+
+    const targetChannel = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase() || null;
+    if (!targetChannel) {
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}revivepet <canal>`);
+        return;
+    }
+
+    const targetChannelId = await client.getUserID(targetChannel);
+    if (!targetChannelId) {
+        client.log.logAndReply(message, `Esse canal não existe`);
+        return;
+    }
+
+    await client.db.update('pet', { channelId: targetChannelId }, { $set: { is_alive: true } });
+    client.log.logAndReply(message, `🤖 Pet ressuscitado no canal ${targetChannel}`);
+    return;
+}
 
 botSayCommand.aliases = ['botsay', 'bsay'];
 forceJoinCommand.aliases = ['forcejoin', 'fjoin'];
@@ -613,6 +635,7 @@ devPartChannelCommand.aliases = ['devpart', 'dpart'];
 giveXpCommand.aliases = ['devgivexp', 'givexp'];
 justlogAddCommand.aliases = ['justlogadd', 'jladd'];
 justlogRemoveCommand.aliases = ['justlogremove', 'jlremove', 'jldelete', 'jldel'];
+revivePetCommand.aliases = ['petrevive', 'revivepet'];
 
 module.exports = {
     botSayCommand,
@@ -637,5 +660,6 @@ module.exports = {
     devPartChannelCommand,
     giveXpCommand,
     justlogAddCommand,
-    justlogRemoveCommand
+    justlogRemoveCommand,
+    revivePetCommand
 };
