@@ -23,6 +23,10 @@ const remindCommand = async (client, message) => {
     message.command = 'remind';
     if (!await processCommand(5000, 'user', message, client)) return;
 
+    // temp disable
+    client.log.logAndReply(message, `Deu uns problemas e tive que desativar o remind por uns tempos, foi mal :(`);
+    return;
+
     if (message.messageText.split(' ').length === 1) {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind <usuário> <mensagem>`);
         return;
