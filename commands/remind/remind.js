@@ -3,7 +3,7 @@ const { manageLongResponse, createNewGist, timeSince, parseTime, isStreamOnline 
 const schedule = require('node-schedule');
 
 async function newRemind(client, message, targetId, remindMessage, remindAt) {
-    const newRemindId = await client.db.count('remind') + 1;
+    const newRemindId = await client.db.count('remind', {}, true) + 1;
     const remindInfo = {
         _id: newRemindId,
         senderId: message.senderUserID,
@@ -22,10 +22,6 @@ async function newRemind(client, message, targetId, remindMessage, remindAt) {
 const remindCommand = async (client, message) => {
     message.command = 'remind';
     if (!await processCommand(5000, 'user', message, client)) return;
-
-    // temp disable
-    client.log.logAndReply(message, `Deu uns problemas e tive que desativar o remind por uns tempos, foi mal :(`);
-    return;
 
     if (message.messageText.split(' ').length === 1) {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind <usuário> <mensagem>`);
