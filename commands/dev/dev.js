@@ -171,8 +171,20 @@ const restartCommand = async (client, message) => {
 
     client.log.logAndReply(message, `Reiniciando...`);
 
-    exec('pm2 restart folhinhajs');
-}
+    exec('docker compose restart', { cwd: process.cwd() }, (err, stdout, stderr) => {
+        if (err) {
+            console.log(`* Erro ao reiniciar compose: ${err}`);
+            client.log.logAndReply(message, `Deu não, check logs`);
+            return;
+        }
+
+        if (stderr) {
+            console.log(`* Docker stderr: ${stderr}`);
+        }
+
+        console.log(`* Compose reiniciado: ${stdout}`);
+    });
+};
 
 const resetPetCommand = async (client, message) => {
     message.command = 'dev resetpet';
@@ -210,28 +222,38 @@ const reloadCommand = async (client, message) => {
     if (authorId !== process.env.DEV_USERID) { return; }
 
     // Pull changes from Git
-    exec('git pull', (err, stdout, stderr) => {
+    exec('git pull', { cwd: process.cwd() }, (err, stdout, stderr) => {
         if (err) {
             console.log(`* Erro ao puxar mudanças do Git: ${err}`);
             client.log.logAndReply(message, `Deu não, check logs`);
             return;
         }
 
+        if (stderr && !stderr.includes('Already up to date')) {
+            console.log(`* Git stderr: ${stderr}`);
+            client.log.logAndReply(message, `Aviso: ${stderr}`);
+        }
+
         client.discord.log(`* Mudanças puxadas do Git: ${stdout}`);
         console.log(`* Mudanças puxadas do Git: ${stdout}`);
 
-        // Clear require cache for all command files
-        Object.keys(require.cache).forEach((key) => {
-            if (key.includes('\\commands\\') || key.includes('/commands/')) {
-                console.log(`deleting ${key} `);
-                delete require.cache[key];
-            }
-        });
+        try {
+            // Clear require cache for all command files
+            Object.keys(require.cache).forEach((key) => {
+                if (key.includes('\\commands\\') || key.includes('/commands/')) {
+                    console.log(`deleting ${key} `);
+                    delete require.cache[key];
+                }
+            });
 
-        // Reload the commands
-        client.loadCommands();
+            // Reload the commands
+            client.loadCommands();
 
-        client.log.logAndReply(message, `Comandos recarregados 👍`);
+            client.log.logAndReply(message, `Comandos recarregados 👍`);
+        } catch (error) {
+            console.error('Error reloading commands:', error);
+            client.log.logAndReply(message, `Erro ao recarregar comandos: ${error.message}`);
+        }
     });
 };
 
@@ -251,11 +273,16 @@ const gitPullCommand = async (client, message) => {
     const authorId = message.senderUserID;
     if (authorId !== process.env.DEV_USERID) { return; }
 
-    exec('git pull', (err, stdout, stderr) => {
+    exec('git pull', { cwd: process.cwd() }, (err, stdout, stderr) => {
         if (err) {
             console.log(`* Erro ao puxar mudanças do Git: ${err}`);
             client.log.logAndReply(message, `Deu não, check logs`);
             return;
+        }
+
+        if (stderr && !stderr.includes('Already up to date')) {
+            console.log(`* Git stderr: ${stderr}`);
+            client.log.logAndReply(message, `Aviso: ${stderr}`);
         }
 
         client.discord.log(`* Mudanças puxadas do Git: ${stdout}`);
@@ -281,15 +308,20 @@ const reloadEmotesCommand = async (client, message) => {
             await client.emotes.getChannelEmotes(channel);
         }
 
-        const emote = await client.emotes.getEmoteFromList(message.channelName, ['joia', 'jumilhao'], '👍');
-        client.log.logAndReply(message, `Emotes recarregados em ${channelsToReload.length} canais ${emote} `);
+        client.log.logAndReply(message, `Emotes recarregados em ${channelsToReload.length} canais 👍`);
         return;
     }
+
+    if (targetChannel === 'clear') {
+        client.emotes.cachedEmotes = {};
+        client.log.logAndReply(message, `Emotes limpos 👍`);
+        return;
+    }
+
     client.emotes.cachedEmotes[targetChannel] = null;
     await client.emotes.getChannelEmotes(targetChannel);
 
-    const emote = await client.emotes.getEmoteFromList(message.channelName, ['joia', 'jumilhao'], '👍');
-    client.log.logAndReply(message, `Emotes recarregados ${emote} `);
+    client.log.logAndReply(message, `Emotes recarregados 👍`);
 }
 
 const allEmotesCommand = async (client, message) => {
