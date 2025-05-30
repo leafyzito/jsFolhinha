@@ -16,6 +16,7 @@ services:
     depends_on:
       - twitchclipper
       - cobalt
+    restart: unless-stopped
 
   twitchclipper:
     container_name: twitch-clipper
@@ -29,6 +30,7 @@ services:
       - "8989:8989"
     networks:
       - app-network
+    restart: unless-stopped
 
   cobalt:
     container_name: cobalt
