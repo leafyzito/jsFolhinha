@@ -1,6 +1,3 @@
-[submodule "cobalt"]
-	path = cobalt
-	url = https://github.com/imputnet/cobalt.git
 [submodule "twitchClipper"]
 	path = twitchClipper
 	url = https://github.com/leafyzito/twitch-clipper.git
