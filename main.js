@@ -61,7 +61,11 @@ channelsToJoin.then((channels) => {
     client.channelsToJoin = channels;
     anonClient.channelsToJoin = channels;
     // client.joinAll(channels);
-    anonClient.joinAll(channels);
+    anonClient.joinAll(channels).then(() => {
+        console.log('* Joined channels');
+    }).catch((error) => {
+        console.log('Error on joining channels:', error);
+    });
 }).catch((error) => {
     console.log('Error on getting channelsToJoin:', error);
 });
