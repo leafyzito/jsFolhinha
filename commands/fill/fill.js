@@ -1,23 +1,44 @@
-const { processCommand } = require("../../utils/processCommand.js");
+import { processCommand } from '../../utils/processCommand.js';
 
 const fillCommand = async (client, message) => {
     message.command = 'fill';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
     if (message.messageText.split(' ').length < 2) {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}me <mensagem>`);
         return;
     }
 
-    var textToRepeat = message.messageText.split(' ').slice(1).join(' ').trim();
+    let textToRepeat = message.messageText.split(' ').slice(1).join(' ').trim();
 
-    const otherPrefixes = ['$', '*', '!', '|', '+', '?', '%', '=', '&', '/', '#', '.', ',', '<', '>', '@', '⠀', '-', '\\', '\\'];
+    const otherPrefixes = [
+        '$',
+        '*',
+        '!',
+        '|',
+        '+',
+        '?',
+        '%',
+        '=',
+        '&',
+        '/',
+        '#',
+        '.',
+        ',',
+        '<',
+        '>',
+        '@',
+        '⠀',
+        '-',
+        '\\',
+        '\\',
+    ];
     while (otherPrefixes.some(char => textToRepeat.startsWith(char))) {
         textToRepeat = '' + textToRepeat.slice(1).trim();
     }
 
     const maxLength = 500;
-    var finalText = '';
+    let finalText = '';
 
     while (finalText.length < maxLength) {
         finalText += textToRepeat + ' ';
@@ -37,6 +58,4 @@ fillCommand.description = `O bot vai repetir o que você fornecer até que o lim
 • Exemplo: !fill OMEGALUL - O bot vai repetir OMEGALUL até que o limite de caracteres seja atingido`;
 fillCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${fillCommand.commandName}/${fillCommand.commandName}.js`;
 
-module.exports = {
-    fillCommand,
-};
+export { fillCommand };

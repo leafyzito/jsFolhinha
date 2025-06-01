@@ -1,7 +1,7 @@
-const fs = require('fs');
-const { exec } = require('child_process');
-const { isStreamOnline, timeSince } = require('./utils.js');
-const { addChannelToJustlog } = require('./justlog.js');
+import fs from 'fs';
+import { exec } from 'child_process';
+import { isStreamOnline, timeSince } from './utils.js';
+import { addChannelToJustlog } from './justlog.js';
 
 async function createNewChannelConfig(client, channelId) {
     const channelName = await client.getUserByUserID(channelId);
@@ -12,7 +12,7 @@ async function createNewChannelConfig(client, channelId) {
         offlineOnly: false,
         isPaused: false,
         disabledCommands: [],
-        devBanCommands: []
+        devBanCommands: [],
     };
 
     await client.db.insert('config', newConfig);
@@ -21,32 +21,32 @@ async function createNewChannelConfig(client, channelId) {
 
     await addChannelToJustlog(client, channelId);
 
-    fs.appendFile('channels.txt',
-        `${channelId} ${channelName}\n`,
-        (err) => {
-            if (err) {
-                console.error(`Erro ao adicionar ${channelName} ao channels.txt: ${err}`);
-                return;
-            }
-            console.log('Data appended to channels.txt');
-        });
+    fs.appendFile('channels.txt', `${channelId} ${channelName}\n`, err => {
+        if (err) {
+            console.error(`Erro ao adicionar ${channelName} ao channels.txt: ${err}`);
+            return;
+        }
+        console.log('Data appended to channels.txt');
+    });
 
     return;
 }
-
-
 
 async function dailyCookieResetTask(client) {
     client.discord.log('* Resetting daily cookies');
     console.log('* Resetting daily cookies');
 
-    await client.db.updateMany('cookie', {}, {
-        $set: {
-            claimedToday: false,
-            giftedToday: false,
-            usedSlot: false
+    await client.db.updateMany(
+        'cookie',
+        {},
+        {
+            $set: {
+                claimedToday: false,
+                giftedToday: false,
+                usedSlot: false,
+            },
         }
-    });
+    );
 }
 
 async function petAttencionTask(client, anonClient) {
@@ -57,7 +57,9 @@ async function petAttencionTask(client, anonClient) {
     for (const pet of pets) {
         const channel = await client.getUserByUserID(pet.channelId);
         // if not connected to channel, skip (for the case the bot leaves the channel)
-        if (![...anonClient.joinedChannels].includes(channel)) { continue; }
+        if (![...anonClient.joinedChannels].includes(channel)) {
+            continue;
+        }
 
         const lastInteraction = pet.last_interaction;
         const warns = pet.warns;
@@ -71,11 +73,18 @@ async function petAttencionTask(client, anonClient) {
 
             if (await isStreamOnline(channel)) {
                 console.log(`* ${channel} is paused or streaming, skipping and adding 10mins`);
-                await client.db.update('pet', { channelId: pet.channelId }, { $inc: { last_interaction: 600 } }); // add 10 minutes to last_interaction
+                await client.db.update(
+                    'pet',
+                    { channelId: pet.channelId },
+                    { $inc: { last_interaction: 600 } }
+                ); // add 10 minutes to last_interaction
                 continue;
             }
 
-            client.log.send(channel, `${pet.pet_emoji} ${pet.pet_name} está pedindo atenção! Se ninguém interagir com ele, ele vai ficar rabugento!`);
+            client.log.send(
+                channel,
+                `${pet.pet_emoji} ${pet.pet_name} está pedindo atenção! Se ninguém interagir com ele, ele vai ficar rabugento!`
+            );
             await new Promise(resolve => setTimeout(resolve, 2000)); // Add delay after sending message to avoid timeouts
             await client.db.update('pet', { channelId: pet.channelId }, { $set: { warns: 1 } });
             continue;
@@ -86,13 +95,20 @@ async function petAttencionTask(client, anonClient) {
             // 2nd warning
             console.log(`* 2nd warning for ${channel}`);
 
-            if (client.channelConfigs[channel].isPaused || await isStreamOnline(channel)) {
+            if (client.channelConfigs[channel].isPaused || (await isStreamOnline(channel))) {
                 console.log(`* ${channel} is paused or streaming, skipping and adding 10mins`);
-                await client.db.update('pet', { channelId: pet.channelId }, { $inc: { last_interaction: 600 } }); // add 10 minutes to last_interaction
+                await client.db.update(
+                    'pet',
+                    { channelId: pet.channelId },
+                    { $inc: { last_interaction: 600 } }
+                ); // add 10 minutes to last_interaction
                 continue;
             }
 
-            client.log.send(channel, `${pet.pet_emoji} ${pet.pet_name} ficou rabugento! Já se passaram mais de 24 horas desde a última interação!`);
+            client.log.send(
+                channel,
+                `${pet.pet_emoji} ${pet.pet_name} ficou rabugento! Já se passaram mais de 24 horas desde a última interação!`
+            );
             await new Promise(resolve => setTimeout(resolve, 2000)); // Add delay after sending message to avoid timeouts
             await client.db.update('pet', { channelId: pet.channelId }, { $set: { warns: 2 } });
             continue;
@@ -103,15 +119,26 @@ async function petAttencionTask(client, anonClient) {
             // 3rd warning
             console.log(`* 3rd warning for ${channel}`);
 
-            if (client.channelConfigs[channel].isPaused || await isStreamOnline(channel)) {
+            if (client.channelConfigs[channel].isPaused || (await isStreamOnline(channel))) {
                 console.log(`* ${channel} is paused or streaming, skipping and adding 10mins`);
-                await client.db.update('pet', { channelId: pet.channelId }, { $inc: { last_interaction: 600 } }); // add 10 minutes to last_interaction
+                await client.db.update(
+                    'pet',
+                    { channelId: pet.channelId },
+                    { $inc: { last_interaction: 600 } }
+                ); // add 10 minutes to last_interaction
                 continue;
             }
 
-            client.log.send(channel, `${pet.pet_emoji} ${pet.pet_name} foi embora! Ninguém deu atenção a ele e ele se foi...`);
+            client.log.send(
+                channel,
+                `${pet.pet_emoji} ${pet.pet_name} foi embora! Ninguém deu atenção a ele e ele se foi...`
+            );
             await new Promise(resolve => setTimeout(resolve, 2000)); // Add delay after sending message to avoid timeouts
-            await client.db.update('pet', { channelId: pet.channelId }, { $set: { is_alive: false, time_of_death: currentTime } });
+            await client.db.update(
+                'pet',
+                { channelId: pet.channelId },
+                { $set: { is_alive: false, time_of_death: currentTime } }
+            );
             continue;
         }
 
@@ -130,22 +157,34 @@ async function fetchPendingJoins(client, anonClient) {
         const inviterName = await client.getUserByUserID(inviterId);
 
         if (channelName) {
-            // this should never happen, but let's test it    
+            // this should never happen, but let's test it
             const alreadyJoinedChannels = [...anonClient.joinedChannels];
             if (alreadyJoinedChannels.includes(channelName)) {
                 console.log(`* ${channelName} is already joined`);
-                await client.db.update('pendingjoin', { _id: channelToJoin._id }, { $set: { status: 'duplicate' } });
+                await client.db.update(
+                    'pendingjoin',
+                    { _id: channelToJoin._id },
+                    { $set: { status: 'duplicate' } }
+                );
                 continue;
             }
 
             console.log(`* Joining ${channelName} to ${channelName}`);
-            client.discord.importantLog(`* Joining to ${channelName} from website (inviter: ${inviterName})`);
+            client.discord.importantLog(
+                `* Joining to ${channelName} from website (inviter: ${inviterName})`
+            );
 
-            anonClient.join(channelName).catch((err) => {
+            anonClient.join(channelName).catch(err => {
                 console.error(`Erro ao entrar no chat ${channelName}: ${err}`);
                 client.discord.importantLog(`* Error joining ${channelName} from website: ${err}`);
-                client.log.send(channelName, `Erro ao entrar no chat ${channelName}. Por favor contacte o @${process.env.DEV_NICK}`);
-                client.log.whisper(inviterName, `Erro ao entrar no chat ${channelName}. Por favor contacte o @${process.env.DEV_NICK}`);
+                client.log.send(
+                    channelName,
+                    `Erro ao entrar no chat ${channelName}. Por favor contacte o @${process.env.DEV_NICK}`
+                );
+                client.log.whisper(
+                    inviterName,
+                    `Erro ao entrar no chat ${channelName}. Por favor contacte o @${process.env.DEV_NICK}`
+                );
                 return;
             });
 
@@ -155,18 +194,34 @@ async function fetchPendingJoins(client, anonClient) {
             anonClient.channelsToJoin.push(channelName);
             client.joinedChannelsIds.push(channelId);
 
-            const emote = await client.emotes.getEmoteFromList(channelName, ['peepohey', 'heyge'], 'KonCha');
+            const emote = await client.emotes.getEmoteFromList(
+                channelName,
+                ['peepohey', 'heyge'],
+                'KonCha'
+            );
             const inviterPart = inviterName != channelName ? ` por @${inviterName}` : '';
-            client.log.send(channelName, `${emote} Oioi! Fui convidado para me juntar aqui${inviterPart}! Para saber mais sobre mim, pode usar !ajuda ou !comandos`);
-            client.log.whisper(inviterName, `Caso tenha follow-mode ativado no chat para o qual me convidou, me dê cargo de moderador ou vip para conseguir falar lá :D`);
+            client.log.send(
+                channelName,
+                `${emote} Oioi! Fui convidado para me juntar aqui${inviterPart}! Para saber mais sobre mim, pode usar !ajuda ou !comandos`
+            );
+            client.log.whisper(
+                inviterName,
+                `Caso tenha follow-mode ativado no chat para o qual me convidou, me dê cargo de moderador ou vip para conseguir falar lá :D`
+            );
 
-
-            await client.db.update('pendingjoin', { _id: channelToJoin._id }, { $set: { status: 'joined' } });
-        }
-        else {
+            await client.db.update(
+                'pendingjoin',
+                { _id: channelToJoin._id },
+                { $set: { status: 'joined' } }
+            );
+        } else {
             console.log(`* ${channelToJoin.userid} not found from website`);
             client.discord.importantLog(`* ${channelToJoin.userid} not found from website`);
-            await client.db.update('pendingjoin', { _id: channelToJoin._id }, { $set: { status: 'user not found' } });
+            await client.db.update(
+                'pendingjoin',
+                { _id: channelToJoin._id },
+                { $set: { status: 'user not found' } }
+            );
         }
 
         // console.log('all good dentro do for loop');
@@ -175,22 +230,24 @@ async function fetchPendingJoins(client, anonClient) {
 }
 
 let counterToRestart = 0;
-async function rejoinDisconnectedChannels(client, anonClient) {
+function rejoinDisconnectedChannels(client, anonClient) {
     const channelsToJoin = [...new Set([...client.channelsToJoin, ...anonClient.channelsToJoin])]; // remove duplicates
-    if (!channelsToJoin || channelsToJoin.length === 0) { return; } // to avoid errors
+    if (!channelsToJoin || channelsToJoin.length === 0) {
+        return;
+    } // to avoid errors
     let rejoinedChannels = [];
 
-    channelsToJoin.forEach(async (channel) => {
+    channelsToJoin.forEach(channel => {
         if (![...anonClient.joinedChannels].includes(channel)) {
             console.log(`* Rejoining ${channel}`);
             // client.discord.log(`* Rejoining ${channel}`);
             rejoinedChannels.push(channel);
             anonClient.join(channel);
-        }
-        else {
+        } else {
             if ([...anonClient.joinedChannels].length === 0) {
                 counterToRestart++;
-                if (counterToRestart >= 4) { // 2 minutes
+                if (counterToRestart >= 4) {
+                    // 2 minutes
                     console.log(`* Restarting client`);
                     client.discord.log(`* Restarting client`);
                     exec('pm2 restart folhinhajs');
@@ -205,7 +262,7 @@ async function rejoinDisconnectedChannels(client, anonClient) {
     }
 }
 
-async function updateDiscordPresence(client, anonClient) {
+function updateDiscordPresence(client, anonClient) {
     client.discord.user.setActivity({
         type: 4,
         name: 'Folhinha Uptime',
@@ -233,12 +290,10 @@ function startDiscordPresenceTask(client, anonClient) {
     setInterval(() => updateDiscordPresence(client, anonClient), 60_000); // 1 minute
 }
 
-
-
-module.exports = {
+export {
     dailyCookieResetTask,
     startPetTask,
     startFetchPendingJoinsTask,
     startRejoinDisconnectedChannelsTask,
-    startDiscordPresenceTask
+    startDiscordPresenceTask,
 };

@@ -1,11 +1,14 @@
-const { processCommand } = require("../../utils/processCommand.js");
+import { processCommand } from '../../utils/processCommand.js';
 
 const vanishCommand = async (client, message) => {
     message.command = 'vanish';
-    if (!await processCommand(5000, 'user', message, client)) return;
+    if (!(await processCommand(5000, 'user', message, client))) return;
 
     if (message.isStreamer) {
-        client.log.logAndReply(message, `Eu não consigo te fazer desaparecer, mas você consegue monkaS`);
+        client.log.logAndReply(
+            message,
+            `Eu não consigo te fazer desaparecer, mas você consegue monkaS`
+        );
         return;
     }
 
@@ -35,6 +38,4 @@ Use este comando para tomar um timeout de 1 segundo e apagar as sua mensagens do
 Para este comando funcione corretamente, o Folhinha precisa do cargo de moderador`;
 vanishCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${vanishCommand.commandName}/${vanishCommand.commandName}.js`;
 
-module.exports = {
-    vanishCommand,
-};
+export { vanishCommand };

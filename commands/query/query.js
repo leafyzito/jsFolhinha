@@ -1,4 +1,4 @@
-const { processCommand } = require("../../utils/processCommand.js");
+import { processCommand } from '../../utils/processCommand.js';
 
 async function getQuery(expression) {
     const urlEncodedExpression = encodeURIComponent(expression);
@@ -11,17 +11,24 @@ async function getQuery(expression) {
 
 const queryCommand = async (client, message) => {
     message.command = 'query';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
     if (message.messageText.split(' ').length === 1) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}query <expressão matemática>. Para mais informações, acesse https://folhinhabot.com/comandos/query`);
+        client.log.logAndReply(
+            message,
+            `Use o formato: ${message.commandPrefix}query <expressão matemática>. Para mais informações, acesse https://folhinhabot.com/comandos/query`
+        );
         return;
     }
 
     const query = message.messageText.split(' ').slice(1).join(' ');
     const queryResult = await getQuery(query);
 
-    const emote = await client.emotes.getEmoteFromList(message.channelName, ['nerd', 'nerdge', 'catnerd', 'dognerd', 'giganerd'], '🤓');
+    const emote = await client.emotes.getEmoteFromList(
+        message.channelName,
+        ['nerd', 'nerdge', 'catnerd', 'dognerd', 'giganerd'],
+        '🤓'
+    );
     client.log.logAndReply(message, `${emote} ${queryResult}`);
 };
 
@@ -44,6 +51,4 @@ Pode também fazer algumas conversões, apenas em inglês, como:
 Para mais informações, consulte o site oficial do <a href="https://products.wolframalpha.com/short-answers-api/explorer/" target="_blank" style="color: #67e8f9">Wolfram Alpha</a>`;
 queryCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${queryCommand.commandName}/${queryCommand.commandName}.js`;
 
-module.exports = {
-    mathCommand: queryCommand,
-};
+export { queryCommand };

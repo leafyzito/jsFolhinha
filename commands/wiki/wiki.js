@@ -1,4 +1,4 @@
-const { processCommand } = require("../../utils/processCommand.js");
+import { processCommand } from '../../utils/processCommand.js';
 
 async function getRandomWiki() {
     const api_url = `https://pt.wikipedia.org/w/api.php?action=query&list=random&rnnamespace=0&format=json`;
@@ -10,11 +10,15 @@ async function getRandomWiki() {
 
 const wikiCommand = async (client, message) => {
     message.command = 'wiki';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
     const wiki = await getRandomWiki();
 
-    const emote = await client.emotes.getEmoteFromList(message.channelName, ['nerd', 'nerdge', 'catnerd', 'dognerd', 'giganerd'], '🤓')
+    const emote = await client.emotes.getEmoteFromList(
+        message.channelName,
+        ['nerd', 'nerdge', 'catnerd', 'dognerd', 'giganerd'],
+        '🤓'
+    );
     client.log.logAndReply(message, `${emote} ${wiki}`);
     return;
 };
@@ -27,6 +31,4 @@ wikiCommand.whisperable = true;
 wikiCommand.description = `Apenas um comando para receber um artigo aleatório do Wikipedia`;
 wikiCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${wikiCommand.commandName}/${wikiCommand.commandName}.js`;
 
-module.exports = {
-    wikiCommand,
-};
+export { wikiCommand };

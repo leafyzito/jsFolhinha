@@ -1,4 +1,4 @@
-const { processCommand } = require("../../utils/processCommand.js");
+import { processCommand } from '../../utils/processCommand.js';
 
 async function getAscii(defaultChannel, input) {
     if (input.includes('.avif')) {
@@ -21,8 +21,7 @@ async function getAscii(defaultChannel, input) {
     // if no "#" in input, add "&c=defaultChannel"
     if (!input.includes('#')) {
         input = `${input}&c=${defaultChannel}`;
-    }
-    else {
+    } else {
         input = encodeURIComponent(input);
     }
 
@@ -39,7 +38,7 @@ async function getAscii(defaultChannel, input) {
 
 const asciiCommand = async (client, message) => {
     message.command = 'ascii';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
     // take as input the whole message but the command word
     let input = message.messageText.split(' ').slice(1).join(' ');
@@ -57,7 +56,9 @@ const asciiCommand = async (client, message) => {
 
     // replace \n and \r with \s
     ascii = ascii.replace(/\n/g, ' ').replace(/\r/g, ' ');
-    if (ascii.length > 499) { ascii = ascii.slice(0, 499); }
+    if (ascii.length > 499) {
+        ascii = ascii.slice(0, 499);
+    }
 
     client.log.logAndReply(message, ascii);
     return;
@@ -91,6 +92,4 @@ mode:simple(default)|ec|hc|nd`;
 
 asciiCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${asciiCommand.commandName}/${asciiCommand.commandName}.js`;
 
-module.exports = {
-    asciiCommand,
-};
+export { asciiCommand };

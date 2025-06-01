@@ -1,11 +1,13 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { capitalize, manageLongResponse } = require("../../utils/utils.js");
+import { processCommand } from '../../utils/processCommand.js';
+import { capitalize, manageLongResponse } from '../../utils/utils.js';
 
 async function getOMDBd(targetTitle) {
-    const response = await fetch(`https://www.omdbapi.com/?t=${targetTitle}&apikey=${process.env.OMDB_API_KEY}`);
+    const response = await fetch(
+        `https://www.omdbapi.com/?t=${targetTitle}&apikey=${process.env.OMDB_API_KEY}`
+    );
     const data = await response.json();
 
-    if (data.Response === "False") {
+    if (data.Response === 'False') {
         return null;
     }
 
@@ -19,29 +21,35 @@ async function getOMDBd(targetTitle) {
         type: capitalize(data.Type),
         genre: data.Genre,
         grossed: data.BoxOffice,
-        ratings: data.Ratings.length > 0 ? data.Ratings.map(rating => `${rating.Source}: ${rating.Value}`).join(", ") : null,
-        imdbID: data.imdbID
+        ratings:
+            data.Ratings.length > 0
+                ? data.Ratings.map(rating => `${rating.Source}: ${rating.Value}`).join(', ')
+                : null,
+        imdbID: data.imdbID,
     };
 
     // filter out N/A values
     return Object.fromEntries(
-        Object.entries(movieData).filter(([_, value]) => value && value !== "N/A")
+        Object.entries(movieData).filter(([_, value]) => value && value !== 'N/A')
     );
 }
 
 const filmeCommand = async (client, message) => {
     message.command = 'filme';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
     const targetTitle = message.messageText.split(' ').slice(1).join(' ').trim();
     if (!targetTitle) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}filme <filme ou série>`);
+        client.log.logAndReply(
+            message,
+            `Use o formato: ${message.commandPrefix}filme <filme ou série>`
+        );
         return;
     }
 
     const movie = await getOMDBd(targetTitle);
     if (!movie) {
-        client.log.logAndReply(message, "⚠️ Filme não encontrado");
+        client.log.logAndReply(message, '⚠️ Filme não encontrado');
         return;
     }
 
@@ -59,7 +67,9 @@ const filmeCommand = async (client, message) => {
     if (movie.imdbID) replyParts.push(`IMDd: https://www.imdb.com/title/${movie.imdbID}`);
 
     let reply = replyParts.join(' ● ');
-    if (reply.length > 490) { reply = await manageLongResponse(reply); }
+    if (reply.length > 490) {
+        reply = await manageLongResponse(reply);
+    }
     client.log.logAndReply(message, reply);
     return;
 };
@@ -73,6 +83,4 @@ filmeCommand.description = `Veja informações como sinopse, classificação, du
 Tente usar o nome exato do filme ou série`;
 filmeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${filmeCommand.commandName}/${filmeCommand.commandName}.js`;
 
-module.exports = {
-    testeCommand: filmeCommand,
-};
+export { filmeCommand };

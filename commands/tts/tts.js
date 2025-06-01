@@ -1,10 +1,10 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const fetch = require('node-fetch');
-const FormData = require('form-data');
+import { processCommand } from '../../utils/processCommand.js';
+import fetch from 'node-fetch';
+import FormData from 'form-data';
 
 async function uploadToFeridinha(audio_content) {
     const api_url = 'https://feridinha.com/upload';
-    const headers = { 'token': process.env.FERIDINHA_API_KEY };
+    const headers = { token: process.env.FERIDINHA_API_KEY };
 
     const form = new FormData();
     form.append('file', audio_content, 'output.mp3');
@@ -12,7 +12,7 @@ async function uploadToFeridinha(audio_content) {
     const response = await fetch(api_url, {
         method: 'POST',
         headers: headers,
-        body: form
+        body: form,
     });
 
     if (response.status === 200) {
@@ -35,7 +35,7 @@ async function getTts(voice, text) {
 
 const ttsCommand = async (client, message) => {
     message.command = 'tts';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
     if (message.messageText.split(' ').length === 1) {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}tts <texto>`);
@@ -53,10 +53,13 @@ const ttsCommand = async (client, message) => {
         return true;
     });
 
-    var msgContent = args.join(' ');
+    let msgContent = args.join(' ');
 
     if (!voice || !msgContent) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}tts voice:Brian <texto>`);
+        client.log.logAndReply(
+            message,
+            `Use o formato: ${message.commandPrefix}tts voice:Brian <texto>`
+        );
         return;
     }
 
@@ -84,6 +87,4 @@ Acesse a lista de vozes disponíveis aqui: https://github.com/chrisjp/tts/blob/m
 Um dia irá ter uma página bonitinha com as possíveis vozes`;
 ttsCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/tts/tts.js`;
 
-module.exports = {
-    ttsCommand,
-};
+export { ttsCommand };

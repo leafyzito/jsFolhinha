@@ -1,10 +1,11 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { randomInt, randomChoice } = require("../../utils/utils.js");
-const fs = require('fs');
+import { processCommand } from '../../utils/processCommand.js';
+import { randomChoice } from '../../utils/utils.js';
+import fs from 'fs';
 
 const cookieFrases = fs.readFileSync('./commands/cookie/cookie_frases.txt', 'utf8');
 
-async function createUserCookieBase(client, message) { // isto é só para o cd, acho eu
+async function createUserCookieBase(client, message) {
+    // isto é só para o cd, acho eu
     const insert_doc = {
         userId: message.senderUserID,
         user: message.senderUsername,
@@ -19,7 +20,7 @@ async function createUserCookieBase(client, message) { // isto é só para o cd,
     };
     await client.db.insert('cookie', insert_doc);
     return insert_doc;
-};
+}
 
 async function loadUserCookieStats(client, targetId) {
     const findFilter = { userId: targetId };
@@ -28,15 +29,17 @@ async function loadUserCookieStats(client, targetId) {
         return null;
     }
     return userCookieStats[0];
-};
-
+}
 
 const cookieCommand = async (client, message) => {
     message.command = 'cookie';
-    if (!await processCommand(5000, 'user', message, client)) return;
+    if (!(await processCommand(5000, 'user', message, client))) return;
 
     if (message.messageText.split(' ').length < 2) {
-        client.log.logAndReply(message, `Está com dúvidas sobre os comandos de cookie? Acesse https://folhinhabot.com/comandos/cookie 😁`);
+        client.log.logAndReply(
+            message,
+            `Está com dúvidas sobre os comandos de cookie? Acesse https://folhinhabot.com/comandos/cookie 😁`
+        );
         return;
     }
 
@@ -48,7 +51,10 @@ const cookieCommand = async (client, message) => {
 
         if (!userCookieStats) {
             await createUserCookieBase(client, message);
-            client.log.logAndReply(message, `Você resgatou seu cookie diário e agora tem 1 cookie! 🍪`);
+            client.log.logAndReply(
+                message,
+                `Você resgatou seu cookie diário e agora tem 1 cookie! 🍪`
+            );
             return;
         }
 
@@ -66,14 +72,24 @@ const cookieCommand = async (client, message) => {
             const hours = Math.floor(timeLeft / (1000 * 60 * 60));
             const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
 
-            client.log.logAndReply(message, `Você já resgatou o seu cookie diário hoje. Volte em ${hours}h ${minutes}m para resgatar o seu cookie diário novamente ⌛`);
+            client.log.logAndReply(
+                message,
+                `Você já resgatou o seu cookie diário hoje. Volte em ${hours}h ${minutes}m para resgatar o seu cookie diário novamente ⌛`
+            );
             return;
         }
 
         userCookieStats.total += 1;
         userCookieStats.claimedToday = true;
-        await client.db.update('cookie', { userId: message.senderUserID }, { $set: { total: userCookieStats.total, claimedToday: userCookieStats.claimedToday } });
-        client.log.logAndReply(message, `Você resgatou seu cookie diário e agora tem ${userCookieStats.total} cookies! 🍪`);
+        await client.db.update(
+            'cookie',
+            { userId: message.senderUserID },
+            { $set: { total: userCookieStats.total, claimedToday: userCookieStats.claimedToday } }
+        );
+        client.log.logAndReply(
+            message,
+            `Você resgatou seu cookie diário e agora tem ${userCookieStats.total} cookies! 🍪`
+        );
         return;
     }
 
@@ -81,37 +97,56 @@ const cookieCommand = async (client, message) => {
         const userCookieStats = await loadUserCookieStats(client, message.senderUserID);
 
         if (!userCookieStats || userCookieStats.total <= 0) {
-            client.log.logAndReply(message, `Você não tem cookies para abrir. Use ${message.commandPrefix}cd para resgatar o cookie diário`);
+            client.log.logAndReply(
+                message,
+                `Você não tem cookies para abrir. Use ${message.commandPrefix}cd para resgatar o cookie diário`
+            );
             return;
         }
 
         userCookieStats.total -= 1;
         userCookieStats.opened += 1;
-        await client.db.update('cookie', { userId: message.senderUserID }, { $set: { total: userCookieStats.total, opened: userCookieStats.opened } });
+        await client.db.update(
+            'cookie',
+            { userId: message.senderUserID },
+            { $set: { total: userCookieStats.total, opened: userCookieStats.opened } }
+        );
         const randomFrase = randomChoice(cookieFrases.split('\n')).replace(/[\n\r]/g, ' ');
-        client.log.logAndReply(message, `${randomFrase} 🥠`)
+        client.log.logAndReply(message, `${randomFrase} 🥠`);
         return;
     }
 
     if (['oferecer', 'gift', 'give', 'oferta', 'offer'].includes(targetCommand)) {
         const userCookieStats = await loadUserCookieStats(client, message.senderUserID);
         if (!userCookieStats) {
-            client.log.logAndReply(message, `Você não tem cookies para oferecer. Use ${message.commandPrefix}cd para resgatar o seu cookie diário`);
+            client.log.logAndReply(
+                message,
+                `Você não tem cookies para oferecer. Use ${message.commandPrefix}cd para resgatar o seu cookie diário`
+            );
             return;
         }
         if (userCookieStats.total <= 0) {
-            client.log.logAndReply(message, `Você não tem cookies para oferecer. Use ${message.commandPrefix}cd para resgatar o seu cookie diário`);
+            client.log.logAndReply(
+                message,
+                `Você não tem cookies para oferecer. Use ${message.commandPrefix}cd para resgatar o seu cookie diário`
+            );
             return;
         }
 
         if (userCookieStats.giftedToday) {
-            client.log.logAndReply(message, `Você já ofereceu um cookie hoje. Agora só pode oferecer novamente amanhã ⌛`);
+            client.log.logAndReply(
+                message,
+                `Você já ofereceu um cookie hoje. Agora só pode oferecer novamente amanhã ⌛`
+            );
             return;
         }
 
         const targetUser = message.messageText.split(' ')[2]?.replace(/^@/, '');
         if (!targetUser) {
-            client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}cookie gift <usuário>`);
+            client.log.logAndReply(
+                message,
+                `Use o formato: ${message.commandPrefix}cookie gift <usuário>`
+            );
             return;
         }
 
@@ -128,23 +163,54 @@ const cookieCommand = async (client, message) => {
 
         const targetUserCookieStats = await loadUserCookieStats(client, targetUserID);
         if (!targetUserCookieStats) {
-            client.log.logAndReply(message, `${targetUser} ainda não foi registrado (nunca usou ${message.commandPrefix}cd)`);
+            client.log.logAndReply(
+                message,
+                `${targetUser} ainda não foi registrado (nunca usou ${message.commandPrefix}cd)`
+            );
             return;
         }
 
         targetUserCookieStats.beenGifted += 1;
         userCookieStats.total -= 1;
         userCookieStats.gifted += 1;
-        await client.db.update('cookie', { userId: message.senderUserID }, { $set: { total: userCookieStats.total, gifted: userCookieStats.gifted, giftedToday: true } });
-        await client.db.update('cookie', { userId: targetUserID }, { $set: { beenGifted: targetUserCookieStats.beenGifted, total: targetUserCookieStats.total + 1 } });
-        const emote = await client.emotes.getEmoteFromList(message.channelName, ['peepoCookie'], '🎁🍪')
+        await client.db.update(
+            'cookie',
+            { userId: message.senderUserID },
+            {
+                $set: {
+                    total: userCookieStats.total,
+                    gifted: userCookieStats.gifted,
+                    giftedToday: true,
+                },
+            }
+        );
+        await client.db.update(
+            'cookie',
+            { userId: targetUserID },
+            {
+                $set: {
+                    beenGifted: targetUserCookieStats.beenGifted,
+                    total: targetUserCookieStats.total + 1,
+                },
+            }
+        );
+        const emote = await client.emotes.getEmoteFromList(
+            message.channelName,
+            ['peepoCookie'],
+            '🎁🍪'
+        );
         client.log.logAndReply(message, `Você ofereceu um cookie para ${targetUser} ${emote}`);
         return;
     }
 
     if (['stats', 'mostrar', 'show'].includes(targetCommand)) {
-        const targetUser = message.messageText.split(' ')[2] ? message.messageText.split(' ')[2].replace(/^@/, '') : message.senderUsername;
-        const targetUserID = (targetUser !== message.senderUsername) ? await client.getUserID(targetUser) : message.senderUserID;
+        const targetUser = message.messageText.split(' ')[2]
+            ? message.messageText.split(' ')[2].replace(/^@/, '')
+            : message.senderUsername;
+        const targetUserID =
+            targetUser !== message.senderUsername
+                ? await client.getUserID(targetUser)
+                : message.senderUserID;
         if (!targetUserID) {
             client.log.logAndReply(message, `Esse usuário não existe`);
             return;
@@ -152,7 +218,10 @@ const cookieCommand = async (client, message) => {
 
         const userCookieStats = await loadUserCookieStats(client, targetUserID);
         if (!userCookieStats) {
-            client.log.logAndReply(message, `${targetUser} ainda não foi registrado (nunca usou ${message.commandPrefix}cd)`);
+            client.log.logAndReply(
+                message,
+                `${targetUser} ainda não foi registrado (nunca usou ${message.commandPrefix}cd)`
+            );
             return;
         }
 
@@ -161,14 +230,16 @@ const cookieCommand = async (client, message) => {
         const gifted = userCookieStats.gifted;
         const beenGifted = userCookieStats.beenGifted;
         const sloted = userCookieStats.sloted;
-        client.log.logAndReply(message, `${targetUser} tem ${total} cookies, 🥠 abriu ${opened}, 🎁 ofereceu ${gifted}, 🎁 foi presenteado com ${beenGifted} e 🎰 apostou ${sloted}`);
+        client.log.logAndReply(
+            message,
+            `${targetUser} tem ${total} cookies, 🥠 abriu ${opened}, 🎁 ofereceu ${gifted}, 🎁 foi presenteado com ${beenGifted} e 🎰 apostou ${sloted}`
+        );
         return;
     }
 
     if (['top', 'ranking', 'rank', 'leaderboard', 'lb'].includes(targetCommand)) {
-
         if (['gift', 'gifts', 'oferta', 'gifted'].includes(args[2])) {
-            const topUsers = await client.db.get('cookie', { userId: { "$ne": "925782584" } });
+            const topUsers = await client.db.get('cookie', { userId: { $ne: '925782584' } });
             topUsers.sort((a, b) => b.gifted - a.gifted);
 
             // only top 5
@@ -200,7 +271,7 @@ const cookieCommand = async (client, message) => {
         }
 
         if (['aposta', 'apostas', 'slot', 'slots'].includes(args[2])) {
-            const topUsers = await client.db.get('cookie', { userId: { "$ne": "925782584" } });
+            const topUsers = await client.db.get('cookie', { userId: { $ne: '925782584' } });
             topUsers.sort((a, b) => b.sloted - a.sloted);
 
             // only top 5
@@ -231,7 +302,7 @@ const cookieCommand = async (client, message) => {
             return;
         }
 
-        const topUsers = await client.db.get('cookie', { userId: { "$ne": "925782584" } });
+        const topUsers = await client.db.get('cookie', { userId: { $ne: '925782584' } });
         topUsers.sort((a, b) => b.total - a.total);
 
         // only top 5
@@ -265,12 +336,18 @@ const cookieCommand = async (client, message) => {
     if (['apostar', 'slot', 'slotmachine'].includes(targetCommand)) {
         const userCookieStats = await loadUserCookieStats(client, message.senderUserID);
         if (!userCookieStats || userCookieStats.total <= 0) {
-            client.log.logAndReply(message, `Você não tem cookies para apostar. Use ${message.commandPrefix}cd para resgatar o seu cookie diário`);
+            client.log.logAndReply(
+                message,
+                `Você não tem cookies para apostar. Use ${message.commandPrefix}cd para resgatar o seu cookie diário`
+            );
             return;
         }
 
         if (userCookieStats.usedSlot) {
-            client.log.logAndReply(message, `Você já apostou hoje. Agora só pode apostar novamente amanhã ⌛`);
+            client.log.logAndReply(
+                message,
+                `Você já apostou hoje. Agora só pode apostar novamente amanhã ⌛`
+            );
             return;
         }
 
@@ -278,43 +355,88 @@ const cookieCommand = async (client, message) => {
         // TODO: add joker card 🃏 with 1% chance of appearing
         // - if 2 jokers, add 5% of current jackpot to jackpot
         // - if 3 jokers, give 5% of current jackpot to user
-        const getSlotSymbol = () => {
-            // 1% chance for joker, 99% chance for regular symbols
-            const isJoker = Math.random() < 0.01;
-            if (isJoker) {
-                return '🃏';
-            }
-            return randomChoice(['🍒', '🍊', '🍋', '🍇', '🍉', '🍓']);
-        };
-        const slotResults2 = [getSlotSymbol(), getSlotSymbol(), getSlotSymbol()];
+        // const getSlotSymbol = () => {
+        //     // 1% chance for joker, 99% chance for regular symbols
+        //     const isJoker = Math.random() < 0.01;
+        //     if (isJoker) {
+        //         return '🃏';
+        //     }
+        //     return randomChoice(['🍒', '🍊', '🍋', '🍇', '🍉', '🍓']);
+        // };
+        // const slotResults2 = [getSlotSymbol(), getSlotSymbol(), getSlotSymbol()];
 
-        const currentJackpot = await client.db.get('cookie', { userId: process.env.BOT_USERID });
+        // const currentJackpot = await client.db.get('cookie', { userId: process.env.BOT_USERID });
 
-        const slotResults = [randomChoice(['🍒', '🍊', '🍋', '🍇', '🍉', '🍓']), randomChoice(['🍒', '🍊', '🍋', '🍇', '🍉', '🍓']), randomChoice(['🍒', '🍊', '🍋', '🍇', '🍉', '🍓'])];
+        const slotResults = [
+            randomChoice(['🍒', '🍊', '🍋', '🍇', '🍉', '🍓']),
+            randomChoice(['🍒', '🍊', '🍋', '🍇', '🍉', '🍓']),
+            randomChoice(['🍒', '🍊', '🍋', '🍇', '🍉', '🍓']),
+        ];
         let reply = `[${slotResults[0]}${slotResults[1]}${slotResults[2]}] `;
 
         if (slotResults[0] === slotResults[1] && slotResults[0] === slotResults[2]) {
-            const emote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.pogEmotes, 'PogChamp');
+            const emote = await client.emotes.getEmoteFromList(
+                message.channelName,
+                client.emotes.pogEmotes,
+                'PogChamp'
+            );
             reply += `você apostou 1 cookie e ganhou 10 cookies! ${emote}`;
             userCookieStats.total += 9;
             userCookieStats.sloted += 1;
             userCookieStats.usedSlot = true;
-            await client.db.update('cookie', { userId: message.senderUserID }, { $set: { total: userCookieStats.total, sloted: userCookieStats.sloted, usedSlot: userCookieStats.usedSlot } });
-
-        } else if (slotResults[0] === slotResults[1] || slotResults[0] === slotResults[2] || slotResults[1] === slotResults[2]) {
+            await client.db.update(
+                'cookie',
+                { userId: message.senderUserID },
+                {
+                    $set: {
+                        total: userCookieStats.total,
+                        sloted: userCookieStats.sloted,
+                        usedSlot: userCookieStats.usedSlot,
+                    },
+                }
+            );
+        } else if (
+            slotResults[0] === slotResults[1] ||
+            slotResults[0] === slotResults[2] ||
+            slotResults[1] === slotResults[2]
+        ) {
             reply += `você apostou 1 cookie e ganhou 3 cookies!`;
             userCookieStats.total += 2;
             userCookieStats.sloted += 1;
             userCookieStats.usedSlot = true;
-            await client.db.update('cookie', { userId: message.senderUserID }, { $set: { total: userCookieStats.total, sloted: userCookieStats.sloted, usedSlot: userCookieStats.usedSlot } });
+            await client.db.update(
+                'cookie',
+                { userId: message.senderUserID },
+                {
+                    $set: {
+                        total: userCookieStats.total,
+                        sloted: userCookieStats.sloted,
+                        usedSlot: userCookieStats.usedSlot,
+                    },
+                }
+            );
         } else {
-            const emote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.sadEmotes, ':(');
+            const emote = await client.emotes.getEmoteFromList(
+                message.channelName,
+                client.emotes.sadEmotes,
+                ':('
+            );
             // reply += `você apostou 1 cookie e ficou sem ele... (adicionado ao jackpot ⇒ ${currentJackpot[0].total + 1}) ${emote}`;
             reply += `você apostou 1 cookie e ficou sem ele... ${emote}`;
             userCookieStats.total -= 1;
             userCookieStats.sloted += 1;
             userCookieStats.usedSlot = true;
-            await client.db.update('cookie', { userId: message.senderUserID }, { $set: { total: userCookieStats.total, sloted: userCookieStats.sloted, usedSlot: userCookieStats.usedSlot } });
+            await client.db.update(
+                'cookie',
+                { userId: message.senderUserID },
+                {
+                    $set: {
+                        total: userCookieStats.total,
+                        sloted: userCookieStats.sloted,
+                        usedSlot: userCookieStats.usedSlot,
+                    },
+                }
+            );
 
             // increase jackpot by adding 1 cookie to folhinhabot
             // await client.db.update('cookie', { userId: process.env.BOT_USERID }, { $inc: { total: 1 } });
@@ -324,14 +446,16 @@ const cookieCommand = async (client, message) => {
         return;
     }
 
-    client.log.logAndReply(message, `Está com dúvidas sobre os comandos de cookie? Acesse https://folhinhabot.com/comandos/cookie 😁`);
+    client.log.logAndReply(
+        message,
+        `Está com dúvidas sobre os comandos de cookie? Acesse https://folhinhabot.com/comandos/cookie 😁`
+    );
     return;
 };
 
-
 const cookieDiarioCommand = async (client, message) => {
     message.command = 'cd';
-    if (!await processCommand(5000, 'user', message, client)) return;
+    if (!(await processCommand(5000, 'user', message, client))) return;
 
     const userCookieStats = await loadUserCookieStats(client, message.senderUserID);
     if (!userCookieStats) {
@@ -356,14 +480,24 @@ const cookieDiarioCommand = async (client, message) => {
         const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
         const timeLeftString = hours == 0 && minutes == 0 ? `${seconds}s` : `${hours}h ${minutes}m`;
 
-        client.log.logAndReply(message, `Você já resgatou o seu cookie diário hoje. Volte em ${timeLeftString} para resgatar o seu cookie diário novamente ⌛`);
+        client.log.logAndReply(
+            message,
+            `Você já resgatou o seu cookie diário hoje. Volte em ${timeLeftString} para resgatar o seu cookie diário novamente ⌛`
+        );
         return;
     }
 
     userCookieStats.total += 1;
     userCookieStats.claimedToday = true;
-    await client.db.update('cookie', { userId: message.senderUserID }, { $set: { total: userCookieStats.total, claimedToday: userCookieStats.claimedToday } });
-    client.log.logAndReply(message, `Você resgatou seu cookie diário e agora tem ${userCookieStats.total} cookies! 🍪`);
+    await client.db.update(
+        'cookie',
+        { userId: message.senderUserID },
+        { $set: { total: userCookieStats.total, claimedToday: userCookieStats.claimedToday } }
+    );
+    client.log.logAndReply(
+        message,
+        `Você resgatou seu cookie diário e agora tem ${userCookieStats.total} cookies! 🍪`
+    );
     return;
 };
 
@@ -390,10 +524,8 @@ cookieDiarioCommand.aliases = ['cd'];
 cookieDiarioCommand.shortDescription = 'Resgate o seu cookie diário';
 cookieDiarioCommand.cooldown = 5000;
 cookieDiarioCommand.whisperable = true;
-cookieDiarioCommand.description = 'Uso: !cd; Resposta esperada: Você resgatou seu cookie diário e agora tem {cookies}';
+cookieDiarioCommand.description =
+    'Uso: !cd; Resposta esperada: Você resgatou seu cookie diário e agora tem {cookies}';
 cookieDiarioCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${cookieCommand.commandName}/${cookieCommand.commandName}.js`;
 
-module.exports = {
-    cookieCommand,
-    cookieDiarioCommand,
-};
+export { cookieCommand, cookieDiarioCommand };

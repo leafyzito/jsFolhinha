@@ -1,16 +1,19 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { timeSince } = require("../../utils/utils.js");
+import { processCommand } from '../../utils/processCommand.js';
+import { timeSince } from '../../utils/utils.js';
 
 const lastSeenCommand = async (client, message) => {
     message.command = 'lastseen';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
     if (message.messageText.split(' ').length === 1) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}lastseen <usuário>`);
+        client.log.logAndReply(
+            message,
+            `Use o formato: ${message.commandPrefix}lastseen <usuário>`
+        );
         return;
     }
 
-    const targetUser = message.messageText.split(' ')[1].toLowerCase().replace(/^@/, '')
+    const targetUser = message.messageText.split(' ')[1].toLowerCase().replace(/^@/, '');
 
     if (targetUser === message.senderUsername) {
         client.log.logAndReply(message, `Você tá aqui mesmo Stare`);
@@ -35,14 +38,20 @@ const lastSeenCommand = async (client, message) => {
     }
 
     if (userInfo[0].optoutLs) {
-        client.log.logAndReply(message, `Esse usuário optou por não ser alvo de comandos lastseen 🚫`);
+        client.log.logAndReply(
+            message,
+            `Esse usuário optou por não ser alvo de comandos lastseen 🚫`
+        );
         return;
     }
 
     const lsDate = userInfo[0].lsDate;
     const timeSinceLs = timeSince(lsDate);
 
-    client.log.logAndReply(message, `${targetUser} foi visto pela última vez num chat há ${timeSinceLs}`);
+    client.log.logAndReply(
+        message,
+        `${targetUser} foi visto pela última vez num chat há ${timeSinceLs}`
+    );
 };
 
 lastSeenCommand.commandName = 'lastseen';
@@ -54,6 +63,4 @@ lastSeenCommand.description = `Pesquise há quanto tempo um usuário foi visto p
 Se quiser desabilitar a função de outras pessoas usarem este comando em você, use !optout lastseen`;
 lastSeenCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${lastSeenCommand.commandName}/${lastSeenCommand.commandName}.js`;
 
-module.exports = {
-    lastSeenCommand,
-};
+export { lastSeenCommand };

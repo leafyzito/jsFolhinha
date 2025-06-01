@@ -1,6 +1,5 @@
-const { underline } = require('discord.js');
-const { randomChoice } = require('./utils.js');
-const fetch = require('node-fetch');
+import { randomChoice } from './utils.js';
+import fetch from 'node-fetch';
 
 class Emotes {
     constructor(client) {
@@ -8,12 +7,22 @@ class Emotes {
         this.cachedEmotes = {};
         this.sadEmotes = ['sadge', 'sadgecry', 'sadcat', 'sadchamp'];
         this.happyEmotes = ['peepoglad', 'gladge', 'peepohappy', 'peepohappyu', 'happycat'];
-        this.pogEmotes = ['pog', 'pogu', 'pagbounce', 'pogg', 'pogs', 'noway', 'nowaying', 'nowaycat', 'eba'];
+        this.pogEmotes = [
+            'pog',
+            'pogu',
+            'pagbounce',
+            'pogg',
+            'pogs',
+            'noway',
+            'nowaying',
+            'nowaycat',
+            'eba',
+        ];
     }
 
     async get7tv(channelId) {
         try {
-            var sevenTvEmotes = [];
+            let sevenTvEmotes = [];
             const url = `https://7tv.io/v3/users/twitch/${channelId}`;
             const response = await fetch(url);
 
@@ -32,8 +41,7 @@ class Emotes {
             }
 
             return data.emote_set.emotes.map(emote => emote.name);
-        }
-        catch (err) {
+        } catch (err) {
             console.log(`* Error fetching 7tv emotes for ${channelId}: ${err}`);
             this.client.discord.logError(`Error fetching 7tv emotes for ${channelId}: ${err}`);
             return [];
@@ -42,7 +50,7 @@ class Emotes {
 
     async getBttv(channelId) {
         try {
-            var bttvEmotes = [];
+            let bttvEmotes = [];
             const url = `https://api.betterttv.net/3/cached/users/twitch/${channelId}`;
             const response = await fetch(url);
             const data = await response.json();
@@ -52,8 +60,7 @@ class Emotes {
             }
 
             return [...data.channelEmotes, ...data.sharedEmotes].map(emote => emote.code);
-        }
-        catch (err) {
+        } catch (err) {
             console.log(`* Error fetching bttv emotes for ${channelId}: ${err}`);
             this.client.discord.logError(`Error fetching bttv emotes for ${channelId}: ${err}`);
             return [];
@@ -62,7 +69,7 @@ class Emotes {
 
     async getFfz(channelId) {
         try {
-            var ffzEmotes = [];
+            let ffzEmotes = [];
             const url = `https://api.frankerfacez.com/v1/room/id/${channelId}`;
             const response = await fetch(url);
             const data = await response.json();
@@ -73,8 +80,7 @@ class Emotes {
 
             const setId = data.room.set;
             return data.sets[setId].emoticons.map(emote => emote.name);
-        }
-        catch (err) {
+        } catch (err) {
             console.log(`* Error fetching ffz emotes for ${channelId}: ${err}`);
             this.client.discord.logError(`Error fetching ffz emotes for ${channelId}: ${err}`);
             return [];
@@ -96,7 +102,9 @@ class Emotes {
             console.log(`* Fetching emotes for ${channelName}`);
             this.client.discord.log(`* Fetching emotes for ${channelName}`);
             const channelId = await this.client.getUserID(channelName);
-            if (!channelId) { return []; }
+            if (!channelId) {
+                return [];
+            }
             return this.getEmotes(channelId, channelName);
         }
 
@@ -104,12 +112,16 @@ class Emotes {
     }
 
     async getEmoteFromList(channelName, emoteList, defaultResponse = '') {
-        if (channelName === 'whisper') { return defaultResponse; }
-        var channelEmotes = await this.getChannelEmotes(channelName);
-        var possibleEmotes = [];
-        emoteList.forEach((emote) => {
+        if (channelName === 'whisper') {
+            return defaultResponse;
+        }
+        let channelEmotes = await this.getChannelEmotes(channelName);
+        let possibleEmotes = [];
+        emoteList.forEach(emote => {
             const lowercaseEmote = emote.toLowerCase();
-            const originalCaseEmote = channelEmotes.find(channelEmote => channelEmote.toLowerCase() === lowercaseEmote);
+            const originalCaseEmote = channelEmotes.find(
+                channelEmote => channelEmote.toLowerCase() === lowercaseEmote
+            );
             if (originalCaseEmote) {
                 possibleEmotes.push(originalCaseEmote);
             }
@@ -117,9 +129,6 @@ class Emotes {
 
         return randomChoice(possibleEmotes) || defaultResponse;
     }
-
 }
 
-module.exports = {
-    Emotes
-};
+export { Emotes };

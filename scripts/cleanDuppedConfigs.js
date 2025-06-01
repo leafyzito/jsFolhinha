@@ -1,9 +1,9 @@
 require('dotenv').config();
-const { MongoClient } = require('mongodb');
-const readline = require('readline');
+import { MongoClient } from 'mongodb';
+import readline from 'readline';
 const mongoUri = process.env.MONGO_URI;
 const clientMongo = new MongoClient(mongoUri);
-const db = clientMongo.db("folhinha");
+const db = clientMongo.db('folhinha');
 
 const processedConfigs = [];
 const duppedConfigs = [];
@@ -11,13 +11,13 @@ const duppedConfigs = [];
 // Create readline interface
 const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout
+    output: process.stdout,
 });
 
 // Promise-based function to ask for confirmation
 function askForConfirmation() {
-    return new Promise((resolve) => {
-        rl.question('Press Enter to proceed with deletion, or type "no" to cancel: ', (answer) => {
+    return new Promise(resolve => {
+        rl.question('Press Enter to proceed with deletion, or type "no" to cancel: ', answer => {
             resolve(answer.toLowerCase() !== 'no');
         });
     });
@@ -49,12 +49,17 @@ async function main() {
 
         // Show what will be deleted
         for (const channelId of duppedConfigs) {
-            const registries = await db.collection('config').find({ channelId: channelId }).toArray();
+            const registries = await db
+                .collection('config')
+                .find({ channelId: channelId })
+                .toArray();
             const highestRegistry = registries.reduce((highest, current) => {
                 return highest.msgCount.total > current.msgCount.total ? highest : current;
             });
             const registriesToDelete = registries.filter(r => r._id !== highestRegistry._id);
-            console.log(`Will delete ${registries.length - 1} registries for channel ${channelId} (keeping id: ${highestRegistry._id} (msgCount: ${highestRegistry.msgCount.total}), deleting ids: ${registriesToDelete.map(r => `${r._id} (msgCount: ${r.msgCount.total})`).join(', ')})`);
+            console.log(
+                `Will delete ${registries.length - 1} registries for channel ${channelId} (keeping id: ${highestRegistry._id} (msgCount: ${highestRegistry.msgCount.total}), deleting ids: ${registriesToDelete.map(r => `${r._id} (msgCount: ${r.msgCount.total})`).join(', ')})`
+            );
         }
 
         // Ask for confirmation
@@ -62,19 +67,25 @@ async function main() {
 
         if (confirmed) {
             // Proceed with deletion
-            for (const userId of duppedConfigs) {
-                const registries = await db.collection('users').find({ userid: userId }).toArray();
+            for (const channelId of duppedConfigs) {
+                const registries = await db
+                    .collection('config')
+                    .find({ channelId: channelId })
+                    .toArray();
                 const highestRegistry = registries.reduce((highest, current) => {
                     return highest.msgCount.total > current.msgCount.total ? highest : current;
                 });
-                console.log(`Deleting ${registries.length - 1} registries for channel ${channelId} (keeping id: ${highestRegistry._id})`);
-                await db.collection('config').deleteMany({ channelId: channelId, _id: { $ne: highestRegistry._id } });
+                console.log(
+                    `Deleting ${registries.length - 1} registries for channel ${channelId} (keeping id: ${highestRegistry._id})`
+                );
+                await db
+                    .collection('config')
+                    .deleteMany({ channelId: channelId, _id: { $ne: highestRegistry._id } });
             }
             console.log('Deletion completed successfully.');
         } else {
             console.log('Operation cancelled by user.');
         }
-
     } catch (error) {
         console.error('Error:', error);
     } finally {
@@ -85,4 +96,3 @@ async function main() {
 
 // Execute the function
 main();
-

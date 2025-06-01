@@ -1,4 +1,4 @@
-const { processCommand } = require("../../utils/processCommand.js");
+import { processCommand } from '../../utils/processCommand.js';
 
 async function getModList(user) {
     const api_url = `https://roles.tv/api/summary/moderators/login/${user}`;
@@ -14,14 +14,20 @@ async function getModList(user) {
     const totalAffiliates = data.data.affiliates;
     const totalFollowers = data.data.channelsTotalFollowers;
 
-    return { totalPartners, totalMods, totalAffiliates, totalFollowers: totalFollowers.toLocaleString('en-US') };
+    return {
+        totalPartners,
+        totalMods,
+        totalAffiliates,
+        totalFollowers: totalFollowers.toLocaleString('en-US'),
+    };
 }
 
 const modListCommand = async (client, message) => {
     message.command = 'modlist';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
-    const targetUser = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
+    const targetUser =
+        message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
     const userModList = await getModList(targetUser);
 
     if (userModList === null) {
@@ -34,8 +40,10 @@ const modListCommand = async (client, message) => {
         return;
     }
 
-    client.log.logAndReply(message, `${targetUser} é moderador em ${userModList.totalMods} canais | ${userModList.totalPartners} Parceiros | ${userModList.totalAffiliates} Afiliados | ${userModList.totalFollowers} Seguidores no total - https://roles.tv/u/${targetUser.toLowerCase()}`);
-
+    client.log.logAndReply(
+        message,
+        `${targetUser} é moderador em ${userModList.totalMods} canais | ${userModList.totalPartners} Parceiros | ${userModList.totalAffiliates} Afiliados | ${userModList.totalFollowers} Seguidores no total - https://roles.tv/u/${targetUser.toLowerCase()}`
+    );
 };
 
 modListCommand.commandName = 'modlist';
@@ -48,6 +56,4 @@ modListCommand.description = `Exibe uma lista de canais onde o usuário fornecid
 • Exemplo: !modlist {usuário} - Exibe a lista de canais que o usuário fornecido é moderador`;
 modListCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${modListCommand.commandName}/${modListCommand.commandName}.js`;
 
-module.exports = {
-    modListCommand,
-};
+export { modListCommand };

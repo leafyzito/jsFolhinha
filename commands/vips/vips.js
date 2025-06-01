@@ -1,4 +1,4 @@
-const { processCommand } = require("../../utils/processCommand.js");
+import { processCommand } from '../../utils/processCommand.js';
 
 async function getChannelVips(channel) {
     const api_url = `https://roles.tv/api/channel/login/${channel}`;
@@ -16,9 +16,10 @@ async function getChannelVips(channel) {
 
 const vipsCommand = async (client, message) => {
     message.command = 'vips';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
-    const targetChannel = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.channelName;
+    const targetChannel =
+        message.messageText.split(' ')[1]?.replace(/^@/, '') || message.channelName;
     const vips = await getChannelVips(targetChannel);
 
     if (vips === null) {
@@ -31,7 +32,10 @@ const vipsCommand = async (client, message) => {
         return;
     }
 
-    client.log.logAndReply(message, `Existem ${vips} VIPs em #${targetChannel} - https://roles.tv/c/${targetChannel.toLowerCase()}`);
+    client.log.logAndReply(
+        message,
+        `Existem ${vips} VIPs em #${targetChannel} - https://roles.tv/c/${targetChannel.toLowerCase()}`
+    );
 };
 
 vipsCommand.commandName = 'vips';
@@ -45,6 +49,4 @@ O comando funcionará mesmo em canais que o Folhinha não esteja presente
 • Exemplo: !vips {canal} - Exibe a lista de vips do canal escolhido`;
 vipsCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${vipsCommand.commandName}/${vipsCommand.commandName}.js`;
 
-module.exports = {
-    vipsCommand,
-};
+export { vipsCommand };

@@ -1,4 +1,4 @@
-const { processCommand } = require("../../utils/processCommand.js");
+import { processCommand } from '../../utils/processCommand.js';
 
 async function getChannelMods(channel) {
     const api_url = `https://roles.tv/api/channel/login/${channel}`;
@@ -16,9 +16,10 @@ async function getChannelMods(channel) {
 
 const modsCommand = async (client, message) => {
     message.command = 'mods';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
-    const targetChannel = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.channelName;
+    const targetChannel =
+        message.messageText.split(' ')[1]?.replace(/^@/, '') || message.channelName;
     const mods = await getChannelMods(targetChannel);
 
     if (mods === null) {
@@ -31,7 +32,10 @@ const modsCommand = async (client, message) => {
         return;
     }
 
-    client.log.logAndReply(message, `Existem ${mods} moderadores em #${targetChannel} - https://roles.tv/c/${targetChannel.toLowerCase()}`);
+    client.log.logAndReply(
+        message,
+        `Existem ${mods} moderadores em #${targetChannel} - https://roles.tv/c/${targetChannel.toLowerCase()}`
+    );
 };
 
 modsCommand.commandName = 'mods';
@@ -45,6 +49,4 @@ O comando funcionará mesmo em canais que o Folhinha não esteja presente
 • Exemplo: !mods {canal} - Exibe a lista de mods do canal escolhido`;
 modsCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${modsCommand.commandName}/${modsCommand.commandName}.js`;
 
-module.exports = {
-    modsCommand,
-};
+export { modsCommand };

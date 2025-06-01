@@ -1,42 +1,71 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { randomChoice, isStreamOnline } = require("../../utils/utils.js");
+import { processCommand } from '../../utils/processCommand.js';
+import { randomChoice, isStreamOnline } from '../../utils/utils.js';
 
 const talkieCommand = async (client, message, anonClient) => {
     message.command = 'talkie';
-    if (!await processCommand(15_000, 'channel', message, client)) return;
+    if (!(await processCommand(15_000, 'channel', message, client))) return;
 
     if (message.messageText.split(' ').length === 1) {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}talkie <mensagem>`);
         return;
     }
 
-    var msgContent = message.messageText.split(' ').slice(1).join(' ').trim();
+    let msgContent = message.messageText.split(' ').slice(1).join(' ').trim();
 
-    const otherPrefixes = ['$', '*', '!', '|', '+', '?', '%', '=', '&', '/', '#', '.', ',', '<', '>', '@', '⠀', '-', '\\', '\\'];
+    const otherPrefixes = [
+        '$',
+        '*',
+        '!',
+        '|',
+        '+',
+        '?',
+        '%',
+        '=',
+        '&',
+        '/',
+        '#',
+        '.',
+        ',',
+        '<',
+        '>',
+        '@',
+        '⠀',
+        '-',
+        '\\',
+        '\\',
+    ];
     while (otherPrefixes.some(char => msgContent.startsWith(char))) {
         msgContent = '' + msgContent.slice(1).trim();
     }
 
     if (msgContent === '') {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}talkie <mensagem válida>`);
+        client.log.logAndReply(
+            message,
+            `Use o formato: ${message.commandPrefix}talkie <mensagem válida>`
+        );
         return;
     }
 
-    var joinedChannels = [...anonClient.channelsToJoin]; // tirar daqui depois de tentado 1 vez
+    let joinedChannels = [...anonClient.channelsToJoin]; // tirar daqui depois de tentado 1 vez
     let targetChannel;
+    let foundTargetChannel = false;
     let i = 0;
     do {
         i++;
         targetChannel = randomChoice(joinedChannels) || message.channelName;
         const targetConfigs = client.channelConfigs[targetChannel];
-        if (targetChannel !== message.channelName
-            && targetChannel !== 'folhinha'
-            && targetChannel !== 'folhinhabot'
-            && (targetConfigs.disabledCommands && !targetConfigs.disabledCommands.includes(message.command))
-            && (targetConfigs.devBanCommands && !targetConfigs.devBanCommands.includes(message.command))
-            && !targetConfigs.isPaused
-            && !await isStreamOnline(targetChannel)
+        if (
+            targetChannel !== message.channelName &&
+            targetChannel !== 'folhinha' &&
+            targetChannel !== 'folhinhabot' &&
+            targetConfigs.disabledCommands &&
+            !targetConfigs.disabledCommands.includes(message.command) &&
+            targetConfigs.devBanCommands &&
+            !targetConfigs.devBanCommands.includes(message.command) &&
+            !targetConfigs.isPaused &&
+            !(await isStreamOnline(targetChannel))
         ) {
+            foundTargetChannel = true;
             break;
         }
         if (i > 100) {
@@ -45,19 +74,28 @@ const talkieCommand = async (client, message, anonClient) => {
         }
         console.log(`infinite loop looking for talkie target, currentTarget: ${targetChannel}`);
         joinedChannels = joinedChannels.filter(channel => channel !== targetChannel);
-    } while (true);
+    } while (!foundTargetChannel);
 
     // client.discord.log(`* Talkie ${message.channelName} > ${targetChannel}`);
     // console.log(`* Talkie ${message.channelName} > ${targetChannel}`);
     client.log.send(targetChannel, `🤖📞 ${msgContent}`);
 
-    const emote = await client.emotes.getEmoteFromList(message.channelName, ['peepogiggle', 'peepogiggles'], '🤭');
-    client.log.logAndReply(message, `Mensagem enviada ${emote}`, `${message.channelName} > ${targetChannel}`);
+    const emote = await client.emotes.getEmoteFromList(
+        message.channelName,
+        ['peepogiggle', 'peepogiggles'],
+        '🤭'
+    );
+    client.log.logAndReply(
+        message,
+        `Mensagem enviada ${emote}`,
+        `${message.channelName} > ${targetChannel}`
+    );
 };
 
 talkieCommand.commandName = 'talkie';
 talkieCommand.aliases = ['talkie'];
-talkieCommand.shortDescription = 'Envia uma mensagem para um canal aleatório que o bot esteja conectado';
+talkieCommand.shortDescription =
+    'Envia uma mensagem para um canal aleatório que o bot esteja conectado';
 talkieCommand.cooldown = 15000;
 talkieCommand.whisperable = false;
 talkieCommand.description = `Envie uma mensagem misteriosa para um canal aleatório que o Folhinha esteja conectado
@@ -66,6 +104,4 @@ talkieCommand.description = `Envie uma mensagem misteriosa para um canal aleató
 Se quiser desabilitar a possibilidade do seu chat ser um dos canais onde o bot irá enviar mensagens misteriosas, use o comando !config ban talkie`;
 talkieCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${talkieCommand.commandName}/${talkieCommand.commandName}.js`;
 
-module.exports = {
-    talkieCommand,
-};
+export { talkieCommand };

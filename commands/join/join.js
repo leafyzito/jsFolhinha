@@ -1,7 +1,6 @@
-const { join } = require("path");
-const { processCommand } = require("../../utils/processCommand.js");
-const fs = require('fs');
-const { addChannelToJustlog } = require('../../utils/justlog.js');
+import { processCommand } from '../../utils/processCommand.js';
+import fs from 'fs';
+import { addChannelToJustlog } from '../../utils/justlog.js';
 
 async function createNewConfig(client, message) {
     const newConfig = {
@@ -11,7 +10,7 @@ async function createNewConfig(client, message) {
         offlineOnly: false,
         isPaused: false,
         disabledCommands: [],
-        devBanCommands: []
+        devBanCommands: [],
     };
 
     await client.db.insert('config', newConfig);
@@ -22,45 +21,66 @@ async function createNewConfig(client, message) {
 
     client.discord.importantLog(`* Joining to ${message.senderUsername} from join command`);
 
-    fs.appendFile('channels.txt',
-        `${message.senderUserID} ${message.senderUsername}\n`, (err) => {
-            if (err) {
-                console.error(`Erro ao adicionar ${message.senderUsername} ao channels.txt: ${err}`);
-                return;
-            }
-            console.log('Data appended to channels.txt');
-        });
+    fs.appendFile('channels.txt', `${message.senderUserID} ${message.senderUsername}\n`, err => {
+        if (err) {
+            console.error(`Erro ao adicionar ${message.senderUsername} ao channels.txt: ${err}`);
+            return;
+        }
+        console.log('Data appended to channels.txt');
+    });
 
     return;
 }
 
 const joinCommand = async (client, message, anonClient) => {
     message.command = 'join';
-    if (!await processCommand(5000, 'user', message, client)) return;
+    if (!(await processCommand(5000, 'user', message, client))) return;
 
     const channelToJoin = message.senderUsername;
     const alreadyJoinedChannels = [...anonClient.joinedChannels];
 
     if (alreadyJoinedChannels.includes(channelToJoin)) {
-        client.log.logAndReply(message, `Eu já estou no seu chat! O meu prefixo lá é ${client.channelPrefixes[channelToJoin] || '!'}`);
+        client.log.logAndReply(
+            message,
+            `Eu já estou no seu chat! O meu prefixo lá é ${client.channelPrefixes[channelToJoin] || '!'}`
+        );
         return;
     }
 
     client.channelsToJoin.push(channelToJoin);
     anonClient.channelsToJoin.push(channelToJoin);
     await createNewConfig(client, message);
-    anonClient.join(channelToJoin).catch((err) => {
+    anonClient.join(channelToJoin).catch(err => {
         console.error(`Erro ao entrar no chat ${channelToJoin}: ${err}`);
-        client.log.logAndReply(message, `Erro ao entrar no chat ${channelToJoin}. Contacte o @${process.env.DEV_NICK}`);
+        client.log.logAndReply(
+            message,
+            `Erro ao entrar no chat ${channelToJoin}. Contacte o @${process.env.DEV_NICK}`
+        );
         return;
     });
 
-    const emote = await client.emotes.getEmoteFromList(channelToJoin, ['peepohey', 'heyge'], 'KonCha');
-    client.log.send(channelToJoin, `${emote} Oioi! Fui convidado para me juntar aqui! Para saber mais sobre mim, pode usar !ajuda ou !comandos`);
+    const emote = await client.emotes.getEmoteFromList(
+        channelToJoin,
+        ['peepohey', 'heyge'],
+        'KonCha'
+    );
+    client.log.send(
+        channelToJoin,
+        `${emote} Oioi! Fui convidado para me juntar aqui! Para saber mais sobre mim, pode usar !ajuda ou !comandos`
+    );
 
-    const happyEmote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.happyEmotes);
-    client.log.logAndReply(message, `Entrei no chat ${message.senderUsername} com sucesso! Tô lá te esperando! ${happyEmote} Caso tenha follow-mode ativado, me dê cargo de moderador no seu chat para conseguir falar lá`);
-    client.log.logAndWhisper(message, `Caso tenha follow-mode ativado no seu chat, me dê cargo de moderador para conseguir falar lá :D`);
+    const happyEmote = await client.emotes.getEmoteFromList(
+        message.channelName,
+        client.emotes.happyEmotes
+    );
+    client.log.logAndReply(
+        message,
+        `Entrei no chat ${message.senderUsername} com sucesso! Tô lá te esperando! ${happyEmote} Caso tenha follow-mode ativado, me dê cargo de moderador no seu chat para conseguir falar lá`
+    );
+    client.log.logAndWhisper(
+        message,
+        `Caso tenha follow-mode ativado no seu chat, me dê cargo de moderador para conseguir falar lá :D`
+    );
     return;
 };
 
@@ -74,6 +94,4 @@ joinCommand.description = `Utilize o comando !join num chat no qual o Folhinha e
 Caso tenha follow-mode ativado no seu chat, o bot não conseguirá falar no seu chat. Para resolver isso, dê cargo de moderador ou vip ao Folhinha`;
 joinCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${joinCommand.commandName}/${joinCommand.commandName}.js`;
 
-module.exports = {
-    joinCommand,
-};
+export { joinCommand };

@@ -1,26 +1,26 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { timeSince } = require("../../utils/utils.js");
+import { processCommand } from '../../utils/processCommand.js';
+import { timeSince } from '../../utils/utils.js';
 
 async function getRandomLine(userid, channelid) {
     let response;
     if (!userid) {
-        const url = `http://localhost:8025/channelid/${channelid}/random`
-        const headers = { accept: 'application/json' }
-        response = await fetch(url, { headers })
+        const url = `http://localhost:8025/channelid/${channelid}/random`;
+        const headers = { accept: 'application/json' };
+        response = await fetch(url, { headers });
         // console.log(data)
     } else {
-        const url = `http://localhost:8025/channelid/${channelid}/userid/${userid}/random`
-        const headers = { accept: 'application/json' }
-        response = await fetch(url, { headers })
+        const url = `http://localhost:8025/channelid/${channelid}/userid/${userid}/random`;
+        const headers = { accept: 'application/json' };
+        response = await fetch(url, { headers });
         // console.log(data)
     }
     if (response.status !== 200) {
         return null;
     }
-    const data = await response.text()
+    const data = await response.text();
     // Parse the log line into components
     const regex = /\[(.*?)\] #(.*?) (.*?): (.*)/;
-    const [_, timestamp, channelName, user, message] = data.match(regex);
+    const [, timestamp, channelName, user, message] = data.match(regex);
 
     // Convert timestamp to Unix time (assuming timestamp is in format "YYYY-MM-DD HH:mm:ss")
     const unixTimestamp = Math.floor(new Date(timestamp).getTime() / 1000);
@@ -29,13 +29,13 @@ async function getRandomLine(userid, channelid) {
         channel: channelName,
         user: user,
         message: message,
-        timeSince: timeSince(unixTimestamp)
-    }
+        timeSince: timeSince(unixTimestamp),
+    };
 }
 
 const randomLineCommand = async (client, message) => {
     message.command = 'randomline';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
     const targetUser = message.messageText.split(' ')[1]?.replace(/^@/, '') || null;
     const targetId = targetUser ? await client.getUserID(targetUser) : null;
@@ -46,15 +46,25 @@ const randomLineCommand = async (client, message) => {
 
     const randomLine = await getRandomLine(targetId, message.channelID);
     if (!targetId && !randomLine) {
-        client.log.logAndReply(message, `Nunca loguei uma mensagem desse usuário neste chat (contando desde 06/03/2025)`);
+        client.log.logAndReply(
+            message,
+            `Nunca loguei uma mensagem desse usuário neste chat (contando desde 06/03/2025)`
+        );
         return;
     }
-    if (!randomLine) { // this should never happen
-        client.log.logAndReply(message, `Nunca loguei uma mensagem desse usuário neste chat (contando desde 06/03/2025)`);
+    if (!randomLine) {
+        // this should never happen
+        client.log.logAndReply(
+            message,
+            `Nunca loguei uma mensagem desse usuário neste chat (contando desde 06/03/2025)`
+        );
         return;
     }
 
-    client.log.logAndReply(message, `(há ${randomLine.timeSince}) ${randomLine.user}: ${randomLine.message}`);
+    client.log.logAndReply(
+        message,
+        `(há ${randomLine.timeSince}) ${randomLine.user}: ${randomLine.message}`
+    );
     return;
 };
 
@@ -70,6 +80,4 @@ randomLineCommand.description = `Receba uma mensagem aleatória de um usuário f
 Começou a contar desde 06/03/2025`;
 randomLineCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${randomLineCommand.commandName}/${randomLineCommand.commandName}.js`;
 
-module.exports = {
-    randomLineCommand,
-};
+export { randomLineCommand };

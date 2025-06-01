@@ -1,27 +1,27 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const path = require('path');
-const fs = require('fs');
-const FormData = require('form-data');
-const fetch = require('node-fetch');
+import { processCommand } from '../../utils/processCommand.js';
+import path from 'path';
+import fs from 'fs';
+import FormData from 'form-data';
+import fetch from 'node-fetch';
 
 async function uploadToFeridinha(content, clipName) {
     const api_url = 'https://feridinha.com/upload';
-    const headers = { 'token': process.env.FERIDINHA_API_KEY };
+    const headers = { token: process.env.FERIDINHA_API_KEY };
 
     const form = new FormData();
     form.append('file', content, {
         filename: clipName,
-        contentType: 'video/mp4'
+        contentType: 'video/mp4',
     });
 
     try {
         const response = await fetch(api_url, {
             method: 'POST',
             headers: {
-                'token': headers.token,
-                ...form.getHeaders()
+                token: headers.token,
+                ...form.getHeaders(),
             },
-            body: form
+            body: form,
         });
 
         if (response.ok) {
@@ -52,7 +52,7 @@ async function makeClip(channelName) {
 
         // Resolve the path to the "clips" folder inside "twitchClipper"
         const clipsFolder = path.join(process.cwd(), 'twitchClipper/clips');
-        var clipPath = path.join(clipsFolder, data.path.replace(/^\//, ''));
+        let clipPath = path.join(clipsFolder, data.path.replace(/^\//, ''));
         console.log(clipPath);
         // upload clip to feridinha
         const clipName = path.basename(clipPath);
@@ -60,7 +60,6 @@ async function makeClip(channelName) {
         const clipUrl = await uploadToFeridinha(clipContent, clipName);
 
         return clipUrl;
-
     } catch (error) {
         console.log('Error making clip:', error);
         return null;
@@ -80,14 +79,20 @@ async function createTwitchClip(channelId, channelName, forceTwitchClip = false)
     const api_url = `https://api.twitch.tv/helix/clips?broadcaster_id=${channelId}&has_delay=true`;
     const response = await fetch(api_url, {
         method: 'POST',
-        headers: { "Client-ID": process.env.BOT_CLIENT_ID, "Authorization": `Bearer ${process.env.BOT_OAUTH_TOKEN}` }
+        headers: {
+            'Client-ID': process.env.BOT_CLIENT_ID,
+            Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
+        },
     });
 
     const data = await response.json();
-    if (data.status === 403 || data.status === 503) { // 403 is for forbidden, 503 is for service unavailable (error in twitch api)
+    if (data.status === 403 || data.status === 503) {
+        // 403 is for forbidden, 503 is for service unavailable (error in twitch api)
         return 'error';
-    };
-    if (data.status === 404) { return null; };
+    }
+    if (data.status === 404) {
+        return null;
+    }
 
     const clipId = data.data[0].id;
     const editUrl = data.data[0].edit_url;
@@ -97,17 +102,20 @@ async function createTwitchClip(channelId, channelName, forceTwitchClip = false)
 
     return {
         id: clipId,
-        editUrl: editUrl
-    }
+        editUrl: editUrl,
+    };
 }
-
 
 const clipCommand = async (client, message) => {
     message.command = 'clip';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
-    const targetChannel = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.channelName;
-    const targetId = message.channelName === targetChannel ? message.channelID : await client.getUserID(targetChannel);
+    const targetChannel =
+        message.messageText.split(' ')[1]?.replace(/^@/, '') || message.channelName;
+    const targetId =
+        message.channelName === targetChannel
+            ? message.channelID
+            : await client.getUserID(targetChannel);
     if (!targetId) {
         client.log.logAndReply(message, `Esse usuário não existe`);
         return;
@@ -120,21 +128,18 @@ const clipCommand = async (client, message) => {
     if (!clip) {
         client.log.logAndReply(message, `O canal ${targetChannel} não está em live`);
         return;
-    }
-    else if (clip === 'error') {
+    } else if (clip === 'error') {
         client.log.logAndReply(message, `⚠️ Erro ao criar clip, tente novamente`);
         return;
-    }
-    else if (clip === 'forbidden') {
+    } else if (clip === 'forbidden') {
         client.log.logAndReply(message, `Esse canal não permite criar clipes`);
         return;
     }
     if (clip.id) {
-        client.log.logAndReply(message, `🎬 https://clips.twitch.tv/${clip.id}`)
+        client.log.logAndReply(message, `🎬 https://clips.twitch.tv/${clip.id}`);
         return;
     }
-    client.log.logAndReply(message, `🎬 ${clip}`)
-
+    client.log.logAndReply(message, `🎬 ${clip}`);
 };
 
 clipCommand.commandName = 'clip';
@@ -148,6 +153,4 @@ clipCommand.description = `Crie um clip de alguma live. Se nenhum canal for espe
 • Exemplo: !clip @leafyzito -twitch - O bot vai criar um clip do canal do usuário @leafyzito, caso ele esteja em live, usando a api do twitch ao invés de upar o clip para o feridinha`;
 clipCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${clipCommand.commandName}/${clipCommand.commandName}.js`;
 
-module.exports = {
-    clipCommand,
-};
+export { clipCommand };

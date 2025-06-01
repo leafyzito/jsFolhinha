@@ -1,24 +1,32 @@
-const fs = require('fs');
-const path = require('path');
+// import { dirname } from 'path';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-var commandsList = {};
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+let commandsList = {};
 
 // Function to reload commands
-const loadCommands = () => {
+const loadCommands = async () => {
     // Clear existing commandsList
-    Object.keys(commandsList).forEach((key) => delete commandsList[key]);
+    Object.keys(commandsList).forEach(key => delete commandsList[key]);
 
     const commandsMainDir = path.join(__dirname, '.');
     const commandDirs = fs.readdirSync(commandsMainDir);
 
     for (const command of commandDirs) {
-        // Skil files, only process folders
-        if (command.includes('.js')) { continue; }
+        // Skip files, only process folders
+        if (command.includes('.js')) {
+            continue;
+        }
 
         const commandPath = path.join(commandsMainDir, command);
-        const fileModule = require(path.join(commandPath, `${command}.js`));
+        const fileModule = await import(path.join(commandPath, `${command}.js`));
+        // const __dirname = dirname(fileURLToPath(import.meta.url));
 
-        // For each fileModule that have multiple commands, add them to commandsList 
+        // For each fileModule that have multiple commands, add them to commandsList
         for (const commandName in fileModule) {
             if (commandName.includes('Command')) {
                 // For each alias, add them to commandsList
@@ -32,13 +40,8 @@ const loadCommands = () => {
         }
     }
 
-
     return commandsList;
 };
 
-
 // Export the loadCommands function
-module.exports = {
-    commandsList,
-    loadCommands,
-};
+export { commandsList, loadCommands };

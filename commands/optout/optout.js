@@ -1,18 +1,24 @@
-const { processCommand } = require("../../utils/processCommand.js");
+import { processCommand } from '../../utils/processCommand.js';
 
 const optoutCommand = async (client, message) => {
     message.command = 'optout';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
     if (message.messageText.split(' ').length === 1) {
-        client.log.logAndReply(message, `Use o formato ${message.commandPrefix}optout <lastseen/stalk>`);
+        client.log.logAndReply(
+            message,
+            `Use o formato ${message.commandPrefix}optout <lastseen/stalk>`
+        );
         return;
     }
 
     const optoutTarget = message.messageText.split(' ')[1]?.toLowerCase();
 
     if (!['channel', 'canal', 'lastseen', 'ls', 'stalk', 'remind'].includes(optoutTarget)) {
-        client.log.logAndReply(message, `Use o formato ${message.commandPrefix}optout <lastseen/stalk/remind>`);
+        client.log.logAndReply(
+            message,
+            `Use o formato ${message.commandPrefix}optout <lastseen/stalk/remind>`
+        );
         return;
     }
 
@@ -25,8 +31,15 @@ const optoutCommand = async (client, message) => {
         const channelOptout = await client.db.get('users', { userid: message.channelID });
         const currState = channelOptout[0].optoutOwnChannel;
 
-        await client.db.update('users', { userid: message.channelID }, { $set: { optoutOwnChannel: !currState } });
-        client.log.logAndReply(message, `A partir de agora o canal ${currState ? 'NÃO' : ''} será censurado em comandos stalk`);
+        await client.db.update(
+            'users',
+            { userid: message.channelID },
+            { $set: { optoutOwnChannel: !currState } }
+        );
+        client.log.logAndReply(
+            message,
+            `A partir de agora o canal ${currState ? 'NÃO' : ''} será censurado em comandos stalk`
+        );
         return;
     }
 
@@ -34,8 +47,15 @@ const optoutCommand = async (client, message) => {
         const userOptout = await client.db.get('users', { userid: message.senderUserID });
         const currState = userOptout[0].optoutLs;
 
-        await client.db.update('users', { userid: message.senderUserID }, { $set: { optoutLs: !currState } });
-        client.log.logAndReply(message, `A partir de agora você ${!currState ? 'NÃO' : ''} pode ser alvo de comandos lastseen`);
+        await client.db.update(
+            'users',
+            { userid: message.senderUserID },
+            { $set: { optoutLs: !currState } }
+        );
+        client.log.logAndReply(
+            message,
+            `A partir de agora você ${!currState ? 'NÃO' : ''} pode ser alvo de comandos lastseen`
+        );
         return;
     }
 
@@ -43,8 +63,15 @@ const optoutCommand = async (client, message) => {
         const userOptout = await client.db.get('users', { userid: message.senderUserID });
         const currState = userOptout[0].optoutStalk;
 
-        await client.db.update('users', { userid: message.senderUserID }, { $set: { optoutStalk: !currState } });
-        client.log.logAndReply(message, `A partir de agora você ${!currState ? 'NÃO' : ''} pode ser alvo de comandos stalk`);
+        await client.db.update(
+            'users',
+            { userid: message.senderUserID },
+            { $set: { optoutStalk: !currState } }
+        );
+        client.log.logAndReply(
+            message,
+            `A partir de agora você ${!currState ? 'NÃO' : ''} pode ser alvo de comandos stalk`
+        );
         return;
     }
 
@@ -52,11 +79,17 @@ const optoutCommand = async (client, message) => {
         const userOptout = await client.db.get('users', { userid: message.senderUserID });
         const currState = userOptout[0].optoutRemind;
 
-        await client.db.update('users', { userid: message.senderUserID }, { $set: { optoutRemind: !currState } });
-        client.log.logAndReply(message, `A partir de agora você ${!currState ? 'NÃO' : ''} pode ser alvo de comandos remind`);
+        await client.db.update(
+            'users',
+            { userid: message.senderUserID },
+            { $set: { optoutRemind: !currState } }
+        );
+        client.log.logAndReply(
+            message,
+            `A partir de agora você ${!currState ? 'NÃO' : ''} pode ser alvo de comandos remind`
+        );
         return;
     }
-
 };
 
 optoutCommand.commandName = 'optout';
@@ -71,6 +104,4 @@ optoutCommand.description = `Alterne entre o estado ativado e desativado de ser 
 !optout channel - Alterne o estado da censura do nome do seu canal no uso de comandos stalk`;
 optoutCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${optoutCommand.commandName}/${optoutCommand.commandName}.js`;
 
-module.exports = {
-    optoutCommand,
-};
+export { optoutCommand };

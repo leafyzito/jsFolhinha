@@ -1,14 +1,17 @@
-const { processCommand, resetCooldown } = require("../../utils/processCommand.js");
-const { waitForMessage, randomChoice, randomInt, capitalize } = require("../../utils/utils.js");
-const fs = require('fs');
-const path = require('path');
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+const __dirname = dirname(fileURLToPath(import.meta.url));
+import { processCommand } from '../../utils/processCommand.js';
+import { waitForMessage, randomChoice, randomInt, capitalize } from '../../utils/utils.js';
+import fs from 'fs';
+import path from 'path';
 
 const dungeonFilePath = path.join(__dirname, 'dungeon.json');
 const dungeonData = (() => {
     try {
         return JSON.parse(fs.readFileSync(dungeonFilePath, 'utf8'));
     } catch (err) {
-        console.error("Error reading dungeon.json:", err);
+        console.error('Error reading dungeon.json:', err);
         return null;
     }
 })();
@@ -23,7 +26,7 @@ async function createUserDungeonBase(client, message) {
         wins: 0,
         losses: 0,
         lastDungeon: 0,
-        cooldown: 0
+        cooldown: 0,
     };
 
     await client.db.insert('dungeon', insert_doc);
@@ -57,7 +60,7 @@ function getFormattedRemainingTime(seconds) {
     return `${hours}h ${minutesLeft}m ${secondsLeft}s`;
 }
 
-async function checkDungeonCooldown(client, message, userDungeonStats) {
+function checkDungeonCooldown(client, message, userDungeonStats) {
     const currentTime = Math.floor(Date.now() / 1000);
     const cooldownEndTime = userDungeonStats.lastDungeon + userDungeonStats.cooldown;
 
@@ -73,22 +76,30 @@ async function setNewCooldown(client, message, winOrLose) {
     const currentTime = Math.floor(Date.now() / 1000);
     let newCooldown;
     if (winOrLose === 'win') {
-        newCooldown = Math.floor(Math.random() * (2 * 60 * 60) + (30 * 60));
+        newCooldown = Math.floor(Math.random() * (2 * 60 * 60) + 30 * 60);
     } else if (winOrLose === 'lose') {
-        newCooldown = Math.floor(Math.random() * (10 * 60) + (20 * 60)); // 20 to 30 minutes
+        newCooldown = Math.floor(Math.random() * (10 * 60) + 20 * 60); // 20 to 30 minutes
     }
-    await client.db.update('dungeon', { userId: message.senderUserID }, { $set: { lastDungeon: currentTime, cooldown: newCooldown } });
+    await client.db.update(
+        'dungeon',
+        { userId: message.senderUserID },
+        { $set: { lastDungeon: currentTime, cooldown: newCooldown } }
+    );
     return getFormattedRemainingTime(newCooldown);
 }
 
 const dungeonCommand = async (client, message, anonClient) => {
     message.command = 'dungeon';
-    if (!await processCommand(12_000, 'user', message, client)) return;
+    if (!(await processCommand(12_000, 'user', message, client))) return;
 
     if (message.messageText.split(' ').length !== 1) {
         const userOption = message.messageText.split(' ')[1].toLowerCase();
-        const targetUser = message.messageText.split(' ')[2]?.replace(/^@/, '') || message.senderUsername;
-        const targetId = targetUser.toLowerCase() === message.senderUsername ? message.senderUserID : await client.getUserID(targetUser);
+        const targetUser =
+            message.messageText.split(' ')[2]?.replace(/^@/, '') || message.senderUsername;
+        const targetId =
+            targetUser.toLowerCase() === message.senderUsername
+                ? message.senderUserID
+                : await client.getUserID(targetUser);
         if (['show', 'stats', 'mostrar', 'level', 'lvl'].includes(userOption)) {
             let userDungeonStats = await client.db.get('dungeon', { userId: targetId });
             if (userDungeonStats.length === 0) {
@@ -98,8 +109,12 @@ const dungeonCommand = async (client, message, anonClient) => {
             }
 
             userDungeonStats = userDungeonStats[0];
-            const winrate = userDungeonStats.wins / (userDungeonStats.wins + userDungeonStats.losses) * 100;
-            await client.log.logAndReply(message, `${targetUser} tem ${Math.round(userDungeonStats.xp)} XP 🌟 está no nível ${userDungeonStats.level} com ${userDungeonStats.wins + userDungeonStats.losses} dungeons ⚔️ (${userDungeonStats.wins} vitórias e ${userDungeonStats.losses} derrotas - ${winrate.toFixed(2)}% winrate)`);
+            const winrate =
+                (userDungeonStats.wins / (userDungeonStats.wins + userDungeonStats.losses)) * 100;
+            await client.log.logAndReply(
+                message,
+                `${targetUser} tem ${Math.round(userDungeonStats.xp)} XP 🌟 está no nível ${userDungeonStats.level} com ${userDungeonStats.wins + userDungeonStats.losses} dungeons ⚔️ (${userDungeonStats.wins} vitórias e ${userDungeonStats.losses} derrotas - ${winrate.toFixed(2)}% winrate)`
+            );
             // resetCooldown(message.senderUsername, 'user', message.command, 30_000, 5_000);
             return;
         }
@@ -142,9 +157,16 @@ const dungeonCommand = async (client, message, anonClient) => {
     }
 
     const userDungeonStats = await loadUserDungeonStats(client, message);
-    const [canDungeon, remainingTime] = await checkDungeonCooldown(client, message, userDungeonStats);
+    const [canDungeon, remainingTime] = await checkDungeonCooldown(
+        client,
+        message,
+        userDungeonStats
+    );
     if (!canDungeon) {
-        await client.log.logAndReply(message, `Você se sente cansado... Só vai se sentir capaz de explorar novamente em ${remainingTime} ⏰`);
+        await client.log.logAndReply(
+            message,
+            `Você se sente cansado... Só vai se sentir capaz de explorar novamente em ${remainingTime} ⏰`
+        );
         return;
     }
 
@@ -152,11 +174,23 @@ const dungeonCommand = async (client, message, anonClient) => {
         senderUserID: message.senderUserID,
         senderUsername: message.senderUsername,
         channelName: message.channelName,
-        content: ['1', '2', `${message.commandPrefix}1`, `${message.commandPrefix}2`, `${message.commandPrefix}d 1`, `${message.commandPrefix}d 2`, `${message.commandPrefix}dungeon 1`, `${message.commandPrefix}dungeon 2`]
+        content: [
+            '1',
+            '2',
+            `${message.commandPrefix}1`,
+            `${message.commandPrefix}2`,
+            `${message.commandPrefix}d 1`,
+            `${message.commandPrefix}d 2`,
+            `${message.commandPrefix}dungeon 1`,
+            `${message.commandPrefix}dungeon 2`,
+        ],
     };
 
     const dungeon = dungeonData[Math.floor(Math.random() * dungeonData.length)];
-    await client.log.reply(message, `${capitalize(dungeon.quote)} você quer ${dungeon['1'].option} ou ${dungeon['2'].option}? Tem 10 segundos para responder (1 ou 2)`);
+    await client.log.reply(
+        message,
+        `${capitalize(dungeon.quote)} você quer ${dungeon['1'].option} ou ${dungeon['2'].option}? Tem 10 segundos para responder (1 ou 2)`
+    );
     const response = await waitForMessage(anonClient, check, 10_000);
     if (!response) {
         // if user level is 0, delete the dungeon stats
@@ -168,8 +202,12 @@ const dungeonCommand = async (client, message, anonClient) => {
 
     // set new cooldown, only after response
     const currentTime = Math.floor(Date.now() / 1000);
-    const newCooldown = Math.floor(Math.random() * (2 * 60 * 60) + (30 * 60));
-    await client.db.update('dungeon', { userId: message.senderUserID }, { $set: { lastDungeon: currentTime, cooldown: newCooldown } });
+    const newCooldown = Math.floor(Math.random() * (2 * 60 * 60) + 30 * 60);
+    await client.db.update(
+        'dungeon',
+        { userId: message.senderUserID },
+        { $set: { lastDungeon: currentTime, cooldown: newCooldown } }
+    );
 
     // choose a random dungeon
     let resMessage = response.messageText.replace(message.commandPrefix, '');
@@ -184,27 +222,56 @@ const dungeonCommand = async (client, message, anonClient) => {
     // console.log(resMessage, userOption);
 
     let result = randomInt(1, 3) <= 2 ? 'win' : 'lose'; // 2/3 chance of winning
-    if (userDungeonStats.level <= 1) { result = 'win'; }
+    if (userDungeonStats.level <= 1) {
+        result = 'win';
+    }
     if (result === 'win') {
         const experienceGain = randomInt(50, 75) + 3 * userDungeonStats.level;
-        const experienceNeededForLvlUp = 100 * userDungeonStats.level + 25 * (userDungeonStats.level * (userDungeonStats.level + 1) / 2);
+        const experienceNeededForLvlUp =
+            100 * userDungeonStats.level +
+            25 * ((userDungeonStats.level * (userDungeonStats.level + 1)) / 2);
         // const xpForNextLevel = experienceNeededForLvlUp - userDungeonStats.xp;
         // console.log('xp para o proximo lvl: ', xpForNextLevel);
 
         if (userDungeonStats.xp + experienceGain > experienceNeededForLvlUp) {
-            const emote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.pogEmotes, 'PogChamp');
-            await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { xp: experienceGain, wins: 1, level: 1 } });
+            const emote = await client.emotes.getEmoteFromList(
+                message.channelName,
+                client.emotes.pogEmotes,
+                'PogChamp'
+            );
+            await client.db.update(
+                'dungeon',
+                { userId: message.senderUserID },
+                { $inc: { xp: experienceGain, wins: 1, level: 1 } }
+            );
             const timeToWait = await setNewCooldown(client, message, result);
-            await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [+${Math.round(experienceGain)} ⇒ ${Math.round(userDungeonStats.xp + experienceGain)} XP] ⬆ subiu para o nível ${userDungeonStats.level + 1}! ${emote} (descanse por ${timeToWait} ⏰)`);
+            await client.log.logAndReply(
+                message,
+                `${capitalize(dungeon[userOption][result])}! [+${Math.round(experienceGain)} ⇒ ${Math.round(userDungeonStats.xp + experienceGain)} XP] ⬆ subiu para o nível ${userDungeonStats.level + 1}! ${emote} (descanse por ${timeToWait} ⏰)`
+            );
         } else {
-            await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { xp: experienceGain, wins: 1 } });
+            await client.db.update(
+                'dungeon',
+                { userId: message.senderUserID },
+                { $inc: { xp: experienceGain, wins: 1 } }
+            );
             const timeToWait = await setNewCooldown(client, message, result);
-            await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [+${Math.round(experienceGain)} ⇒ ${Math.round(userDungeonStats.xp + experienceGain)} XP] (descanse por ${timeToWait} ⏰)`);
+            await client.log.logAndReply(
+                message,
+                `${capitalize(dungeon[userOption][result])}! [+${Math.round(experienceGain)} ⇒ ${Math.round(userDungeonStats.xp + experienceGain)} XP] (descanse por ${timeToWait} ⏰)`
+            );
         }
     } else {
-        await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { losses: 1 } });
+        await client.db.update(
+            'dungeon',
+            { userId: message.senderUserID },
+            { $inc: { losses: 1 } }
+        );
         const timeToWait = await setNewCooldown(client, message, result);
-        await client.log.logAndReply(message, `${capitalize(dungeon[userOption][result])}! [+0 ⇒ ${userDungeonStats.xp} XP] (descanse por ${timeToWait} ⏰)`);
+        await client.log.logAndReply(
+            message,
+            `${capitalize(dungeon[userOption][result])}! [+0 ⇒ ${userDungeonStats.xp} XP] (descanse por ${timeToWait} ⏰)`
+        );
     }
 
     return;
@@ -212,12 +279,19 @@ const dungeonCommand = async (client, message, anonClient) => {
 
 const fastDungeonCommand = async (client, message) => {
     message.command = 'dungeon';
-    if (!await processCommand(10_000, 'user', message, client)) return;
+    if (!(await processCommand(10_000, 'user', message, client))) return;
 
     const userDungeonStats = await loadUserDungeonStats(client, message);
-    const [canDungeon, remainingTime] = await checkDungeonCooldown(client, message, userDungeonStats);
+    const [canDungeon, remainingTime] = await checkDungeonCooldown(
+        client,
+        message,
+        userDungeonStats
+    );
     if (!canDungeon) {
-        await client.log.logAndReply(message, `Você se sente cansado... Só vai se sentir capaz de explorar novamente em ${remainingTime} ⏰`);
+        await client.log.logAndReply(
+            message,
+            `Você se sente cansado... Só vai se sentir capaz de explorar novamente em ${remainingTime} ⏰`
+        );
         return;
     }
 
@@ -225,25 +299,45 @@ const fastDungeonCommand = async (client, message) => {
 
     const option = randomChoice(['1', '2']);
     let result = randomInt(1, 3) <= 2 ? 'win' : 'lose'; // 2/3 chance of winning
-    if (userDungeonStats.level <= 1) { result = 'win'; }
+    if (userDungeonStats.level <= 1) {
+        result = 'win';
+    }
     let responseMessage = `${capitalize(dungeon.quote)} Você decide ${dungeon[option].option} e `;
 
     if (result === 'win') {
         const experienceGain = randomInt(50, 75) + 3 * userDungeonStats.level;
-        const experienceNeededForLvlUp = 100 * userDungeonStats.level + 25 * (userDungeonStats.level * (userDungeonStats.level + 1) / 2);
+        const experienceNeededForLvlUp =
+            100 * userDungeonStats.level +
+            25 * ((userDungeonStats.level * (userDungeonStats.level + 1)) / 2);
 
         if (userDungeonStats.xp + experienceGain >= experienceNeededForLvlUp) {
-            const emote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.pogEmotes, 'PogChamp');
-            await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { xp: experienceGain, wins: 1, level: 1 } });
+            const emote = await client.emotes.getEmoteFromList(
+                message.channelName,
+                client.emotes.pogEmotes,
+                'PogChamp'
+            );
+            await client.db.update(
+                'dungeon',
+                { userId: message.senderUserID },
+                { $inc: { xp: experienceGain, wins: 1, level: 1 } }
+            );
             const timeToWait = await setNewCooldown(client, message, result);
             responseMessage += `${dungeon[option][result]}! [+${Math.round(experienceGain)} ⇒ ${Math.round(userDungeonStats.xp + experienceGain)} XP] ⬆ subiu para o nível ${userDungeonStats.level + 1}! ${emote} (descanse por ${timeToWait} ⏰)`;
         } else {
-            await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { xp: experienceGain, wins: 1 } });
+            await client.db.update(
+                'dungeon',
+                { userId: message.senderUserID },
+                { $inc: { xp: experienceGain, wins: 1 } }
+            );
             const timeToWait = await setNewCooldown(client, message, result);
             responseMessage += `${dungeon[option][result]}! [+${Math.round(experienceGain)} ⇒ ${Math.round(userDungeonStats.xp + experienceGain)} XP] (descanse por ${timeToWait} ⏰)`;
         }
     } else {
-        await client.db.update('dungeon', { userId: message.senderUserID }, { $inc: { losses: 1 } });
+        await client.db.update(
+            'dungeon',
+            { userId: message.senderUserID },
+            { $inc: { losses: 1 } }
+        );
         const timeToWait = await setNewCooldown(client, message, result);
         responseMessage += `${dungeon[option][result]}! [+0 ⇒ ${userDungeonStats.xp} XP] (descanse por ${timeToWait} ⏰)`;
     }
@@ -274,7 +368,8 @@ dungeonCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/command
 
 fastDungeonCommand.commandName = 'fastdungeon';
 fastDungeonCommand.aliases = ['fastdungeon', 'fd'];
-fastDungeonCommand.shortDescription = 'Entre em uma dungeon e tenha o seu destino escolhido aleatoriamente';
+fastDungeonCommand.shortDescription =
+    'Entre em uma dungeon e tenha o seu destino escolhido aleatoriamente';
 fastDungeonCommand.cooldown = 30_000;
 fastDungeonCommand.whisperable = true;
 fastDungeonCommand.description = `Você entrará em uma dungeon aleatória e terá um destino aleatório
@@ -287,7 +382,4 @@ O XP necessário para subir de nível é calculado assim:
 XP necessário para subir de nível = 100 * Nível do player + 25 * (Nível do player * (Nível do player + 1) / 2)`;
 fastDungeonCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${fastDungeonCommand.commandName}/${fastDungeonCommand.commandName}.js`;
 
-module.exports = {
-    dungeonCommand,
-    fastDungeonCommand,
-};
+export { dungeonCommand, fastDungeonCommand };

@@ -1,26 +1,26 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { shortenUrl } = require("../../utils/utils.js");
-const FormData = require('form-data');
-const fetch = require('node-fetch');
+import { processCommand } from '../../utils/processCommand.js';
+import { shortenUrl } from '../../utils/utils.js';
+import FormData from 'form-data';
+import fetch from 'node-fetch';
 
 async function uploadToFeridinha(content, fileName) {
     const api_url = 'https://feridinha.com/upload';
-    const headers = { 'token': process.env.FERIDINHA_API_KEY };
+    const headers = { token: process.env.FERIDINHA_API_KEY };
 
     const form = new FormData();
     form.append('file', content, {
         filename: fileName,
-        contentType: 'video/mp4'
+        contentType: 'video/mp4',
     });
 
     try {
         const response = await fetch(api_url, {
             method: 'POST',
             headers: {
-                'token': headers.token,
-                ...form.getHeaders()
+                token: headers.token,
+                ...form.getHeaders(),
             },
-            body: form
+            body: form,
         });
 
         if (response.ok) {
@@ -43,19 +43,19 @@ async function uploadToFeridinha(content, fileName) {
 async function getVideoDownload(urlToDownload) {
     const apiUrl = 'http://localhost:9000/'; // https://cobalt.tools/ local instance
     const headers = {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'ApiKey ' + process.env.COBALT_API_KEY
+        Authorization: 'ApiKey ' + process.env.COBALT_API_KEY,
     };
     const payload = {
-        'url': urlToDownload
+        url: urlToDownload,
     };
 
     try {
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: headers,
-            body: JSON.stringify(payload)
+            body: JSON.stringify(payload),
         });
 
         if (!response.ok) {
@@ -91,7 +91,6 @@ async function getVideoDownload(urlToDownload) {
             }
         } catch (e2) {
             console.log(`erro no try-catch do getVideoDownload: ${e2}`);
-            console.log(resData);
             return null;
         }
     }
@@ -100,20 +99,20 @@ async function getVideoDownload(urlToDownload) {
 async function getAudioDownload(urlToDownload) {
     const apiUrl = 'http://localhost:9000/'; // https://cobalt.tools/ local instance
     const headers = {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'ApiKey ' + process.env.COBALT_API_KEY
+        Authorization: 'ApiKey ' + process.env.COBALT_API_KEY,
     };
     const payload = {
-        'url': urlToDownload,
-        'downloadMode': 'audio'
+        url: urlToDownload,
+        downloadMode: 'audio',
     };
 
     try {
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: headers,
-            body: JSON.stringify(payload)
+            body: JSON.stringify(payload),
         });
         const resData = await response.json();
         let resUrl = resData.url;
@@ -135,7 +134,7 @@ async function getAudioDownload(urlToDownload) {
     } catch (e) {
         console.log(`erro no getAudioDownload: ${e}`);
         try {
-            const errorText = resData.text;
+            const errorText = e.text;
             if ('connect to the service api' in errorText) {
                 return 'apiError';
             } else {
@@ -143,7 +142,6 @@ async function getAudioDownload(urlToDownload) {
             }
         } catch (e2) {
             console.log(`erro no try-catch do getAudioDownload: ${e2}`);
-            console.log(resData);
             return null;
         }
     }
@@ -151,24 +149,36 @@ async function getAudioDownload(urlToDownload) {
 
 const downloadCommand = async (client, message) => {
     message.command = 'download';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
     const args = message.messageText.split(' ');
     if (args.length < 2) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}download (opcional: video/audio) <link para fazer download>`);
+        client.log.logAndReply(
+            message,
+            `Use o formato: ${message.commandPrefix}download (opcional: video/audio) <link para fazer download>`
+        );
         return;
     }
 
-    if ((args.length === 2 || args[1].toLowerCase() === 'video') && args[1].toLowerCase() !== 'audio') {
+    if (
+        (args.length === 2 || args[1].toLowerCase() === 'video') &&
+        args[1].toLowerCase() !== 'audio'
+    ) {
         const urlToDownload = args[2] ? args[2] : args[1];
         if (urlToDownload === 'video' || urlToDownload === 'audio') {
-            client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}download video <link para fazer download>`);
+            client.log.logAndReply(
+                message,
+                `Use o formato: ${message.commandPrefix}download video <link para fazer download>`
+            );
             return;
         }
 
         let downloadUrl = await getVideoDownload(urlToDownload);
         if (downloadUrl === 'apiError') {
-            client.log.logAndReply(message, `Não foi possível fazer o download, o serviço para esse site não está funcionando no momento. Tente novamente mais tarde`);
+            client.log.logAndReply(
+                message,
+                `Não foi possível fazer o download, o serviço para esse site não está funcionando no momento. Tente novamente mais tarde`
+            );
             return;
         } else if (!downloadUrl) {
             client.log.logAndReply(message, `Não foi possível fazer o download desse link`);
@@ -181,13 +191,19 @@ const downloadCommand = async (client, message) => {
     if (args[1].toLowerCase() === 'audio') {
         const urlToDownload = args[2];
         if (!urlToDownload) {
-            client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}download audio <link para fazer download>`);
+            client.log.logAndReply(
+                message,
+                `Use o formato: ${message.commandPrefix}download audio <link para fazer download>`
+            );
             return;
         }
 
         let downloadUrl = await getAudioDownload(urlToDownload);
         if (downloadUrl === 'apiError') {
-            client.log.logAndReply(message, `Não foi possível fazer o download, o serviço para esse site não está funcionando no momento. Tente novamente mais tarde`);
+            client.log.logAndReply(
+                message,
+                `Não foi possível fazer o download, o serviço para esse site não está funcionando no momento. Tente novamente mais tarde`
+            );
             return;
         } else if (!downloadUrl) {
             client.log.logAndReply(message, `Não foi possível fazer o download desse link`);
@@ -197,7 +213,10 @@ const downloadCommand = async (client, message) => {
         return;
     }
 
-    client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}download (opcional: video/audio) <link para fazer download>`);
+    client.log.logAndReply(
+        message,
+        `Use o formato: ${message.commandPrefix}download (opcional: video/audio) <link para fazer download>`
+    );
 };
 
 downloadCommand.commandName = 'download';
@@ -215,6 +234,4 @@ Sites mais famosos suportados: Youtube, Instagram, Facebook, Reddit, Tiktok, Twi
 Para mais informações sobre a API utilizada, acesse <a href="https://github.com/imputnet/cobalt/tree/main/api#supported-services" target="_blank" style="color: #67e8f9">aqui</a>`;
 downloadCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${downloadCommand.commandName}/${downloadCommand.commandName}.js`;
 
-module.exports = {
-    downloadCommand,
-};
+export { downloadCommand };

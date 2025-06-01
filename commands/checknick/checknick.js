@@ -1,4 +1,4 @@
-const { processCommand } = require("../../utils/processCommand.js");
+import { processCommand } from '../../utils/processCommand.js';
 
 async function checkNick(nick) {
     const api_url = `https://api.fuchsty.com/twitch/checkname?username=${nick}`;
@@ -16,15 +16,14 @@ async function checkNick(nick) {
     }
 
     return false;
-
 }
 
 const checkNickCommand = async (client, message) => {
     message.command = 'checknick';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
     if (message.messageText.split(' ').length < 2) {
-        client.log.logAndReply(message, `Use o formato: ${prefix}checknick <nick>`);
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}checknick <nick>`);
         return;
     }
 
@@ -44,7 +43,11 @@ const checkNickCommand = async (client, message) => {
         return;
     }
 
-    const emote = await client.emotes.getEmoteFromList(message.channelName, ['joia', 'jumilhao'], '👍');
+    const emote = await client.emotes.getEmoteFromList(
+        message.channelName,
+        ['joia', 'jumilhao'],
+        '👍'
+    );
     client.log.logAndReply(message, `O nick ${nick} está disponível ${emote}`);
 };
 
@@ -57,6 +60,4 @@ checkNickCommand.description = `Use este comando para ver se um nick específico
 • Exemplo: !checknick leafyzito - Verifica se o nick "leafyzito" está disponível`;
 checkNickCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${checkNickCommand.commandName}/${checkNickCommand.commandName}.js`;
 
-module.exports = {
-    checkNickCommand,
-};
+export { checkNickCommand };

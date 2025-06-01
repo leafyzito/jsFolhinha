@@ -1,12 +1,12 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { timeSinceDT } = require("../../utils/utils.js");
+import { processCommand } from '../../utils/processCommand.js';
+import { timeSinceDT } from '../../utils/utils.js';
 
 async function getFA(user, channel) {
     const api_url = `https://api.ivr.fi/v2/twitch/subage/${user}/${channel}`;
     const response = await fetch(api_url);
     const data = await response.json();
 
-    if ("statusCode" in data) {
+    if ('statusCode' in data) {
         return `${channel} não existe`;
     }
 
@@ -24,7 +24,7 @@ async function getFA(user, channel) {
 
 const followAgeCommand = async (client, message) => {
     message.command = 'followage';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
     let faTarget = message.senderUsername;
     let faChannelTarget = message.channelName;
@@ -45,12 +45,12 @@ const followAgeCommand = async (client, message) => {
 
     const faResult = await getFA(faTarget, faChannelTarget);
 
-    if (faResult.includes("não existe")) {
+    if (faResult.includes('não existe')) {
         client.log.logAndReply(message, faResult);
         return;
     }
 
-    if (faResult.includes("não segue")) {
+    if (faResult.includes('não segue')) {
         client.log.logAndReply(message, faResult);
         return;
     }
@@ -71,6 +71,4 @@ Apenas !followage: O bot vai responder com a quantidade de tempo que o usuário 
 !followage @usuário1 @usuário2: O bot vai responder com a quantidade de tempo que o @usuário1 segue @usuário2`;
 followAgeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${followAgeCommand.commandName}/${followAgeCommand.commandName}.js`;
 
-module.exports = {
-    followAgeCommand,
-};
+export { followAgeCommand };

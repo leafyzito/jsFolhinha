@@ -1,19 +1,22 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { randomInt } = require("../../utils/utils.js");
+import { processCommand } from '../../utils/processCommand.js';
+import { randomInt } from '../../utils/utils.js';
 
 const rolarCommand = async (client, message) => {
     message.command = 'rolar';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
     if (message.messageText.split(' ').length === 1) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}rolar <quantos dados> <de quantos lados>`);
+        client.log.logAndReply(
+            message,
+            `Use o formato: ${message.commandPrefix}rolar <quantos dados> <de quantos lados>`
+        );
         return;
     }
 
     const args = message.messageText.split(' ').slice(1);
 
-    var dice = args[0];
-    var sides = args[1].replace(/d/g, '');
+    let dice = args[0];
+    let sides = args[1].replace(/d/g, '');
 
     if (dice.includes('d')) {
         sides = dice.split('d')[1];
@@ -21,12 +24,18 @@ const rolarCommand = async (client, message) => {
     }
 
     if (!dice || !sides) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}rolar <quantos dados> <de quantos lados>`);
+        client.log.logAndReply(
+            message,
+            `Use o formato: ${message.commandPrefix}rolar <quantos dados> <de quantos lados>`
+        );
         return;
     }
 
     if (isNaN(dice) || isNaN(sides) || dice < 1 || sides < 1) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}rolar <quantos dados> <de quantos lados>`);
+        client.log.logAndReply(
+            message,
+            `Use o formato: ${message.commandPrefix}rolar <quantos dados> <de quantos lados>`
+        );
         return;
     }
 
@@ -45,7 +54,10 @@ const rolarCommand = async (client, message) => {
 
     const sum = roladas.reduce((a, b) => a + b, 0);
 
-    client.log.logAndReply(message, `${roladas.length === 1 ? 'A sua rolada foi:' : 'As suas roladas foram:'} ${roladas.join(', ')}${roladas.length > 1 ? ` (soma: ${sum})` : ''} 🎲`);
+    client.log.logAndReply(
+        message,
+        `${roladas.length === 1 ? 'A sua rolada foi:' : 'As suas roladas foram:'} ${roladas.join(', ')}${roladas.length > 1 ? ` (soma: ${sum})` : ''} 🎲`
+    );
 };
 
 rolarCommand.commandName = 'rolar';
@@ -58,6 +70,4 @@ rolarCommand.description = `Lance até 10 dados com quantos lados você quiser, 
 • Exemplo: !rolar 6d10 - O bot irá lançar 6 dados de 10 lados`;
 rolarCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${rolarCommand.commandName}/${rolarCommand.commandName}.js`;
 
-module.exports = {
-    rolarCommand,
-};
+export { rolarCommand };

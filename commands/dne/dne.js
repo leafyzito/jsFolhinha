@@ -1,8 +1,8 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { shortenUrl } = require("../../utils/utils.js");
+import { processCommand } from '../../utils/processCommand.js';
+import { shortenUrl } from '../../utils/utils.js';
 
 async function getDne() {
-    const url = "https://this-person-does-not-exist.com/new";
+    const url = 'https://this-person-does-not-exist.com/new';
     const response = await fetch(url);
 
     if (response.status === 200) {
@@ -17,7 +17,7 @@ async function getDne() {
 
 const dneCommand = async (client, message) => {
     message.command = 'dne';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
     const dne = await getDne();
 
@@ -27,7 +27,6 @@ const dneCommand = async (client, message) => {
     }
 
     client.log.logAndReply(message, dne);
-
 };
 
 dneCommand.commandName = 'doesnotexist';
@@ -38,6 +37,4 @@ dneCommand.whisperable = true;
 dneCommand.description = 'Veja uma foto aleatória gerada pelo site thispersondoesnotexist.com';
 dneCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${dneCommand.commandName}/${dneCommand.commandName}.js`;
 
-module.exports = {
-    dneCommand,
-};
+export { dneCommand };

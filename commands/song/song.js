@@ -1,5 +1,5 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { timeSince } = require("../../utils/utils.js");
+import { processCommand } from '../../utils/processCommand.js';
+import { timeSince } from '../../utils/utils.js';
 
 async function getSongInfo(lastfmUser) {
     const api_url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${lastfmUser}&limit=1&api_key=${process.env.LASTFM_API_KEY}&format=json`;
@@ -30,23 +30,29 @@ async function getSongInfo(lastfmUser) {
     return { isNowPlaying, songArtist, songName, albumName, timestamp };
 }
 
-
 const songCommand = async (client, message) => {
     message.command = 'song';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
-    const songTarget = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
+    const songTarget =
+        message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
 
     if (songTarget.toLowerCase() === 'set') {
         const lastfmUserToSet = message.messageText.split(' ')[2].replace(/^@/, '') || null;
         if (!lastfmUserToSet) {
-            client.log.logAndReply(message, `Você precisa especificar o nome do usuário do Last.fm que deseja configurar. Se estiver com dúvidas sobre o comando, acesse https://folhinhabot.com/comandos/song 😁`);
+            client.log.logAndReply(
+                message,
+                `Você precisa especificar o nome do usuário do Last.fm que deseja configurar. Se estiver com dúvidas sobre o comando, acesse https://folhinhabot.com/comandos/song 😁`
+            );
             return;
         }
         // check if lastfm user exists
         const lastfmUserExists = await getSongInfo(lastfmUserToSet);
         if (lastfmUserExists === null) {
-            client.log.logAndReply(message, `O usuário ${lastfmUserToSet} não existe no Last.fm. Se estiver com dúvidas sobre o comando, acesse https://folhinhabot.com/comandos/song 😁`);
+            client.log.logAndReply(
+                message,
+                `O usuário ${lastfmUserToSet} não existe no Last.fm. Se estiver com dúvidas sobre o comando, acesse https://folhinhabot.com/comandos/song 😁`
+            );
             return;
         }
 
@@ -54,17 +60,31 @@ const songCommand = async (client, message) => {
         const matchFromDb = await client.db.get('lastfm', { twitch_uid: message.senderUserID });
         if (matchFromDb.length > 0) {
             // if already set, update
-            await client.db.update('lastfm', { twitch_uid: message.senderUserID }, { $set: { lastfm_user: lastfmUserToSet } });
+            await client.db.update(
+                'lastfm',
+                { twitch_uid: message.senderUserID },
+                { $set: { lastfm_user: lastfmUserToSet } }
+            );
         } else {
             // if not set, insert
-            await client.db.insert('lastfm', { twitch_uid: message.senderUserID, lastfm_user: lastfmUserToSet });
+            await client.db.insert('lastfm', {
+                twitch_uid: message.senderUserID,
+                lastfm_user: lastfmUserToSet,
+            });
         }
 
-        const emote = await client.emotes.getEmoteFromList(message.channelName, ['joia', 'jumilhao'], '👍');
+        const emote = await client.emotes.getEmoteFromList(
+            message.channelName,
+            ['joia', 'jumilhao'],
+            '👍'
+        );
         client.log.logAndReply(message, `Usuário do Last.fm configurado com sucesso ${emote}`);
         return;
     }
-    const songTargetId = songTarget.toLowerCase() != message.senderUsername ? await client.getUserID(songTarget) : message.senderUserID;
+    const songTargetId =
+        songTarget.toLowerCase() != message.senderUsername
+            ? await client.getUserID(songTarget)
+            : message.senderUserID;
     // if (!songTargetId) {
     //     console.log(`Esse usuário não existe`);
     //     // client.log.logAndReply(message, `Esse usuário não existe`);
@@ -81,25 +101,40 @@ const songCommand = async (client, message) => {
 
     const songInfo = await getSongInfo(lastfmUser);
     if (songInfo === null) {
-        client.log.logAndReply(message, `O usuário ${songTarget} não está registrado no Last.fm. Se estiver com dúvidas sobre o comando, acesse https://folhinhabot.com/comandos/song 😁`);
+        client.log.logAndReply(
+            message,
+            `O usuário ${songTarget} não está registrado no Last.fm. Se estiver com dúvidas sobre o comando, acesse https://folhinhabot.com/comandos/song 😁`
+        );
         return;
     }
 
     if (songInfo === false) {
-        client.log.logAndReply(message, `${songTarget != message.senderUsername ? songTarget : 'Você'} ainda não escutou nenhuma música`);
+        client.log.logAndReply(
+            message,
+            `${songTarget != message.senderUsername ? songTarget : 'Você'} ainda não escutou nenhuma música`
+        );
         return;
     }
 
     if (songInfo === 'private') {
-        client.log.logAndReply(message, `O usuário ${songTarget} tem o perfil privado no Last.fm (se não for o caso, avise o dev)`);
+        client.log.logAndReply(
+            message,
+            `O usuário ${songTarget} tem o perfil privado no Last.fm (se não for o caso, avise o dev)`
+        );
         return;
     }
 
     if (songInfo.isNowPlaying) {
-        client.log.logAndReply(message, `${songTarget != message.senderUsername ? songTarget : 'Você'} está ouvindo ${songInfo.songArtist} - ${songInfo.songName} ${songInfo.albumName != '' ? `(Álbum: ${songInfo.albumName})` : ''}`);
+        client.log.logAndReply(
+            message,
+            `${songTarget != message.senderUsername ? songTarget : 'Você'} está ouvindo ${songInfo.songArtist} - ${songInfo.songName} ${songInfo.albumName != '' ? `(Álbum: ${songInfo.albumName})` : ''}`
+        );
     } else {
         const timeAgo = timeSince(songInfo.timestamp);
-        client.log.logAndReply(message, `${songTarget != message.senderUsername ? songTarget : 'Você'} ouviu por último ${songInfo.songArtist} - ${songInfo.songName} ${songInfo.albumName != '' ? `(Álbum: ${songInfo.albumName})` : ''} há ${timeAgo}`);
+        client.log.logAndReply(
+            message,
+            `${songTarget != message.senderUsername ? songTarget : 'Você'} ouviu por último ${songInfo.songArtist} - ${songInfo.songName} ${songInfo.albumName != '' ? `(Álbum: ${songInfo.albumName})` : ''} há ${timeAgo}`
+        );
     }
     return;
 };
@@ -120,6 +155,4 @@ Caso já tenha a sua conta configurada, use !song set {nome_da_sua_conta_do_last
 Pode também ver qual música outra pessoa está ouvindo usando !song {nome_da_pessoa}`;
 songCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${songCommand.commandName}/${songCommand.commandName}.js`;
 
-module.exports = {
-    songCommand,
-};
+export { songCommand };

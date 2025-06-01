@@ -1,9 +1,9 @@
-const { MongoClient } = require('mongodb');
-const { LRUCache } = require('lru-cache');
+import { MongoClient } from 'mongodb';
+import { LRUCache } from 'lru-cache';
 
 const mongoUri = process.env.MONGO_URI;
 const clientMongo = new MongoClient(mongoUri);
-const db = clientMongo.db("folhinha");
+const db = clientMongo.db('folhinha');
 
 class MongoUtils {
     constructor() {
@@ -15,7 +15,7 @@ class MongoUtils {
         this.cacheOptions = {
             max: 50000, // Maximum number of items
             ttl: 24 * 60 * 60 * 1000, // 24 hour TTL
-            updateAgeOnGet: true
+            updateAgeOnGet: true,
         };
 
         // Load initial data
@@ -69,7 +69,7 @@ class MongoUtils {
         if (!forceDb) {
             // Search cache for matching documents
             const matches = [];
-            for (const [_, doc] of cache.entries()) {
+            for (const [, doc] of cache.entries()) {
                 let isMatch = true;
                 for (const [key, value] of Object.entries(query)) {
                     if (doc[key] !== value) {
@@ -204,7 +204,7 @@ class MongoUtils {
         }
 
         let count = 0;
-        for (const [_, doc] of cache.entries()) {
+        for (const [, doc] of cache.entries()) {
             let isMatch = true;
             for (const [key, value] of Object.entries(query)) {
                 if (doc[key] !== value) {
@@ -228,6 +228,4 @@ class MongoUtils {
     }
 }
 
-module.exports = {
-    MongoUtils: MongoUtils,
-};
+export { MongoUtils };

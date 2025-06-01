@@ -1,9 +1,9 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { createNewGist } = require("../../utils/utils.js");
-const fetch = require('node-fetch');
+import { processCommand } from '../../utils/processCommand.js';
+import { createNewGist } from '../../utils/utils.js';
+import fetch from 'node-fetch';
 
 async function getChatters(channel) {
-    api_url = 'https://api.fuchsty.com/twitch/chatters/' + channel;
+    const api_url = `https://api.fuchsty.com/twitch/chatters/${channel}`;
     const response = await fetch(api_url);
     const data = await response.json();
 
@@ -22,14 +22,14 @@ async function getChatters(channel) {
     const viewers = data.chatters.viewers || [];
 
     return [broadcaster, mods, vips, viewers, count];
-};
-
+}
 
 const chattersCommand = async (client, message) => {
     message.command = 'chatters';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
-    const targetChannel = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.channelName;
+    const targetChannel =
+        message.messageText.split(' ')[1]?.replace(/^@/, '') || message.channelName;
     const chattersRes = await getChatters(targetChannel);
 
     if (chattersRes === 'erro') {
@@ -42,33 +42,35 @@ const chattersCommand = async (client, message) => {
         return;
     }
 
-    var streamer = chattersRes[0];
-    var mods = chattersRes[1];
-    var vips = chattersRes[2];
-    var viewers = chattersRes[3];
-    var count = chattersRes[4];
+    let streamer = chattersRes[0];
+    let mods = chattersRes[1];
+    let vips = chattersRes[2];
+    let viewers = chattersRes[3];
+    let count = chattersRes[4];
 
-    var modsLen = mods.length;
-    var vipsLen = vips.length;
-    var viewersLen = viewers.length;
+    let modsLen = mods.length;
+    let vipsLen = vips.length;
+    let viewersLen = viewers.length;
 
-    var streamer = streamer.join("\n");
-    var mods = mods.sort().join("\n");
-    var vips = vips.sort().join("\n");
-    var viewers = viewers.sort().join("\n");
+    streamer = streamer.join('\n');
+    mods = mods.sort().join('\n');
+    vips = vips.sort().join('\n');
+    viewers = viewers.sort().join('\n');
 
-    var finalList = `Total de chatters em #${targetChannel}: ${count}\n\nStreamer:\n${streamer}\n\nModeradores: (${modsLen})\n${mods}\n\nVips: (${vipsLen})\n${vips}\n\nChatters: (${viewersLen})\n${viewers}`;
+    let finalList = `Total de chatters em #${targetChannel}: ${count}\n\nStreamer:\n${streamer}\n\nModeradores: (${modsLen})\n${mods}\n\nVips: (${vipsLen})\n${vips}\n\nChatters: (${viewersLen})\n${viewers}`;
 
     const gistUrl = await createNewGist(finalList);
 
     // TODO: getEmoteFromList
     if (count > 99) {
-        client.log.logAndReply(message, `Existem ${count} chatters em #${targetChannel}: ${gistUrl} (devido a limitações da Twitch, esta lista contém apenas 100 chatters)`);
+        client.log.logAndReply(
+            message,
+            `Existem ${count} chatters em #${targetChannel}: ${gistUrl} (devido a limitações da Twitch, esta lista contém apenas 100 chatters)`
+        );
         return;
     }
 
     client.log.logAndReply(message, `Existem ${count} chatters em #${targetChannel}: ${gistUrl}`);
-
 };
 
 chattersCommand.commandName = 'chatters';
@@ -82,6 +84,4 @@ O comando funcionará mesmo em canais que o Folhinha não esteja presente
 • Exemplo: !chatters {canal} - Exibe a lista de chatters do canal escolhido`;
 chattersCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${chattersCommand.commandName}/${chattersCommand.commandName}.js`;
 
-module.exports = {
-    chattersCommand,
-};
+export { chattersCommand };

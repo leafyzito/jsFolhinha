@@ -3,21 +3,21 @@ async function addChannelToJustlog(client, channelId) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-API-Key': `${process.env.JUSTLOG_API_KEY}`
+            'X-API-Key': `${process.env.JUSTLOG_API_KEY}`,
         },
         body: JSON.stringify({
-            channels: [channelId]
-        })
+            channels: [channelId],
+        }),
     });
 
     if (response.status !== 200) {
-        client.discord.importantLog(`Erro ao adicionar ${channelId} ao justlog: ${response.statusText}`);
+        client.discord.importantLog(
+            `Erro ao adicionar ${channelId} ao justlog: ${response.statusText}`
+        );
         return false;
     }
 
     return true;
 }
 
-module.exports = {
-    addChannelToJustlog
-}
+export { addChannelToJustlog };

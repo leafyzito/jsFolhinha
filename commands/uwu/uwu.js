@@ -1,11 +1,11 @@
-const Uwuifier = require("uwuifier").default;
-const { processCommand } = require("../../utils/processCommand.js");
+import Uwuifier from 'uwuifier';
+import { processCommand } from '../../utils/processCommand.js';
 
 const uwuifier = new Uwuifier();
 
 const uwuCommand = async (client, message) => {
     message.command = 'uwu';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
     const textToUwuify = message.messageText.split(' ').slice(1).join(' ');
     const uwuifiedText = uwuifier.uwuifySentence(textToUwuify);
@@ -22,6 +22,4 @@ uwuCommand.whisperable = true;
 uwuCommand.description = `Uwuifique uma mensagem`;
 uwuCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${uwuCommand.commandName}/${uwuCommand.commandName}.js`;
 
-module.exports = {
-    testeCommand: uwuCommand,
-};
+export { uwuCommand };

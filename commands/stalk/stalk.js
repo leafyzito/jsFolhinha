@@ -1,16 +1,16 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { timeSince } = require("../../utils/utils.js");
+import { processCommand } from '../../utils/processCommand.js';
+import { timeSince } from '../../utils/utils.js';
 
 const stalkCommand = async (client, message) => {
     message.command = 'stalk';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
     if (message.messageText.split(' ').length === 1) {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}stalk <usuário>`);
         return;
     }
 
-    const targetUser = message.messageText.split(' ')[1].toLowerCase().replace(/^@/, '')
+    const targetUser = message.messageText.split(' ')[1].toLowerCase().replace(/^@/, '');
 
     if (targetUser === message.senderUsername) {
         client.log.logAndReply(message, `Você tá aqui mesmo Stare`);
@@ -39,10 +39,14 @@ const stalkCommand = async (client, message) => {
         return;
     }
 
-    var lsChannel = userInfo[0].lsChannel;
+    let lsChannel = userInfo[0].lsChannel;
     const lsChannelId = await client.getUserID(lsChannel);
     const lsChannelInfo = await client.db.get('users', { userid: lsChannelId });
-    if (lsChannelInfo.length !== 0 && lsChannelInfo[0].optoutOwnChannel && lsChannel != message.channelName) {
+    if (
+        lsChannelInfo.length !== 0 &&
+        lsChannelInfo[0].optoutOwnChannel &&
+        lsChannel != message.channelName
+    ) {
         lsChannel = '***';
     }
 
@@ -50,7 +54,10 @@ const stalkCommand = async (client, message) => {
     const lsMessage = userInfo[0].lsMessage;
     const timeSinceLs = timeSince(lsDate);
 
-    client.log.logAndReply(message, `${targetUser} foi visto pela última vez há ${timeSinceLs} em #${lsChannel} - ${lsMessage}`);
+    client.log.logAndReply(
+        message,
+        `${targetUser} foi visto pela última vez há ${timeSinceLs} em #${lsChannel} - ${lsMessage}`
+    );
 };
 
 stalkCommand.commandName = 'stalk';
@@ -62,6 +69,4 @@ stalkCommand.description = `Pesquise há quanto tempo um usuário foi visto pela
 Se quiser desabilitar a função de outras pessoas usarem este comando em você, use !optout stalk`;
 stalkCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${stalkCommand.commandName}/${stalkCommand.commandName}.js`;
 
-module.exports = {
-    stalkCommand,
-};
+export { stalkCommand };

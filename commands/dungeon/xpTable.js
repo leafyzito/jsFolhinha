@@ -4,14 +4,14 @@ function calculateXPRange(level) {
     const maxXP = 75 + 3 * level;
 
     // XP needed for next level formula: 100 * level + 25 * (level * (level + 1) / 2)
-    const xpNeededForNextLevel = 100 * level + 25 * (level * (level + 1) / 2);
+    const xpNeededForNextLevel = 100 * level + 25 * ((level * (level + 1)) / 2);
 
     return {
         level,
         xpRange: `${Math.round(minXP)}-${Math.round(maxXP)}`,
         xpNeededForNextLevel: Math.round(xpNeededForNextLevel),
         minDungeonsNeeded: Math.ceil(xpNeededForNextLevel / maxXP),
-        maxDungeonsNeeded: Math.ceil(xpNeededForNextLevel / minXP)
+        maxDungeonsNeeded: Math.ceil(xpNeededForNextLevel / minXP),
     };
 }
 
@@ -23,12 +23,12 @@ function generateXPTable(maxLevel = 10) {
         const stats = calculateXPRange(level);
         console.log(
             `${stats.level.toString().padEnd(5)} | ` +
-            `${stats.xpRange.padEnd(12)} | ` +
-            `${stats.xpNeededForNextLevel.toString().padEnd(20)} | ` +
-            `${stats.minDungeonsNeeded}-${stats.maxDungeonsNeeded}`
+                `${stats.xpRange.padEnd(12)} | ` +
+                `${stats.xpNeededForNextLevel.toString().padEnd(20)} | ` +
+                `${stats.minDungeonsNeeded}-${stats.maxDungeonsNeeded}`
         );
     }
 }
 
 // Generate table for first 200 levels
-generateXPTable(200); 
+generateXPTable(200);

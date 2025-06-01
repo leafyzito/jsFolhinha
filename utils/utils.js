@@ -1,19 +1,22 @@
-const fetch = require('node-fetch');
-
+import fetch from 'node-fetch';
 
 async function isValidUser(user) {
     // Construct API URL
     const api_url = `https://api.twitch.tv/helix/users?login=${user}`;
     // Set headers with API credentials
-    const headers = { "Client-ID": process.env.BOT_CLIENT_ID, "Authorization": `Bearer ${process.env.BOT_OAUTH_TOKEN}` };
+    const headers = {
+        'Client-ID': process.env.BOT_CLIENT_ID,
+        Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
+    };
     // Make API request to fetch clips
     const response = await fetch(api_url, { headers });
     const data = await response.json();
 
-    if (data.data.length === 0) { return false; }
+    if (data.data.length === 0) {
+        return false;
+    }
     return true;
 }
-
 
 async function shortenUrl(url) {
     const api_url = `https://shlink.mrchuw.com.br/rest/v3/short-urls`;
@@ -50,21 +53,20 @@ async function shortenUrl(url) {
     return url;
 }
 
-
 async function createNewGist(content) {
-    const api_url = "https://api.github.com/gists";
+    const api_url = 'https://api.github.com/gists';
     const headers = {
-        "Authorization": `token ${process.env.GITHUB_GIST_TOKEN}`,
-        "Content-Type": "application/json",
+        Authorization: `token ${process.env.GITHUB_GIST_TOKEN}`,
+        'Content-Type': 'application/json',
     };
 
     const payload = {
-        "public": false,
-        "files": {
-            "file.txt": {
-                "content": content,
-            }
-        }
+        public: false,
+        files: {
+            'file.txt': {
+                content: content,
+            },
+        },
     };
 
     const response = await fetch(api_url, {
@@ -76,10 +78,9 @@ async function createNewGist(content) {
     // shorten gist url
     const jsonRes = await response.json();
     if (jsonRes != null) {
-        const gist_url = jsonRes['html_url'];
         const raw_url = jsonRes['files']['file.txt']['raw_url'];
-        const shortenedUrl = shortenUrl(raw_url);
-        return (!shortenedUrl ? raw_url : shortenedUrl);
+        const shortenedUrl = await shortenUrl(raw_url);
+        return !shortenedUrl ? raw_url : shortenedUrl;
     }
 
     return null;
@@ -97,14 +98,14 @@ async function manageLongResponse(content, sendOnlyLink = false) {
     return sendOnlyLink ? gist : response;
 }
 
-const timeSince = (lsDate) => {
+const timeSince = lsDate => {
     const deltaTime = Math.floor(Date.now() / 1000) - lsDate;
 
     const tdAFK = {
         days: Math.floor(deltaTime / (3600 * 24)),
         hours: Math.floor((deltaTime % (3600 * 24)) / 3600),
         minutes: Math.floor((deltaTime % 3600) / 60),
-        seconds: Math.floor(deltaTime % 60)
+        seconds: Math.floor(deltaTime % 60),
     };
 
     let formattedDeltaTime;
@@ -124,14 +125,14 @@ const timeSince = (lsDate) => {
     return formattedDeltaTime;
 };
 
-const timeUntil = (futureDate) => {
+const timeUntil = futureDate => {
     const deltaTime = futureDate - Math.floor(Date.now() / 1000);
 
     const tdUntil = {
         days: Math.floor(deltaTime / (3600 * 24)),
         hours: Math.floor((deltaTime % (3600 * 24)) / 3600),
         minutes: Math.floor((deltaTime % 3600) / 60),
-        seconds: Math.floor(deltaTime % 60)
+        seconds: Math.floor(deltaTime % 60),
     };
 
     let formattedDeltaTime;
@@ -202,7 +203,7 @@ function timeSinceDT(inputDate) {
     }
 
     // Format the follow date string as "dd-mm-yyyy"
-    let formattedDate = given_datetime.toLocaleDateString("en-GB").replace(/\//g, '-');
+    let formattedDate = given_datetime.toLocaleDateString('en-GB').replace(/\//g, '-');
 
     return [formatted_deltaTime, formattedDate];
 }
@@ -258,21 +259,21 @@ function timeUntilDT(inputDate) {
     }
 
     // Format the date string as "dd-mm-yyyy"
-    let formattedDate = future_datetime.toLocaleDateString("en-GB").replace(/\//g, '-');
+    let formattedDate = future_datetime.toLocaleDateString('en-GB').replace(/\//g, '-');
 
     return [formatted_deltaTime, formattedDate];
 }
 
-
-
-
-var streamer_status_cache = {};
+let streamer_status_cache = {};
 async function isStreamOnline(canal, cache_timeout = 60) {
     const current_time = Math.floor(Date.now() / 1000);
 
     // Check if the streamer's online status is present in the cache and not expired
-    if (streamer_status_cache[canal] && (current_time - streamer_status_cache[canal]['timestamp']) < cache_timeout) {
-        if (streamer_status_cache[canal]['status'] === "live") {
+    if (
+        streamer_status_cache[canal] &&
+        current_time - streamer_status_cache[canal]['timestamp'] < cache_timeout
+    ) {
+        if (streamer_status_cache[canal]['status'] === 'live') {
             return true;
         }
         return false;
@@ -280,21 +281,21 @@ async function isStreamOnline(canal, cache_timeout = 60) {
 
     const api_url = `https://api.twitch.tv/helix/streams?user_login=${canal}`;
     const headers = {
-        "Client-ID": process.env.BOT_CLIENT_ID,
-        "Authorization": `Bearer ${process.env.BOT_OAUTH_TOKEN}`
+        'Client-ID': process.env.BOT_CLIENT_ID,
+        Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
     };
 
     const response = await fetch(api_url, { headers });
     const data = await response.json();
-    const streamer_status = data.data.length > 0 ? data.data[0].type : "offline";
+    const streamer_status = data.data.length > 0 ? data.data[0].type : 'offline';
 
     // Update the cache with the current status and timestamp
     streamer_status_cache[canal] = {
-        'status': streamer_status,
-        'timestamp': current_time
+        status: streamer_status,
+        timestamp: current_time,
     };
 
-    if (streamer_status_cache[canal]['status'] === "live") {
+    if (streamer_status_cache[canal]['status'] === 'live') {
         // console.log('returning true, live on');
         return true;
     }
@@ -341,29 +342,36 @@ function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-async function waitForMessage(client, check, timeout = 30_000) {
-    return new Promise((resolve) => {
+function waitForMessage(client, check, timeout = 30_000) {
+    return new Promise(resolve => {
         const timer = setTimeout(() => {
             resolve(null);
         }, timeout);
 
-        client.on('PRIVMSG', (msg) => {
-            if (check.senderUsername && msg.senderUsername === check.senderUsername
-                && msg.channelName === check.channelName
-                && check.content.some(content => msg.messageText.toLowerCase() === content.toLowerCase())) {
+        client.on('PRIVMSG', msg => {
+            if (
+                check.senderUsername &&
+                msg.senderUsername === check.senderUsername &&
+                msg.channelName === check.channelName &&
+                check.content.some(
+                    content => msg.messageText.toLowerCase() === content.toLowerCase()
+                )
+            ) {
                 clearTimeout(timer);
                 resolve(msg);
-            }
-            else if (!check.senderUsername
-                && msg.channelName === check.channelName
-                && check.content.some(content => msg.messageText.toLowerCase() === content.toLowerCase())) {
+            } else if (
+                !check.senderUsername &&
+                msg.channelName === check.channelName &&
+                check.content.some(
+                    content => msg.messageText.toLowerCase() === content.toLowerCase()
+                )
+            ) {
                 clearTimeout(timer);
                 resolve(msg);
             }
         });
     });
 }
-
 
 let lastPresenceUpdate = 0;
 async function send7tvPresence(message, stv_uid, skip_cooldown = false) {
@@ -378,7 +386,7 @@ async function send7tvPresence(message, stv_uid, skip_cooldown = false) {
         const response = await fetch(`https://7tv.io/v3/users/${stv_uid}/presences`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 kind: 1,
@@ -386,12 +394,13 @@ async function send7tvPresence(message, stv_uid, skip_cooldown = false) {
                 session_id: undefined,
                 data: {
                     platform: 'TWITCH',
-                    id: message.channelID
-                }
-            })
+                    id: message.channelID,
+                },
+            }),
         });
 
-        if (!response.ok) { // just to be sure
+        if (!response.ok) {
+            // just to be sure
             // console.log('Error sending 7TV presence:', response);
             return null;
         }
@@ -401,25 +410,25 @@ async function send7tvPresence(message, stv_uid, skip_cooldown = false) {
         lastPresenceUpdate = now;
         return data;
     } catch (err) {
-        // console.log('Error sending 7TV presence:', err);
+        console.log('Error sending 7TV presence:', err);
         return null;
     }
 }
 
-module.exports = {
-    isValidUser: isValidUser,
-    shortenUrl: shortenUrl,
-    randomInt: randomInt,
-    randomChoice: randomChoice,
-    createNewGist: createNewGist,
-    manageLongResponse: manageLongResponse,
-    timeSince: timeSince,
-    timeSinceDT: timeSinceDT,
-    timeUntil: timeUntil,
-    timeUntilDT: timeUntilDT,
-    isStreamOnline: isStreamOnline,
-    parseTime: parseTime,
-    capitalize: capitalize,
-    waitForMessage: waitForMessage,
-    send7tvPresence: send7tvPresence
+export {
+    isValidUser,
+    shortenUrl,
+    createNewGist,
+    manageLongResponse,
+    timeSince,
+    timeUntil,
+    timeSinceDT,
+    timeUntilDT,
+    isStreamOnline,
+    parseTime,
+    randomInt,
+    randomChoice,
+    capitalize,
+    waitForMessage,
+    send7tvPresence,
 };

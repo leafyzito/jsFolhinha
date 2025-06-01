@@ -1,5 +1,4 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { timeSince } = require("../../utils/utils.js");
+import { processCommand } from '../../utils/processCommand.js';
 
 async function getFirstLineDate(channelid, usernameid) {
     const apiUrl = `https://logs.zonian.dev/list?channelid=${channelid}&userid=${usernameid}`;
@@ -37,12 +36,12 @@ async function getFirstLineMessage(logUrl) {
     const firstLine = data.split('\n')[0];
 
     const regex = /\[(.*?)\] #(.*?) (.*?): (.*)/;
-    const [_, timestamp, channelName, user, message] = firstLine.match(regex);
+    const [, timestamp, channelName, user, message] = firstLine.match(regex);
     return {
         date: timestamp,
         channel: channelName,
         user: user,
-        message: message
+        message: message,
     };
 }
 
@@ -57,19 +56,27 @@ async function getFirstLine(channelid, userid) {
 
 const firstLineCommand = async (client, message) => {
     message.command = 'firstline';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
     let targetUser = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
-    const targetId = targetUser !== message.senderUsername.toLowerCase() ? await client.getUserID(targetUser.toLowerCase()) : message.senderUserID;
-
+    const targetId =
+        targetUser !== message.senderUsername.toLowerCase()
+            ? await client.getUserID(targetUser.toLowerCase())
+            : message.senderUserID;
 
     const firstLine = await getFirstLine(message.channelID, targetId);
     if (!firstLine) {
-        client.log.logAndReply(message, `Nunca loguei uma mensagem desse usuário neste chat (contando desde 06/03/2025)`);
+        client.log.logAndReply(
+            message,
+            `Nunca loguei uma mensagem desse usuário neste chat (contando desde 06/03/2025)`
+        );
         return;
     }
 
-    client.log.logAndReply(message, `${targetUser === message.senderUsername.toLowerCase() ? 'A sua primeira' : `A primeira mensagem de ${firstLine.user}`} neste chat foi em ${firstLine.date}: ${firstLine.message}`);
+    client.log.logAndReply(
+        message,
+        `${targetUser === message.senderUsername.toLowerCase() ? 'A sua primeira' : `A primeira mensagem de ${firstLine.user}`} neste chat foi em ${firstLine.date}: ${firstLine.message}`
+    );
     return;
 };
 
@@ -83,6 +90,4 @@ firstLineCommand.description = `Receba a primeira mensagem de um usuário fornec
 • Exemplo: !firstline @leafyzito - O bot vai mostrar a primeira mensagem de @leafyzito no chat onde o comando foi executado`;
 firstLineCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${firstLineCommand.commandName}/${firstLineCommand.commandName}.js`;
 
-module.exports = {
-    firstLineCommand,
-};
+export { firstLineCommand };

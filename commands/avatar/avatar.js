@@ -1,21 +1,22 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const fetch = require('node-fetch');
-const FormData = require('form-data');
+import { processCommand } from '../../utils/processCommand.js';
+import fetch from 'node-fetch';
+import FormData from 'form-data';
 
 async function uploadToFeridinha(content) {
     const api_url = 'https://feridinha.com/upload';
-    const headers = { 'token': process.env.FERIDINHA_API_KEY };
+    const headers = { token: process.env.FERIDINHA_API_KEY };
 
     const form = new FormData();
     form.append('file', content, 'image.jpg');
 
     const response = await fetch(api_url, {
         method: 'POST',
-        headers: { 'token': headers.token, ...form.getHeaders() }, // Include FormData headers
-        body: form
+        headers: { token: headers.token, ...form.getHeaders() }, // Include FormData headers
+        body: form,
     });
 
-    if (response.ok) { // Check if status is 200-299
+    if (response.ok) {
+        // Check if status is 200-299
         const resData = await response.json();
 
         if (resData.success) {
@@ -38,20 +39,26 @@ async function getImage(url) {
 
 async function getAvatar(avatarTarget) {
     const api_url = `https://api.twitch.tv/helix/users?login=${avatarTarget}`;
-    const headers = { "Client-ID": process.env.BOT_CLIENT_ID, "Authorization": `Bearer ${process.env.BOT_OAUTH_TOKEN}` };
+    const headers = {
+        'Client-ID': process.env.BOT_CLIENT_ID,
+        Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
+    };
     const response = await fetch(api_url, { headers });
     const data = await response.json();
 
-    if (!response.ok || data.data.length === 0) { return null; }
+    if (!response.ok || data.data.length === 0) {
+        return null;
+    }
 
     return await getImage(data.data[0].profile_image_url);
 }
 
 const avatarCommand = async (client, message) => {
     message.command = 'avatar';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
-    const avatarTarget = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
+    const avatarTarget =
+        message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
     const avatar = await getAvatar(avatarTarget);
 
     if (!avatar) {
@@ -59,9 +66,10 @@ const avatarCommand = async (client, message) => {
         return;
     }
 
-    client.log.logAndReply(message,
-        `${avatarTarget == message.senderUsername ? `O seu avatar é: ${avatar}` : `O avatar de ${avatarTarget} é: ${avatar}`}`);
-
+    client.log.logAndReply(
+        message,
+        `${avatarTarget == message.senderUsername ? `O seu avatar é: ${avatar}` : `O avatar de ${avatarTarget} é: ${avatar}`}`
+    );
 };
 
 avatarCommand.commandName = 'avatar';
@@ -73,6 +81,4 @@ avatarCommand.description = `Marque alguém para ver a foto de perfil.
 • Exemplo: !avatar @pessoa`;
 avatarCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${avatarCommand.commandName}/${avatarCommand.commandName}.js`;
 
-module.exports = {
-    avatarCommand,
-};
+export { avatarCommand };

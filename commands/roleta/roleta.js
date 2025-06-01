@@ -1,5 +1,5 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { randomInt } = require("../../utils/utils.js");
+import { processCommand } from '../../utils/processCommand.js';
+import { randomInt } from '../../utils/utils.js';
 
 // foi de base, foi de comes e bebes, foi dessa pra melhor, bateu as botas, virou lenda, foi de F, caiu no Alt+F4, chapuletou
 const Frases = [
@@ -20,21 +20,35 @@ const Frases = [
 
 const roletaCommand = async (client, message) => {
     message.command = 'roleta';
-    if (!await processCommand(15_000, 'channel', message, client)) return;
+    if (!(await processCommand(15_000, 'channel', message, client))) return;
 
     if (message.senderUsername === message.channelName) {
-        const emote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.sadEmotes, '');
-        client.log.logAndReply(message, `Você é o streamer, então não consegue jogar a roleta russa ${emote}`);
+        const emote = await client.emotes.getEmoteFromList(
+            message.channelName,
+            client.emotes.sadEmotes,
+            ''
+        );
+        client.log.logAndReply(
+            message,
+            `Você é o streamer, então não consegue jogar a roleta russa ${emote}`
+        );
         return;
     }
 
     if (message.isMod) {
-        const emote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.sadEmotes, '');
-        client.log.logAndReply(message, `Você é mod, então não consegue jogar a roleta russa ${emote}`);
+        const emote = await client.emotes.getEmoteFromList(
+            message.channelName,
+            client.emotes.sadEmotes,
+            ''
+        );
+        client.log.logAndReply(
+            message,
+            `Você é mod, então não consegue jogar a roleta russa ${emote}`
+        );
         return;
     }
 
-    var timeoutDuration = message.messageText.split(' ')[1] || 10;
+    let timeoutDuration = message.messageText.split(' ')[1] || 10;
     // if timeDuration not a number, turn it to 10
     if (isNaN(timeoutDuration)) {
         timeoutDuration = 10;
@@ -49,7 +63,11 @@ const roletaCommand = async (client, message) => {
 
     const randomChance = randomInt(1, 6);
     if (randomChance !== 1) {
-        const emote = await client.emotes.getEmoteFromList(message.channelName, ['saved'], 'monkaS');
+        const emote = await client.emotes.getEmoteFromList(
+            message.channelName,
+            ['saved'],
+            'monkaS'
+        );
         client.log.logAndReply(message, `Click! Não foi dessa vez ${emote}`);
         return;
     }
@@ -62,7 +80,11 @@ const roletaCommand = async (client, message) => {
     }
 
     const randomPhrase = Frases[randomInt(0, Frases.length - 1)];
-    const emote = await client.emotes.getEmoteFromList(message.channelName, ['ripbozo', 'o7'], ':tf:');
+    const emote = await client.emotes.getEmoteFromList(
+        message.channelName,
+        ['ripbozo', 'o7'],
+        ':tf:'
+    );
     client.log.logAndSay(message, `BANG! ${randomPhrase} ${emote}`);
 };
 
@@ -79,6 +101,4 @@ O tempo do timeout pode ser customizado, sendo o tempo padrão 10 minutos
 Para este comando funcione corretamente, o Folhinha precisa do cargo de moderador`;
 roletaCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/roleta/roleta.js`;
 
-module.exports = {
-    roletaCommand,
-};
+export { roletaCommand };

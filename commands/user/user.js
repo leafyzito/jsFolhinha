@@ -1,12 +1,14 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { timeSinceDT } = require("../../utils/utils.js");
+import { processCommand } from '../../utils/processCommand.js';
+import { timeSinceDT } from '../../utils/utils.js';
 
 async function getUserInfo(targetUser) {
     const api_url = `https://api.ivr.fi/v2/twitch/user?login=${targetUser}`;
     const response = await fetch(api_url);
     const data = await response.json();
 
-    if (data === null || data == [] || data.length === 0) { return null; }
+    if (data === null || data == [] || data.length === 0) {
+        return null;
+    }
 
     const displayName = data[0].displayName;
     const userId = data[0].id;
@@ -17,18 +19,35 @@ async function getUserInfo(targetUser) {
     const howLongAgo = timeSinceDT(data[0].createdAt)[0];
     const followers = data[0].followers;
     const isLive = data[0].stream !== null ? true : false;
-    const lastStream = data[0].lastBroadcast.startedAt ? timeSinceDT(data[0].lastBroadcast.startedAt)[0] : null;
+    const lastStream = data[0].lastBroadcast.startedAt
+        ? timeSinceDT(data[0].lastBroadcast.startedAt)[0]
+        : null;
     const isBanned = data[0].banned;
     const banReason = data[0].banReason || null;
 
-    return { displayName, userId, chatColor, badge, chatterCount, createdAt, howLongAgo, followers, isLive, lastStream, isBanned, banReason };
+    return {
+        displayName,
+        userId,
+        chatColor,
+        badge,
+        chatterCount,
+        createdAt,
+        howLongAgo,
+        followers,
+        isLive,
+        lastStream,
+        isBanned,
+        banReason,
+    };
 }
 
 const userCommand = async (client, message) => {
     message.command = 'user';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
-    const userTarget = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase() || message.senderUsername;
+    const userTarget =
+        message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase() ||
+        message.senderUsername;
 
     const userInfo = await getUserInfo(userTarget);
     if (!userInfo) {
@@ -36,7 +55,10 @@ const userCommand = async (client, message) => {
         return;
     }
 
-    client.log.logAndReply(message, `${userInfo.isBanned ? `🚫 Banido: ${userInfo.banReason} • ` : ''}  @${userInfo.displayName} • ID: ${userInfo.userId} • Cor: ${userInfo.chatColor} • Badge: ${userInfo.badge} • Chatters: ${userInfo.chatterCount} • Seguidores: ${userInfo.followers} • Criado há ${userInfo.howLongAgo} (${userInfo.createdAt}) ${userInfo.isLive ? '• 🔴 Em live agora' : ''} ${userInfo.lastStream && !userInfo.isLive ? `• Última live: há ${userInfo.lastStream}` : ''}`);
+    client.log.logAndReply(
+        message,
+        `${userInfo.isBanned ? `🚫 Banido: ${userInfo.banReason} • ` : ''}  @${userInfo.displayName} • ID: ${userInfo.userId} • Cor: ${userInfo.chatColor} • Badge: ${userInfo.badge} • Chatters: ${userInfo.chatterCount} • Seguidores: ${userInfo.followers} • Criado há ${userInfo.howLongAgo} (${userInfo.createdAt}) ${userInfo.isLive ? '• 🔴 Em live agora' : ''} ${userInfo.lastStream && !userInfo.isLive ? `• Última live: há ${userInfo.lastStream}` : ''}`
+    );
     return;
 };
 
@@ -49,6 +71,4 @@ userCommand.description = `Exibe várias informações sobre quem executou o com
 Informações a serem exibidas: Nick, ID, Cor, Badge, Chatters no canal, Seguidores e Tempo de criação da conta`;
 userCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${userCommand.commandName}/${userCommand.commandName}.js`;
 
-module.exports = {
-    userCommand,
-};
+export { userCommand };

@@ -1,16 +1,20 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { randomChoice } = require("../../utils/utils.js");
-const fs = require('fs');
+import { processCommand } from '../../utils/processCommand.js';
+import { randomChoice } from '../../utils/utils.js';
+import fs from 'fs';
 
 const Filosofias = fs.readFileSync('./commands/filosofia/filosofias.txt', 'utf8');
 
 const filosofiaCommand = async (client, message) => {
     message.command = 'filosofia';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
     const totalFilosofias = Filosofias.split('\n').length - 1;
-    const specificFilosofiaIndex = message.messageText.split(' ')[1] ? parseInt(message.messageText.split(' ')[1]) : null;
-    let filosofiaRes = specificFilosofiaIndex ? Filosofias.split('\n')[specificFilosofiaIndex - 1] : randomChoice(Filosofias.split('\n'));
+    const specificFilosofiaIndex = message.messageText.split(' ')[1]
+        ? parseInt(message.messageText.split(' ')[1])
+        : null;
+    let filosofiaRes = specificFilosofiaIndex
+        ? Filosofias.split('\n')[specificFilosofiaIndex - 1]
+        : randomChoice(Filosofias.split('\n'));
 
     if (specificFilosofiaIndex) {
         if (specificFilosofiaIndex < 1 || specificFilosofiaIndex > totalFilosofias) {
@@ -19,12 +23,13 @@ const filosofiaCommand = async (client, message) => {
     }
 
     // remove \n and \r from copypastaRes
-    filosofiaRes = filosofiaRes.replace(/(\r\n|\n|\r)/gm, " ");
-    const jokeIndex = specificFilosofiaIndex ? specificFilosofiaIndex : Filosofias.split('\n').indexOf(filosofiaRes) + 1;
+    filosofiaRes = filosofiaRes.replace(/(\r\n|\n|\r)/gm, ' ');
+    const jokeIndex = specificFilosofiaIndex
+        ? specificFilosofiaIndex
+        : Filosofias.split('\n').indexOf(filosofiaRes) + 1;
     filosofiaRes = `#${jokeIndex}/${totalFilosofias} - ${filosofiaRes}`;
 
     client.log.logAndReply(message, filosofiaRes);
-
 };
 
 filosofiaCommand.commandName = 'filosofia';
@@ -37,6 +42,4 @@ filosofiaCommand.description = `Veja uma filosofia aleatória ou específica qua
 • Exemplo: "!filosofia 4 - O bot vai enviar a filosofia número 4 da lista de filosofias`;
 filosofiaCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${filosofiaCommand.commandName}/${filosofiaCommand.commandName}.js`;
 
-module.exports = {
-    filosofiaCommand,
-};
+export { filosofiaCommand };

@@ -1,6 +1,6 @@
-const { exec } = require('child_process');
-const { shortenUrl, manageLongResponse } = require('../../utils/utils.js');
-const { addChannelToJustlog } = require('../../utils/justlog.js');
+import { exec } from 'child_process';
+import { shortenUrl, manageLongResponse } from '../../utils/utils.js';
+import { addChannelToJustlog } from '../../utils/justlog.js';
 
 async function createNewChannelConfig(client, user) {
     const newConfig = {
@@ -10,7 +10,7 @@ async function createNewChannelConfig(client, user) {
         offlineOnly: false,
         isPaused: false,
         disabledCommands: [],
-        devBanCommands: []
+        devBanCommands: [],
     };
 
     await client.db.insert('config', newConfig);
@@ -26,7 +26,9 @@ const botSayCommand = async (client, message) => {
     message.command = 'dev botsay';
 
     const authorId = message.senderUserID;
-    if (authorId !== process.env.DEV_USERID) { return; }
+    if (authorId !== process.env.DEV_USERID) {
+        return;
+    }
 
     const args = message.messageText.split(' ');
     const targetChannel = args[1];
@@ -48,17 +50,20 @@ const botSayCommand = async (client, message) => {
     return;
 };
 
-const forceJoinCommand = async (client, message, anonClient) => {
+const forceJoinCommand = (client, message, anonClient) => {
     message.command = 'dev forcejoin';
 
     const authorId = message.senderUserID;
-    if (authorId !== process.env.DEV_USERID) { return; }
+    if (authorId !== process.env.DEV_USERID) {
+        return;
+    }
 
     const args = message.messageText.split(' ');
     const targetChannel = args[1].toLowerCase();
     const announce = args[2] === 'true' ? true : false;
 
-    anonClient.join(targetChannel)
+    anonClient
+        .join(targetChannel)
         .then(() => {
             client.log.logAndReply(message, `Joined ${targetChannel}`);
             if (announce) {
@@ -69,23 +74,26 @@ const forceJoinCommand = async (client, message, anonClient) => {
             client.channelsToJoin.push(targetChannel);
             anonClient.channelsToJoin.push(targetChannel);
         })
-        .catch((err) => {
+        .catch(err => {
             client.log.logAndReply(message, `Não foi, check logs`);
             console.log(err);
         });
 };
 
-const forcePartCommand = async (client, message, anonClient) => {
+const forcePartCommand = (client, message, anonClient) => {
     message.command = 'dev forcepart';
 
     const authorId = message.senderUserID;
-    if (authorId !== process.env.DEV_USERID) { return; }
+    if (authorId !== process.env.DEV_USERID) {
+        return;
+    }
 
     const args = message.messageText.split(' ');
     const targetChannel = args[1];
     const announce = args[2] === 'announce' ? true : false;
 
-    anonClient.part(targetChannel)
+    anonClient
+        .part(targetChannel)
         .then(() => {
             client.log.logAndReply(message, `Parted ${targetChannel}`);
             if (announce) {
@@ -93,31 +101,38 @@ const forcePartCommand = async (client, message, anonClient) => {
             }
 
             // remove channel from channelsToJoin array
-            client.channelsToJoin = client.channelsToJoin.filter(channel => channel !== targetChannel);
+            client.channelsToJoin = client.channelsToJoin.filter(
+                channel => channel !== targetChannel
+            );
         })
-        .catch((err) => {
+        .catch(err => {
             client.log.logAndReply(message, `Erro ao dar part em ${targetChannel}: ${err}`);
         });
-}
+};
 
 const execCommand = async (client, message) => {
     message.command = 'dev exec';
 
     const authorId = message.senderUserID;
-    if (authorId !== process.env.DEV_USERID) { return; }
+    if (authorId !== process.env.DEV_USERID) {
+        return;
+    }
 
     const args = message.messageText.split(' ');
     const command = args.slice(1).join(' ');
 
     try {
-        const AsyncFunction = Object.getPrototypeOf(async function () { }).constructor;
+        const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
         const asyncCommand = new AsyncFunction('client', 'message', `return ${command}`);
         let res = await asyncCommand(client, message);
         console.log(res);
         if (typeof res === 'object') {
             res = JSON.stringify(res);
         }
-        client.log.logAndReply(message, `🤖 ${res.length > 490 ? await manageLongResponse(res) : res}`);
+        client.log.logAndReply(
+            message,
+            `🤖 ${res.length > 490 ? await manageLongResponse(res) : res}`
+        );
     } catch (err) {
         client.log.logAndReply(message, `🤖 Erro ao executar comando: ${err}`);
     }
@@ -127,7 +142,9 @@ const sqlExecCommand = async (client, message) => {
     message.command = 'dev sqlexec';
 
     const authorId = message.senderUserID;
-    if (authorId !== process.env.DEV_USERID) { return; }
+    if (authorId !== process.env.DEV_USERID) {
+        return;
+    }
 
     const args = message.messageText.split(' ');
     const command = args.slice(1).join(' ');
@@ -136,7 +153,10 @@ const sqlExecCommand = async (client, message) => {
         const query = await client.turso.client.execute(command);
         const res = JSON.stringify(query.rows);
         console.log(res);
-        client.log.logAndReply(message, `🤖 ${res.length > 490 ? await manageLongResponse(res, true) : res}`);
+        client.log.logAndReply(
+            message,
+            `🤖 ${res.length > 490 ? await manageLongResponse(res, true) : res}`
+        );
     } catch (err) {
         client.log.logAndReply(message, `🤖 Erro ao executar comando: ${err}`);
     }
@@ -146,7 +166,9 @@ const getUserIdCommand = async (client, message) => {
     message.command = 'dev getuserid';
 
     const authorId = message.senderUserID;
-    if (authorId !== process.env.DEV_USERID) { return; }
+    if (authorId !== process.env.DEV_USERID) {
+        return;
+    }
 
     const args = message.messageText.split(' ');
     const targetUser = args[1];
@@ -161,13 +183,15 @@ const getUserIdCommand = async (client, message) => {
     const targetUserId = await client.getUserID(targetUser);
     client.log.logAndReply(message, `UserID de ${targetUser}: ${targetUserId}`);
     return;
-}
+};
 
-const restartCommand = async (client, message) => {
+const restartCommand = (client, message) => {
     message.command = 'dev restart';
 
     const authorId = message.senderUserID;
-    if (authorId !== process.env.DEV_USERID) { return; }
+    if (authorId !== process.env.DEV_USERID) {
+        return;
+    }
 
     client.log.logAndReply(message, `Reiniciando...`);
 
@@ -190,36 +214,46 @@ const resetPetCommand = async (client, message) => {
     message.command = 'dev resetpet';
 
     const authorId = message.senderUserID;
-    if (authorId !== process.env.DEV_USERID) { return; }
+    if (authorId !== process.env.DEV_USERID) {
+        return;
+    }
 
     const currentTime = Math.floor(Date.now() / 1000);
     await client.db.updateMany('pet', {}, { $set: { last_interaction: currentTime } });
 
     client.log.logAndReply(message, `feito 👍`);
-}
+};
 
 const resetCdCommand = async (client, message) => {
     message.command = 'dev resetcd';
 
     const authorId = message.senderUserID;
-    if (authorId !== process.env.DEV_USERID) { return; }
+    if (authorId !== process.env.DEV_USERID) {
+        return;
+    }
 
-    await client.db.updateMany('cookie', {}, {
-        $set: {
-            claimedToday: false,
-            giftedToday: false,
-            usedSlot: false
+    await client.db.updateMany(
+        'cookie',
+        {},
+        {
+            $set: {
+                claimedToday: false,
+                giftedToday: false,
+                usedSlot: false,
+            },
         }
-    });
+    );
 
     client.log.logAndReply(message, `cookies resetados 👍`);
-}
+};
 
-const reloadCommand = async (client, message) => {
+const reloadCommand = (client, message) => {
     message.command = 'dev reload';
 
     const authorId = message.senderUserID;
-    if (authorId !== process.env.DEV_USERID) { return; }
+    if (authorId !== process.env.DEV_USERID) {
+        return;
+    }
 
     // Pull changes from Git
     exec('git pull', { cwd: process.cwd() }, (err, stdout, stderr) => {
@@ -239,7 +273,7 @@ const reloadCommand = async (client, message) => {
 
         try {
             // Clear require cache for all command files
-            Object.keys(require.cache).forEach((key) => {
+            Object.keys(require.cache).forEach(key => {
                 if (key.includes('\\commands\\') || key.includes('/commands/')) {
                     console.log(`deleting ${key} `);
                     delete require.cache[key];
@@ -261,17 +295,21 @@ const reloadDbCommand = async (client, message) => {
     message.command = 'dev reloaddb';
 
     const authorId = message.senderUserID;
-    if (authorId !== process.env.DEV_USERID) { return; }
+    if (authorId !== process.env.DEV_USERID) {
+        return;
+    }
 
     await client.db.loadDbCache();
     client.log.logAndReply(message, `Base de dados recarregada 👍`);
-}
+};
 
-const gitPullCommand = async (client, message) => {
+const gitPullCommand = (client, message) => {
     message.command = 'dev gitpull';
 
     const authorId = message.senderUserID;
-    if (authorId !== process.env.DEV_USERID) { return; }
+    if (authorId !== process.env.DEV_USERID) {
+        return;
+    }
 
     exec('git pull', { cwd: process.cwd() }, (err, stdout, stderr) => {
         if (err) {
@@ -297,7 +335,9 @@ const reloadEmotesCommand = async (client, message) => {
     message.command = 'dev reloademotes';
 
     const authorId = message.senderUserID;
-    if (authorId !== process.env.DEV_USERID) { return; }
+    if (authorId !== process.env.DEV_USERID) {
+        return;
+    }
 
     const targetChannel = message.messageText.split(' ')[1]?.toLowerCase() || message.channelName;
 
@@ -308,7 +348,10 @@ const reloadEmotesCommand = async (client, message) => {
             await client.emotes.getChannelEmotes(channel);
         }
 
-        client.log.logAndReply(message, `Emotes recarregados em ${channelsToReload.length} canais 👍`);
+        client.log.logAndReply(
+            message,
+            `Emotes recarregados em ${channelsToReload.length} canais 👍`
+        );
         return;
     }
 
@@ -322,42 +365,49 @@ const reloadEmotesCommand = async (client, message) => {
     await client.emotes.getChannelEmotes(targetChannel);
 
     client.log.logAndReply(message, `Emotes recarregados 👍`);
-}
+};
 
 const allEmotesCommand = async (client, message) => {
     message.command = 'dev allemotes';
 
     const authorId = message.senderUserID;
-    if (authorId !== process.env.DEV_USERID) { return; }
+    if (authorId !== process.env.DEV_USERID) {
+        return;
+    }
 
     const targetChannel = message.messageText.split(' ')[1] || message.channelName;
     const channelEmotes = await client.emotes.getChannelEmotes(targetChannel);
     client.log.logAndReply(message, `${channelEmotes.length} emotes no total`);
 
     // send all emotes in chunks of 490 characters
-    let emoteMessage = "";
+    let emoteMessage = '';
     for (let i = 0; i < channelEmotes.length; i++) {
         if ((emoteMessage + ` ${channelEmotes[i]} `).length > 490) {
             client.log.logAndSay(message, emoteMessage);
-            emoteMessage = "";
+            emoteMessage = '';
         }
         emoteMessage += ` ${channelEmotes[i]} `;
     }
     if (emoteMessage.length > 0) {
         client.log.logAndSay(message, emoteMessage);
     }
-}
+};
 
 const devBanCommand = async (client, message) => {
     message.command = 'dev ban';
 
     const authorId = message.senderUserID;
-    if (authorId !== process.env.DEV_USERID) { return; }
+    if (authorId !== process.env.DEV_USERID) {
+        return;
+    }
 
     const targetUser = message.messageText.split(' ')[1];
 
     if (!targetUser) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix} devban < usuário > <all /comando > `);
+        client.log.logAndReply(
+            message,
+            `Use o formato: ${message.commandPrefix} devban < usuário > <all /comando > `
+        );
         return;
     }
 
@@ -380,18 +430,24 @@ const devBanCommand = async (client, message) => {
         await client.db.insert('bans', { userId: targetUserId, bannedCommands: [] });
     }
 
-    await client.db.update('bans', { userId: targetUserId }, { $push: { bannedCommands: targetCommand } });
+    await client.db.update(
+        'bans',
+        { userId: targetUserId },
+        { $push: { bannedCommands: targetCommand } }
+    );
     await client.reloadBans();
 
     client.log.logAndReply(message, `👍`);
     return;
-}
+};
 
 const unbanDevCommand = async (client, message) => {
     message.command = 'dev unban';
 
     const authorId = message.senderUserID;
-    if (authorId !== process.env.DEV_USERID) { return; }
+    if (authorId !== process.env.DEV_USERID) {
+        return;
+    }
 
     const targetUser = message.messageText.split(' ')[1];
     const targetUserId = await client.getUserID(targetUser);
@@ -414,18 +470,24 @@ const unbanDevCommand = async (client, message) => {
         return;
     }
 
-    await client.db.update('bans', { userId: targetUserId }, { $pull: { bannedCommands: targetCommand } });
+    await client.db.update(
+        'bans',
+        { userId: targetUserId },
+        { $pull: { bannedCommands: targetCommand } }
+    );
     await client.reloadBans();
 
     client.log.logAndReply(message, `👍`);
     return;
-}
+};
 
 const shortenCommand = async (client, message) => {
     message.command = 'dev shorten';
 
     const authorId = message.senderUserID;
-    if (authorId !== process.env.DEV_USERID) { return; }
+    if (authorId !== process.env.DEV_USERID) {
+        return;
+    }
 
     const targetUrl = message.messageText.split(' ')[1];
     if (!targetUrl) {
@@ -436,28 +498,33 @@ const shortenCommand = async (client, message) => {
     const shortenedUrl = await shortenUrl(targetUrl);
     client.log.logAndReply(message, `🤖  ${shortenedUrl} `);
     return;
-}
+};
 
-const joinedChannelsCommand = async (client, message, anonClient) => {
+const joinedChannelsCommand = (client, message, anonClient) => {
     message.command = 'dev joinedchannels';
 
     const authorId = message.senderUserID;
-    if (authorId !== process.env.DEV_USERID) { return; }
+    if (authorId !== process.env.DEV_USERID) {
+        return;
+    }
 
     const joinedChannels = [...anonClient.joinedChannels].length;
     const channelsToJoin = [...anonClient.channelsToJoin].length;
 
     client.log.logAndReply(message, `🤖 ${joinedChannels}/${channelsToJoin}`);
     return;
-}
+};
 
 const devJoinChannelCommand = async (client, message, anonClient) => {
     message.command = 'dev join';
 
     const authorId = message.senderUserID;
-    if (authorId !== process.env.DEV_USERID) { return; }
+    if (authorId !== process.env.DEV_USERID) {
+        return;
+    }
 
-    const targetChannel = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase() || null;
+    const targetChannel =
+        message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase() || null;
     const announce = message.messageText.split(' ')[2] === 'true' ? true : false;
 
     if (!targetChannel) {
@@ -475,23 +542,36 @@ const devJoinChannelCommand = async (client, message, anonClient) => {
     anonClient.join(targetChannel);
     anonClient.channelsToJoin.push(targetChannel);
     if (announce) {
-        const emote = await client.emotes.getEmoteFromList(targetChannel, ['peepohey', 'heyge'], 'KonCha');
-        client.log.send(targetChannel, `${emote} Oioi! Fui convidado para me juntar aqui! Para saber mais sobre mim, pode usar !ajuda ou !comandos`);
+        const emote = await client.emotes.getEmoteFromList(
+            targetChannel,
+            ['peepohey', 'heyge'],
+            'KonCha'
+        );
+        client.log.send(
+            targetChannel,
+            `${emote} Oioi! Fui convidado para me juntar aqui! Para saber mais sobre mim, pode usar !ajuda ou !comandos`
+        );
     }
     client.log.logAndReply(message, `🤖 Criei config e entrei no canal ${targetChannel}`);
     return;
-}
+};
 
 const devPartChannelCommand = async (client, message, anonClient) => {
     message.command = 'dev part';
 
     const authorId = message.senderUserID;
-    if (authorId !== process.env.DEV_USERID) { return; }
+    if (authorId !== process.env.DEV_USERID) {
+        return;
+    }
 
-    const targetChannel = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase() || null;
+    const targetChannel =
+        message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase() || null;
 
     if (!targetChannel) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}devpart < canal > `);
+        client.log.logAndReply(
+            message,
+            `Use o formato: ${message.commandPrefix}devpart < canal > `
+        );
         return;
     }
 
@@ -501,20 +581,27 @@ const devPartChannelCommand = async (client, message, anonClient) => {
     await client.reloadChannelPrefixes();
 
     anonClient.part(targetChannel);
-    anonClient.channelsToJoin = anonClient.channelsToJoin.filter(channel => channel !== targetChannel);
+    anonClient.channelsToJoin = anonClient.channelsToJoin.filter(
+        channel => channel !== targetChannel
+    );
     client.log.logAndReply(message, `🤖 Apaguei config a saí do canal ${targetChannel} `);
     return;
-}
+};
 
 const giveXpCommand = async (client, message) => {
     message.command = 'dev givexp';
 
     const authorId = message.senderUserID;
-    if (authorId !== process.env.DEV_USERID) { return; }
+    if (authorId !== process.env.DEV_USERID) {
+        return;
+    }
 
     const targetUser = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase();
     if (!targetUser) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}givexp <usuário> <xp>`);
+        client.log.logAndReply(
+            message,
+            `Use o formato: ${message.commandPrefix}givexp <usuário> <xp>`
+        );
         return;
     }
     const targetUserId = await client.getUserID(targetUser);
@@ -525,77 +612,32 @@ const giveXpCommand = async (client, message) => {
 
     const xp = message.messageText.split(' ')[2];
     if (!xp || isNaN(xp)) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}givexp <usuário> <xp>`);
+        client.log.logAndReply(
+            message,
+            `Use o formato: ${message.commandPrefix}givexp <usuário> <xp>`
+        );
         return;
     }
 
     await client.db.update('dungeon', { userId: targetUserId }, { $inc: { xp: parseInt(xp) } });
     const newXp = await client.db.get('dungeon', { userId: targetUserId });
-    client.log.logAndReply(message, `🤖 ${targetUser} XP modificado: [${xp.includes('-') ? `${xp}` : `+${xp}`} ⇒ ${newXp[0].xp}]`);
+    client.log.logAndReply(
+        message,
+        `🤖 ${targetUser} XP modificado: [${xp.includes('-') ? `${xp}` : `+${xp}`} ⇒ ${newXp[0].xp}]`
+    );
     return;
-}
-
-const justlogAddCommand = async (client, message) => {
-    message.command = 'dev justlogadd';
-
-    const authorId = message.senderUserID;
-    if (authorId !== process.env.DEV_USERID) { return; }
-
-    const targetChannel = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase() || null;
-    if (!targetChannel) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}justlogadd <canal>`);
-        return;
-    }
-
-    const targetChannelId = await client.getUserID(targetChannel);
-    if (!targetChannelId) {
-        client.log.logAndReply(message, `Esse canal não existe`);
-        return;
-    }
-
-    const success = await addChannelToJustlog(client, targetChannelId);
-    if (!success) {
-        client.log.logAndReply(message, `Erro ao adicionar canal ao justlog`);
-        return;
-    }
-    client.log.logAndReply(message, `🤖 Canal adicionado ao justlog: ${targetChannel}`);
-    return;
-}
-
-const justlogRemoveCommand = async (client, message) => {
-    message.command = 'dev justlogremove';
-
-    const authorId = message.senderUserID;
-    if (authorId !== process.env.DEV_USERID) { return; }
-
-    const targetChannel = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase() || null;
-    if (!targetChannel) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}justlogremove <canal>`);
-        return;
-    }
-
-    const targetChannelId = await client.getUserID(targetChannel);
-    if (!targetChannelId) {
-        client.log.logAndReply(message, `Esse canal não existe`);
-        return;
-    }
-
-    const success = await removeChannelFromJustlog(client, targetChannelId);
-    if (!success) {
-        client.log.logAndReply(message, `Erro ao remover canal do justlog`);
-        return;
-    }
-    client.log.logAndReply(message, `🤖 Canal removido do justlog: ${targetChannel}`);
-    return;
-}
+};
 
 const revivePetCommand = async (client, message) => {
     message.command = 'dev revivepet';
 
     const authorId = message.senderUserID;
-    if (authorId !== process.env.DEV_USERID) { return; }
+    if (authorId !== process.env.DEV_USERID) {
+        return;
+    }
 
-    const targetChannel = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase() || null;
+    const targetChannel =
+        message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase() || null;
     if (!targetChannel) {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}revivepet <canal>`);
         return;
@@ -610,7 +652,7 @@ const revivePetCommand = async (client, message) => {
     await client.db.update('pet', { channelId: targetChannelId }, { $set: { is_alive: true } });
     client.log.logAndReply(message, `🤖 Pet ressuscitado no canal ${targetChannel}`);
     return;
-}
+};
 
 botSayCommand.aliases = ['botsay', 'bsay'];
 forceJoinCommand.aliases = ['forcejoin', 'fjoin'];
@@ -633,11 +675,9 @@ joinedChannelsCommand.aliases = ['joinedchannels', 'jchannels'];
 devJoinChannelCommand.aliases = ['devjoin', 'djoin'];
 devPartChannelCommand.aliases = ['devpart', 'dpart'];
 giveXpCommand.aliases = ['devgivexp', 'givexp'];
-justlogAddCommand.aliases = ['justlogadd', 'jladd'];
-justlogRemoveCommand.aliases = ['justlogremove', 'jlremove', 'jldelete', 'jldel'];
 revivePetCommand.aliases = ['petrevive', 'revivepet'];
 
-module.exports = {
+export {
     botSayCommand,
     forceJoinCommand,
     forcePartCommand,
@@ -659,7 +699,5 @@ module.exports = {
     devJoinChannelCommand,
     devPartChannelCommand,
     giveXpCommand,
-    justlogAddCommand,
-    justlogRemoveCommand,
-    revivePetCommand
+    revivePetCommand,
 };

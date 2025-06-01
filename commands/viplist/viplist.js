@@ -1,4 +1,4 @@
-const { processCommand } = require("../../utils/processCommand.js");
+import { processCommand } from '../../utils/processCommand.js';
 
 async function getVipList(user) {
     const api_url = `https://roles.tv/api/summary/vips/login/${user}`;
@@ -14,14 +14,20 @@ async function getVipList(user) {
     const totalAffiliates = data.data.affiliates;
     const totalFollowers = data.data.channelsTotalFollowers;
 
-    return { totalPartners, totalVips, totalAffiliates, totalFollowers: totalFollowers.toLocaleString('en-US') };
+    return {
+        totalPartners,
+        totalVips,
+        totalAffiliates,
+        totalFollowers: totalFollowers.toLocaleString('en-US'),
+    };
 }
 
 const vipListCommand = async (client, message) => {
     message.command = 'viplist';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
-    const targetUser = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
+    const targetUser =
+        message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
     const userVipList = await getVipList(targetUser);
 
     if (userVipList === null) {
@@ -34,8 +40,10 @@ const vipListCommand = async (client, message) => {
         return;
     }
 
-    client.log.logAndReply(message, `${targetUser} é VIP em ${userVipList.totalVips} canais | ${userVipList.totalPartners} Parceiros | ${userVipList.totalAffiliates} Afiliados | ${userVipList.totalFollowers} Seguidores no total - https://roles.tv/u/${targetUser.toLowerCase()}`);
-
+    client.log.logAndReply(
+        message,
+        `${targetUser} é VIP em ${userVipList.totalVips} canais | ${userVipList.totalPartners} Parceiros | ${userVipList.totalAffiliates} Afiliados | ${userVipList.totalFollowers} Seguidores no total - https://roles.tv/u/${targetUser.toLowerCase()}`
+    );
 };
 
 vipListCommand.commandName = 'viplist';
@@ -48,6 +56,4 @@ vipListCommand.description = `Exibe uma lista de canais onde o usuário fornecid
 • Exemplo: !viplist {usuário} - Exibe a lista de canais que o usuário fornecido é moderador`;
 vipListCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${vipListCommand.commandName}/${vipListCommand.commandName}.js`;
 
-module.exports = {
-    vipListCommand,
-};
+export { vipListCommand };

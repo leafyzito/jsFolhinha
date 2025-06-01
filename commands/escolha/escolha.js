@@ -1,9 +1,9 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { randomChoice } = require("../../utils/utils.js");
+import { processCommand } from '../../utils/processCommand.js';
+import { randomChoice } from '../../utils/utils.js';
 
 const escolhaCommand = async (client, message) => {
     message.command = 'escolha';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
     const args = message.messageText.split(' ').slice(1);
 
@@ -34,6 +34,4 @@ escolhaCommand.description = `Faça o Folhinha escolher entre as escolhas que vo
 • Exemplo: !escolha a b c - O bot vai escolher um dos três itens aleatoriamente`;
 escolhaCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${escolhaCommand.commandName}/${escolhaCommand.commandName}.js`;
 
-module.exports = {
-    escolhaCommand,
-};
+export { escolhaCommand };

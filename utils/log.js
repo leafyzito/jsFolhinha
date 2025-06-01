@@ -1,4 +1,4 @@
-const { CreateRegex } = require('./Regex.js');
+import { CreateRegex } from './Regex.js';
 
 const regex = new CreateRegex();
 
@@ -13,14 +13,22 @@ class Logger {
         const lastMessageTime = this.channelMsgCooldowns.get(channel) || 0;
         const timeSinceLastMessage = now - lastMessageTime;
 
-        if (timeSinceLastMessage < 2000) { // 2 seconds cooldown
+        if (timeSinceLastMessage < 2000) {
+            // 2 seconds cooldown
             await new Promise(resolve => setTimeout(resolve, 2000 - timeSinceLastMessage));
         }
 
         this.channelMsgCooldowns.set(channel, Date.now());
     }
 
-    handleSendError(err, channel, content, retryMethod, retryCount = 0, lastResortWhisperTarger = null) {
+    handleSendError(
+        err,
+        channel,
+        content,
+        retryMethod,
+        retryCount = 0,
+        lastResortWhisperTarger = null
+    ) {
         // console.log('handleSendError: ', err);
 
         // Handle identical message error - no retries needed
@@ -33,7 +41,9 @@ class Logger {
             // send whisper to user as last resort
             if (lastResortWhisperTarger) {
                 console.log('Max retries reached, whispering response to user');
-                this.client.discord.log(`* Dropped message in #${channel}, whispering response to ${lastResortWhisperTarger}: ${content}`);
+                this.client.discord.log(
+                    `* Dropped message in #${channel}, whispering response to ${lastResortWhisperTarger}: ${content}`
+                );
                 this.client.whisper(lastResortWhisperTarger, content);
                 return;
             }
@@ -43,12 +53,18 @@ class Logger {
         }
 
         // Handle retryable errors
-        const isRetryableError = err.cause.message.includes('too quickly') || err.cause.message.includes('waiting for response');
-        const errorType = err.cause.message.includes('too quickly') ? 'sending messages too quickly' : 'waiting for response';
+        const isRetryableError =
+            err.cause.message.includes('too quickly') ||
+            err.cause.message.includes('waiting for response');
+        const errorType = err.cause.message.includes('too quickly')
+            ? 'sending messages too quickly'
+            : 'waiting for response';
 
         if (isRetryableError) {
             console.log(`${errorType} error, retrying (${retryCount + 1}/3)`);
-            setTimeout(() => { retryMethod(channel, content, retryCount + 1, lastResortWhisperTarger); }, 1500);
+            setTimeout(() => {
+                retryMethod(channel, content, retryCount + 1, lastResortWhisperTarger);
+            }, 1500);
             return;
         }
 
@@ -59,14 +75,21 @@ class Logger {
     checkRegexAndHandle(content, channelContext, message = null) {
         const result = regex.check(content, content.split(' '), channelContext);
         if (result.caught) {
-            console.log(`* Caught by ${result.caughtCategory} (${result.matchedWord}) - original content: ${content}`);
-            this.client.discord.importantLog(`* Caught by ${result.caughtCategory} (${result.matchedWord}) - original content: ${content}`);
+            console.log(
+                `* Caught by ${result.caughtCategory} (${result.matchedWord}) - original content: ${content}`
+            );
+            this.client.discord.importantLog(
+                `* Caught by ${result.caughtCategory} (${result.matchedWord}) - original content: ${content}`
+            );
             // this.send(process.env.DEV_TEST_CHANNEL, `Regex apanhado, check logs ${process.env.DEV_NICK}`);
             if (message) {
                 if (!message.notes) message.notes = '';
-                message.notes = message.notes + `Caught by: ${result.caughtCategory} (${result.matchedWord}) - Original content: ${content}`;
+                message.notes =
+                    message.notes +
+                    `Caught by: ${result.caughtCategory} (${result.matchedWord}) - Original content: ${content}`;
             }
-            content = '⚠️ Mensagem retida por conter conteúdo banido, tente novamente ou mude um pouco o comando';
+            content =
+                '⚠️ Mensagem retida por conter conteúdo banido, tente novamente ou mude um pouco o comando';
         }
         return content;
     }
@@ -102,14 +125,19 @@ class Logger {
             this.client.whisper(message.senderUsername, response);
         } else {
             await this.manageChannelMsgCooldown(message.channelName);
-            this.client.reply(message.channelName, message.messageID, response)
-                .catch((err) => this.handleSendError(err,
-                    message.channelName,
-                    response,
-                    (channel, content, retryCount, senderUsername) => this.send(channel, content, retryCount, senderUsername),
-                    retryCount,
-                    message.senderUsername
-                ));
+            this.client
+                .reply(message.channelName, message.messageID, response)
+                .catch(err =>
+                    this.handleSendError(
+                        err,
+                        message.channelName,
+                        response,
+                        (channel, content, retryCount, senderUsername) =>
+                            this.send(channel, content, retryCount, senderUsername),
+                        retryCount,
+                        message.senderUsername
+                    )
+                );
         }
 
         await this.createCommandLog(message, response);
@@ -124,15 +152,19 @@ class Logger {
         message.internalResponseTime = new Date().getTime() - message.internalTimestamp;
 
         await this.manageChannelMsgCooldown(message.channelName);
-        this.client.say(message.channelName, response)
-            .catch((err) => this.handleSendError(
-                err,
-                message.channelName,
-                response,
-                (channel, content, retryCount, senderUsername) => this.send(channel, content, retryCount, senderUsername),
-                retryCount,
-                message.senderUsername
-            ));
+        this.client
+            .say(message.channelName, response)
+            .catch(err =>
+                this.handleSendError(
+                    err,
+                    message.channelName,
+                    response,
+                    (channel, content, retryCount, senderUsername) =>
+                        this.send(channel, content, retryCount, senderUsername),
+                    retryCount,
+                    message.senderUsername
+                )
+            );
 
         await this.createCommandLog(message, response);
         console.log(`#${message.channelName}/${message.senderUsername} - ${message.command}`);
@@ -146,19 +178,25 @@ class Logger {
         message.internalResponseTime = new Date().getTime() - message.internalTimestamp;
 
         await this.manageChannelMsgCooldown(message.channelName);
-        this.client.me(message.channelName, response)
-            .catch((err) => this.handleSendError(err,
-                message.channelName,
-                response,
-                (channel, content, retryCount, senderUsername) => this.send(channel, content, retryCount, senderUsername), retryCount,
-                message.senderUsername
-            ));
+        this.client
+            .me(message.channelName, response)
+            .catch(err =>
+                this.handleSendError(
+                    err,
+                    message.channelName,
+                    response,
+                    (channel, content, retryCount, senderUsername) =>
+                        this.send(channel, content, retryCount, senderUsername),
+                    retryCount,
+                    message.senderUsername
+                )
+            );
 
         await this.createCommandLog(message, '/me ' + response);
         console.log(`#${message.channelName}/${message.senderUsername} - ${message.command}`);
     }
 
-    async logAndWhisper(message, response, notes = null) {
+    logAndWhisper(message, response, notes = null) {
         message.notes = notes;
         response = this.checkRegexAndHandle(response, message.senderUsername, message);
 
@@ -170,14 +208,19 @@ class Logger {
         content = this.checkRegexAndHandle(content, channel);
 
         await this.manageChannelMsgCooldown(channel);
-        this.client.say(channel, content)
-            .catch((err) => this.handleSendError(err,
-                channel,
-                content,
-                (channel, content, retryCount, senderUsername) => this.send(channel, content, retryCount, senderUsername),
-                retryCount,
-                senderUsername
-            ));
+        this.client
+            .say(channel, content)
+            .catch(err =>
+                this.handleSendError(
+                    err,
+                    channel,
+                    content,
+                    (channel, content, retryCount, senderUsername) =>
+                        this.send(channel, content, retryCount, senderUsername),
+                    retryCount,
+                    senderUsername
+                )
+            );
 
         this.client.discord.logSend(channel, content);
     }
@@ -186,34 +229,41 @@ class Logger {
         response = this.checkRegexAndHandle(response, message.channelName, message);
 
         await this.manageChannelMsgCooldown(message.channelName);
-        this.client.reply(message.channelName, message.messageID, response)
-            .catch((err) => this.handleSendError(err,
-                message.channelName,
-                response,
-                (channel, content, retryCount, senderUsername) => this.send(channel, content, retryCount, senderUsername),
-                retryCount,
-                message.senderUsername
-            ));
+        this.client
+            .reply(message.channelName, message.messageID, response)
+            .catch(err =>
+                this.handleSendError(
+                    err,
+                    message.channelName,
+                    response,
+                    (channel, content, retryCount, senderUsername) =>
+                        this.send(channel, content, retryCount, senderUsername),
+                    retryCount,
+                    message.senderUsername
+                )
+            );
 
         this.client.discord.logSend(message.channelName, response);
     }
 
-    async whisper(targetUser, content, retryCount = 0) {
+    whisper(targetUser, content, retryCount = 0) {
         content = this.checkRegexAndHandle(content, targetUser);
 
-        this.client.whisper(targetUser, content)
-            .catch((err) => this.handleSendError(err,
-                targetUser,
-                content,
-                this.whisper.bind(this),
-                retryCount,
-                null
-            ));
+        this.client
+            .whisper(targetUser, content)
+            .catch(err =>
+                this.handleSendError(
+                    err,
+                    targetUser,
+                    content,
+                    this.whisper.bind(this),
+                    retryCount,
+                    null
+                )
+            );
 
         this.client.discord.logWhisper(targetUser, content);
     }
 }
 
-module.exports = {
-    Logger: Logger
-};
+export { Logger };

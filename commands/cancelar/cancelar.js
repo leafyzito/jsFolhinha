@@ -1,5 +1,5 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { randomInt, randomChoice } = require("../../utils/utils.js");
+import { processCommand } from '../../utils/processCommand.js';
+import { randomChoice } from '../../utils/utils.js';
 
 const Cancelamentos = [
     'ser atraente demais',
@@ -32,14 +32,15 @@ const Cancelamentos = [
     'procrastinar demais',
     'se considerar incancelável',
     'assistir anime',
-    'jogar league of legends'
+    'jogar league of legends',
 ];
 
 const cancelarCommand = async (client, message) => {
     message.command = 'cancelar';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
-    const cancelTarget = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
+    const cancelTarget =
+        message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
 
     if (['folhinha', 'folhinhabot'].includes(cancelTarget.toLowerCase())) {
         client.log.logAndReply(message, `Stare ow`);
@@ -48,10 +49,10 @@ const cancelarCommand = async (client, message) => {
 
     const randomCancelamento = randomChoice(Cancelamentos);
 
-    client.log.logAndReply(message,
-        `${cancelTarget == message.senderUsername ? `${cancelTarget} se auto-cancelou por ${randomCancelamento}` : `${message.senderUsername} cancelou ${cancelTarget} por ${randomCancelamento}`}`);
-
-
+    client.log.logAndReply(
+        message,
+        `${cancelTarget == message.senderUsername ? `${cancelTarget} se auto-cancelou por ${randomCancelamento}` : `${message.senderUsername} cancelou ${cancelTarget} por ${randomCancelamento}`}`
+    );
 };
 
 cancelarCommand.commandName = 'cancelar';
@@ -63,6 +64,4 @@ cancelarCommand.description = `Marque alguém para que seja cancelado por algo a
 A lista de motivos aleatórios foi tirada do site https://perchance.org/gerador-cancelamento`;
 cancelarCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${cancelarCommand.commandName}/${cancelarCommand.commandName}.js`;
 
-module.exports = {
-    cancelarCommand,
-};
+export { cancelarCommand };

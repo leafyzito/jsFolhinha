@@ -1,9 +1,15 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { manageLongResponse, createNewGist, timeSince, parseTime, isStreamOnline } = require("../../utils/utils.js");
-const schedule = require('node-schedule');
+import { processCommand } from '../../utils/processCommand.js';
+import {
+    manageLongResponse,
+    createNewGist,
+    timeSince,
+    parseTime,
+    isStreamOnline,
+} from '../../utils/utils.js';
+import schedule from 'node-schedule';
 
 async function newRemind(client, message, targetId, remindMessage, remindAt) {
-    const newRemindId = await client.db.count('remind', {}, true) + 1;
+    const newRemindId = (await client.db.count('remind', {}, true)) + 1;
     const remindInfo = {
         _id: newRemindId,
         senderId: message.senderUserID,
@@ -21,24 +27,30 @@ async function newRemind(client, message, targetId, remindMessage, remindAt) {
 
 const remindCommand = async (client, message) => {
     message.command = 'remind';
-    if (!await processCommand(5000, 'user', message, client)) return;
+    if (!(await processCommand(5000, 'user', message, client))) return;
 
     if (message.messageText.split(' ').length === 1) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind <usuário> <mensagem>`);
+        client.log.logAndReply(
+            message,
+            `Use o formato: ${message.commandPrefix}remind <usuário> <mensagem>`
+        );
         return;
     }
 
-    var targetUser = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase()
+    let targetUser = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase();
 
     if (['del', 'delete', 'apagar'].includes(targetUser)) {
         const reminderId = message.messageText.split(' ')[2];
 
         if (isNaN(reminderId)) {
-            client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind delete <ID do lembrete>`);
+            client.log.logAndReply(
+                message,
+                `Use o formato: ${message.commandPrefix}remind delete <ID do lembrete>`
+            );
             return;
         }
 
-        var remindInfo = await client.db.get('remind', { _id: parseInt(reminderId) });
+        let remindInfo = await client.db.get('remind', { _id: parseInt(reminderId) });
         if (remindInfo.length === 0) {
             client.log.logAndReply(message, `Não existe nenhum lembrete com esse ID`);
             return;
@@ -55,12 +67,22 @@ const remindCommand = async (client, message) => {
             return;
         }
 
-        const emote = await client.emotes.getEmoteFromList(message.channelName, ['joia', 'jumilhao'], '👍');
+        const emote = await client.emotes.getEmoteFromList(
+            message.channelName,
+            ['joia', 'jumilhao'],
+            '👍'
+        );
         client.log.logAndReply(message, `Lembrete apagado ${emote}`);
-        await client.db.update('remind', { _id: parseInt(reminderId) }, { $set: { beenRead: true } });
+        await client.db.update(
+            'remind',
+            { _id: parseInt(reminderId) },
+            { $set: { beenRead: true } }
+        );
         // await client.reloadReminders();
         // remove userid from client.usersWithPendingReminders
-        client.usersWithPendingReminders = client.usersWithPendingReminders.filter(id => id !== remindInfo.receiverId);
+        client.usersWithPendingReminders = client.usersWithPendingReminders.filter(
+            id => id !== remindInfo.receiverId
+        );
 
         // cancel the cron job
         if (client.reminderJobs[reminderId]) {
@@ -77,15 +99,21 @@ const remindCommand = async (client, message) => {
         }
 
         if (message.messageText.split(' ').length === 2) {
-            const remindInfo = await client.db.get('remind', { receiverId: message.senderUserID, beenRead: false, remindAt: null });
+            let remindInfo = await client.db.get('remind', {
+                receiverId: message.senderUserID,
+                beenRead: false,
+                remindAt: null,
+            });
 
-            var pendingReminders = [];
-            remindInfo.forEach((reminder) => {
+            let pendingReminders = [];
+            remindInfo.forEach(reminder => {
                 pendingReminders.push(`${reminder._id}`);
             });
 
-            var finalRes = `Você tem estes lembretes: ${pendingReminders.join(', ')}`;
-            if (finalRes.length > 480) { finalRes = await manageLongResponse(finalRes); }
+            let finalRes = `Você tem estes lembretes: ${pendingReminders.join(', ')}`;
+            if (finalRes.length > 480) {
+                finalRes = await manageLongResponse(finalRes);
+            }
 
             client.log.logAndReply(message, finalRes);
             return;
@@ -94,14 +122,18 @@ const remindCommand = async (client, message) => {
         const reminderId = message.messageText.split(' ')[2];
 
         if (reminderId === 'all') {
-            const remindInfo = await client.db.get('remind', { receiverId: message.senderUserID, beenRead: false });
+            let remindInfo = await client.db.get('remind', {
+                receiverId: message.senderUserID,
+                beenRead: false,
+            });
 
-            var pendingReminders = ``;
-            var reminderSenders = {};
+            let pendingReminders = ``;
+            let reminderSenders = {};
 
-            for (const reminder of remindInfo) {
+            for (let reminder of remindInfo) {
                 if (!reminderSenders[reminder.senderId]) {
-                    var reminderSender = await client.getUserByUserID(reminder.senderId) || 'Usuário deletado';
+                    let reminderSender =
+                        (await client.getUserByUserID(reminder.senderId)) || 'Usuário deletado';
                     reminderSenders[reminder.senderId] = reminderSender;
                 }
 
@@ -109,54 +141,90 @@ const remindCommand = async (client, message) => {
             }
 
             pendingReminders = await createNewGist(pendingReminders);
-            client.log.logAndReply(message, `Para ver todos os seus lembretes, acesse: ${pendingReminders}`);
-            await client.db.updateMany('remind', { receiverId: message.senderUserID }, { $set: { beenRead: true } });
+            client.log.logAndReply(
+                message,
+                `Para ver todos os seus lembretes, acesse: ${pendingReminders}`
+            );
+            await client.db.updateMany(
+                'remind',
+                { receiverId: message.senderUserID },
+                { $set: { beenRead: true } }
+            );
             // await client.reloadReminders();
             // remove userid from client.usersWithPendingReminders
-            client.usersWithPendingReminders = client.usersWithPendingReminders.filter(id => id !== message.senderUserID);
+            client.usersWithPendingReminders = client.usersWithPendingReminders.filter(
+                id => id !== message.senderUserID
+            );
             return;
         }
 
         if (isNaN(reminderId)) {
-            client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind show <ID do lembrete>`);
+            client.log.logAndReply(
+                message,
+                `Use o formato: ${message.commandPrefix}remind show <ID do lembrete>`
+            );
             return;
         }
 
-        var remindInfo = await client.db.get('remind', { _id: parseInt(reminderId), beenRead: false });
+        let remindInfo = await client.db.get('remind', {
+            _id: parseInt(reminderId),
+            beenRead: false,
+        });
         if (remindInfo.length === 0) {
             client.log.logAndReply(message, `Não existe nenhum lembrete pendente com esse ID`);
             return;
         }
 
         remindInfo = remindInfo[0];
-        if (remindInfo.receiverId !== message.senderUserID && remindInfo.senderId !== message.senderUserID) {
-            client.log.logAndReply(message, `Você não é o criador nem o destinatário desse lembrete`);
+        if (
+            remindInfo.receiverId !== message.senderUserID &&
+            remindInfo.senderId !== message.senderUserID
+        ) {
+            client.log.logAndReply(
+                message,
+                `Você não é o criador nem o destinatário desse lembrete`
+            );
             return;
         }
 
-        var reminderSender = await client.getUserByUserID(remindInfo.senderId) || 'Usuário deletado';
-        var finalRes = `Lembrete de @${reminderSender} há ${timeSince(remindInfo.remindTime)}: ${remindInfo.remindMessage}`;
-        if (finalRes.length > 480) { finalRes = await manageLongResponse(finalRes); }
+        let reminderSender =
+            (await client.getUserByUserID(remindInfo.senderId)) || 'Usuário deletado';
+        let finalRes = `Lembrete de @${reminderSender} há ${timeSince(remindInfo.remindTime)}: ${remindInfo.remindMessage}`;
+        if (finalRes.length > 480) {
+            finalRes = await manageLongResponse(finalRes);
+        }
 
         client.log.logAndReply(message, finalRes);
-        await client.db.update('remind', { _id: parseInt(reminderId) }, { $set: { beenRead: true } });
+        await client.db.update(
+            'remind',
+            { _id: parseInt(reminderId) },
+            { $set: { beenRead: true } }
+        );
         // await client.reloadReminders();
         // remove userid from client.usersWithPendingReminders if there are no more pending reminders
-        const hasMorePendingReminders = await client.db.get('remind', { receiverId: message.senderUserID, beenRead: false });
+        let hasMorePendingReminders = await client.db.get('remind', {
+            receiverId: message.senderUserID,
+            beenRead: false,
+        });
         if (hasMorePendingReminders.length === 0) {
-            client.usersWithPendingReminders = client.usersWithPendingReminders.filter(id => id !== message.senderUserID);
+            client.usersWithPendingReminders = client.usersWithPendingReminders.filter(
+                id => id !== message.senderUserID
+            );
         }
         return;
     }
 
     if (['block', 'bloquear'].includes(targetUser)) {
-        const targetUser = message.messageText.split(' ')[2]?.replace(/^@/, '');
+        let targetUser = message.messageText.split(' ')[2]?.replace(/^@/, '');
         if (!targetUser) {
-            client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind block <usuário>`);
+            client.log.logAndReply(
+                message,
+                `Use o formato: ${message.commandPrefix}remind block <usuário>`
+            );
             return;
         }
 
-        const targetUserId = await client.getUserID(targetUser);
+        let targetUserId = await client.getUserID(targetUser);
         if (!targetUserId) {
             client.log.logAndReply(message, `Esse usuário não existe`);
             return;
@@ -167,19 +235,29 @@ const remindCommand = async (client, message) => {
             return;
         }
 
-        await client.db.update('users', { userid: message.senderUserID }, { $push: { 'blocks.remind': targetUserId } });
-        client.log.logAndReply(message, `Você bloqueou ${targetUser} de usar comandos remind para você`);
+        await client.db.update(
+            'users',
+            { userid: message.senderUserID },
+            { $push: { 'blocks.remind': targetUserId } }
+        );
+        client.log.logAndReply(
+            message,
+            `Você bloqueou ${targetUser} de usar comandos remind para você`
+        );
         return;
     }
 
     if (['unblock', 'desbloquear'].includes(targetUser)) {
-        const targetUser = message.messageText.split(' ')[2]?.replace(/^@/, '');
+        let targetUser = message.messageText.split(' ')[2]?.replace(/^@/, '');
         if (!targetUser) {
-            client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind unblock <usuário>`);
+            client.log.logAndReply(
+                message,
+                `Use o formato: ${message.commandPrefix}remind unblock <usuário>`
+            );
             return;
         }
 
-        const targetUserId = await client.getUserID(targetUser);
+        let targetUserId = await client.getUserID(targetUser);
         if (!targetUserId) {
             client.log.logAndReply(message, `Esse usuário não existe`);
             return;
@@ -190,8 +268,15 @@ const remindCommand = async (client, message) => {
             return;
         }
 
-        await client.db.updateMany('users', { userid: message.senderUserID }, { $pull: { 'blocks.remind': targetUserId } });
-        client.log.logAndReply(message, `Você desbloqueou ${targetUser} de usar comandos remind para você`);
+        await client.db.updateMany(
+            'users',
+            { userid: message.senderUserID },
+            { $pull: { 'blocks.remind': targetUserId } }
+        );
+        client.log.logAndReply(
+            message,
+            `Você desbloqueou ${targetUser} de usar comandos remind para você`
+        );
         return;
     }
 
@@ -204,7 +289,7 @@ const remindCommand = async (client, message) => {
         targetUser = message.senderUsername;
     }
 
-    const targetUserId = await client.getUserID(targetUser);
+    let targetUserId = await client.getUserID(targetUser);
     if (!targetUserId) {
         client.log.logAndReply(message, `Esse usuário não existe`);
         return;
@@ -213,13 +298,35 @@ const remindCommand = async (client, message) => {
     let totalSeconds = 0;
     let timeParts = message.messageText.split(' ');
     let timeIndex = timeParts[2]?.toLowerCase() === 'in' ? 3 : null;
-    let days = timeParts[timeIndex] && ['d', 'day', 'days'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
+    let days =
+        timeParts[timeIndex] &&
+        ['d', 'day', 'days'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix))
+            ? timeParts[timeIndex]
+            : null;
     if (days && !isNaN(parseInt(days))) timeIndex++;
-    let hours = timeParts[timeIndex] && ['h', 'hrs', 'hour', 'hours'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
+    let hours =
+        timeParts[timeIndex] &&
+        ['h', 'hrs', 'hour', 'hours'].some(suffix =>
+            timeParts[timeIndex].toLowerCase().endsWith(suffix)
+        )
+            ? timeParts[timeIndex]
+            : null;
     if (hours && !isNaN(parseInt(hours))) timeIndex++;
-    let minutes = timeParts[timeIndex] && ['m', 'min', 'mins', 'minute', 'minutes'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
+    let minutes =
+        timeParts[timeIndex] &&
+        ['m', 'min', 'mins', 'minute', 'minutes'].some(suffix =>
+            timeParts[timeIndex].toLowerCase().endsWith(suffix)
+        )
+            ? timeParts[timeIndex]
+            : null;
     if (minutes && !isNaN(parseInt(minutes))) timeIndex++;
-    let seconds = timeParts[timeIndex] && ['s', 'sec', 'secs', 'second', 'seconds'].some(suffix => timeParts[timeIndex].toLowerCase().endsWith(suffix)) ? timeParts[timeIndex] : null;
+    let seconds =
+        timeParts[timeIndex] &&
+        ['s', 'sec', 'secs', 'second', 'seconds'].some(suffix =>
+            timeParts[timeIndex].toLowerCase().endsWith(suffix)
+        )
+            ? timeParts[timeIndex]
+            : null;
     if (seconds && !isNaN(parseInt(seconds))) timeIndex++;
 
     if (days && !isNaN(parseInt(days))) totalSeconds += parseTime(days, 'd');
@@ -227,15 +334,20 @@ const remindCommand = async (client, message) => {
     if (minutes && !isNaN(parseInt(minutes))) totalSeconds += parseTime(minutes, 'm');
     if (seconds && !isNaN(parseInt(seconds))) totalSeconds += parseTime(seconds, 's');
 
-    if (totalSeconds === NaN) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind <usuário> in <tempo> <mensagem> (ex: in 10s/10m/10h/10d). Se o erro persistir, contacte o @${process.env.DEV_NICK}`);
+    if (isNaN(totalSeconds)) {
+        client.log.logAndReply(
+            message,
+            `Use o formato: ${message.commandPrefix}remind <usuário> in <tempo> <mensagem> (ex: in 10s/10m/10h/10d). Se o erro persistir, contacte o @${process.env.DEV_NICK}`
+        );
         return;
     }
 
-    if (timeIndex === null) { timeIndex = 2; }
+    if (timeIndex === null) {
+        timeIndex = 2;
+    }
     let remindMessage = message.messageText.split(' ').slice(timeIndex).join(' ').trim();
 
-    const remindAt = totalSeconds ? Math.floor(Date.now() / 1000) + totalSeconds : null;
+    let remindAt = totalSeconds ? Math.floor(Date.now() / 1000) + totalSeconds : null;
     console.log(Math.floor(Date.now() / 1000));
     console.log(remindAt);
 
@@ -244,7 +356,10 @@ const remindCommand = async (client, message) => {
     }
 
     if (timeParts.includes('in') && (days || hours || minutes || seconds) && !totalSeconds) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}remind <usuário> in <tempo> <mensagem> (ex: in 10s/10m/10h/10d).`);
+        client.log.logAndReply(
+            message,
+            `Use o formato: ${message.commandPrefix}remind <usuário> in <tempo> <mensagem> (ex: in 10s/10m/10h/10d).`
+        );
         return;
     }
 
@@ -273,58 +388,84 @@ const remindCommand = async (client, message) => {
     // if exists in logs, check for stuff. if not, skip and create remind anyway
     if (targetUserInfo) {
         if (targetUserInfo.optoutRemind) {
-            client.log.logAndReply(message, `Esse usuário optou por não ser alvo de comandos remind 🚫`);
+            client.log.logAndReply(
+                message,
+                `Esse usuário optou por não ser alvo de comandos remind 🚫`
+            );
             return;
         }
 
         if (targetUserInfo.blocks && targetUserInfo.blocks.remind) {
             if (targetUserInfo.blocks.remind.includes(message.senderUserID)) {
-                client.log.logAndReply(message, `Esse usuário bloqueou você de usar comandos remind para ele 🚫`);
+                client.log.logAndReply(
+                    message,
+                    `Esse usuário bloqueou você de usar comandos remind para ele 🚫`
+                );
                 return;
             }
         }
     }
 
     // create remind
-    const newRemindId = await newRemind(client, message, targetUserId, remindMessage, remindAt);
+    let newRemindId = await newRemind(client, message, targetUserId, remindMessage, remindAt);
 
     const emote = await client.emotes.getEmoteFromList(message.channelName, ['noted'], '📝');
-    client.log.logAndReply(message, `Vou lembrar ${targetUser !== message.senderUsername ? `@${targetUser}` : 'você'} disso ${totalSeconds ? `em ${days ? `${days} ` : ''}${hours ? `${hours} ` : ''}${minutes ? `${minutes} ` : ''}${seconds ? `${seconds} ` : ''}` : 'assim que falar no chat'} ${emote} (ID ${newRemindId})`,
-        remindAt ? new Date(remindAt * 1000).toLocaleString('pt-PT', { timeZone: 'Europe/Lisbon' }) : null
+    client.log.logAndReply(
+        message,
+        `Vou lembrar ${targetUser !== message.senderUsername ? `@${targetUser}` : 'você'} disso ${totalSeconds ? `em ${days ? `${days} ` : ''}${hours ? `${hours} ` : ''}${minutes ? `${minutes} ` : ''}${seconds ? `${seconds} ` : ''}` : 'assim que falar no chat'} ${emote} (ID ${newRemindId})`,
+        remindAt
+            ? new Date(remindAt * 1000).toLocaleString('pt-PT', { timeZone: 'Europe/Lisbon' })
+            : null
     );
     // await client.reloadReminders();
     // add userid to client.usersWithPendingReminders
     client.usersWithPendingReminders.push(targetUserId);
 
     // if it is a scheduled remind, add it to client.reminderJobs
-    const remindCreateTime = Math.floor(Date.now() / 1000);
+    let remindCreateTime = Math.floor(Date.now() / 1000);
     if (remindAt) {
-        const job = schedule.scheduleJob(new Date(remindAt * 1000), async function () {
+        let job = schedule.scheduleJob(new Date(remindAt * 1000), async function () {
             // verify the remind has not been deleted on website, force check in db
-            const remindDeletionCheck = await client.db.get('remind', { _id: newRemindId }, true);
-            if (remindDeletionCheck.length != 0 && remindDeletionCheck[0].beenRead) { return; }
+            let remindDeletionCheck = await client.db.get('remind', { _id: newRemindId }, true);
+            if (remindDeletionCheck.length != 0 && remindDeletionCheck[0].beenRead) {
+                return;
+            }
 
-            const reminderSender = await client.getUserByUserID(message.senderUserID) || 'Usuário deletado';
-            const reminderTime = timeSince(remindCreateTime);
-            let finalRes = reminderSender === targetUser
-                ? `@${targetUser}, lembrete de você mesmo há ${reminderTime}: ${remindMessage}`
-                : `@${targetUser}, lembrete de @${reminderSender} há ${reminderTime}: ${remindMessage}`;
+            let reminderSender =
+                (await client.getUserByUserID(message.senderUserID)) || 'Usuário deletado';
+            let reminderTime = timeSince(remindCreateTime);
+            let finalRes =
+                reminderSender === targetUser
+                    ? `@${targetUser}, lembrete de você mesmo há ${reminderTime}: ${remindMessage}`
+                    : `@${targetUser}, lembrete de @${reminderSender} há ${reminderTime}: ${remindMessage}`;
 
-            if (finalRes.length > 480) { finalRes = await manageLongResponse(finalRes); }
+            if (finalRes.length > 480) {
+                finalRes = await manageLongResponse(finalRes);
+            }
 
             // check if channel is still in configs and check for if it's paused, reminds are banned and offlineOnly
-            if (!client.channelConfigs[message.channelName] ||
+            if (
+                !client.channelConfigs[message.channelName] ||
                 client.channelConfigs[message.channelName].isPaused ||
                 client.channelConfigs[message.channelName].disabledCommands.includes('remind') ||
-                (client.channelConfigs[message.channelName].offlineOnly && await isStreamOnline(message.channelName))) {
+                (client.channelConfigs[message.channelName].offlineOnly &&
+                    (await isStreamOnline(message.channelName)))
+            ) {
                 // send in whisper to receiverName if channel is paused, reminds are banned or offlineOnly with stream online
                 await client.log.whisper(targetUser, finalRes);
-                await client.db.update('remind', { _id: newRemindId }, { $set: { beenRead: true } });
-            }
-            else {
+                await client.db.update(
+                    'remind',
+                    { _id: newRemindId },
+                    { $set: { beenRead: true } }
+                );
+            } else {
                 // send in channel if channel is not paused, reminds are not banned and not offlineOnly
                 await client.log.send(message.channelName, finalRes);
-                await client.db.update('remind', { _id: newRemindId }, { $set: { beenRead: true } });
+                await client.db.update(
+                    'remind',
+                    { _id: newRemindId },
+                    { $set: { beenRead: true } }
+                );
             }
         });
 
@@ -364,6 +505,4 @@ Caso queira apagar algum lembrete, use o comando !remind delete {ID do lembrete}
 Por fim, se quiser bloquear lembretes de algum usuário em específico basta usar !remind block/unblock`;
 remindCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${remindCommand.commandName}/${remindCommand.commandName}.js`;
 
-module.exports = {
-    remindCommand,
-};
+export { remindCommand };

@@ -1,24 +1,24 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { LANGUAGE_MAPPINGS } = require('../translate/langs.js');
+import { processCommand } from '../../utils/processCommand.js';
+import { LANGUAGE_MAPPINGS } from '../translate/langs.js';
 
 async function translateText(targetLanguage, textToTranslate) {
     console.log('translating to: ', targetLanguage, 'text: ', textToTranslate);
     const params = new URLSearchParams({
-        client: "gtx",
-        dt: "t",
-        ie: "UTF-8",
-        oe: "UTF-8",
+        client: 'gtx',
+        dt: 't',
+        ie: 'UTF-8',
+        oe: 'UTF-8',
         sl: 'auto',
         tl: targetLanguage,
-        q: textToTranslate
+        q: textToTranslate,
     });
 
     const response = await fetch(`https://translate.googleapis.com/translate_a/single?${params}`, {
-        method: "GET",
+        method: 'GET',
         headers: {
-            "User-Agent": "Mozilla/5.0",
-            "Accept": "application/json"
-        }
+            'User-Agent': 'Mozilla/5.0',
+            Accept: 'application/json',
+        },
     });
 
     const data = await response.json();
@@ -35,10 +35,15 @@ async function hypertranslateText(textToTranslate, numTranslations) {
     let confidenceAverage = 0;
 
     for (let i = 0; i < numTranslations; i++) {
-        const randomLangCode = Object.values(LANGUAGE_MAPPINGS)[Math.floor(Math.random() * Object.values(LANGUAGE_MAPPINGS).length)];
+        const randomLangCode =
+            Object.values(LANGUAGE_MAPPINGS)[
+                Math.floor(Math.random() * Object.values(LANGUAGE_MAPPINGS).length)
+            ];
 
         // add to listOfTranslations the name of the language
-        const languageName = Object.keys(LANGUAGE_MAPPINGS).find(key => LANGUAGE_MAPPINGS[key] === randomLangCode);
+        const languageName = Object.keys(LANGUAGE_MAPPINGS).find(
+            key => LANGUAGE_MAPPINGS[key] === randomLangCode
+        );
         listOfTranslations.push(languageName);
 
         const translation = await translateText(randomLangCode, currentText);
@@ -50,16 +55,23 @@ async function hypertranslateText(textToTranslate, numTranslations) {
     const finalTranslation = await translateText('pt', currentText);
     confidenceAverage += finalTranslation.confidence;
     confidenceAverage = confidenceAverage / numTranslations;
-    return { translatedText: finalTranslation.translatedText, listOfTranslations, confidenceAverage };
+    return {
+        translatedText: finalTranslation.translatedText,
+        listOfTranslations,
+        confidenceAverage,
+    };
 }
 
 const hypertranslateCommand = async (client, message) => {
     message.command = 'hypertranslate';
-    if (!await processCommand(20_000, 'channel', message, client)) return;
+    if (!(await processCommand(20_000, 'channel', message, client))) return;
 
     const args = message.messageText.split(' ');
     if (args.length < 2) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}hypertranslate (<número de traduções>) <texto para traduzir>`);
+        client.log.logAndReply(
+            message,
+            `Use o formato: ${message.commandPrefix}hypertranslate (<número de traduções>) <texto para traduzir>`
+        );
         return;
     }
 
@@ -70,7 +82,10 @@ const hypertranslateCommand = async (client, message) => {
     } else {
         // check if there is number argument and text to be translated
         if (args.length < 3) {
-            client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}hypertranslate <número de traduções> <texto para traduzir>`);
+            client.log.logAndReply(
+                message,
+                `Use o formato: ${message.commandPrefix}hypertranslate <número de traduções> <texto para traduzir>`
+            );
             return;
         }
 
@@ -86,11 +101,19 @@ const hypertranslateCommand = async (client, message) => {
     }
 
     const textToTranslate = args.slice(1).join(' ');
-    const emote = await client.emotes.getEmoteFromList(message.channelName, ['pphop', 'ppcircle', 'waiting', 'ppdvd'], '🤖');
+    const emote = await client.emotes.getEmoteFromList(
+        message.channelName,
+        ['pphop', 'ppcircle', 'waiting', 'ppdvd'],
+        '🤖'
+    );
     client.log.reply(message, `Correndo ${numTranslations} traduções... ${emote}`);
     const hyperTranslatedText = await hypertranslateText(textToTranslate, numTranslations);
 
-    client.log.logAndReply(message, `🤖 ${hyperTranslatedText.translatedText}`, `Lista de traduções: ${hyperTranslatedText.listOfTranslations.join(', ')}`);
+    client.log.logAndReply(
+        message,
+        `🤖 ${hyperTranslatedText.translatedText}`,
+        `Lista de traduções: ${hyperTranslatedText.listOfTranslations.join(', ')}`
+    );
 };
 
 hypertranslateCommand.commandName = 'hypertranslate';
@@ -103,6 +126,4 @@ hypertranslateCommand.description = `Traduz o texto fornecido o número de vezes
 • Exemplo: !hypertranslate 15 Olá mundo - O bot vai traduzir aleatoriamente "Olá mundo" 15 vezes`;
 hypertranslateCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${hypertranslateCommand.commandName}/${hypertranslateCommand.commandName}.js`;
 
-module.exports = {
-    hypertranslateCommand,
-};
+export { hypertranslateCommand };

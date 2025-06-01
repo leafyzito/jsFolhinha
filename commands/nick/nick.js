@@ -1,5 +1,5 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { manageLongResponse } = require("../../utils/utils.js");
+import { processCommand } from '../../utils/processCommand.js';
+import { manageLongResponse } from '../../utils/utils.js';
 
 async function getAllNicks(userId) {
     const api_url = `https://logs.spanix.team/namehistory/${userId}`;
@@ -7,8 +7,8 @@ async function getAllNicks(userId) {
     const data = await response.json();
 
     // Sort the data by first_timestamp in ascending order
-    const sortedData = data.sort((a, b) =>
-        new Date(a.first_timestamp) - new Date(b.first_timestamp)
+    const sortedData = data.sort(
+        (a, b) => new Date(a.first_timestamp) - new Date(b.first_timestamp)
     );
 
     const nicks = sortedData.map(nick => nick.user_login);
@@ -17,9 +17,15 @@ async function getAllNicks(userId) {
 
 const nicksCommand = async (client, message) => {
     message.command = 'nick';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
-    const nicksTarget = message.messageText.split(' ').slice(1).find(arg => !arg.startsWith('-'))?.replace(/^@/, '').toLowerCase() || message.senderUsername;
+    const nicksTarget =
+        message.messageText
+            .split(' ')
+            .slice(1)
+            .find(arg => !arg.startsWith('-'))
+            ?.replace(/^@/, '')
+            .toLowerCase() || message.senderUsername;
     let targetId = null;
 
     // to allow searching for old nicks
@@ -37,12 +43,11 @@ const nicksCommand = async (client, message) => {
 
     const aliases = (await getAllNicks(targetId)).join(' → ');
 
-    let response = `${nicksTarget === message.senderUsername ? `O seu histórico de nicks é:` : `O histórico de nicks de ${nicksTarget} (id: ${targetId}) é:`} ${aliases}`
+    let response = `${nicksTarget === message.senderUsername ? `O seu histórico de nicks é:` : `O histórico de nicks de ${nicksTarget} (id: ${targetId}) é:`} ${aliases}`;
     if (response.length > 490) {
         response = await manageLongResponse(response);
     }
     client.log.logAndReply(message, response);
-
 };
 
 nicksCommand.commandName = 'nick';
@@ -56,6 +61,4 @@ nicksCommand.description = `Exibe o histórico de nicks de um usuário ou de que
 // • Exemplo: !nicks @leafyzito -all - O bot irá responder com o histórico de nicks de leafyzito, consoante a API usada
 nicksCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${nicksCommand.commandName}/${nicksCommand.commandName}.js`;
 
-module.exports = {
-    nicksCommand,
-};
+export { nicksCommand };

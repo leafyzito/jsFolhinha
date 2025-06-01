@@ -1,23 +1,24 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const fetch = require('node-fetch');
-const FormData = require('form-data');
-const path = require('path');
-const fs = require('fs');
+import { processCommand } from '../../utils/processCommand.js';
+import fetch from 'node-fetch';
+import FormData from 'form-data';
+import path from 'path';
+import fs from 'fs';
 
 async function uploadToFeridinha(content) {
     const api_url = 'https://feridinha.com/upload';
-    const headers = { 'token': process.env.FERIDINHA_API_KEY };
+    const headers = { token: process.env.FERIDINHA_API_KEY };
 
     const form = new FormData();
     form.append('file', content, 'image.jpg');
 
     const response = await fetch(api_url, {
         method: 'POST',
-        headers: { 'token': headers.token, ...form.getHeaders() }, // Include FormData headers
-        body: form
+        headers: { token: headers.token, ...form.getHeaders() }, // Include FormData headers
+        body: form,
     });
 
-    if (response.ok) { // Check if status is 200-299
+    if (response.ok) {
+        // Check if status is 200-299
         const resData = await response.json();
 
         if (resData.success) {
@@ -43,14 +44,13 @@ async function makePreview(channelName) {
 
         // Resolve the path to the "clips" folder inside "twitchClipper"
         const previewsFolder = path.join(process.cwd(), 'twitchClipper/previews');
-        var previewPath = path.join(previewsFolder, data.path.replace(/^\//, ''));
+        let previewPath = path.join(previewsFolder, data.path.replace(/^\//, ''));
         console.log(previewPath);
         // upload clip to feridinha
         const previewContent = fs.readFileSync(previewPath);
         const previewUrl = await uploadToFeridinha(previewContent);
 
         return previewUrl;
-
     } catch (error) {
         console.log('Error making clip:', error);
         return null;
@@ -66,8 +66,8 @@ async function getImage(url) {
 async function getOfflineImage(previewTarget) {
     const api_url = `https://api.twitch.tv/helix/users?login=${previewTarget}`;
     const headers = {
-        "Client-ID": process.env.BOT_CLIENT_ID,
-        "Authorization": `Bearer ${process.env.BOT_OAUTH_TOKEN}`
+        'Client-ID': process.env.BOT_CLIENT_ID,
+        Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
     };
     const response = await fetch(api_url, { headers });
     const data = await response.json();
@@ -87,14 +87,16 @@ async function getOfflineImage(previewTarget) {
 async function getPreview(previewTarget) {
     const api_url = `https://api.twitch.tv/helix/streams?user_login=${previewTarget}`;
     const headers = {
-        "Client-ID": process.env.BOT_CLIENT_ID,
-        "Authorization": `Bearer ${process.env.BOT_OAUTH_TOKEN}`
+        'Client-ID': process.env.BOT_CLIENT_ID,
+        Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
     };
     // Make API request to fetch clips
     const response = await fetch(api_url, { headers });
     const data = await response.json();
 
-    if ("error" in data) { return 'não existe'; }
+    if ('error' in data) {
+        return 'não existe';
+    }
 
     if (data.data.length === 0) {
         // if offline, return the offline image
@@ -109,7 +111,7 @@ async function getPreview(previewTarget) {
     }
 
     const thumbPreviewRaw = data.data[0].thumbnail_url;
-    const thumbPreview = thumbPreviewRaw.replace("{width}x{height}", "1280x720");
+    const thumbPreview = thumbPreviewRaw.replace('{width}x{height}', '1280x720');
     const thumbPreviewUrl = await getImage(thumbPreview);
 
     return { isLive: true, image: thumbPreviewUrl };
@@ -117,9 +119,10 @@ async function getPreview(previewTarget) {
 
 const previewCommand = async (client, message) => {
     message.command = 'preview';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
-    const previewTarget = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.channelName;
+    const previewTarget =
+        message.messageText.split(' ')[1]?.replace(/^@/, '') || message.channelName;
     const preview = await getPreview(previewTarget);
 
     if (preview === 'não existe') {
@@ -133,7 +136,10 @@ const previewCommand = async (client, message) => {
     }
 
     if (!preview.isLive && preview.image !== null) {
-        client.log.logAndReply(message, `O canal ${previewTarget} não está em live, aqui está a tela offline: ${preview.image}`);
+        client.log.logAndReply(
+            message,
+            `O canal ${previewTarget} não está em live, aqui está a tela offline: ${preview.image}`
+        );
         return;
     }
 
@@ -151,6 +157,4 @@ previewCommand.description = `Exibe uma imagem do momento atual da live do canal
 • Exemplo: !preview omeiaum - Se o canal "omeiaum" estiver ao vivo, o bot vai enviar uma imagem do momento atual da live`;
 previewCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${previewCommand.commandName}/${previewCommand.commandName}.js`;
 
-module.exports = {
-    previewCommand,
-};
+export { previewCommand };

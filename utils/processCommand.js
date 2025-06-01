@@ -1,15 +1,15 @@
-const { isStreamOnline } = require('../utils/utils.js');
+import { isStreamOnline } from '../utils/utils.js';
 
 // Define variables to store the last execution time for each user and channel
-var userCooldowns = {};
-var channelCooldowns = {};
+let userCooldowns = {};
+let channelCooldowns = {};
 
 // Function to manage the cooldown
 function manageCooldown(cooldownDuration, type, message) {
     // Get the current time
     const currentTime = Date.now();
-    var identifier = message.senderUsername;
-    var command = message.command;
+    let identifier = message.senderUsername;
+    let command = message.command;
 
     // if channel is whisper, set type to user, no matter what type is passed
     if (message.channelName === 'whisper') {
@@ -47,7 +47,9 @@ function manageCooldown(cooldownDuration, type, message) {
     }
 
     // Return false to indicate that the cooldown is not over
-    console.log(`CD: #${message.channelName}/${message.senderUsername} - ${message.command} (${Math.ceil((cooldownDuration - timeElapsed) / 1000)}s)`);
+    console.log(
+        `CD: #${message.channelName}/${message.senderUsername} - ${message.command} (${Math.ceil((cooldownDuration - timeElapsed) / 1000)}s)`
+    );
     return false;
 }
 
@@ -72,16 +74,28 @@ function resetCooldown(identifier, type, command, originalCooldown = 5000, newCo
 }
 
 async function processCommand(cooldownDuration, type, message, client) {
-    isCooldownOver = manageCooldown(cooldownDuration, type, message);
-    if (!isCooldownOver) { return false; }
+    const isCooldownOver = manageCooldown(cooldownDuration, type, message);
+    if (!isCooldownOver) {
+        return false;
+    }
 
     // check perms to execute
-    var currChannelConfigs = client.channelConfigs[message.channelName] || null;
-    var currUserBans = client.bans[message.senderUserID];
+    let currChannelConfigs = client.channelConfigs[message.channelName] || null;
+    let currUserBans = client.bans[message.senderUserID];
 
-    if (currUserBans && (currUserBans.includes('all') || currUserBans.includes(message.command))) { return false; }
-    if (currChannelConfigs && currChannelConfigs.isPaused) { return false; }
-    if (currChannelConfigs && currChannelConfigs.offlineOnly && await isStreamOnline(message.channelName)) { return false; }
+    if (currUserBans && (currUserBans.includes('all') || currUserBans.includes(message.command))) {
+        return false;
+    }
+    if (currChannelConfigs && currChannelConfigs.isPaused) {
+        return false;
+    }
+    if (
+        currChannelConfigs &&
+        currChannelConfigs.offlineOnly &&
+        (await isStreamOnline(message.channelName))
+    ) {
+        return false;
+    }
     if (currChannelConfigs && currChannelConfigs.disabledCommands.includes(message.command)) {
         client.log.logAndReply(message, `⚠️ Esse comando foi desativado neste chat`);
         return false;
@@ -95,9 +109,4 @@ async function processCommand(cooldownDuration, type, message, client) {
     return true;
 }
 
-module.exports = {
-    processCommand: processCommand,
-    manageCooldown: manageCooldown,
-    resetCooldown: resetCooldown
-};
-
+export { processCommand, manageCooldown, resetCooldown };

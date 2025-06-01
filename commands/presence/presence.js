@@ -1,5 +1,5 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { send7tvPresence } = require("../../utils/utils.js");
+import { processCommand } from '../../utils/processCommand.js';
+import { send7tvPresence } from '../../utils/utils.js';
 
 async function get7tvUserid(twitchUid) {
     const api_url = `https://7tv.io/v3/users/twitch/${twitchUid}`;
@@ -15,10 +15,14 @@ async function get7tvUserid(twitchUid) {
 
 const presenceCommand = async (client, message) => {
     message.command = 'presence';
-    if (!await processCommand(5000, 'user', message, client)) return;
+    if (!(await processCommand(5000, 'user', message, client))) return;
 
-    const presenceTarget = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
-    const presenceTargetTwitchUid = presenceTarget.toLowerCase() != message.senderUsername ? await client.getUserID(presenceTarget) : message.senderUserID;
+    const presenceTarget =
+        message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
+    const presenceTargetTwitchUid =
+        presenceTarget.toLowerCase() != message.senderUsername
+            ? await client.getUserID(presenceTarget)
+            : message.senderUserID;
     if (!presenceTargetTwitchUid) {
         client.log.logAndReply(message, `Esse usuário não existe`);
         return;
@@ -31,8 +35,15 @@ const presenceCommand = async (client, message) => {
 
     await send7tvPresence(message, sevenTvUserId, true);
 
-    const emote = await client.emotes.getEmoteFromList(message.channelName, ['joia', 'jumilhao'], 'FeelsOkayMan 👍');
-    client.log.logAndReply(message, `(7TV) Presence ${presenceTarget != message.senderUsername ? `de ${presenceTarget}` : ''} atualizada ${emote}`);
+    const emote = await client.emotes.getEmoteFromList(
+        message.channelName,
+        ['joia', 'jumilhao'],
+        'FeelsOkayMan 👍'
+    );
+    client.log.logAndReply(
+        message,
+        `(7TV) Presence ${presenceTarget != message.senderUsername ? `de ${presenceTarget}` : ''} atualizada ${emote}`
+    );
 };
 
 presenceCommand.commandName = 'presence';
@@ -46,6 +57,4 @@ Pode também fornecer um usuário para atualizar a sua presença, caso queira at
 Se você não sabe o que isso significa, este comando provavelmente não será útil para você`;
 presenceCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${presenceCommand.commandName}/${presenceCommand.commandName}.js`;
 
-module.exports = {
-    presenceCommand,
-};
+export { presenceCommand };

@@ -1,55 +1,55 @@
 name: folhinha
 
 services:
-  jsfolhinha:
-    container_name: folhinha-bot
-    network_mode: "host"
-    build:
-      context: .
-      dockerfile: Dockerfile
-    environment:
-      - ENV=prod
-      - TZ=Europe/Lisbon
-    volumes:
-      - .:/app
-      - /app/node_modules
-      - /var/run/docker.sock:/var/run/docker.sock
-    depends_on:
-      - twitchclipper
-      - cobalt
-    restart: unless-stopped
+    jsfolhinha:
+        container_name: folhinha-bot
+        network_mode: 'host'
+        build:
+            context: .
+            dockerfile: Dockerfile
+        environment:
+            - ENV=dev
+            - TZ=Europe/Lisbon
+        volumes:
+            - .:/app
+            - /app/node_modules
+            - /var/run/docker.sock:/var/run/docker.sock
+        depends_on:
+            - twitchclipper
+            - cobalt
+        restart: unless-stopped
 
-  twitchclipper:
-    container_name: twitch-clipper
-    build:
-      context: ./twitchClipper
-      dockerfile: Dockerfile
-    environment:
-      - TZ=Europe/Lisbon
-    volumes:
-      - ./twitchClipper/clips:/app/clips
-      - ./twitchClipper/previews:/app/previews
-    ports:
-      - "8989:8989"
-    networks:
-      - app-network
-    restart: unless-stopped
+    twitchclipper:
+        container_name: twitch-clipper
+        build:
+            context: ./twitchClipper
+            dockerfile: Dockerfile
+        environment:
+            - TZ=Europe/Lisbon
+        volumes:
+            - ./twitchClipper/clips:/app/clips
+            - ./twitchClipper/previews:/app/previews
+        ports:
+            - '8989:8989'
+        networks:
+            - app-network
+        restart: unless-stopped
 
-  cobalt:
-    container_name: cobalt
-    image: ghcr.io/imputnet/cobalt:11
-    environment:
-      - API_URL=http://cobalt:9000
-      - COBALT_API_KEY=folhinhacobalt123
-      - TZ=Europe/Lisbon
-    ports:
-      - "9000:9000"
-    networks:
-      - app-network
-    read_only: true
-    init: true
-    restart: unless-stopped
+    cobalt:
+        container_name: cobalt
+        image: ghcr.io/imputnet/cobalt:11
+        environment:
+            - API_URL=http://cobalt:9000
+            - COBALT_API_KEY=folhinhacobalt123
+            - TZ=Europe/Lisbon
+        ports:
+            - '9000:9000'
+        networks:
+            - app-network
+        read_only: true
+        init: true
+        restart: unless-stopped
 
 networks:
-  app-network:
-    driver: bridge
+    app-network:
+        driver: bridge

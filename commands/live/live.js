@@ -1,14 +1,17 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { shortenUrl, timeSinceDT } = require("../../utils/utils.js");
+import { processCommand } from '../../utils/processCommand.js';
+import { timeSinceDT } from '../../utils/utils.js';
 
 async function getLive(liveTarget) {
-    const api_url = `https://api.ivr.fi/v2/twitch/user?login=${liveTarget}`
+    const api_url = `https://api.ivr.fi/v2/twitch/user?login=${liveTarget}`;
     const response = await fetch(api_url);
     const data = await response.json();
 
-    if (data.length === 0) { return null; }
+    if (data.length === 0) {
+        return null;
+    }
 
-    const lastStreamDate = data[0].lastBroadcast.startedAt !== null ? data[0].lastBroadcast.startedAt : null;
+    const lastStreamDate =
+        data[0].lastBroadcast.startedAt !== null ? data[0].lastBroadcast.startedAt : null;
 
     if (!lastStreamDate) {
         //  never streamed
@@ -30,13 +33,13 @@ async function getLive(liveTarget) {
     return {
         isLive: false,
         lastStreamDate: lastStreamDate,
-        lastStreamTitle: data[0].lastBroadcast.title
+        lastStreamTitle: data[0].lastBroadcast.title,
     };
 }
 
 const liveCommand = async (client, message) => {
     message.command = 'live';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
     const liveTarget = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.channelName;
     const live = await getLive(liveTarget);
@@ -53,13 +56,20 @@ const liveCommand = async (client, message) => {
 
     if (!live.isLive) {
         const timeSinceLastStream = timeSinceDT(live.lastStreamDate)[0];
-        client.log.logAndReply(message, `Não tem live ${liveTarget.toLowerCase() === message.channelName ? 'aqui' : 'no ' + liveTarget} há ${timeSinceLastStream} - título: ${live.lastStreamTitle}`);
+        client.log.logAndReply(
+            message,
+            `Não tem live ${liveTarget.toLowerCase() === message.channelName ? 'aqui' : 'no ' + liveTarget} há ${timeSinceLastStream} - título: ${live.lastStreamTitle}`
+        );
         return;
     }
 
     if (live.isLive) {
-        const liveUrl = liveTarget !== message.channelName ? ` | https://twitch.tv/${liveTarget}` : '';
-        client.log.logAndReply(message, `${liveTarget} está agora fazendo live de ${live.game} para ${live.viewers} viewers - ${live.title}${liveUrl}`);
+        const liveUrl =
+            liveTarget !== message.channelName ? ` | https://twitch.tv/${liveTarget}` : '';
+        client.log.logAndReply(
+            message,
+            `${liveTarget} está agora fazendo live de ${live.game} para ${live.viewers} viewers - ${live.title}${liveUrl}`
+        );
         return;
     }
 };
@@ -73,6 +83,4 @@ liveCommand.description = `Saiba há quanto tempo foi a última live do canal fo
 Se o canal estiver ao vivo, mostrará a categoria, a quantidade de viewers, o título e o link para a live`;
 liveCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${liveCommand.commandName}/${liveCommand.commandName}.js`;
 
-module.exports = {
-    liveCommand,
-};
+export { liveCommand };

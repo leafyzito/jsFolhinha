@@ -1,12 +1,64 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { randomInt, randomChoice } = require("../../utils/utils.js");
+import { processCommand } from '../../utils/processCommand.js';
+import { randomInt, randomChoice } from '../../utils/utils.js';
 
-const petEmojis = ["🦝", "🐴", "🐶", "🦊", "🐯", "🐸", "🐱", "🐻", "🦁", "🐵", "🐭", "🐼", "🐮", "🐹", "🐻‍❄️", "🐷", "🐰", "🐨", "🐥",
-    "🐔", "🐧", "🐦", "🐤", "🦅", "🦉", "🐴", "🦆", "🐺", "🦄", "🐝", "🪱", "🐛", "🦋", "🐌", "🐞", "🪰", "🪲", "🕷️", "🦎", "🦂",
-    "🐢", "🐍", "🦑", "🐙", "🦕", "🦖", "🐬", "🐋", "🦭", "🐀", "🦇", "🐈‍⬛", "🐲", "🐉", "🐊", "🦔"]
-
-
-
+const petEmojis = [
+    '🦝',
+    '🐴',
+    '🐶',
+    '🦊',
+    '🐯',
+    '🐸',
+    '🐱',
+    '🐻',
+    '🦁',
+    '🐵',
+    '🐭',
+    '🐼',
+    '🐮',
+    '🐹',
+    '🐻‍❄️',
+    '🐷',
+    '🐰',
+    '🐨',
+    '🐥',
+    '🐔',
+    '🐧',
+    '🐦',
+    '🐤',
+    '🦅',
+    '🦉',
+    '🐴',
+    '🦆',
+    '🐺',
+    '🦄',
+    '🐝',
+    '🪱',
+    '🐛',
+    '🦋',
+    '🐌',
+    '🐞',
+    '🪰',
+    '🪲',
+    '🕷️',
+    '🦎',
+    '🦂',
+    '🐢',
+    '🐍',
+    '🦑',
+    '🐙',
+    '🦕',
+    '🦖',
+    '🐬',
+    '🐋',
+    '🦭',
+    '🐀',
+    '🦇',
+    '🐈‍⬛',
+    '🐲',
+    '🐉',
+    '🐊',
+    '🦔',
+];
 
 async function createPetBase(client, message) {
     console.log('running createPetBase');
@@ -24,7 +76,7 @@ async function createPetBase(client, message) {
         last_interaction: 0,
         last_play: 0,
         last_pat: 0,
-    }
+    };
 
     await client.db.insert('pet', insert_doc);
 }
@@ -42,8 +94,8 @@ async function updatePetCreate(client, message, petEmoji, petName) {
             last_play: 0,
             last_pat: 0,
             last_interaction: Math.floor(Date.now() / 1000),
-            alive_since: Math.floor(Date.now() / 1000)
-        }
+            alive_since: Math.floor(Date.now() / 1000),
+        },
     };
 
     await client.db.update('pet', { channelId: message.channelID }, update_doc);
@@ -51,26 +103,35 @@ async function updatePetCreate(client, message, petEmoji, petName) {
 
 const petCommand = async (client, message) => {
     message.command = 'pet';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
     if (message.messageText.split(' ').length === 1) {
-        client.log.logAndReply(message, `Para saber mais sobre os comandos de pet, acesse https://folhinhabot.com/comandos/pet 😁 `);
+        client.log.logAndReply(
+            message,
+            `Para saber mais sobre os comandos de pet, acesse https://folhinhabot.com/comandos/pet 😁 `
+        );
         return;
     }
 
     const args = message.messageText.split(' ').slice(1);
 
-    var petStats = await client.db.get('pet', { channelId: message.channelID });
+    let petStats = await client.db.get('pet', { channelId: message.channelID });
     petStats = petStats[0];
 
     if (['criar', 'create'].includes(args[0].toLowerCase())) {
         if (!message.isMod) {
-            client.log.logAndReply(message, `Apenas o streamer e os mods podem criar um pet para o chat`);
+            client.log.logAndReply(
+                message,
+                `Apenas o streamer e os mods podem criar um pet para o chat`
+            );
             return;
         }
 
         if (petStats && petStats.is_alive) {
-            client.log.logAndReply(message, `Já existe um pet para este chat. Se quiser matar (deletar) ele, digite ${message.commandPrefix}pet kill`);
+            client.log.logAndReply(
+                message,
+                `Já existe um pet para este chat. Se quiser matar (deletar) ele, digite ${message.commandPrefix}pet kill`
+            );
             return;
         }
 
@@ -78,12 +139,18 @@ const petCommand = async (client, message) => {
         const petName = args.slice(2).join(' ');
 
         if (!petEmoji || !petName) {
-            client.log.logAndReply(message, `Para criar um pet, use ${message.commandPrefix}pet criar <emoji> <nome>`);
+            client.log.logAndReply(
+                message,
+                `Para criar um pet, use ${message.commandPrefix}pet criar <emoji> <nome>`
+            );
             return;
         }
 
         if (!petEmojis.includes(petEmoji)) {
-            client.log.logAndReply(message, `Esse emoji não é válido. Para uma lista de emojis válidos, acesse https://folhinhabot.com/emojis`);
+            client.log.logAndReply(
+                message,
+                `Esse emoji não é válido. Para uma lista de emojis válidos, acesse https://folhinhabot.com/emojis`
+            );
             return;
         }
 
@@ -104,15 +171,18 @@ const petCommand = async (client, message) => {
         }
 
         if (!petStats || !petStats.is_alive) {
-            client.log.logAndReply(message, `Não existe um pet para este chat. Para criar um pet, use ${message.commandPrefix}pet criar`);
+            client.log.logAndReply(
+                message,
+                `Não existe um pet para este chat. Para criar um pet, use ${message.commandPrefix}pet criar`
+            );
             return;
         }
 
         const update_doc = {
             $set: {
                 is_alive: false,
-                time_of_death: 0
-            }
+                time_of_death: 0,
+            },
         };
 
         await client.db.update('pet', { channelId: message.channelID }, update_doc);
@@ -123,37 +193,52 @@ const petCommand = async (client, message) => {
 
     if (['stats', 'status'].includes(args[0].toLowerCase())) {
         if (!petStats || !petStats.is_alive) {
-            client.log.logAndReply(message, `Não existe um pet para este chat. Para criar um pet, use ${message.commandPrefix}pet criar`);
+            client.log.logAndReply(
+                message,
+                `Não existe um pet para este chat. Para criar um pet, use ${message.commandPrefix}pet criar`
+            );
             return;
         }
 
-        var pet_mood;
-        if (petStats.warns === 0) { pet_mood = 'feliz' }
-        else if (petStats.warns === 1) { pet_mood = 'pedindo atenção' }
-        else { pet_mood = 'rabugento por falta de atenção' }
+        let pet_mood;
+        if (petStats.warns === 0) {
+            pet_mood = 'feliz';
+        } else if (petStats.warns === 1) {
+            pet_mood = 'pedindo atenção';
+        } else {
+            pet_mood = 'rabugento por falta de atenção';
+        }
 
         const pet_alive_since = petStats.alive_since;
         const currentTime = Math.floor(Date.now() / 1000);
         const elapsedDays = Math.floor((currentTime - pet_alive_since) / (24 * 60 * 60));
 
-        client.log.logAndReply(message, `${petStats.pet_emoji} ${petStats.pet_name} está ${pet_mood}! Ele já recebeu ${petStats.total_pats} carinhos e ${petStats.total_plays} brincadeiras num total de ${elapsedDays} dias`);
+        client.log.logAndReply(
+            message,
+            `${petStats.pet_emoji} ${petStats.pet_name} está ${pet_mood}! Ele já recebeu ${petStats.total_pats} carinhos e ${petStats.total_plays} brincadeiras num total de ${elapsedDays} dias`
+        );
     }
-
 };
 
 const carinhoCommand = async (client, message) => {
     message.command = 'carinho';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
-    var petStats = await client.db.get('pet', { channelId: message.channelID });
+    let petStats = await client.db.get('pet', { channelId: message.channelID });
     petStats = petStats[0];
     if (!petStats || !petStats.is_alive) {
-        client.log.logAndReply(message, `Não existe um pet para este chat. Para criar um pet, use ${message.commandPrefix}pet criar`);
+        client.log.logAndReply(
+            message,
+            `Não existe um pet para este chat. Para criar um pet, use ${message.commandPrefix}pet criar`
+        );
         return;
     }
 
     if (petStats.warns === 2 && randomInt(1, 2) === 1) {
-        client.log.logAndReply(message, `${petStats.pet_emoji} ${petStats.pet_name} tá rabugento e não aceitou o seu carinho`);
+        client.log.logAndReply(
+            message,
+            `${petStats.pet_emoji} ${petStats.pet_name} tá rabugento e não aceitou o seu carinho`
+        );
         return;
     }
 
@@ -162,28 +247,37 @@ const carinhoCommand = async (client, message) => {
             total_pats: petStats.total_pats + 1,
             warns: 0,
             last_interaction: Math.floor(Date.now() / 1000),
-            last_pat: Math.floor(Date.now() / 1000)
-        }
+            last_pat: Math.floor(Date.now() / 1000),
+        },
     };
 
     await client.db.update('pet', { channelId: message.channelID }, update_doc);
 
-    client.log.logAndReply(message, `${petStats.pet_emoji} PETPET ${message.senderUsername} fez carinho em ${petStats.pet_emoji} ${petStats.pet_name}`);
-}
+    client.log.logAndReply(
+        message,
+        `${petStats.pet_emoji} PETPET ${message.senderUsername} fez carinho em ${petStats.pet_emoji} ${petStats.pet_name}`
+    );
+};
 
 const brincarCommand = async (client, message) => {
     message.command = 'brincar';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
-    var petStats = await client.db.get('pet', { channelId: message.channelID });
+    let petStats = await client.db.get('pet', { channelId: message.channelID });
     petStats = petStats[0];
     if (!petStats || !petStats.is_alive) {
-        client.log.logAndReply(message, `Não existe um pet para este chat. Para criar um pet, use ${message.commandPrefix}pet criar`);
+        client.log.logAndReply(
+            message,
+            `Não existe um pet para este chat. Para criar um pet, use ${message.commandPrefix}pet criar`
+        );
         return;
     }
 
     if (petStats.warns === 2 && randomInt(1, 2) === 1) {
-        client.log.logAndReply(message, `${petStats.pet_emoji} ${petStats.pet_name} tá rabugento e não quis brincar com você`);
+        client.log.logAndReply(
+            message,
+            `${petStats.pet_emoji} ${petStats.pet_name} tá rabugento e não quis brincar com você`
+        );
         return;
     }
 
@@ -192,8 +286,8 @@ const brincarCommand = async (client, message) => {
             total_plays: petStats.total_plays + 1,
             warns: 0,
             last_interaction: Math.floor(Date.now() / 1000),
-            last_play: Math.floor(Date.now() / 1000)
-        }
+            last_play: Math.floor(Date.now() / 1000),
+        },
     };
 
     await client.db.update('pet', { channelId: message.channelID }, update_doc);
@@ -221,13 +315,12 @@ const brincarCommand = async (client, message) => {
         `${message.senderUsername} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de pular corda mas você tropeçou e caiu! 🏆`,
         `${message.senderUsername} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de olhar seriamente 👀 e você ganhou! 🏆`,
         `${message.senderUsername} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de olhar seriamente 👀 mas o pet é muito sério e ganhou! 🏆`,
-        `${message.senderUsername} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de caça ao tesouro 🗺 e acharam ${randomChoice(tesouros)}`
-
+        `${message.senderUsername} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de caça ao tesouro 🗺 e acharam ${randomChoice(tesouros)}`,
     ];
 
     const brincadeira = randomChoice(brincadeiras);
     client.log.logAndReply(message, brincadeira);
-}
+};
 
 petCommand.commandName = 'pet';
 petCommand.aliases = ['pet'];
@@ -261,8 +354,4 @@ brincarCommand.whisperable = false;
 brincarCommand.description = 'Brinque com o pet do canal e ajude a mantê-lo saudável.';
 brincarCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${petCommand.commandName}/${petCommand.commandName}.js`;
 
-module.exports = {
-    petCommand,
-    carinhoCommand,
-    brincarCommand
-};
+export { petCommand, carinhoCommand, brincarCommand };

@@ -1,35 +1,37 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { Shazam } = require("node-shazam");
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+const __dirname = dirname(fileURLToPath(import.meta.url));
+import { processCommand } from '../../utils/processCommand.js';
+import { Shazam } from 'node-shazam';
 const shazam = new Shazam();
-const FormData = require('form-data');
-const fetch = require('node-fetch');
-const fs = require('fs');
-const path = require('path');
+import FormData from 'form-data';
+import fetch from 'node-fetch';
+import fs from 'fs';
+import path from 'path';
 
-
-const isDirectFileUrl = (url) => {
+const isDirectFileUrl = url => {
     const directFileExtensions = ['.mp4', '.mp3', '.wav', '.ogg', '.webm', '.m4a', '.aac'];
     return directFileExtensions.some(ext => url.toLowerCase().includes(ext));
 };
 
 async function uploadToFeridinha(content, fileName) {
     const api_url = 'https://feridinha.com/upload';
-    const headers = { 'token': process.env.FERIDINHA_API_KEY };
+    const headers = { token: process.env.FERIDINHA_API_KEY };
 
     const form = new FormData();
     form.append('file', content, {
         filename: fileName,
-        contentType: 'video/mp4'
+        contentType: 'video/mp4',
     });
 
     try {
         const response = await fetch(api_url, {
             method: 'POST',
             headers: {
-                'token': headers.token,
-                ...form.getHeaders()
+                token: headers.token,
+                ...form.getHeaders(),
             },
-            body: form
+            body: form,
         });
 
         if (response.ok) {
@@ -52,19 +54,19 @@ async function uploadToFeridinha(content, fileName) {
 async function getVideoCobalt(urlToDownload) {
     const apiUrl = 'http://localhost:9000/'; // https://cobalt.tools/ local instance
     const headers = {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'ApiKey ' + process.env.COBALT_API_KEY
+        Authorization: 'ApiKey ' + process.env.COBALT_API_KEY,
     };
     const payload = {
-        'url': urlToDownload
+        url: urlToDownload,
     };
 
     try {
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: headers,
-            body: JSON.stringify(payload)
+            body: JSON.stringify(payload),
         });
         const resData = await response.json();
         let resUrl = resData.url;
@@ -87,7 +89,7 @@ async function getVideoCobalt(urlToDownload) {
     } catch (e) {
         console.log(`erro no getVideoDownload: ${e}`);
         try {
-            const errorText = resData.text;
+            const errorText = e.text;
             if ('connect to the service api' in errorText) {
                 return 'apiError';
             } else {
@@ -111,7 +113,7 @@ async function makeClip(channelName) {
 
         // Resolve the path to the "clips" folder inside "twitchClipper"
         const clipsFolder = path.join(process.cwd(), 'twitchClipper/clips');
-        var clipPath = path.join(clipsFolder, data.path.replace(/^\//, ''));
+        let clipPath = path.join(clipsFolder, data.path.replace(/^\//, ''));
         // console.log(clipPath);
         // upload clip to feridinha
         const clipName = path.basename(clipPath);
@@ -119,7 +121,6 @@ async function makeClip(channelName) {
         const clipUrl = await uploadToFeridinha(clipContent, clipName);
 
         return clipUrl;
-
     } catch (error) {
         console.log('Error making clip:', error);
         return null;
@@ -132,7 +133,9 @@ async function shazamIt(url) {
         if (!isDirectFileUrl(url)) {
             console.log('URL is not a direct file URL, getting video download...');
             url = await getVideoCobalt(url);
-            if (!url) { return 'cobalt-error'; } // if it's not a direct file URL, and the getVideoCobalt fails, return null
+            if (!url) {
+                return 'cobalt-error';
+            } // if it's not a direct file URL, and the getVideoCobalt fails, return null
         }
 
         console.log(`Downloading audio content from ${url}...`);
@@ -167,11 +170,14 @@ async function shazamIt(url) {
 
 const shazamCommand = async (client, message) => {
     message.command = 'shazam';
-    if (!await processCommand(10_000, 'channel', message, client)) return;
+    if (!(await processCommand(10_000, 'channel', message, client))) return;
 
     const args = message.messageText.split(' ');
     if (args.length < 2) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}shazam <link>. Se estiver com dúvidas sobre o comando, acesse https://folhinhabot.com/comandos/shazam 😁`);
+        client.log.logAndReply(
+            message,
+            `Use o formato: ${message.commandPrefix}shazam <link>. Se estiver com dúvidas sobre o comando, acesse https://folhinhabot.com/comandos/shazam 😁`
+        );
         return;
     }
 
@@ -180,12 +186,17 @@ const shazamCommand = async (client, message) => {
     // Validate if it's a URL
     const urlPattern = /^(https?:\/\/)?(www\.)?([\da-z.-]+)\.([a-z.]{2,})([/\w .-?=&]*)*\/?$/;
     if (!urlPattern.test(urlToShazam)) {
-        client.log.logAndReply(message, `Por favor, forneça um link válido. Use o formato: ${message.commandPrefix}shazam <link>. Se estiver com dúvidas sobre o comando, acesse https://folhinhabot.com/comandos/shazam 😁`);
+        client.log.logAndReply(
+            message,
+            `Por favor, forneça um link válido. Use o formato: ${message.commandPrefix}shazam <link>. Se estiver com dúvidas sobre o comando, acesse https://folhinhabot.com/comandos/shazam 😁`
+        );
         return;
     }
 
     // Check if it's a Twitch channel URL or a clip URL
+    // eslint-disable-next-line
     const twitchChannelMatch = urlToShazam.match(/twitch\.tv\/([^\/\?]+)(?:\?|$)/);
+    // eslint-disable-next-line
     const twitchClipMatch = urlToShazam.match(/twitch\.tv\/[^\/]+\/clip\//);
 
     if (twitchChannelMatch && !twitchClipMatch) {
@@ -196,12 +207,13 @@ const shazamCommand = async (client, message) => {
         const clip = await makeClip(channelName);
         if (!clip) {
             console.log(`Não deu pra criar clip com o makeClip`);
-            client.log.logAndReply(message, `Não consegui criar um clip para identificar a música, tente novamente. Se o problema persistir, avise o dev`);
+            client.log.logAndReply(
+                message,
+                `Não consegui criar um clip para identificar a música, tente novamente. Se o problema persistir, avise o dev`
+            );
             return;
-        }
-        else if (clip === 'error') {
+        } else if (clip === 'error') {
             throw new Error(`Shazam makeClip - Check logs`);
-            return;
         }
         urlToShazam = clip;
     }
@@ -215,12 +227,14 @@ const shazamCommand = async (client, message) => {
 
     if (result === 'cobalt-error') {
         throw new Error(`Shazam shazamIt cobalt-error - Check logs`);
-        return;
     }
 
     if (result.track) {
         const track = result.track;
-        client.log.logAndReply(message, `🎵 Música identificada: ${track.title} - ${track.subtitle} (${track.url})`);
+        client.log.logAndReply(
+            message,
+            `🎵 Música identificada: ${track.title} - ${track.subtitle} (${track.url})`
+        );
         return;
     }
 
@@ -241,6 +255,4 @@ Identifica músicas de algum link fornecido ou de uma live da Twitch:
 • Exemplo: !shazam www.twitch.tv/xql - O bot vai criar um clip e depois identificar a música do clip`;
 shazamCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${shazamCommand.commandName}/${shazamCommand.commandName}.js`;
 
-module.exports = {
-    shazamCommand,
-};
+export { shazamCommand };

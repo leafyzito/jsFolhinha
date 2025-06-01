@@ -1,12 +1,12 @@
-const { processCommand } = require("../../utils/processCommand.js");
-const { timeUntilDT } = require("../../utils/utils.js");
+import { processCommand } from '../../utils/processCommand.js';
+import { timeUntilDT } from '../../utils/utils.js';
 
 async function getSubAge(user, channel) {
     const api_url = `https://api.ivr.fi/v2/twitch/subage/${user}/${channel}`;
     const response = await fetch(api_url);
     const data = await response.json();
 
-    if ("statusCode" in data) {
+    if ('statusCode' in data) {
         return `Um dos usuários inseridos não existe`;
     }
 
@@ -63,7 +63,7 @@ async function getSubAge(user, channel) {
 
 const subAgeCommand = async (client, message) => {
     message.command = 'subage';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
     let saTarget = message.senderUsername;
     let saChannelTarget = message.channelName;
@@ -79,7 +79,7 @@ const subAgeCommand = async (client, message) => {
 
     const saResult = await getSubAge(saTarget, saChannelTarget);
 
-    if (saResult.includes("não existe")) {
+    if (saResult.includes('não existe')) {
         client.log.logAndReply(message, saResult);
         return;
     }
@@ -92,7 +92,8 @@ subAgeCommand.aliases = ['subage', 'sa'];
 subAgeCommand.shortDescription = 'Mostra há quanto tempo um usuário é sub de algum canal';
 subAgeCommand.cooldown = 5000;
 subAgeCommand.whisperable = false;
-subAgeCommand.description = 'Uso: !subage <usuário> <canal>; Resposta esperada: {usuário} é sub de {canal} há {tempo}';
+subAgeCommand.description =
+    'Uso: !subage <usuário> <canal>; Resposta esperada: {usuário} é sub de {canal} há {tempo}';
 subAgeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${subAgeCommand.commandName}/${subAgeCommand.commandName}.js`;
 
 subAgeCommand.description = `Mostra há quanto tempo um usuário é sub de um canal, tendo várias formas de o fazer:
@@ -100,7 +101,4 @@ Apenas !subage: O bot vai responder com a quantidade de tempo que o usuário que
 !subage @usuário: O bot vai responder com a quantidade de tempo que o usuário que executou o comando é sub do canal que foi fornecido
 !subage @usuário1 @usuário2: O bot vai responder com a quantidade de tempo que o @usuário1 é sub do @usuário2`;
 
-
-module.exports = {
-    subAgeCommand,
-};
+export { subAgeCommand };

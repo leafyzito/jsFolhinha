@@ -1,4 +1,4 @@
-const { processCommand } = require("../../utils/processCommand.js");
+import { processCommand } from '../../utils/processCommand.js';
 
 async function getChannelFounders(channel) {
     const api_url = `https://roles.tv/api/channel/login/${channel}`;
@@ -16,9 +16,10 @@ async function getChannelFounders(channel) {
 
 const foundersCommand = async (client, message) => {
     message.command = 'founders';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
-    const targetChannel = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.channelName;
+    const targetChannel =
+        message.messageText.split(' ')[1]?.replace(/^@/, '') || message.channelName;
     const founders = await getChannelFounders(targetChannel);
 
     if (founders === null) {
@@ -31,7 +32,10 @@ const foundersCommand = async (client, message) => {
         return;
     }
 
-    client.log.logAndReply(message, `Existem ${founders} fundadores em #${targetChannel} - https://roles.tv/c/${targetChannel.toLowerCase()}`);
+    client.log.logAndReply(
+        message,
+        `Existem ${founders} fundadores em #${targetChannel} - https://roles.tv/c/${targetChannel.toLowerCase()}`
+    );
 };
 
 foundersCommand.commandName = 'founders';
@@ -45,6 +49,4 @@ O comando funcionará mesmo em canais que o Folhinha não esteja presente
 • Exemplo: !founders {canal} - Exibe a lista de founders do canal escolhido`;
 foundersCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${foundersCommand.commandName}/${foundersCommand.commandName}.js`;
 
-module.exports = {
-    foundersCommand,
-};
+export { foundersCommand };

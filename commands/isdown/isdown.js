@@ -1,6 +1,6 @@
-const { domainToASCII } = require('node:url');
-const { processCommand } = require("../../utils/processCommand.js");
-const { timeSince } = require("../../utils/utils.js");
+import { domainToASCII } from 'node:url';
+import { processCommand } from '../../utils/processCommand.js';
+import { timeSince } from '../../utils/utils.js';
 
 async function checkSite(url) {
     const url_ascii = domainToASCII(url);
@@ -17,9 +17,9 @@ async function checkSite(url) {
 
 const isDownCommand = async (client, message) => {
     message.command = 'isdown';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
-    const targetUrl = message.messageText.split(" ").slice(1)[0];
+    const targetUrl = message.messageText.split(' ').slice(1)[0];
     if (!targetUrl) {
         client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}isdown <url>`);
         return;
@@ -27,13 +27,19 @@ const isDownCommand = async (client, message) => {
 
     const check = await checkSite(targetUrl);
     if (!check) {
-        client.log.logAndReply(message, `⚠️ Erro ao verificar o status do site, tente novamente mais tarde`);
+        client.log.logAndReply(
+            message,
+            `⚠️ Erro ao verificar o status do site, tente novamente mais tarde`
+        );
         return;
     }
 
     const { scan, warnings } = check;
     if (scan?.error) {
-        client.log.logAndReply(message, `⚠️ Não foi possível verificar o status do site: ${scan.error}`);
+        client.log.logAndReply(
+            message,
+            `⚠️ Não foi possível verificar o status do site: ${scan.error}`
+        );
         return;
     }
 
@@ -43,17 +49,22 @@ const isDownCommand = async (client, message) => {
 
     if (Array.isArray(warnings?.scan_failed)) {
         const error = warnings.scan_failed[0].msg;
-        if (error === "Host not found") {
+        if (error === 'Host not found') {
             client.log.logAndReply(message, `⚠️ O site fornecido não foi encontrado`);
             return;
-        }
-        else {
-            client.log.logAndReply(message, `⚠️ O site está fora do ar: ${error ?? "(N/A)"}. Última verificação há ${timeSinceLastScan}.`);
+        } else {
+            client.log.logAndReply(
+                message,
+                `⚠️ O site está fora do ar: ${error ?? '(N/A)'}. Última verificação há ${timeSinceLastScan}.`
+            );
             return;
         }
     }
 
-    client.log.logAndReply(message, `✅ O site está online e disponível. Última verificação há ${timeSinceLastScan}.`);
+    client.log.logAndReply(
+        message,
+        `✅ O site está online e disponível. Última verificação há ${timeSinceLastScan}.`
+    );
     return;
 };
 
@@ -65,7 +76,4 @@ isDownCommand.whisperable = true;
 isDownCommand.description = `Verifica se um site está fora do ar ou se é só você que não consegue ver o site, de acordo com a API do Sucuri`;
 isDownCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${isDownCommand.commandName}/${isDownCommand.commandName}.js`;
 
-module.exports = {
-    isDownCommand: isDownCommand,
-};
-
+export { isDownCommand };

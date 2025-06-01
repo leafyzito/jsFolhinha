@@ -1,8 +1,8 @@
-const { processCommand } = require("../../utils/processCommand.js");
+import { processCommand } from '../../utils/processCommand.js';
 
 const countlineCommand = async (client, message) => {
     message.command = 'countline';
-    if (!await processCommand(5000, 'channel', message, client)) return;
+    if (!(await processCommand(5000, 'channel', message, client))) return;
 
     const clTarget = message.messageText.split(' ')[1]?.replace(/^@/, '') || message.senderUsername;
 
@@ -12,8 +12,12 @@ const countlineCommand = async (client, message) => {
     }
 
     if (clTarget.toLowerCase() === 'top') {
-        const clCurrChat = await client.db.get('users', { [`msgCount.${message.channelName}`]: { "$exists": true } });
-        clCurrChat.sort((a, b) => b.msgCount[message.channelName] - a.msgCount[message.channelName]);
+        const clCurrChat = await client.db.get('users', {
+            [`msgCount.${message.channelName}`]: { $exists: true },
+        });
+        clCurrChat.sort(
+            (a, b) => b.msgCount[message.channelName] - a.msgCount[message.channelName]
+        );
 
         // only top 5
         const top5 = clCurrChat.slice(0, 5);
@@ -28,11 +32,9 @@ const countlineCommand = async (client, message) => {
         }
 
         let userPlacing;
-        let userIndex;
         for (let i = 0; i < top5.length; i++) {
             if (top5[i].userid === message.senderUserID) {
                 userPlacing = i + 1;
-                userIndex = i;
                 break;
             }
         }
@@ -41,7 +43,11 @@ const countlineCommand = async (client, message) => {
             reply += `. Você está em ${clCurrChat.findIndex(user => user.userid === message.senderUserID) + 1}º com ${clCurrChat.find(user => user.userid === message.senderUserID).msgCount[message.channelName]} mensagens`;
         }
 
-        const emote = await client.emotes.getEmoteFromList(message.channelName, ['falamuito', 'talkk', 'peepotalk']);
+        const emote = await client.emotes.getEmoteFromList(message.channelName, [
+            'falamuito',
+            'talkk',
+            'peepotalk',
+        ]);
         client.log.logAndReply(message, `${reply} ${emote}`);
         return;
     }
@@ -51,7 +57,8 @@ const countlineCommand = async (client, message) => {
         return;
     }
 
-    const clTargetID = (clTarget !== message.senderUserID) ? await client.getUserID(clTarget) : message.senderUserID;
+    const clTargetID =
+        clTarget !== message.senderUserID ? await client.getUserID(clTarget) : message.senderUserID;
     if (!clTargetID) {
         client.log.logAndReply(message, `O usuário ${clTarget} não existe`);
         return;
@@ -73,7 +80,9 @@ const countlineCommand = async (client, message) => {
     }
 
     // get channel total
-    const channelTotal = await client.db.get('users', { [`msgCount.${message.channelName}`]: { '$exists': true } });
+    const channelTotal = await client.db.get('users', {
+        [`msgCount.${message.channelName}`]: { $exists: true },
+    });
     let channelTotalCount = 0;
     for (const countChannel of channelTotal) {
         channelTotalCount += countChannel.msgCount[message.channelName];
@@ -84,7 +93,10 @@ const countlineCommand = async (client, message) => {
         return;
     }
 
-    client.log.logAndReply(message, `${clTarget} mandou ${userMsgCount.toLocaleString('en-US')} das ${channelTotalCount.toLocaleString('en-US')} mensagens totais deste chat`);
+    client.log.logAndReply(
+        message,
+        `${clTarget} mandou ${userMsgCount.toLocaleString('en-US')} das ${channelTotalCount.toLocaleString('en-US')} mensagens totais deste chat`
+    );
 };
 
 countlineCommand.commandName = 'countline';
@@ -96,6 +108,4 @@ countlineCommand.description = `Veja quantas mensagem você ou algum usuário j�
 Pode também utilizar !countline top para ver o top 5 de pessoas que mais falaram no chat`;
 countlineCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${countlineCommand.commandName}/${countlineCommand.commandName}.js`;
 
-module.exports = {
-    countlineCommand,
-};
+export { countlineCommand };
