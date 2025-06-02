@@ -7,8 +7,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    env_file:
+      - .env
     environment:
-      - ENV=prod
       - TZ=Europe/Lisbon
     volumes:
       - .:/app
