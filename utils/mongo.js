@@ -13,7 +13,7 @@ class MongoUtils {
         // Initialize LRU cache for each collection
         this.collectionCaches = new Map();
         this.cacheOptions = {
-            max: 50000, // Maximum number of items
+            max: 500000, // Maximum number of items
             ttl: 24 * 60 * 60 * 1000, // 24 hour TTL
             updateAgeOnGet: true
         };
