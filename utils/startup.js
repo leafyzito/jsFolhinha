@@ -226,8 +226,8 @@ async function modifyClient(client, anonClient) {
                             client.scheduledReminders.push(reminder._id);
 
                             if (reminder.remindAt && reminder.remindAt <= currentTime) {
-                                client.discord.log(`* Sending missed reminder for ${reminderDate.toLocaleString()}`);
-                                console.log('* Sending missed reminder for ' + reminderDate.toLocaleString());
+                                client.discord.log(`* Sending missed reminder to ${reminder.fromChannelId} (${reminderDate.toLocaleString()})`);
+                                console.log(`* Sending missed reminder to ${reminder.fromChannelId} (${reminderDate.toLocaleString()})`);
 
                                 const reminderSender = await client.getUserByUserID(reminder.senderId) || 'Usuário deletado';
                                 const receiverName = await client.getUserByUserID(reminder.receiverId) || 'Usuário deletado 2';
