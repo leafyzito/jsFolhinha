@@ -1,7 +1,7 @@
 const { join } = require("path");
 const { processCommand } = require("../../utils/processCommand.js");
 const fs = require('fs');
-const { addChannelToJustlog } = require('../../utils/justlog.js');
+const { addChannelToRustlog } = require('../../utils/rustlog.js');
 
 async function createNewConfig(client, message) {
     const newConfig = {
@@ -18,7 +18,7 @@ async function createNewConfig(client, message) {
     await client.reloadChannelConfigs();
     await client.reloadChannelPrefixes();
 
-    await addChannelToJustlog(client, message.senderUserID);
+    await addChannelToRustlog(client, message.senderUserID);
 
     client.discord.importantLog(`* Joining to ${message.senderUsername} from join command`);
 

@@ -1,7 +1,7 @@
 const fs = require('fs');
 const { exec } = require('child_process');
 const { isStreamOnline, timeSince } = require('./utils.js');
-const { addChannelToJustlog } = require('./justlog.js');
+const { addChannelToRustlog } = require('./rustlog.js');
 
 async function createNewChannelConfig(client, channelId) {
     const channelName = await client.getUserByUserID(channelId);
@@ -19,7 +19,7 @@ async function createNewChannelConfig(client, channelId) {
     await client.reloadChannelConfigs();
     await client.reloadChannelPrefixes();
 
-    await addChannelToJustlog(client, channelId);
+    await addChannelToRustlog(client, channelId);
 
     fs.appendFile('channels.txt',
         `${channelId} ${channelName}\n`,

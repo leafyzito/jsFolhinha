@@ -1,6 +1,6 @@
 const { exec } = require('child_process');
 const { shortenUrl, manageLongResponse } = require('../../utils/utils.js');
-const { addChannelToJustlog } = require('../../utils/justlog.js');
+const { addChannelToRustlog } = require('../../utils/rustlog.js');
 
 async function createNewChannelConfig(client, user) {
     const newConfig = {
@@ -17,7 +17,7 @@ async function createNewChannelConfig(client, user) {
     await client.reloadChannelConfigs();
     await client.reloadChannelPrefixes();
 
-    await addChannelToJustlog(client, newConfig.channelId);
+    await addChannelToRustlog(client, newConfig.channelId);
 
     return;
 }
@@ -535,15 +535,15 @@ const giveXpCommand = async (client, message) => {
     return;
 }
 
-const justlogAddCommand = async (client, message) => {
-    message.command = 'dev justlogadd';
+const rustlogAddCommand = async (client, message) => {
+    message.command = 'dev rustlogadd';
 
     const authorId = message.senderUserID;
     if (authorId !== process.env.DEV_USERID) { return; }
 
     const targetChannel = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase() || null;
     if (!targetChannel) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}justlogadd <canal>`);
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}rustlogadd <canal>`);
         return;
     }
 
@@ -553,24 +553,24 @@ const justlogAddCommand = async (client, message) => {
         return;
     }
 
-    const success = await addChannelToJustlog(client, targetChannelId);
+    const success = await addChannelToRustlog(client, targetChannelId);
     if (!success) {
-        client.log.logAndReply(message, `Erro ao adicionar canal ao justlog`);
+        client.log.logAndReply(message, `Erro ao adicionar canal ao rustlog`);
         return;
     }
-    client.log.logAndReply(message, `🤖 Canal adicionado ao justlog: ${targetChannel}`);
+    client.log.logAndReply(message, `🤖 Canal adicionado ao rustlog: ${targetChannel}`);
     return;
 }
 
-const justlogRemoveCommand = async (client, message) => {
-    message.command = 'dev justlogremove';
+const rustlogRemoveCommand = async (client, message) => {
+    message.command = 'dev rustlogremove';
 
     const authorId = message.senderUserID;
     if (authorId !== process.env.DEV_USERID) { return; }
 
     const targetChannel = message.messageText.split(' ')[1]?.replace(/^@/, '').toLowerCase() || null;
     if (!targetChannel) {
-        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}justlogremove <canal>`);
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}rustlogremove <canal>`);
         return;
     }
 
@@ -580,12 +580,12 @@ const justlogRemoveCommand = async (client, message) => {
         return;
     }
 
-    const success = await removeChannelFromJustlog(client, targetChannelId);
+    const success = await removeChannelFromRustlog(client, targetChannelId);
     if (!success) {
-        client.log.logAndReply(message, `Erro ao remover canal do justlog`);
+        client.log.logAndReply(message, `Erro ao remover canal do rustlog`);
         return;
     }
-    client.log.logAndReply(message, `🤖 Canal removido do justlog: ${targetChannel}`);
+    client.log.logAndReply(message, `🤖 Canal removido do rustlog: ${targetChannel}`);
     return;
 }
 
@@ -633,8 +633,8 @@ joinedChannelsCommand.aliases = ['joinedchannels', 'jchannels'];
 devJoinChannelCommand.aliases = ['devjoin', 'djoin'];
 devPartChannelCommand.aliases = ['devpart', 'dpart'];
 giveXpCommand.aliases = ['devgivexp', 'givexp'];
-justlogAddCommand.aliases = ['justlogadd', 'jladd'];
-justlogRemoveCommand.aliases = ['justlogremove', 'jlremove', 'jldelete', 'jldel'];
+rustlogAddCommand.aliases = ['rustlogadd', 'rladd'];
+rustlogRemoveCommand.aliases = ['rustlogremove', 'rlremove', 'rldelete', 'rldel'];
 revivePetCommand.aliases = ['petrevive', 'revivepet'];
 
 module.exports = {
@@ -659,7 +659,7 @@ module.exports = {
     devJoinChannelCommand,
     devPartChannelCommand,
     giveXpCommand,
-    justlogAddCommand,
-    justlogRemoveCommand,
+    rustlogAddCommand,
+    rustlogRemoveCommand,
     revivePetCommand
 };
