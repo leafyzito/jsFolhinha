@@ -71,7 +71,8 @@ joinCommand.cooldown = 5000;
 joinCommand.whisperable = true;
 joinCommand.description = `Utilize o comando !join num chat no qual o Folhinha esteja presente e faça com que o bot entre no chat de quem executou o comando
 
-Caso tenha follow-mode ativado no seu chat, o bot não conseguirá falar no seu chat. Para resolver isso, dê cargo de moderador ou vip ao Folhinha`;
+Se quiser convidar o bot para um chat que você modera, acesse <a href="https://folhinhabot.com/" target="_blank" style="color: #67e8f9">a página principal do site</a> e na aba de "Convidar para um canal que você modera" coloque o canal para o qual você deseja convidar o bot
+Caso tenha follow-mode ativado no chat, o bot não conseguirá falar. Para resolver isso, dê cargo de moderador ou vip ao Folhinha`;
 joinCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${joinCommand.commandName}/${joinCommand.commandName}.js`;
 
 module.exports = {
