@@ -1,9 +1,9 @@
-async function addChannelToJustlog(client, channelId) {
+async function addChannelToRustlog(client, channelId) {
     const response = await fetch(`http://localhost:8025/admin/channels`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-API-Key': `${process.env.JUSTLOG_API_KEY}`
+            'X-API-Key': `${process.env.RUSTLOG_API_KEY}`
         },
         body: JSON.stringify({
             channels: [channelId]
@@ -11,7 +11,7 @@ async function addChannelToJustlog(client, channelId) {
     });
 
     if (response.status !== 200) {
-        client.discord.importantLog(`Erro ao adicionar ${channelId} ao justlog: ${response.statusText}`);
+        client.discord.importantLog(`Error adding channel ${channelId} to rustlog: ${response.statusText}`);
         return false;
     }
 
@@ -19,5 +19,5 @@ async function addChannelToJustlog(client, channelId) {
 }
 
 module.exports = {
-    addChannelToJustlog
+    addChannelToRustlog
 }
