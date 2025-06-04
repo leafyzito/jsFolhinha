@@ -91,7 +91,6 @@ async function getVideoDownload(urlToDownload) {
             }
         } catch (e2) {
             console.log(`erro no try-catch do getVideoDownload: ${e2}`);
-            console.log(resData);
             return null;
         }
     }
@@ -135,7 +134,7 @@ async function getAudioDownload(urlToDownload) {
     } catch (e) {
         console.log(`erro no getAudioDownload: ${e}`);
         try {
-            const errorText = resData.text;
+            const errorText = e.message;
             if ('connect to the service api' in errorText) {
                 return 'apiError';
             } else {
@@ -143,7 +142,6 @@ async function getAudioDownload(urlToDownload) {
             }
         } catch (e2) {
             console.log(`erro no try-catch do getAudioDownload: ${e2}`);
-            console.log(resData);
             return null;
         }
     }
