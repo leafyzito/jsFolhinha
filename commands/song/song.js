@@ -96,7 +96,8 @@ const songCommand = async (client, message) => {
     }
 
     if (songInfo.isNowPlaying) {
-        client.log.logAndReply(message, `${songTarget != message.senderUsername ? songTarget : 'Você'} está ouvindo ${songInfo.songArtist} - ${songInfo.songName} ${songInfo.albumName != '' ? `(Álbum: ${songInfo.albumName})` : ''}`);
+        const emote = await client.emotes.getEmoteFromList(message.channelName, ['catjam', 'alienpls', 'banger', 'jamgie', 'lebronjam', 'jammies'], '');
+        client.log.logAndReply(message, `${songTarget != message.senderUsername ? songTarget : 'Você'} está ouvindo ${songInfo.songArtist} - ${songInfo.songName} ${songInfo.albumName != '' ? `(Álbum: ${songInfo.albumName})` : ''} ${emote}`);
     } else {
         const timeAgo = timeSince(songInfo.timestamp);
         client.log.logAndReply(message, `${songTarget != message.senderUsername ? songTarget : 'Você'} ouviu por último ${songInfo.songArtist} - ${songInfo.songName} ${songInfo.albumName != '' ? `(Álbum: ${songInfo.albumName})` : ''} há ${timeAgo}`);
