@@ -62,7 +62,7 @@ const charadaCommand = async (client, message, anonClient) => {
     const responseMsg = await waitForMessage(anonClient, check);
     if (!responseMsg) {
         const emote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.sadEmotes, ':('); 
-        client.log.logAndReply(message, `Ninguém respondeu a charada a tempo! ${emote} A resposta era: ${charada.resposta}`);
+        client.log.logAndReply(message, `Ninguém respondeu a charada a tempo! ${emote} A resposta era: ${charada.resposta[0]}`);
         return;
     }
 
