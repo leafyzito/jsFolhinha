@@ -77,10 +77,11 @@ const charadaCommand = async (client, message, anonClient) => {
 
 charadaCommand.commandName = 'charada';
 charadaCommand.aliases = ['charada', 'charadas'];
-charadaCommand.shortDescription = 'Inicie uma charada que todos podem responder';
+charadaCommand.shortDescription = 'Inicie uma charada que todos podem participar';
 charadaCommand.cooldown = 30_000;
 charadaCommand.whisperable = false;
-charadaCommand.description = `Inicie uma charada que todos do chat no qual o comando foi executado podem responder dentro de 30 segundos com a recompensa de 1 cookie para quem acertar`;
+charadaCommand.description = `Inicie uma charada que todos do chat (no qual o comando foi executado) podem participar
+Se ninguém do chat responder a charada a tempo dentro de 30 segundos, a resposta será revelada`;
 charadaCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${charadaCommand.commandName}/${charadaCommand.commandName}.js`;
 
 module.exports = {
