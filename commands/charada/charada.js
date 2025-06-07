@@ -66,7 +66,7 @@ const charadaCommand = async (client, message, anonClient) => {
     const responseMsg = await waitForMessage(anonClient, check);
     if (!responseMsg) {
         const emote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.sadEmotes, ':('); 
-        client.log.logAndReply(message, `Ninguém respondeu a charada a tempo! ${emote} A resposta era: ${charada.resposta[0]}`);
+        client.log.logAndReply(message, `Ninguém respondeu a charada a tempo! ${emote} A resposta era: ${charada.resposta[0]}`, `${charada.pergunta} -> ${charada.resposta[0]}`);
         return;
     }
 
@@ -75,7 +75,7 @@ const charadaCommand = async (client, message, anonClient) => {
     // await client.db.update('cookie', { userId: responseMsg.senderUserID }, { $inc: { total: 1 } });
 
     const emote = await client.emotes.getEmoteFromList(message.channelName, ['nerd', 'nerdge', 'catnerd', 'dognerd', 'giganerd'], '🤓');
-    client.log.logAndReply(message, `${responseMsg.senderUsername} acertou a resposta! ${emote}`);
+    client.log.logAndReply(message, `${responseMsg.senderUsername} acertou a resposta! ${emote}`, `${charada.pergunta} -> ${charada.resposta[0]}`);
     return;
 };
 
