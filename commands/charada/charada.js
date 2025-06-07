@@ -10,6 +10,10 @@ async function waitForMessage(client, check, timeout = 30_000) {
         }, timeout);
 
         client.on('PRIVMSG', (msg) => {
+            if (msg.replyParentMessageID) {
+                msg.messageText = msg.messageText.split(' ').slice(1).join(' ').trim();
+                console.log(msg.messageText);
+            }
             if (msg.channelName === check.channelName
                 && check.content.some(content => msg.messageText.toLowerCase().trim() === content.toLowerCase().trim())) {
                 clearTimeout(timer);
