@@ -57,7 +57,7 @@ const charadaCommand = async (client, message, anonClient) => {
     const charada = randomChoice(Object.values(charadasData));
     console.log(charada);
 
-    await client.log.reply(message, `${message.senderUsername} iniciou uma charada! ${capitalize(charada.pergunta)}`);
+    await client.log.reply(message, `${message.senderUsername} iniciou uma charada! 🤔 ${capitalize(charada.pergunta)}`);
 
     const check = {
         channelName: message.channelName,
