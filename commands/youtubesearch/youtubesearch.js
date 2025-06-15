@@ -106,7 +106,7 @@ const youtubeSearchCommand = async (client, message) => {
 
     const ytVideo = await getVideo(query);
     if (ytVideo === null) {
-        client.log.logAndReply(message, `Não foi possível encontrar nenhum vídeo para a consulta "${query}"`);
+        client.log.logAndReply(message, `Não encontrei nenhum vídeo sobre essa pesquisa`);
         return;
     }
     
