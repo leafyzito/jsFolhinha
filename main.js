@@ -56,8 +56,7 @@ anonClient.on('CLEARCHAT', (msg) => { onClearChatHandler(msg); });
 client.on('WHISPER', (msg) => { onWhisperHandler(msg); });
 
 // Join the channels with both clients
-// const channelsToJoin = process.env.ENV == 'prod' ? client.getChannelsToJoin() : Promise.resolve([process.env.DEV_TEST_CHANNEL]);
-const channelsToJoin = Promise.resolve(['leafyzito']); // to force stop it the server is acting weird aaaaaa
+const channelsToJoin = process.env.ENV == 'prod' ? client.getChannelsToJoin() : Promise.resolve([process.env.DEV_TEST_CHANNEL]);
 channelsToJoin.then((channels) => {
     client.channelsToJoin = channels;
     anonClient.channelsToJoin = channels;
