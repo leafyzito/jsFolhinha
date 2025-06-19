@@ -187,19 +187,31 @@ async function rejoinDisconnectedChannels(client, anonClient) {
             rejoinedChannels.push(channel);
             anonClient.join(channel);
         }
-        else {
-            if ([...anonClient.joinedChannels].length === 0) {
-                counterToRestart++;
-                if (counterToRestart >= 4) { // 2 minutes
-                    console.log(`* Restarting client`);
-                    client.discord.log(`* Restarting client`);
-                    exec('pm2 restart folhinhajs');
-                }
-            }
-            // console.log('all good ' + client.channelsToJoin);
-        }
     });
+    
     if (rejoinedChannels.length > 0) {
+        if (rejoinedChannels.length == channelsToJoin.length) { // sometimes the client bugs and doesn't join channel anymore, so restart the bot
+            counterToRestart++;
+            if (counterToRestart >= 4) { // 2 minutes
+                console.log(`* Restarting client`);
+                client.discord.log(`* Restarting client`);
+                
+                exec('docker compose restart', { cwd: process.cwd() }, (err, stdout, stderr) => {
+                    if (err) {
+                        console.log(`* Erro ao reiniciar compose: ${err}`);
+                        client.discord.log(`* Erro ao reiniciar compose: ${err}`);
+                        return;
+                    }
+
+                    if (stderr) {
+                        console.log(`* Docker stderr: ${stderr}`);
+                    }
+
+                    console.log(`* Compose reiniciado: ${stdout}`);
+                    client.discord.log(`* Compose reiniciado: ${stdout}`);
+                });
+            }
+        }
         console.log(`* Rejoining ${rejoinedChannels.length} channels`);
         client.discord.log(`* Rejoining ${rejoinedChannels.length} channels`);
     }
