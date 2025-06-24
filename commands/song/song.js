@@ -20,7 +20,7 @@ async function getSongInfo(lastfmUser) {
     }
 
     const currentTrack = data.recenttracks.track[0];
-    const isNowPlaying = currentTrack['@attr'] ? currentTrack['@attr'].nowplaying : false;
+    const isNowPlaying = currentTrack['@attr'] && currentTrack['@attr'].nowplaying ? currentTrack['@attr'].nowplaying : false;
 
     const songArtist = currentTrack.artist['#text'];
     const songName = currentTrack.name;
