@@ -13,7 +13,7 @@ const rolarCommand = async (client, message) => {
     const args = message.messageText.split(' ').slice(1);
 
     var dice = args[0];
-    var sides = args[1].replace(/d/g, '');
+    var sides = args[1]?.replace(/d/g, '') || args[1];
 
     if (dice.includes('d')) {
         sides = dice.split('d')[1];
