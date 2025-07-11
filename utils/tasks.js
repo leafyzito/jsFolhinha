@@ -141,6 +141,10 @@ async function fetchPendingJoins(client, anonClient) {
             console.log(`* Joining ${channelName} to ${channelName}`);
             client.discord.importantLog(`* Joining to ${channelName} from website (inviter: ${inviterName})`);
 
+            // create config
+            createNewChannelConfig(client, channelId);
+
+            // join channel
             anonClient.join(channelName).catch((err) => {
                 console.error(`Erro ao entrar no chat ${channelName}: ${err}`);
                 client.discord.importantLog(`* Error joining ${channelName} from website: ${err}`);
@@ -149,8 +153,7 @@ async function fetchPendingJoins(client, anonClient) {
                 return;
             });
 
-            // create config
-            createNewChannelConfig(client, channelId);
+            // update lists
             client.channelsToJoin.push(channelName);
             anonClient.channelsToJoin.push(channelName);
             client.joinedChannelsIds.push(channelId);
