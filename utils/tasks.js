@@ -1,6 +1,6 @@
 const fs = require('fs');
 const { exec } = require('child_process');
-const { isStreamOnline, timeSince } = require('./utils.js');
+const { isStreamOnline, timeSince, timeSinceDT } = require('./utils.js');
 const { addChannelToRustlog } = require('./rustlog.js');
 
 async function createNewChannelConfig(client, channelId) {
@@ -34,6 +34,27 @@ async function createNewChannelConfig(client, channelId) {
     return;
 }
 
+async function getUserInfo(username) {
+    const api_url = `https://api.ivr.fi/v2/twitch/user?login=${username}`;
+    const response = await fetch(api_url);
+    const data = await response.json();
+
+    if (data === null || data == [] || data.length === 0) { return null; }
+
+    const displayName = data[0].displayName;
+    const userId = data[0].id;
+    const badge = data[0].badges.length > 0 ? data[0].badges[0].title : 'Nenhuma';
+    const chatterCount = data[0].chatterCount;
+    const createdAt = timeSinceDT(data[0].createdAt)[1];
+    const howLongCreated = timeSinceDT(data[0].createdAt)[0];
+    const followers = data[0].followers;
+    const isLive = data[0].stream !== null ? true : false;
+    const lastStream = data[0].lastBroadcast.startedAt ? timeSinceDT(data[0].lastBroadcast.startedAt)[0] : null;
+    const isBanned = data[0].banned;
+    const banReason = data[0].banReason || null;
+
+    return { displayName, userId, badge, chatterCount, createdAt, howLongCreated, followers, isLive, lastStream, isBanned, banReason };
+}
 
 
 async function dailyCookieResetTask(client) {
@@ -138,8 +159,16 @@ async function fetchPendingJoins(client, anonClient) {
                 continue;
             }
 
+            // get user info for joining log
+            const userInfo = await getUserInfo(channelName);
+
             console.log(`* Joining ${channelName} to ${channelName}`);
-            client.discord.importantLog(`* Joining to ${channelName} from website (inviter: ${inviterName})`);
+            
+            if (userInfo) {
+                client.discord.importantLog(`* Joining to ${channelName} from website (inviter: ${inviterName})\n${userInfo.isBanned ? `🚫 Banido: ${userInfo.banReason} • ` : ''}  @${userInfo.displayName} • ID: ${userInfo.userId} • Badge: ${userInfo.badge} • Chatters: ${userInfo.chatterCount} • Seguidores: ${userInfo.followers} • Criado há ${userInfo.howLongCreated} (${userInfo.createdAt}) ${userInfo.isLive ? '• 🔴 Em live agora' : ''} ${userInfo.lastStream && !userInfo.isLive ? `• Última live: há ${userInfo.lastStream}` : ''}`);
+            } else {
+                client.discord.importantLog(`* Joining to ${channelName} from website (inviter: ${inviterName})\nCould not fetch user info from API`);
+            }
 
             // create config
             createNewChannelConfig(client, channelId);
