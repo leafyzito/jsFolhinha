@@ -69,7 +69,7 @@ const firstLineCommand = async (client, message) => {
         return;
     }
 
-    client.log.logAndReply(message, `${targetUser === message.senderUsername.toLowerCase() ? 'A sua primeira' : `A primeira mensagem de ${firstLine.user}`} neste chat foi em ${firstLine.date}: ${firstLine.message}`);
+    client.log.logAndReply(message, `${targetUser === message.senderUsername.toLowerCase() ? 'A sua primeira mensagem' : `A primeira mensagem de ${firstLine.user}`} neste chat foi em ${firstLine.date}: ${firstLine.message}`);
     return;
 };
 
