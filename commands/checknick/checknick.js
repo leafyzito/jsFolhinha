@@ -24,15 +24,11 @@ const checkNickCommand = async (client, message) => {
     if (!await processCommand(5000, 'channel', message, client)) return;
 
     if (message.messageText.split(' ').length < 2) {
-        client.log.logAndReply(message, `Use o formato: ${prefix}checknick <nick>`);
+        client.log.logAndReply(message, `Use o formato: ${message.commandPrefix}checknick <nick>`);
         return;
     }
 
-    const nick = message.messageText.split(' ')[1]?.replace(/^@/, '') || null;
-    if (!nick) {
-        client.log.logAndReply(message, `Use o formato: ${prefix}checknick <nick>`);
-        return;
-    }
+    const nick = message.messageText.split(' ')[1].replace(/^@/, '');
 
     const checkNickRes = await checkNick(nick);
 
