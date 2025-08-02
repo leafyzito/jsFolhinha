@@ -28,7 +28,7 @@ const checkNickCommand = async (client, message) => {
         return;
     }
 
-    const nick = message.messageText.split(' ')[1].replace(/^@/, '');
+    const nick = message.messageText.split(' ')[1]?.replace(/^@/, '') || null;
     if (!nick) {
         client.log.logAndReply(message, `Use o formato: ${prefix}checknick <nick>`);
         return;
