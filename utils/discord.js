@@ -24,12 +24,12 @@ function getFormattedDateTime() {
     return `${day}/${month}/${year} - ${hours}:${minutes}:${seconds}`;
 }
 
-function getLogsUrl(channel) {
+function getLogsUrl(channel, messageId = null) {
     const now = new Date();
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0');
     const day = String(now.getDate()).padStart(2, '0');
-    return `https://tv.supa.sh/logs?c=${channel}&d=${year}-${month}-${day}`
+    return `https://tv.supa.sh/logs?c=${channel}&d=${year}-${month}-${day}${messageId ? `#${messageId}` : ''}`
 }
 
 
@@ -37,7 +37,7 @@ discordClient.logCommand = async function (message, response) {
     const channelName = message.channelName == 'whisper' ? '📨 Whisper' : `#${message.channelName}`;
     const embed = new discordClient.EmbedBuilder()
         .setTitle(`${channelName}/${message.displayName} - ${message.command}`)
-        .setURL(`${getLogsUrl(message.channelName)}`)
+        .setURL(`${getLogsUrl(message.channelName, message.messageID)}`)
         .addFields(
             {
                 name: "Comando:",
@@ -201,7 +201,7 @@ discordClient.logError = async function (content) {
 discordClient.notifyDevMention = async function (message) {
     const embed = new discordClient.EmbedBuilder()
         .setTitle(`#${message.channelName}/${message.displayName}`)
-        .setURL(`${getLogsUrl(message.channelName)}`)
+        .setURL(`${getLogsUrl(message.channelName, message.messageID)}`)
         .setColor(message.color ? colorToHexString(message.color) : '#008000')
         .setFooter({
             text: `${getFormattedDateTime()}`,
