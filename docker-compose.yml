@@ -3,7 +3,6 @@ name: folhinha
 services:
   jsfolhinha:
     container_name: folhinha-bot
-    network_mode: "host"
     build:
       context: .
       dockerfile: Dockerfile
@@ -18,18 +17,20 @@ services:
     depends_on:
       - twitchclipper
       - cobalt
+    networks:
+      - app-network
     restart: unless-stopped
 
   twitchclipper:
     container_name: twitch-clipper
     build:
-      context: ./twitchClipper
+      context: ./apps/twitchClipper
       dockerfile: Dockerfile
     environment:
       - TZ=Europe/Lisbon
     volumes:
-      - ./twitchClipper/clips:/app/clips
-      - ./twitchClipper/previews:/app/previews
+      - ./apps/twitchClipper/clips:/app/clips
+      - ./apps/twitchClipper/previews:/app/previews
     ports:
       - "8989:8989"
     networks:
