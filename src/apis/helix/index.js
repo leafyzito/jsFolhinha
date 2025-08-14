@@ -291,7 +291,7 @@ class HelixApi {
     return true;
   }
 
-  async whisper(whisperTargetId, message) {
+  async whisper(whisperTargetId, content) {
     const headers = {
       "Client-ID": process.env.BOT_CLIENT_ID,
       Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
@@ -303,7 +303,7 @@ class HelixApi {
         headers,
         method: "POST",
         body: JSON.stringify({
-          message: message,
+          message: content,
         }),
       }
     );
