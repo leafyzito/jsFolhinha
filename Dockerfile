@@ -11,6 +11,9 @@ RUN npm install
 
 COPY . .
 
+# Ensure cross-env is available for the CMD script
+RUN npm install -g cross-env
+
 # Run depending on the environment declared in docker-compose.yml
 CMD if [ "$ENV" = "prod" ]; then \
     npm run start; \

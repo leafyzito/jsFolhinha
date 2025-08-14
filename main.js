@@ -1,144 +1,96 @@
-require('dotenv').config();
-const { ChatClient } = require('@mastondzn/dank-twitch-irc');
-const { modifyClient } = require('./utils/startup.js');
-const { commandHandler, listenerHandler } = require('./utils/handlers.js');
-const { dailyCookieResetTask, startPetTask, startFetchPendingJoinsTask, startRejoinDisconnectedChannelsTask, startDiscordPresenceTask } = require('./utils/tasks.js');
-const cron = require('node-cron');
+// <reference path="./types/global.d.ts" />
+require("dotenv").config();
 
-// Create the main bot client for sending messages
-const client = new ChatClient({
-    username: process.env.BOT_USERNAME,
-    password: process.env.BOT_IRC_TOKEN,
+// IMPORTS
+const cron = require("node-cron");
+const { request } = require("undici");
+const { loadCommands } = require("./src/commands/commandsList");
+const { loadReminders } = require("./src/handlers/listener/reminder");
 
-    ignoreUnhandledPromiseRejections: true,
-    maxChannelCountPerConnection: 100,
-    connectionRateLimits: {
-        parallelConnections: 5,
-        releaseTime: 1000
-    }
-});
+// GLOBAL FB OBJECT SETUP
+// Initialize fb object first, before any other modules
+// This makes fb available globally (fb.*) and also as global.fb.*
+global.fb = global.fb || {};
+const fb = global.fb;
 
-// Create anonymous client for reading messages
-const anonClient = new ChatClient({
-    username: 'justinfan12345', // Anonymous username
-    password: undefined, // No password needed for anonymous login
+// Ensure fb is available globally for all modules
+global.fb = fb;
 
-    // Optimized for anonymous connection
-    rateLimits: "verifiedBot", // Anon connections are allowed higher limits
-    connection: {
-        type: "websocket",
-        secure: true, // Use secure websocket connection
-    },
-    maxChannelCountPerConnection: 200, // Maximum allowed for anonymous connections
-    connectionRateLimits: {
-        parallelConnections: 10, // Maximum parallel connections for anonymous
-        releaseTime: 100, // Reduced wait time between connections
-    },
-    requestMembershipCapability: false, // Disable membership capability for faster joins
-    installDefaultMixins: false, // Disable mixins for better performance
-    ignoreUnhandledPromiseRejections: true,
-});
+// Add request to fb for easier access
+fb.request = request;
 
-// Modify the main client with custom functions
-modifyClient(client, anonClient);
+// FB PROPERTIES INITIALIZATION
+// Add initialization status tracking
+fb.isReady = false;
+fb.startTime = Math.floor(Date.now() / 1000);
+fb.readyCallbacks = [];
 
-// Connect both clients to Twitch
-client.connect();
-anonClient.connect();
+// Initialize all fb properties upfront so they're available globally from the start
+fb.utils = null;
+fb.emotes = null;
+fb.db = null;
+fb.log = null;
+fb.api = {};
+fb.twitch = null;
+fb.discord = null;
 
-// Register event handlers on the anonymous client for reading messages
-anonClient.on('ready', () => { onReadyHandler(); });
-anonClient.on('JOIN', (channel) => { onJoinHandler(channel); });
-anonClient.on("PRIVMSG", (msg) => { onMessageHandler(msg); });
-anonClient.on('CLEARCHAT', (msg) => { onClearChatHandler(msg); });
+// FB UTILITY FUNCTIONS
+// Function to mark fb as ready
+fb.markReady = () => {
+  fb.isReady = true;
+  fb.readyCallbacks.forEach((callback) => callback());
+  fb.readyCallbacks = [];
+};
 
-// Register whisper handler on main client (since anon can't receive whispers)
-client.on('WHISPER', (msg) => { onWhisperHandler(msg); });
+// MAIN INITIALIZATION FUNCTION
+async function initializeApp() {
+  try {
+    console.log("* Starting application initialization...");
 
-// Join the channels with both clients
-const channelsToJoin = process.env.ENV == 'prod' ? client.getChannelsToJoin() : Promise.resolve([process.env.DEV_TEST_CHANNEL]);
-channelsToJoin.then((channels) => {
-    client.channelsToJoin = channels;
-    anonClient.channelsToJoin = channels;
-    // client.joinAll(channels);
-    anonClient.joinAll(channels).then(() => {
-        console.log('* Joined channels');
-    }).catch((error) => {
-        console.log('Error on joining channels:', error);
-    });
-}).catch((error) => {
-    console.log('Error on getting channelsToJoin:', error);
-});
+    // Initialize all utility instances first
+    const { utils, emotes, db, log } =
+      await require("./src/utils/init").initializeUtilities();
+    fb.utils = utils;
+    fb.emotes = emotes;
+    fb.db = db;
+    fb.log = log;
+    console.log("* Utilities initialized");
 
-// Start tasks
-if (process.env.ENV == 'prod') {
-    console.log('* Starting tasks');
-    cron.schedule('0 9 * * *', async () => { await dailyCookieResetTask(client); });
-    startPetTask(client, anonClient);
-    startFetchPendingJoinsTask(client, anonClient);
-}
-startRejoinDisconnectedChannelsTask(client, anonClient);
-startDiscordPresenceTask(client, anonClient);
+    // Initialize APIs
+    fb.api = await require("./src/utils/init").initializeAPIs();
+    console.log("* APIs initialized");
 
-// handlers
-function onJoinHandler(channel) {
-    console.log(`* ${channel.joinedUsername} joined ${channel.channelName}`);
-}
+    // Initialize clients
+    fb.discord = await require("./src/utils/init").initializeDiscord();
+    console.log("* Discord client initialized");
 
-async function onReadyHandler() {
-    console.log(`* Connected and ready! Joining channels...`);
-}
+    fb.twitch = await require("./src/utils/init").initializeTwitch();
+    console.log("* Twitch client initialized");
 
-client.duplicateMessages = [];
-function onMessageHandler(message) {
-    // for shared chats, read the original message with priority
-    const sourceRoomId = message.ircTags['source-room-id'] || null;
-    const sourceMessageId = message.ircTags['source-id'] || null;
-    if (sourceRoomId && sourceRoomId !== message.channelID && client.joinedChannelsIds.includes(sourceRoomId)) { return; }
-    if (sourceMessageId) { // to avoid duplicate messages
-        client.duplicateMessages.push(sourceMessageId);
-        if (client.duplicateMessages.length > 100) { client.duplicateMessages.shift(); }
-    }
+    // Load commands
+    loadCommands();
+    console.log("* Commands loaded");
 
-    message.commandPrefix = process.env.ENV === 'prod' ? client.channelPrefixes[message.channelName] || '!' : '!!';
-    message.internalTimestamp = new Date().getTime();
-    message.isStreamer = message.badges.hasBroadcaster;
-    if (message.isStreamer) { message.isMod = true; } //consider streamer as mod
-    message.isVip = message.badges.hasVIP;
-    message.isFirstMsg = message.ircTags['first-msg'] === '1' ? true : false;
+    // Load and process reminders (handle missed and schedule future ones)
+    await loadReminders();
+    console.log("* Reminders loaded and processed");
 
-    // Pass both clients to handlers - anon for reading, main for sending
-    listenerHandler(client, message, anonClient);
-    commandHandler(client, message, anonClient);
+    // Mark fb as ready
+    fb.markReady = true;
+    console.log("* fb object is now ready");
+
+    // Start recurring tasks
+    const { startAllTasks } = require("./src/tasks/index");
+    startAllTasks();
+
+    console.log("* Application initialization complete!");
+  } catch (error) {
+    console.error("Failed to initialize application:", error);
+    process.exit(1);
+  }
 }
 
-function onWhisperHandler(message) {
-    message.commandPrefix = '!';
-    message.internalTimestamp = new Date().getTime();
-    message.serverTimestamp = new Date();
-    message.serverTimestampRaw = new Date().getTime();
-    message.channelName = "whisper";
+// Start the initialization process
+initializeApp();
 
-    // if the message starts with any valid prefix, replace it with "!"
-    const validPrefixes = ['?', '&', '%', '+', '*', '-', '=', '|', '@', '#', '$', '~', '\\', '_', ',', ';', '<', '>'];
-    for (const prefix of validPrefixes) {
-        if (message.messageText.startsWith(prefix)) {
-            message.messageText = message.messageText.replace(prefix, message.commandPrefix);
-        }
-    }
-
-    if (process.env.ENV == 'prod') {
-        commandHandler(client, message, anonClient);
-    }
-    if (!message.messageText.startsWith(message.commandPrefix)) {
-        client.discord.logWhisperFrom(message);
-    }
-}
-
-function onClearChatHandler(message) {
-    if (message.targetUsername === process.env.BOT_USERNAME) {
-        console.log(`* ${message.isTimeout() ? `Tomei timeout em #${message.channelName} por ${message.banDuration} segundos` : `Fui banido em #${message.channelName}`}`);
-        // client.log.send(process.env.DEV_TEST_CHANNEL, `${message.isTimeout() ? `Tomei timeout em #${message.channelName} por ${message.banDuration} segundos` : `Fui banido em #${message.channelName} @${process.env.DEV_NICK}`}`);
-        client.discord.importantLog(`* ${message.isTimeout() ? `Tomei timeout em #${message.channelName} por ${message.banDuration} segundos` : `Fui banido em #${message.channelName}`}`);
-    }
-}
+module.exports = { fb };

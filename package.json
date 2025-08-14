@@ -1,6 +1,6 @@
 {
-  "name": "folhinhajs",
-  "version": "1.0.0",
+  "name": "folhinhabot",
+  "version": "4.0",
   "main": "main.js",
   "scripts": {
     "start": "cross-env ENV=prod node main.js",
@@ -14,6 +14,7 @@
     "@mastondzn/dank-twitch-irc": "^7.2.1",
     "cheerio": "^1.0.0",
     "cross-env": "^7.0.3",
+    "dayjs": "^1.11.13",
     "discord.js": "^14.15.3",
     "dotenv": "^16.4.5",
     "google-translate-api-browser": "^5.0.0",
