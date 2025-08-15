@@ -116,6 +116,10 @@ class Utils {
     return `${isFuture ? "em" : "há"} ${units.join(" ")}`;
   }
 
+  unix(date = new Date()) {
+    return Math.floor(date.getTime() / 1000);
+  }
+
   waitForWhisper(check, timeout = 30_000) {
     return new Promise((resolve) => {
       const timer = setTimeout(() => {
