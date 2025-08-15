@@ -24,7 +24,7 @@ class Emotes {
 
   async get7tv(channelId) {
     try {
-      var sevenTvEmotes = [];
+      const sevenTvEmotes = [];
       const url = `https://7tv.io/v3/users/twitch/${channelId}`;
       const response = await fb.request(url);
 
@@ -52,7 +52,7 @@ class Emotes {
 
   async getBttv(channelId) {
     try {
-      var bttvEmotes = [];
+      const bttvEmotes = [];
       const url = `https://api.betterttv.net/3/cached/users/twitch/${channelId}`;
       const response = await fb.request(url);
       const data = await response.body.json();
@@ -75,7 +75,7 @@ class Emotes {
 
   async getFfz(channelId) {
     try {
-      var ffzEmotes = [];
+      const ffzEmotes = [];
       const url = `https://api.frankerfacez.com/v1/room/id/${channelId}`;
       const response = await fb.request(url);
       const data = await response.body.json();
@@ -123,8 +123,8 @@ class Emotes {
     if (channelName === "whisper") {
       return defaultResponse;
     }
-    var channelEmotes = await this.getChannelEmotes(channelName);
-    var possibleEmotes = [];
+    const channelEmotes = await this.getChannelEmotes(channelName);
+    const possibleEmotes = [];
     emoteList.forEach((emote) => {
       const lowercaseEmote = emote.toLowerCase();
       const originalCaseEmote = channelEmotes.find(

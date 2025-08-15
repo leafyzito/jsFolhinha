@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-var commandsList = {};
+const commandsList = {};
 
 // Function to reload commands
 const loadCommands = () => {
@@ -18,7 +18,7 @@ const loadCommands = () => {
         const commandPath = path.join(commandsMainDir, command);
         const fileModule = require(path.join(commandPath, `${command}.js`));
 
-        // For each fileModule that have multiple commands, add them to commandsList 
+        // For each fileModule that have multiple commands, add them to commandsList
         for (const commandName in fileModule) {
             if (commandName.includes('Command')) {
                 // For each alias, add them to commandsList

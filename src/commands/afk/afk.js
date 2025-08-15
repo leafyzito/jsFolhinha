@@ -1,6 +1,6 @@
 const { afkInfoObjects } = require("./afk_info_model.js");
 
-var afkAliasList = [];
+let afkAliasList = [];
 afkInfoObjects.forEach((afk) => {
   afkAliasList = afkAliasList.concat(afk.alias);
 });
@@ -40,7 +40,7 @@ const afkCommand = async (message) => {
     await createAfkBase(message);
   }
 
-  var afkMessage = message.messageText.split(" ").slice(1).join(" ");
+  let afkMessage = message.messageText.split(" ").slice(1).join(" ");
   if (afkMessage.length > 400) {
     afkMessage = afkMessage.slice(0, 400) + "...";
   }
@@ -72,7 +72,7 @@ const afkCommand = async (message) => {
 };
 
 const rafkCommand = async (message) => {
-  var afkStats = await fb.db.get("afk", {
+  let afkStats = await fb.db.get("afk", {
     channel: message.channelName,
     user: message.senderUsername,
   });
@@ -89,7 +89,7 @@ const rafkCommand = async (message) => {
     afkStats = afkStats[0];
   }
 
-  var deltaTime = fb.utils.unix() - afkStats.afk_return;
+  const deltaTime = fb.utils.unix() - afkStats.afk_return;
   if (deltaTime > 300) {
     return {
       replyType: "reply",
@@ -147,7 +147,7 @@ const isAfkCommand = async (message) => {
     ?.replace(/^@/, "")
     .toLowerCase();
 
-  var afkStats = await fb.db.get("afk", {
+  let afkStats = await fb.db.get("afk", {
     channel: message.channelName,
     user: isAfkTarget,
   });
@@ -176,7 +176,7 @@ const isAfkCommand = async (message) => {
   const afkAction = afkInfoObject.isafk;
   const afkEmoji = afkInfoObject.emoji;
   const afkMessage = afkStats.afk_message;
-  var afkSince = fb.utils.relativeTime(afkStats.afk_since);
+  const afkSince = fb.utils.relativeTime(afkStats.afk_since);
 
   return {
     replyType: "reply",

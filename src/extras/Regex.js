@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateRegex = void 0;
 class CreateRegex {
-    /* eslint-disable camelcase */
+
     /* eslint-disable no-control-regex */
-    /* eslint-disable prefer-regex-literals */
+
     /* eslint-disable no-misleading-character-class */
     constructor() {
         this.specialCharacters = Object.entries({
@@ -128,7 +128,7 @@ class CreateRegex {
         }
     }
     static new() {
-        var _a;
+        let _a;
         return (_a = this.instance) !== null && _a !== void 0 ? _a : (this.instance = new this());
     }
     get emojis() {
@@ -261,7 +261,7 @@ class CreateRegex {
     }
     get login() {
         if (this._login)
-            return this._login;
+            {return this._login;}
         this._login = /^[A-Z_\d]{3,25}$/i;
         return this._login;
     }
@@ -437,7 +437,7 @@ class CreateRegex {
     }
     replaceConfusables(str) {
         if (this.checkLNP(str))
-            return str;
+            {return str;}
         let newStr = '';
         for (const char of this.clean(str)) {
             newStr += this.confusablesMap.get(char) || char;
@@ -457,9 +457,9 @@ class CreateRegex {
         return text;
     }
     check(mainInput, arrayInput, channelID) {
-        var _a;
+        let _a;
         if (!mainInput && !arrayInput)
-            return;
+            {return;}
         const fullInput = (mainInput + ((_a = arrayInput === null || arrayInput === void 0 ? void 0 : arrayInput.toString()) !== null && _a !== void 0 ? _a : ''));
         const cleansedText = fullInput.replace(this.invisChars, '').toLowerCase();
         const moreCleansedText = this.normalizeUnicode(cleansedText);

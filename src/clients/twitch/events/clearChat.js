@@ -7,7 +7,7 @@ module.exports = function onClearChat(message) {
           : `Fui banido em #${message.channelName}`
       }`
     );
-    client.discord.importantLog(
+    fb.discord.importantLog(
       `* ${
         message.isTimeout()
           ? `Tomei timeout em #${message.channelName} por ${message.banDuration} segundos`

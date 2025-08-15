@@ -1,4 +1,4 @@
-const testeCommand = async (message) => {
+const testeCommand = async () => {
   return {
     replyType: "reply",
     reply: "testado 4",
