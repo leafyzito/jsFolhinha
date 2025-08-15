@@ -1,5 +1,5 @@
 const { shouldSkipMessage } = require("./middleware");
-var lastReplyTime = {};
+const lastReplyTime = {};
 
 // Bot name constants
 const BOT_NAMES = ["folhinha", "folhinhabot", "@folhinhabot", "@folhinhabot,"];

@@ -2,7 +2,7 @@ const { shouldSkipMessage } = require("./middleware");
 const schedule = require("node-schedule");
 
 let processingReminder = [];
-let scheduledReminders = new Set(); // Track scheduled reminder IDs locally
+const scheduledReminders = new Set(); // Track scheduled reminder IDs locally
 
 // Helper function to format reminder message
 const formatReminderMessage = (
@@ -182,7 +182,7 @@ const loadReminders = async () => {
 // Function to handle reminder responses
 const handleReminderResponse = async (message, reminders) => {
   // Add length property to single objects for compatibility
-  if (!Array.isArray(reminders)) reminders.length = 1;
+  if (!Array.isArray(reminders)) {reminders.length = 1;}
 
   if (reminders.length <= 3) {
     // Handle small number of reminders (≤3)

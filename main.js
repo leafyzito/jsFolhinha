@@ -2,7 +2,6 @@
 require("dotenv").config();
 
 // IMPORTS
-const cron = require("node-cron");
 const { request } = require("undici");
 const { loadCommands } = require("./src/commands/commandsList");
 const { loadReminders } = require("./src/handlers/listener/reminder");

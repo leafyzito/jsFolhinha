@@ -6,7 +6,7 @@ const shouldSkipMessage = async (channelID, commandName = null) => {
     return false;
   }
 
-  let channelData = await fb.db.get("config", {
+  const channelData = await fb.db.get("config", {
     channelID: channelID,
   });
   if (!channelData) {

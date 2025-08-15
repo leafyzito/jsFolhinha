@@ -7,7 +7,7 @@ async function rejoinDisconnectedChannels() {
   if (!channelsToJoin || channelsToJoin.length === 0) {
     return;
   }
-  let rejoinedChannels = [];
+  const rejoinedChannels = [];
 
   channelsToJoin.forEach(async (channel) => {
     if (![...fb.twitch.anonClient.joinedChannels].includes(channel)) {

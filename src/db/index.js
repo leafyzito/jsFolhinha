@@ -32,7 +32,9 @@ class MongoUtils {
 
       for (const collection of collections) {
         const collectionName = collection.name;
-        if (collectionsToIgnore.includes(collectionName)) continue;
+        if (collectionsToIgnore.includes(collectionName)) {
+          continue;
+        }
 
         // Create empty cache container for each collection
         const cache = new LRUCache(this.cacheOptions);
@@ -64,7 +66,7 @@ class MongoUtils {
     if (!forceDb) {
       // Search cache for matching documents
       const matches = [];
-      for (const [_, doc] of cache.entries()) {
+      for (const [, doc] of cache.entries()) {
         let isMatch = true;
         for (const [key, value] of Object.entries(query)) {
           if (doc[key] !== value) {
@@ -203,7 +205,9 @@ class MongoUtils {
 
   async delete(collectionName, query) {
     const docToDelete = await this.get(collectionName, query);
-    if (!docToDelete) return;
+    if (!docToDelete) {
+      return;
+    }
 
     // Remove from cache immediately
     const cache = this.getCollectionCache(collectionName);
@@ -235,7 +239,7 @@ class MongoUtils {
 
     // Check cache first
     let count = 0;
-    for (const [_, doc] of cache.entries()) {
+    for (const [, doc] of cache.entries()) {
       let isMatch = true;
       for (const [key, value] of Object.entries(query)) {
         if (doc[key] !== value) {
@@ -243,7 +247,9 @@ class MongoUtils {
           break;
         }
       }
-      if (isMatch) count++;
+      if (isMatch) {
+        count++;
+      }
     }
 
     // If we have cached results, return them
@@ -328,7 +334,7 @@ class MongoUtils {
       }
     } else {
       // Clear all caches
-      for (const [name, cache] of this.collectionCaches) {
+      for (const [, cache] of this.collectionCaches) {
         cache.clear();
       }
       console.log("Cleared all caches");
@@ -385,7 +391,7 @@ class MongoUtils {
       let totalHits = 0;
       let totalMisses = 0;
 
-      for (const [_, cache] of this.collectionCaches) {
+      for (const [, cache] of this.collectionCaches) {
         if (cache.hits !== undefined && cache.misses !== undefined) {
           totalHits += cache.hits;
           totalMisses += cache.misses;

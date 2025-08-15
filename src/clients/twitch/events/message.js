@@ -1,6 +1,6 @@
 const { commandHandler, listenerHandler } = require("../../../handlers");
 
-let duplicateMessages = [];
+const duplicateMessages = [];
 
 module.exports = async function onMessage(message) {
   const sourceRoomId = message.ircTags["source-room-id"] || null;

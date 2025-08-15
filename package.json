@@ -5,7 +5,9 @@
   "scripts": {
     "start": "cross-env ENV=prod node main.js",
     "dev": "cross-env ENV=dev node main.js",
-    "test": "node testes.js"
+    "test": "node testes.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "keywords": [],
   "author": "leafyzito",
@@ -24,5 +26,10 @@
     "openai": "^4.53.2",
     "uwuifier": "^4.2.2"
   },
-  "description": "https://folhinhabot.com/"
+  "description": "https://folhinhabot.com/",
+  "devDependencies": {
+    "@eslint/js": "^9.33.0",
+    "eslint": "^9.33.0",
+    "globals": "^16.3.0"
+  }
 }

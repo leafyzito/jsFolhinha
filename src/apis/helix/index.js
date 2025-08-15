@@ -250,6 +250,7 @@ class HelixApi {
 
       return this.streamerStatusCache[channelName].status === "live";
     } catch (error) {
+      console.error(`Error fetching stream status for ${channelName}:`, error);
       // If API call fails, return cached value if available, otherwise false
       if (this.streamerStatusCache[channelName]) {
         return this.streamerStatusCache[channelName].status === "live";
@@ -333,7 +334,7 @@ class HelixApi {
       chunks.push(userIds.slice(i, i + chunkSize));
     }
 
-    let allUsers = [];
+    const allUsers = [];
 
     // Process each chunk
     for (const chunk of chunks) {

@@ -175,7 +175,7 @@ class Utils {
         `* Caught by ${result.caughtCategory} (${result.matchedWord}) - original content: ${content}`
       );
       if (message) {
-        if (!message.notes) message.notes = "";
+        if (!message.notes) {message.notes = "";}
         message.notes =
           message.notes +
           `Caught by: ${result.caughtCategory} (${result.matchedWord}) - Original content: ${content}`;

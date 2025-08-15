@@ -1,13 +1,13 @@
 // Define variables to store the last execution time for each user and channel
-var userCooldowns = {};
-var channelCooldowns = {};
+const userCooldowns = {};
+const channelCooldowns = {};
 
 // Function to manage the cooldown
 function manageCooldown(cooldownDuration, type, message) {
   // Get the current time
   const currentTime = Date.now();
-  var identifier = message.senderUsername;
-  var command = message.command;
+  let identifier = message.senderUsername;
+  const command = message.command;
 
   // if channel is whisper, set type to user, no matter what type is passed
   if (message.channelName === "whisper") {
@@ -60,10 +60,10 @@ async function validateCommandExecution(cooldownDuration, type, message) {
   }
 
   // check perms to execute from
-  var currChannelConfigs = await fb.db.get("config", {
+  const currChannelConfigs = await fb.db.get("config", {
     channelId: message.channelID,
   });
-  var currUserBans = await fb.db.get("bans", {
+  const currUserBans = await fb.db.get("bans", {
     userId: message.senderUserID,
   });
 
