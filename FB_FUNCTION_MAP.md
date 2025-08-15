@@ -66,6 +66,7 @@ fb.log.logAndWhisper(message, response);
 
 // TWITCH FUNCTIONS
 fb.twitch.join(channels);
+fb.twitch.part(channel);
 
 // UTILITY FUNCTIONS
 fb.request(url, options); // = undici request
