@@ -1,13 +1,13 @@
 const { validateCommandExecution } = require("../../commands/commandValidator");
 const { commandsList } = require("../../commands/commandsList");
 
-function checkCommandExecution(command, message) {
+async function checkCommandExecution(command, message) {
   if (
-    !validateCommandExecution(
+    !(await validateCommandExecution(
       commandsList[command].cooldown,
       commandsList[command].cooldownType,
       message
-    )
+    ))
   ) {
     return false;
   }
@@ -38,11 +38,11 @@ async function commandHandler(message) {
     return;
   }
 
-  if (!checkCommandExecution(command, message)) {
+  message.command = commandsList[command].commandName;
+  if (!(await checkCommandExecution(command, message))) {
     return;
   }
 
-  message.command = command;
   let commandResult;
   try {
     commandResult = await commandsList[command](message);
