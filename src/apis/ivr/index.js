@@ -7,9 +7,10 @@ class IvrApi {
     const response = await fb.request(`${this.baseUrl}/user?login=${username}`);
 
     if (response.statusCode !== 200) {
-      throw new Error(
+      fb.discord.logError(
         `IVR API: ${response.statusCode} - ${response.statusMessage}`
       );
+      return null;
     }
 
     const data = await response.body.json();
@@ -56,9 +57,10 @@ class IvrApi {
     const response = await fb.request(`${this.baseUrl}/live?login=${username}`);
 
     if (response.statusCode !== 200) {
-      throw new Error(
+      fb.discord.logError(
         `IVR API: ${response.statusCode} - ${response.statusMessage}`
       );
+      return null;
     }
 
     const data = await response.body.json();
@@ -93,9 +95,10 @@ class IvrApi {
     );
 
     if (response.statusCode !== 200) {
-      throw new Error(
+      fb.discord.logError(
         `IVR API: ${response.statusCode} - ${response.statusMessage}`
       );
+      return null;
     }
 
     const data = await response.body.json();

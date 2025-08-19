@@ -5,9 +5,9 @@ class GithubApi {
 
   async createGist(content) {
     const headers = {
-      accept: "application/json",
-      "Content-Type": "application/json",
       Authorization: `token ${process.env.GITHUB_GIST_TOKEN}`,
+      "Content-Type": "application/json",
+      "User-Agent": "FolhinhaBot",
     };
 
     const payload = {
@@ -20,21 +20,20 @@ class GithubApi {
       body: JSON.stringify(payload),
     });
 
-    if (response.statusCode !== 200) {
+    if (response.statusCode !== 201) {
       throw new Error(
         `Github API: ${response.statusCode} - ${response.statusMessage}`
       );
     }
 
     const data = await response.body.json();
-    if (!Array.isArray(data) || data.length === 0) {
-      return null;
+    if (!data) {
+      throw new Error("Github API: No data returned");
     }
 
-    const gist_url = data[0].html_url || null;
-    const raw_url = data[0].files["file.txt"].raw_url || null;
-
-    return { gist_url, raw_url };
+    const rawUrl = data.files["file.txt"].raw_url;
+    const shortenedUrl = await fb.api.chuw.shortenUrl(rawUrl);
+    return shortenedUrl ? shortenedUrl : rawUrl;
   }
 }
 

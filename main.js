@@ -82,6 +82,11 @@ async function initializeApp() {
     const { startAllTasks } = require("./src/tasks/index");
     startAllTasks();
 
+    // Start status server
+    const StatusServer = require("./src/utils/statusServer");
+    fb.statusServer = new StatusServer();
+    fb.statusServer.start();
+
     console.log("* Application initialization complete!");
   } catch (error) {
     console.error("Failed to initialize application:", error);

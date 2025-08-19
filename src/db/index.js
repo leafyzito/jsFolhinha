@@ -40,7 +40,7 @@ class MongoUtils {
         const cache = new LRUCache(this.cacheOptions);
         this.collectionCaches.set(collectionName, cache);
       }
-      console.log("Cache containers initialized");
+      console.log("* Cache containers initialized");
     } catch (err) {
       console.error("Failed to initialize cache containers:", err);
     }

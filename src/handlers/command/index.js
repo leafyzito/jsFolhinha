@@ -29,9 +29,8 @@ async function commandHandler(message) {
     return;
   }
 
-  const command = message.messageText
+  const command = message.args[0]
     .slice(message.commandPrefix.length)
-    .split(" ")[0]
     .toLowerCase();
 
   if (!(command in commandsList)) {

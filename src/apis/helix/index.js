@@ -32,13 +32,14 @@ class HelixApi {
     );
 
     if (response.statusCode !== 200) {
-      throw new Error(
+      fb.discord.logError(
         `Helix API: ${response.statusCode} - ${response.statusMessage}`
       );
+      return null;
     }
 
     let data = await response.body.json();
-    if (!data) {
+    if (!data.data || data.data.length === 0) {
       return null;
     }
 
@@ -75,13 +76,14 @@ class HelixApi {
     });
 
     if (response.statusCode !== 200) {
-      throw new Error(
+      fb.discord.logError(
         `Helix API: ${response.statusCode} - ${response.statusMessage}`
       );
+      return null;
     }
 
     let data = await response.body.json();
-    if (!data) {
+    if (!data.data || data.data.length === 0) {
       return null;
     }
 
@@ -123,13 +125,14 @@ class HelixApi {
     );
 
     if (response.statusCode !== 200) {
-      throw new Error(
+      fb.discord.logError(
         `Helix API: ${response.statusCode} - ${response.statusMessage}`
       );
+      return null;
     }
 
     let data = await response.body.json();
-    if (!data) {
+    if (!data.data || data.data.length === 0) {
       return null;
     }
 
@@ -161,13 +164,14 @@ class HelixApi {
     );
 
     if (response.statusCode !== 200) {
-      throw new Error(
+      fb.discord.logError(
         `Helix API: ${response.statusCode} - ${response.statusMessage}`
       );
+      return null;
     }
 
     let data = await response.body.json();
-    if (!data) {
+    if (!data.data || data.data.length === 0) {
       return null;
     }
 
@@ -231,12 +235,17 @@ class HelixApi {
       );
 
       if (response.statusCode !== 200) {
-        throw new Error(
+        fb.discord.logError(
           `Helix API: ${response.statusCode} - ${response.statusMessage}`
         );
+        return false;
       }
 
       let data = await response.body.json();
+      if (!data.data || data.data.length === 0) {
+        return false;
+      }
+
       data = data.data;
 
       const streamerStatus =
@@ -284,9 +293,10 @@ class HelixApi {
     }
 
     if (response.statusCode !== 200) {
-      throw new Error(
+      fb.discord.logError(
         `Helix API: ${response.statusCode} - ${response.statusMessage}`
       );
+      return false;
     }
 
     return true;
@@ -310,13 +320,15 @@ class HelixApi {
     );
 
     if (response.statusCode === 429) {
-      throw new Error("Helix API: Whisper rate limit reached");
+      fb.discord.logError("Helix API: Whisper rate limit reached");
+      return false;
     }
 
     if (response.statusCode !== 200) {
-      throw new Error(
+      fb.discord.logError(
         `Helix API: ${response.statusCode} - ${response.statusMessage}`
       );
+      return false;
     }
 
     return true;
@@ -387,6 +399,39 @@ class HelixApi {
     }
 
     return allUsers;
+  }
+
+  async createClip(channelId) {
+    const headers = {
+      "Client-ID": process.env.BOT_CLIENT_ID,
+      Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
+    };
+    const response = await fb.request(
+      `${this.baseUrl}/clips?broadcaster_id=${channelId}&has_delay=true`,
+      { method: "POST", headers }
+    );
+
+    if (response.statusCode !== 202) {
+      fb.discord.logError(
+        `Helix API: ${response.statusCode} - ${response.statusMessage}`
+      );
+      return null;
+    }
+
+    if (response.statusCode == 403 || response.statusCode == 503) {
+      return "error";
+    }
+
+    const data = await response.body.json();
+
+    if (!data.data || data.data.length === 0) {
+      return null;
+    }
+
+    const id = data.data[0].id;
+    const editUrl = data.data[0].edit_url;
+    const clipUrl = `https://clips.twitch.tv/${id}`;
+    return { id, editUrl, clipUrl };
   }
 }
 

@@ -4,33 +4,41 @@ This document lists all functions available in the global `fb` object for refere
 
 ```javascript
 // API FUNCTIONS
-// HELIX
-fb.api.helix.getUserByUsername(username);
-fb.api.helix.getUserByID(userId);
-fb.api.helix.getManyUsersByUserIDs(userIds);
-fb.api.helix.getColor(userId);
-fb.api.helix.getStream(username);
-fb.api.helix.isStreamOnline(channelName);
-fb.api.helix.timeoutUser(channelId, userId, duration, reason);
-fb.api.helix.whisper(whisperTargetId, content);
+  // HELIX
+  fb.api.helix.getUserByUsername(username);
+  fb.api.helix.getUserByID(userId);
+  fb.api.helix.getManyUsersByUserIDs(userIds);
+  fb.api.helix.getColor(userId);
+  fb.api.helix.getStream(username);
+  fb.api.helix.isStreamOnline(channelName);
+  fb.api.helix.timeoutUser(channelId, userId, duration, reason);
+  fb.api.helix.whisper(whisperTargetId, content);
 
-// GITHUB
-fb.api.github.createGist(content);
+  // GITHUB
+  fb.api.github.createGist(content);
 
-// RUSTLOG
-fb.api.rustlog.addChannel(channelId);
-fb.api.rustlog.removeChannel(channelId);
+  // RUSTLOG
+  fb.api.rustlog.addChannel(channelId);
+  fb.api.rustlog.removeChannel(channelId);
 
-// 7TV
-fb.api.stv.updatePresence(uid, channelID);
+  // 7TV
+  fb.api.stv.updatePresence(uid, channelID);
 
-// CHUW
-fb.api.chuw.shortenUrl(url);
+  // CHUW
+  fb.api.chuw.shortenUrl(url);
 
-// IVR
-fb.api.ivr.getUser(username);
-fb.api.ivr.getLive(username);
-fb.api.ivr.getSubAge(user, channel);
+  // IVR
+  fb.api.ivr.getUser(username);
+  fb.api.ivr.getLive(username);
+  fb.api.ivr.getSubAge(user, channel);
+
+  // FERIDINHA
+  fb.api.feridinha.uploadImage(fileData, filename);
+  fb.api.feridinha.uploadAudio(fileData, filename);
+  fb.api.feridinha.uploadVideo(fileData, filename);
+  fb.api.feridinha.uploadFile(fileData, filename);
+  fb.api.feridinha.uploadFromUrl(url, filename);
+
 
 // DATABASE FUNCTIONS
 fb.db.get(collectionName, query, forceDb);
@@ -70,12 +78,14 @@ fb.twitch.part(channel);
 
 // UTILITY FUNCTIONS
 fb.request(url, options); // = undici request
+fb.utils.randomInt(min, max);
+fb.utils.randomChoice(arr);
+fb.utils.relativeTime(input, returnOnlyTime, compact);
 fb.utils.capitalize(str);
+fb.utils.unix(date);
+fb.utils.waitForWhisper(check, timeout);
+fb.utils.waitForMessage(check, timeout);
+fb.utils.manageLongResponse(content, sendOnlyLink);
 fb.utils.checkRegex(content, channelName, message);
 fb.utils.createNewChannelConfig(channelId);
-fb.utils.manageLongResponse(content, sendOnlyLink);
-fb.utils.randomChoice(arr);
-fb.utils.randomInt(min, max);
-fb.utils.relativeTime(input, returnOnlyTime, compact);
-fb.utils.waitForWhisper(check, timeout);
 ```

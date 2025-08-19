@@ -202,6 +202,7 @@ class DiscordClient {
   }
 
   async logError(content) {
+    console.log(content);
     const embed = new this.client.EmbedBuilder()
       .setTitle(`Error Alert`)
       .addFields({

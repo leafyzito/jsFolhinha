@@ -13,7 +13,9 @@ testeCommand.cooldown = 5000;
 testeCommand.cooldownType = "channel";
 testeCommand.whisperable = true;
 testeCommand.description = `Use para verificar se o Folhinha ainda está presente entre nós. Caso ele não responda, infelizmente ele se foi.`;
-testeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${testeCommand.commandName}/${testeCommand.commandName}.js`;
+testeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
+  .split("/")
+  .pop()}/${__filename.split("/").pop()}`;
 
 module.exports = {
   testeCommand,
