@@ -50,11 +50,18 @@ async function waitForMessage(client, check, timeout = 30_000) {
 //     return userCookieStats[0];
 // };
 
+let usedCharadas = [];
+
 const charadaCommand = async (client, message, anonClient) => {
     message.command = 'charada';
     if (!await processCommand(30_000, 'channel', message, client)) return;
 
-    const charada = randomChoice(Object.values(charadasData));
+    if (usedCharadas.length === Object.values(charadasData).length) {
+        usedCharadas = [];
+    }
+
+    const charada = randomChoice(Object.values(charadasData).filter(charada => !usedCharadas.includes(charada.id)));
+    usedCharadas.push(charada);
     console.log(charada);
 
     await client.log.reply(message, `${message.senderUsername} iniciou uma charada! 🤔 ${capitalize(charada.pergunta)}`);
