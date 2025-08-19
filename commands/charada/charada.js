@@ -1,32 +1,26 @@
 const { processCommand } = require("../../utils/processCommand.js");
 const { randomChoice, capitalize } = require("../../utils/utils.js");
 
-const charadasData = require("./charadas.json");
+const charadasData = require('./charadas.json');
 
 async function waitForMessage(client, check, timeout = 30_000) {
-  return new Promise((resolve) => {
-    const timer = setTimeout(() => {
-      resolve(null);
-    }, timeout);
+    return new Promise((resolve) => {
+        const timer = setTimeout(() => {
+            resolve(null);
+        }, timeout);
 
-    client.on("PRIVMSG", (msg) => {
-      if (msg.replyParentMessageID) {
-        msg.messageText = msg.messageText.split(" ").slice(1).join(" ").trim();
-        console.log(msg.messageText);
-      }
-      if (
-        msg.channelName === check.channelName &&
-        check.content.some(
-          (content) =>
-            msg.messageText.toLowerCase().trim() ===
-            content.toLowerCase().trim()
-        )
-      ) {
-        clearTimeout(timer);
-        resolve(msg);
-      }
+        client.on('PRIVMSG', (msg) => {
+            if (msg.replyParentMessageID) {
+                msg.messageText = msg.messageText.split(' ').slice(1).join(' ').trim();
+                console.log(msg.messageText);
+            }
+            if (msg.channelName === check.channelName
+                && check.content.some(content => msg.messageText.toLowerCase().trim() === content.toLowerCase().trim())) {
+                clearTimeout(timer);
+                resolve(msg);
+            }
+        });
     });
-  });
 }
 
 // async function createUserCookieBase(client, message) {
@@ -56,71 +50,67 @@ async function waitForMessage(client, check, timeout = 30_000) {
 //     return userCookieStats[0];
 // };
 
-let usedCharadas = [];
+let usedCharadas = {};
 
-const charadaCommand = async (client, message, anonClient) => {
-  message.command = "charada";
-  if (!(await processCommand(30_000, "channel", message, client))) return;
-
-  if (usedCharadas.length === Object.keys(charadasData).length) {
-    usedCharadas = [];
+const getRandomCharada = (channelName) => {
+  if (
+    usedCharadas[channelName] &&
+    usedCharadas[channelName].length === Object.keys(charadasData).length
+  ) {
+    usedCharadas = { [channelName]: [] };
   }
 
-  const charada = randomChoice(
-    Object.values(charadasData).filter(
-      (charada) => !usedCharadas.includes(charada.id)
-    )
-  );
-  usedCharadas.push(charada.id);
-  console.log(charada);
-
-  await client.log.reply(
-    message,
-    `${message.senderUsername} iniciou uma charada! 🤔 ${capitalize(
-      charada.pergunta
-    )}`
+  // Get available charada keys (IDs) that haven't been used
+  const availableCharadaKeys = Object.keys(charadasData).filter(
+    (key) =>
+      !usedCharadas[channelName] || !usedCharadas[channelName].includes(key)
   );
 
-  const check = {
-    channelName: message.channelName,
-    content: charada.resposta,
-  };
-  const responseMsg = await waitForMessage(anonClient, check);
-  if (!responseMsg) {
-    const emote = await client.emotes.getEmoteFromList(
-      message.channelName,
-      client.emotes.sadEmotes,
-      ":("
-    );
-    client.log.logAndReply(
-      message,
-      `Ninguém respondeu a charada a tempo! ${emote} A resposta era: ${charada.resposta[0]}`,
-      `${charada.pergunta} -> ${charada.resposta[0]}`
-    );
-    return;
+  // Select a random charada key
+  const selectedKey = randomChoice(availableCharadaKeys);
+  const charada = charadasData[selectedKey];
+
+  // Initialize usedCharadas for this channel if it doesn't exist
+  if (!usedCharadas[channelName]) {
+    usedCharadas[channelName] = [];
   }
 
-  // // give 1 cookie to user who answered - melhor não, mas fica aqui
-  // const userCookieStats = await loadUserCookieStats(client, responseMsg);
-  // await client.db.update('cookie', { userId: responseMsg.senderUserID }, { $inc: { total: 1 } });
+  usedCharadas[channelName].push(selectedKey);
 
-  const emote = await client.emotes.getEmoteFromList(
-    message.channelName,
-    ["nerd", "nerdge", "catnerd", "dognerd", "giganerd"],
-    "🤓"
-  );
-  client.log.logAndReply(
-    message,
-    `${responseMsg.senderUsername} acertou a resposta! ${emote}`,
-    `${charada.pergunta} -> ${charada.resposta[0]}`
-  );
-  return;
+  return charada;
 };
 
-charadaCommand.commandName = "charada";
-charadaCommand.aliases = ["charada", "charadas"];
-charadaCommand.shortDescription =
-  "Inicie uma charada que todos podem participar";
+const charadaCommand = async (client, message, anonClient) => {
+    message.command = 'charada';
+    if (!await processCommand(30_000, 'channel', message, client)) return;
+    const charada = getRandomCharada(message.channelName);
+    console.log(charada);
+
+    await client.log.reply(message, `${message.senderUsername} iniciou uma charada! 🤔 ${capitalize(charada.pergunta)}`);
+
+    const check = {
+        channelName: message.channelName,
+        content: charada.resposta
+    };
+    const responseMsg = await waitForMessage(anonClient, check);
+    if (!responseMsg) {
+        const emote = await client.emotes.getEmoteFromList(message.channelName, client.emotes.sadEmotes, ':('); 
+        client.log.logAndReply(message, `Ninguém respondeu a charada a tempo! ${emote} A resposta era: ${charada.resposta[0]}`, `${charada.pergunta} -> ${charada.resposta[0]}`);
+        return;
+    }
+
+    // // give 1 cookie to user who answered - melhor não, mas fica aqui
+    // const userCookieStats = await loadUserCookieStats(client, responseMsg);
+    // await client.db.update('cookie', { userId: responseMsg.senderUserID }, { $inc: { total: 1 } });
+
+    const emote = await client.emotes.getEmoteFromList(message.channelName, ['nerd', 'nerdge', 'catnerd', 'dognerd', 'giganerd'], '🤓');
+    client.log.logAndReply(message, `${responseMsg.senderUsername} acertou a resposta! ${emote}`, `${charada.pergunta} -> ${charada.resposta[0]}`);
+    return;
+};
+
+charadaCommand.commandName = 'charada';
+charadaCommand.aliases = ['charada', 'charadas'];
+charadaCommand.shortDescription = 'Inicie uma charada que todos podem participar';
 charadaCommand.cooldown = 30_000;
 charadaCommand.whisperable = false;
 charadaCommand.description = `Inicie uma charada que todos do chat (no qual o comando foi executado) podem participar
@@ -128,5 +118,5 @@ Se ninguém do chat responder a charada a tempo dentro de 30 segundos, a respost
 charadaCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/commands/${charadaCommand.commandName}/${charadaCommand.commandName}.js`;
 
 module.exports = {
-  charadaCommand,
+    charadaCommand,
 };
