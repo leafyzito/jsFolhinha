@@ -1,14 +1,37 @@
 const charadasData = require("./charadas.json");
 
-let usedCharadas = [];
+let usedCharadas = {};
 
-const charadaCommand = async (message) => {
-  if (usedCharadas.length === Object.values(charadasData).length) {
-    usedCharadas = [];
+const getRandomCharada = (channelName) => {
+  if (
+    usedCharadas[channelName] &&
+    usedCharadas[channelName].length === Object.keys(charadasData).length
+  ) {
+    usedCharadas = { [channelName]: [] };
   }
 
-  const charada = fb.utils.randomChoice(Object.values(charadasData));
-  usedCharadas.push(charada);
+  // Get available charada keys (IDs) that haven't been used
+  const availableCharadaKeys = Object.keys(charadasData).filter(
+    (key) =>
+      !usedCharadas[channelName] || !usedCharadas[channelName].includes(key)
+  );
+
+  // Select a random charada key
+  const selectedKey = fb.utils.randomChoice(availableCharadaKeys);
+  const charada = charadasData[selectedKey];
+
+  // Initialize usedCharadas for this channel if it doesn't exist
+  if (!usedCharadas[channelName]) {
+    usedCharadas[channelName] = [];
+  }
+
+  usedCharadas[channelName].push(selectedKey);
+
+  return charada;
+};
+
+const charadaCommand = async (message) => {
+  const charada = getRandomCharada(message.channelName);
   console.log(charada);
 
   await fb.log.reply(
