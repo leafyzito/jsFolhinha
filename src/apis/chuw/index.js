@@ -23,19 +23,18 @@ class ChuwApi {
     });
 
     if (response.statusCode !== 200) {
-      throw new Error(
+      fb.discord.logError(
         `Chuw API: ${response.statusCode} - ${response.statusMessage}`
       );
+      return url;
     }
 
     const data = await response.body.json();
-    if (!Array.isArray(data) || data.length === 0) {
-      return null;
+    if (!data || !data.shortUrl) {
+      return url;
     }
 
-    const finalUrl = data[0].shortUrl || null;
-
-    return finalUrl;
+    return data.shortUrl;
   }
 }
 

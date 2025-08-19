@@ -126,7 +126,7 @@ class Utils {
         resolve(null);
       }, timeout);
 
-      fb.twitch.client.on("PRIVMSG", (msg) => {
+      fb.twitch.client.on("WHISPER", (msg) => {
         if (
           check.senderUsername &&
           msg.senderUsername === check.senderUsername &&
@@ -175,7 +175,9 @@ class Utils {
         `* Caught by ${result.caughtCategory} (${result.matchedWord}) - original content: ${content}`
       );
       if (message) {
-        if (!message.notes) {message.notes = "";}
+        if (!message.notes) {
+          message.notes = "";
+        }
         message.notes =
           message.notes +
           `Caught by: ${result.caughtCategory} (${result.matchedWord}) - Original content: ${content}`;
@@ -200,6 +202,36 @@ class Utils {
 
     await fb.db.insert("config", newConfig);
     await fb.api.rustlog.addChannel(channelId);
+  }
+
+  async waitForMessage(check, timeout = 30_000) {
+    return new Promise((resolve) => {
+      const timer = setTimeout(() => {
+        resolve(null);
+      }, timeout);
+
+      fb.twitch.anonClient.on("PRIVMSG", (msg) => {
+        if (msg.replyParentMessageID) {
+          msg.messageText = msg.messageText
+            .split(" ")
+            .slice(1)
+            .join(" ")
+            .trim();
+          console.log(msg.messageText);
+        }
+        if (
+          msg.channelName === check.channelName &&
+          check.content.some(
+            (content) =>
+              msg.messageText.toLowerCase().trim() ===
+              content.toLowerCase().trim()
+          )
+        ) {
+          clearTimeout(timer);
+          resolve(msg);
+        }
+      });
+    });
   }
 }
 

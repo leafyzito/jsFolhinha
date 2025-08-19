@@ -5,7 +5,7 @@ const path = require("path");
 
 // load environment variables
 require("dotenv").config();
-const { loadCommands } = require("./commands/commandsList.js");
+const { loadCommands } = require("../src/commands/commandsList.js");
 
 const rawCommandsList = loadCommands();
 

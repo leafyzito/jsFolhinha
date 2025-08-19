@@ -103,9 +103,8 @@ const handleMissedReminder = async (reminder) => {
 
 // Function to schedule future reminders
 const scheduleFutureReminder = async (reminder) => {
-  const reminderDate = new Date(reminder.remindAt * 1000);
-
-  console.log("* Setting timed reminder for " + reminderDate.toLocaleString());
+  // const reminderDate = new Date(reminder.remindAt * 1000);
+  // console.log("* Setting timed reminder for " + reminderDate.toLocaleString());
 
   const job = schedule.scheduleJob(
     new Date(reminder.remindAt * 1000),
@@ -182,7 +181,9 @@ const loadReminders = async () => {
 // Function to handle reminder responses
 const handleReminderResponse = async (message, reminders) => {
   // Add length property to single objects for compatibility
-  if (!Array.isArray(reminders)) {reminders.length = 1;}
+  if (!Array.isArray(reminders)) {
+    reminders.length = 1;
+  }
 
   if (reminders.length <= 3) {
     // Handle small number of reminders (≤3)

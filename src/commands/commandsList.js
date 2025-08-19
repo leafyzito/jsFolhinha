@@ -1,44 +1,57 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 const commandsList = {};
 
 // Function to reload commands
 const loadCommands = () => {
-    // Clear existing commandsList
-    Object.keys(commandsList).forEach((key) => delete commandsList[key]);
+  // Clear existing commandsList
+  Object.keys(commandsList).forEach((key) => delete commandsList[key]);
 
-    const commandsMainDir = path.join(__dirname, '.');
-    const commandDirs = fs.readdirSync(commandsMainDir);
+  const commandsMainDir = path.join(__dirname, ".");
 
-    for (const command of commandDirs) {
-        // Skil files, only process folders
-        if (command.includes('.js')) { continue; }
+  // Get all command directories (folders only)
+  const commandDirs = fs.readdirSync(commandsMainDir).filter((item) => {
+    const itemPath = path.join(commandsMainDir, item);
+    return fs.statSync(itemPath).isDirectory();
+  });
 
-        const commandPath = path.join(commandsMainDir, command);
-        const fileModule = require(path.join(commandPath, `${command}.js`));
+  // Process each command directory
+  commandDirs.forEach((commandDir) => {
+    const commandPath = path.join(commandsMainDir, commandDir);
 
-        // For each fileModule that have multiple commands, add them to commandsList
-        for (const commandName in fileModule) {
-            if (commandName.includes('Command')) {
-                // For each alias, add them to commandsList
-                if (fileModule[commandName].aliases) {
-                    for (const alias of fileModule[commandName].aliases) {
-                        console.log(`* Loading ${commandName} - ${alias}`);
-                        commandsList[alias] = fileModule[commandName];
-                    }
-                }
-            }
-        }
-    }
+    // Get all JS files in the command folder
+    const commandFiles = fs
+      .readdirSync(commandPath)
+      .filter((file) => file.endsWith(".js"));
 
+    // Process each JS file
+    commandFiles.forEach((file) => {
+      const filePath = path.join(commandPath, file);
+      const fileModule = require(filePath);
 
-    return commandsList;
+      // Extract commands from the module
+      Object.entries(fileModule)
+        .filter(([key]) => key.includes("Command"))
+        .forEach(([, command]) => {
+          // Add main command
+          if (command.aliases) {
+            // Add all aliases
+            command.aliases.forEach((alias) => {
+              commandsList[alias] = command;
+            });
+          }
+        });
+    });
+  });
+
+  console.log(`* Loaded ${Object.keys(commandsList).length} commands`);
+
+  return commandsList;
 };
-
 
 // Export the loadCommands function
 module.exports = {
-    commandsList,
-    loadCommands,
+  commandsList,
+  loadCommands,
 };
