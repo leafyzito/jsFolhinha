@@ -1,4 +1,6 @@
 // Define variables to store the last execution time for each user and channel
+const { commandsList } = require("./commandsList");
+
 const userCooldowns = {};
 const channelCooldowns = {};
 
@@ -53,10 +55,56 @@ function manageCooldown(cooldownDuration, type, message) {
   return false;
 }
 
+async function checkUserPermissions(message, requiredPermissions) {
+  // Check if user is streamer (always has all permissions)
+  if (message.isStreamer && requiredPermissions.includes("streamer")) {
+    return true;
+  }
+
+  // Check if user is moderator
+  if (message.isMod && requiredPermissions.includes("mod")) {
+    return true;
+  }
+
+  // Check if user is VIP
+  if (message.isVip && requiredPermissions.includes("vip")) {
+    return true;
+  }
+
+  // Check if user is subscriber
+  if (message.isSub && requiredPermissions.includes("sub")) {
+    return true;
+  }
+
+  // Check if user is admin (you can implement custom admin logic)
+  if (message.isAdmin && requiredPermissions.includes("admin")) {
+    return true;
+  }
+
+  return false;
+}
+
 async function validateCommandExecution(cooldownDuration, type, message) {
   const isCooldownOver = manageCooldown(cooldownDuration, type, message);
   if (!isCooldownOver) {
     return false;
+  }
+
+  // Check command permissions
+  const command = commandsList[message.command];
+  // if command has permissions, check if user has permission
+  if (command && command.permissions && command.permissions.length > 0) {
+    const hasPermission = await checkUserPermissions(
+      message,
+      command.permissions
+    );
+    if (!hasPermission) {
+      fb.log.logAndReply(
+        message,
+        `⚠️ Este comando é reservado para ${command.permissions.join(", ")}`
+      );
+      return false;
+    }
   }
 
   // check perms to execute from
