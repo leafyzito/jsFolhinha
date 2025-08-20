@@ -41,6 +41,8 @@ module.exports = async function onMessage(message) {
   if (message.isStreamer) message.isMod = true;
   message.isVip = message.badges.hasVIP;
   message.isFirstMsg = message.ircTags["first-msg"] === "1" ? true : false;
+  message.isSub = message.badges.hasSubscriber;
+  message.isAdmin = process.env.ADMIN_USERIDS.includes(message.senderUserID);
   message.args = message.messageText.split(" ");
 
   // handle listeners and commands
