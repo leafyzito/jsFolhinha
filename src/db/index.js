@@ -129,36 +129,24 @@ class MongoUtils {
       currentDoc = await collection.findOne(query);
     }
 
-    // Calculate updated document
-    const doc = currentDoc;
-    const updatedDoc = { ...doc };
-    if (update.$set) {
-      Object.assign(updatedDoc, update.$set);
+    // Update DB first to get the actual updated document
+    await this.client.connect();
+    const collection = this.db.collection(collectionName);
+
+    // Apply the update to DB
+    await collection.updateOne(query, update);
+
+    // Fetch the updated document from DB to ensure cache has correct data
+    const updatedDoc = await collection.findOne(query);
+
+    if (updatedDoc) {
+      // Update cache with the actual updated document from DB
+      const cache = this.getCollectionCache(collectionName);
+      cache.set(JSON.stringify(updatedDoc._id), updatedDoc);
+      return updatedDoc;
     }
-    if (update.$inc) {
-      for (const [key, value] of Object.entries(update.$inc)) {
-        updatedDoc[key] = (updatedDoc[key] || 0) + value;
-      }
-    }
 
-    // Update DB asynchronously
-    this.client.connect().then(() => {
-      const collection = this.db.collection(collectionName);
-      collection.updateOne(query, update).catch((err) => {
-        console.error("Failed to update DB:", err);
-        // Rollback cache on error
-        this.getCollectionCache(collectionName).set(
-          JSON.stringify(doc._id),
-          doc
-        );
-      });
-    });
-
-    // Update cache immediately
-    const cache = this.getCollectionCache(collectionName);
-    cache.set(JSON.stringify(doc._id), updatedDoc);
-
-    return updatedDoc;
+    return currentDoc;
   }
 
   async updateMany(collectionName, query, update) {
@@ -173,34 +161,25 @@ class MongoUtils {
       currentDocs = [currentDocs];
     }
 
-    // Update cache immediately
-    const updatedDocs = currentDocs.map((doc) => {
-      const updatedDoc = { ...doc };
-      if (update.$set) {
-        Object.assign(updatedDoc, update.$set);
-      }
-      if (update.$inc) {
-        for (const [key, value] of Object.entries(update.$inc)) {
-          updatedDoc[key] = (updatedDoc[key] || 0) + value;
-        }
-      }
-      cache.set(JSON.stringify(doc._id), updatedDoc);
-      return updatedDoc;
-    });
+    // Update DB first to get the actual updated documents
+    await this.client.connect();
+    const collection = this.db.collection(collectionName);
 
-    // Update DB asynchronously
-    this.client.connect().then(() => {
-      const collection = this.db.collection(collectionName);
-      collection.updateMany(query, update).catch((err) => {
-        console.error("Failed to update DB:", err);
-        // Rollback cache on error
-        currentDocs.forEach((doc) => {
-          cache.set(JSON.stringify(doc._id), doc);
-        });
+    // Apply the update to DB
+    await collection.updateMany(query, update);
+
+    // Fetch the updated documents from DB to ensure cache has correct data
+    const updatedDocs = await collection.find(query).toArray();
+
+    if (updatedDocs.length > 0) {
+      // Update cache with the actual updated documents from DB
+      updatedDocs.forEach((doc) => {
+        cache.set(JSON.stringify(doc._id), doc);
       });
-    });
+      return updatedDocs;
+    }
 
-    return updatedDocs;
+    return currentDocs;
   }
 
   async delete(collectionName, query) {

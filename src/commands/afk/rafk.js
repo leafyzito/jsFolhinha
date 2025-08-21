@@ -39,7 +39,7 @@ const rafkCommand = async (message) => {
 
     return {
       replyType: "reply",
-      reply: `Você só pode usar o comando ${message.commandPrefix}rafk 3 vezes por vez`,
+      reply: `Você só pode usar o comando ${message.prefix}rafk 3 vezes por vez`,
     };
   }
 

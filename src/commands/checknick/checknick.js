@@ -1,7 +1,12 @@
 async function checkNick(nick) {
   const api_url = `https://api.fuchsty.com/twitch/checkname?username=${nick}`;
-  const response = await fb.request(api_url);
-  const data = await response.body.json();
+  const response = await fb.got(api_url);
+
+  if (!response) {
+    return "invalid";
+  }
+
+  const data = response;
 
   const isInvalid = data[0].invalid;
   if (isInvalid) {
@@ -19,7 +24,7 @@ async function checkNick(nick) {
 const checkNickCommand = async (message) => {
   if (message.args.length < 2) {
     return {
-      reply: `Use o formato: ${message.commandPrefix}checknick <nick>`,
+      reply: `Use o formato: ${message.prefix}checknick <nick>`,
     };
   }
 

@@ -28,8 +28,13 @@ async function getAscii(channel, input) {
   }
 
   const api_url = `https://fun.joet.me/ascii?q=${input}`;
-  const response = await fb.request(api_url);
-  const data = await response.body.json();
+  const response = await fb.got(api_url);
+
+  if (!response) {
+    return null;
+  }
+
+  const data = response;
 
   if (data.ok === false) {
     return null;
@@ -43,7 +48,7 @@ const asciiCommand = async (message) => {
   const input = message.args.slice(1).join(" ");
   if (input.length === 0) {
     return {
-      reply: `Use o formato: ${message.commandPrefix}ascii <emote>`,
+      reply: `Use o formato: ${message.prefix}ascii <emote>`,
     };
   }
 

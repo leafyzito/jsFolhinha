@@ -90,12 +90,10 @@ STATUS_PORT=8080
   "uptime": 3600,
   "uptimeFormatted": "1h 0m 0s",
   "startTime": 1703123456,
-  "currentTime": 1703127056,
-  "isReady": true
+  "connectedChannels": 1,
+  "channelsToJoin": 1
 }
 ```
-
-This endpoint is perfect for uptime monitoring services like UptimeRobot, Pingdom, or any other monitoring tool.
 
 ## Code Quality
 

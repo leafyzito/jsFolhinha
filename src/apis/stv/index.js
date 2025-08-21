@@ -12,22 +12,25 @@ class STVApi {
 
     this.lastPresenceUpdate = now;
 
-    const response = await fetch(`${this.baseUrl}/users/${stv_uid}/presences`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        kind: 1,
-        passive: false,
-        session_id: undefined,
-        data: {
-          platform: "TWITCH",
-          id: channelID,
+    const response = await fb.got(
+      `${this.baseUrl}/users/${stv_uid}/presences`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      }),
-    });
-    return response.json();
+        json: {
+          kind: 1,
+          passive: false,
+          session_id: undefined,
+          data: {
+            platform: "TWITCH",
+            id: channelID,
+          },
+        },
+      }
+    );
+    return response;
   }
 }
 

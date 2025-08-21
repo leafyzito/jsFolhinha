@@ -25,13 +25,11 @@ async function commandHandler(message) {
     return;
   }
 
-  if (!message.messageText.startsWith(message.commandPrefix)) {
+  if (!message.messageText.startsWith(message.prefix)) {
     return;
   }
 
-  const command = message.args[0]
-    .slice(message.commandPrefix.length)
-    .toLowerCase();
+  const command = message.args[0].slice(message.prefix.length).toLowerCase();
 
   if (!(command in commandsList)) {
     return;

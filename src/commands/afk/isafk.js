@@ -4,7 +4,7 @@ const isAfkCommand = async (message) => {
   if (message.args.length === 1) {
     return {
       replyType: "reply",
-      reply: `Use o formato: ${message.commandPrefix}isafk <usuário>`,
+      reply: `Use o formato: ${message.prefix}isafk <usuário>`,
     };
   }
 

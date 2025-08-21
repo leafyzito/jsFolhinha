@@ -56,7 +56,12 @@ function manageCooldown(cooldownDuration, type, message) {
 }
 
 async function checkUserPermissions(message, requiredPermissions) {
-  // Check if user is streamer (always has all permissions)
+  // Check if user is admin
+  if (message.isAdmin && requiredPermissions.includes("admin")) {
+    return true;
+  }
+
+  // Check if user is streamer
   if (message.isStreamer && requiredPermissions.includes("streamer")) {
     return true;
   }
@@ -73,11 +78,6 @@ async function checkUserPermissions(message, requiredPermissions) {
 
   // Check if user is subscriber
   if (message.isSub && requiredPermissions.includes("sub")) {
-    return true;
-  }
-
-  // Check if user is admin (you can implement custom admin logic)
-  if (message.isAdmin && requiredPermissions.includes("admin")) {
     return true;
   }
 
@@ -105,6 +105,11 @@ async function validateCommandExecution(cooldownDuration, type, message) {
       );
       return false;
     }
+  }
+
+  if (command.flags && command.flags.includes("always")) {
+    // for specific commands, if the command has the flag "always", it will always be executed, not matter if paused, stream on or whatever
+    return true;
   }
 
   // check perms to execute from

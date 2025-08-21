@@ -14,8 +14,11 @@ async function getDog() {
   });
 
   try {
-    const response = await fb.request(`${api_url}?${queryParams.toString()}`);
-    const data = await response.body.json();
+    const response = await fb.got(`${api_url}?${queryParams.toString()}`);
+    if (!response) {
+      return null;
+    }
+    const data = response;
     if (data.items == null) {
       return null;
     }

@@ -16,25 +16,21 @@ class ChuwApi {
       "X-Api-Key": process.env.SHORTURL_CHUW_KEY,
     };
 
-    const response = await fb.request(`${this.baseUrl}/short-urls`, {
+    const res = await fb.got(`${this.baseUrl}/short-urls`, {
       method: "POST",
       headers,
-      body: JSON.stringify(payload),
+      json: payload,
     });
 
-    if (response.statusCode !== 200) {
-      fb.discord.logError(
-        `Chuw API: ${response.statusCode} - ${response.statusMessage}`
-      );
+    if (res === null) {
+      fb.discord.logError(`Chuw API returned null`);
+      return url;
+    }
+    if (!res || !res.shortUrl) {
       return url;
     }
 
-    const data = await response.body.json();
-    if (!data || !data.shortUrl) {
-      return url;
-    }
-
-    return data.shortUrl;
+    return res.shortUrl;
   }
 }
 

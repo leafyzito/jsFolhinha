@@ -26,13 +26,13 @@ class Emotes {
     try {
       const sevenTvEmotes = [];
       const url = `https://7tv.io/v3/users/twitch/${channelId}`;
-      const response = await fb.request(url);
+      const response = await fb.got(url);
 
-      if (response.statusCode !== 200) {
+      if (!response) {
         return sevenTvEmotes;
       }
 
-      const data = await response.body.json();
+      const data = response;
 
       if (data.error_code === 404) {
         return sevenTvEmotes;
@@ -54,12 +54,13 @@ class Emotes {
     try {
       const bttvEmotes = [];
       const url = `https://api.betterttv.net/3/cached/users/twitch/${channelId}`;
-      const response = await fb.request(url);
-      const data = await response.body.json();
+      const response = await fb.got(url);
 
-      if (response.statusCode !== 200) {
+      if (!response) {
         return bttvEmotes;
       }
+
+      const data = response;
 
       return [...data.channelEmotes, ...data.sharedEmotes].map(
         (emote) => emote.code
@@ -77,12 +78,13 @@ class Emotes {
     try {
       const ffzEmotes = [];
       const url = `https://api.frankerfacez.com/v1/room/id/${channelId}`;
-      const response = await fb.request(url);
-      const data = await response.body.json();
+      const response = await fb.got(url);
 
-      if (response.statusCode !== 200) {
+      if (!response) {
         return ffzEmotes;
       }
+
+      const data = response;
 
       const setId = data.room.set;
       return data.sets[setId].emoticons.map((emote) => emote.name);
