@@ -12,7 +12,7 @@ class FeridinhaApi {
       const form = new FormData();
       form.append("file", imageData, filename);
 
-      const response = await fb.request(`${this.baseUrl}/upload`, {
+      const response = await fb.got(`${this.baseUrl}/upload`, {
         method: "POST",
         headers: {
           token: this.apiKey,
@@ -21,13 +21,11 @@ class FeridinhaApi {
         body: form,
       });
 
-      if (response.statusCode !== 200) {
-        throw new Error(
-          `Feridinha API: ${response.statusCode} - ${response.statusMessage}`
-        );
+      if (!response) {
+        throw new Error("Feridinha API: Request failed");
       }
 
-      const data = await response.body.json();
+      const data = response;
 
       if (data.success) {
         return data.message;
@@ -49,7 +47,7 @@ class FeridinhaApi {
       const form = new FormData();
       form.append("file", audioData, filename);
 
-      const response = await fb.request(`${this.baseUrl}/upload`, {
+      const response = await fb.got(`${this.baseUrl}/upload`, {
         method: "POST",
         headers: {
           token: this.apiKey,
@@ -58,13 +56,11 @@ class FeridinhaApi {
         body: form,
       });
 
-      if (response.statusCode !== 200) {
-        throw new Error(
-          `Feridinha API: ${response.statusCode} - ${response.statusMessage}`
-        );
+      if (!response) {
+        throw new Error("Feridinha API: Request failed");
       }
 
-      const data = await response.body.json();
+      const data = response;
 
       if (data.success) {
         return data.message;
@@ -86,7 +82,7 @@ class FeridinhaApi {
       const form = new FormData();
       form.append("file", videoData, filename);
 
-      const response = await fb.request(`${this.baseUrl}/upload`, {
+      const response = await fb.got(`${this.baseUrl}/upload`, {
         method: "POST",
         headers: {
           token: this.apiKey,
@@ -95,13 +91,11 @@ class FeridinhaApi {
         body: form,
       });
 
-      if (response.statusCode !== 200) {
-        throw new Error(
-          `Feridinha API: ${response.statusCode} - ${response.statusMessage}`
-        );
+      if (!response) {
+        throw new Error("Feridinha API: Request failed");
       }
 
-      const data = await response.body.json();
+      const data = response;
 
       if (data.success) {
         return data.message;
@@ -144,17 +138,16 @@ class FeridinhaApi {
   // Download file from URL and upload to Feridinha
   async uploadFromUrl(url, filename = null) {
     try {
-      const response = await fb.request(url);
+      const response = await fb.got(url);
 
-      if (response.statusCode !== 200) {
-        throw new Error(
-          `Failed to download file from URL: ${response.statusCode} - ${response.statusMessage}`
-        );
+      if (!response) {
+        throw new Error("Failed to download file from URL: Request failed");
       }
 
-      // Use arrayBuffer() for undici and convert to Buffer
-      const arrayBuffer = await response.body.arrayBuffer();
-      const fileData = Buffer.from(arrayBuffer);
+      // Convert response to Buffer (fb.got returns Buffer for binary data)
+      const fileData = Buffer.isBuffer(response)
+        ? response
+        : Buffer.from(response);
 
       if (!filename) {
         // Extract filename from URL

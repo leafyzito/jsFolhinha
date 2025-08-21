@@ -24,21 +24,16 @@ class HelixApi {
       "Client-ID": process.env.BOT_CLIENT_ID,
       Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
     };
-    const response = await fb.request(
-      `${this.baseUrl}/users?login=${username}`,
-      {
-        headers,
-      }
-    );
+    const response = await fb.got(`${this.baseUrl}/users?login=${username}`, {
+      headers,
+    });
 
-    if (response.statusCode !== 200) {
-      fb.discord.logError(
-        `Helix API: ${response.statusCode} - ${response.statusMessage}`
-      );
+    if (!response) {
+      fb.discord.logError("Helix API: Request failed");
       return null;
     }
 
-    let data = await response.body.json();
+    let data = response;
     if (!data.data || data.data.length === 0) {
       return null;
     }
@@ -71,18 +66,16 @@ class HelixApi {
       "Client-ID": process.env.BOT_CLIENT_ID,
       Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
     };
-    const response = await fb.request(`${this.baseUrl}/users?id=${userId}`, {
+    const response = await fb.got(`${this.baseUrl}/users?id=${userId}`, {
       headers,
     });
 
-    if (response.statusCode !== 200) {
-      fb.discord.logError(
-        `Helix API: ${response.statusCode} - ${response.statusMessage}`
-      );
+    if (!response) {
+      fb.discord.logError("Helix API: Request failed");
       return null;
     }
 
-    let data = await response.body.json();
+    let data = response;
     if (!data.data || data.data.length === 0) {
       return null;
     }
@@ -117,21 +110,19 @@ class HelixApi {
       "Client-ID": process.env.BOT_CLIENT_ID,
       Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
     };
-    const response = await fb.request(
+    const response = await fb.got(
       `${this.baseUrl}/chat/color?user_id=${userId}`,
       {
         headers,
       }
     );
 
-    if (response.statusCode !== 200) {
-      fb.discord.logError(
-        `Helix API: ${response.statusCode} - ${response.statusMessage}`
-      );
+    if (!response) {
+      fb.discord.logError("Helix API: Request failed");
       return null;
     }
 
-    let data = await response.body.json();
+    let data = response;
     if (!data.data || data.data.length === 0) {
       return null;
     }
@@ -156,21 +147,19 @@ class HelixApi {
       "Client-ID": process.env.BOT_CLIENT_ID,
       Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
     };
-    const response = await fb.request(
+    const response = await fb.got(
       `${this.baseUrl}/streams?user_login=${username}`,
       {
         headers,
       }
     );
 
-    if (response.statusCode !== 200) {
-      fb.discord.logError(
-        `Helix API: ${response.statusCode} - ${response.statusMessage}`
-      );
+    if (!response) {
+      fb.discord.logError("Helix API: Request failed");
       return null;
     }
 
-    let data = await response.body.json();
+    let data = response;
     if (!data.data || data.data.length === 0) {
       return null;
     }
@@ -229,19 +218,17 @@ class HelixApi {
     };
 
     try {
-      const response = await fb.request(
+      const response = await fb.got(
         `${this.baseUrl}/streams?user_login=${channelName}`,
         { headers }
       );
 
-      if (response.statusCode !== 200) {
-        fb.discord.logError(
-          `Helix API: ${response.statusCode} - ${response.statusMessage}`
-        );
+      if (!response) {
+        fb.discord.logError("Helix API: Request failed");
         return false;
       }
 
-      let data = await response.body.json();
+      let data = response;
       if (!data.data || data.data.length === 0) {
         return false;
       }
@@ -273,31 +260,27 @@ class HelixApi {
       "Client-ID": process.env.BOT_CLIENT_ID,
       Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
     };
-    const response = await fb.request(
+    const response = await fb.got(
       `${this.baseUrl}/moderation/bans?broadcaster_id=${channelId}&moderator_id=${process.env.BOT_USERID}`,
       {
         headers,
         method: "POST",
-        body: JSON.stringify({
+        json: {
           data: {
             user_id: userId,
             duration: duration,
             reason: reason,
           },
-        }),
+        },
       }
     );
 
-    if (response.statusCode === 403) {
-      return false; // forbidden
+    if (!response) {
+      return false; // request failed
     }
 
-    if (response.statusCode !== 200) {
-      fb.discord.logError(
-        `Helix API: ${response.statusCode} - ${response.statusMessage}`
-      );
-      return false;
-    }
+    // Note: fb.got doesn't provide status codes, so we can't check for 403 specifically
+    // The API will return null on failure, which we handle above
 
     return true;
   }
@@ -306,30 +289,25 @@ class HelixApi {
     const headers = {
       "Client-ID": process.env.BOT_CLIENT_ID,
       Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
-      "Content-Type": "application/json",
     };
-    const response = await fb.request(
+    const response = await fb.got(
       `${this.baseUrl}/whispers?from_user_id=${process.env.BOT_USERID}&to_user_id=${whisperTargetId}`,
       {
         headers,
         method: "POST",
-        body: JSON.stringify({
+        json: {
           message: content,
-        }),
+        },
       }
     );
 
-    if (response.statusCode === 429) {
-      fb.discord.logError("Helix API: Whisper rate limit reached");
+    if (!response) {
+      fb.discord.logError("Helix API: Whisper request failed");
       return false;
     }
 
-    if (response.statusCode !== 200) {
-      fb.discord.logError(
-        `Helix API: ${response.statusCode} - ${response.statusMessage}`
-      );
-      return false;
-    }
+    // Note: fb.got doesn't provide status codes, so we can't check for 429 (rate limit error) specifically
+    // The API will return null on failure, which we handle above
 
     return true;
   }
@@ -357,14 +335,13 @@ class HelixApi {
       };
 
       try {
-        const response = await fb.request(
+        const response = await fb.got(
           `${this.baseUrl}/users?id=${userIdsToUrl}`,
           { headers }
         );
 
-        if (response.statusCode === 200) {
-          let data = await response.body.json();
-          data = data.data;
+        if (response) {
+          const data = response.data;
 
           if (data && data.length > 0) {
             data.forEach((user) => {
@@ -406,23 +383,20 @@ class HelixApi {
       "Client-ID": process.env.BOT_CLIENT_ID,
       Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
     };
-    const response = await fb.request(
+    const response = await fb.got(
       `${this.baseUrl}/clips?broadcaster_id=${channelId}&has_delay=true`,
       { method: "POST", headers }
     );
 
-    if (response.statusCode !== 202) {
-      fb.discord.logError(
-        `Helix API: ${response.statusCode} - ${response.statusMessage}`
-      );
+    if (!response) {
+      fb.discord.logError("Helix API: Create clip request failed");
       return null;
     }
 
-    if (response.statusCode == 403 || response.statusCode == 503) {
-      return "error";
-    }
+    // Note: fb.got doesn't provide status codes, so we can't check for specific status codes
+    // The API will return null on failure, which we handle above
 
-    const data = await response.body.json();
+    const data = response;
 
     if (!data.data || data.data.length === 0) {
       return null;

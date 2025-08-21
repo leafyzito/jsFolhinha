@@ -77,7 +77,7 @@ fb.twitch.join(channels);
 fb.twitch.part(channel);
 
 // UTILITY FUNCTIONS
-fb.request(url, options); // = undici request
+fb.got(url, options); // custom got wrapper
 fb.utils.randomInt(min, max);
 fb.utils.randomChoice(arr);
 fb.utils.relativeTime(input, returnOnlyTime, compact);

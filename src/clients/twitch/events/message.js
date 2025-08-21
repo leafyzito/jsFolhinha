@@ -33,7 +33,7 @@ module.exports = async function onMessage(message) {
   });
 
   // set custom properties
-  message.commandPrefix =
+  message.prefix =
     process.env.ENV === "prod" ? channelData[0].prefix || "!" : "!!";
 
   message.internalTimestamp = new Date().getTime();

@@ -1,0 +1,40 @@
+const got = require("got");
+
+/**
+ * Smart fetch function with auto response-type detection
+ * @param {string} url - API URL
+ * @param {object} options - Extra got options
+ * @returns {any|null} - Parsed JSON, string, Buffer, or null on failure
+ */
+async function fetchData(url, options = {}) {
+  try {
+    // Always request as buffer first so we can decide ourselves
+    const { rawBody, headers, statusCode } = await got(url, {
+      throwHttpErrors: false,
+      responseType: "buffer", // keep it raw until we inspect
+      ...options,
+    });
+
+    if (statusCode < 200 || statusCode > 299) {
+      return null;
+    }
+
+    const contentType = headers["content-type"] || "";
+
+    if (contentType.includes("application/json")) {
+      return JSON.parse(rawBody.toString("utf8"));
+    }
+
+    if (contentType.startsWith("text/")) {
+      return rawBody.toString("utf8");
+    }
+
+    // fallback → return raw buffer (useful for images, pdfs, etc.)
+    return rawBody;
+  } catch (err) {
+    console.error("Request error:", err.message);
+    return null;
+  }
+}
+
+module.exports = { fetchData };

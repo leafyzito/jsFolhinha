@@ -1,7 +1,12 @@
 async function getChatters(channel) {
   const api_url = "https://api.fuchsty.com/twitch/chatters/" + channel;
-  const response = await fb.request(api_url);
-  const data = await response.body.json();
+  const response = await fb.got(api_url);
+
+  if (!response) {
+    return "erro";
+  }
+
+  const data = response;
 
   if ("error" in data) {
     return "erro";

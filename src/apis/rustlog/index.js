@@ -4,20 +4,23 @@ class RustlogApi {
   }
 
   async addChannel(channelId) {
-    const response = await fb.request(`${this.baseUrl}/admin/channels`, {
+    const response = await fb.got(`${this.baseUrl}/admin/channels`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "X-API-Key": process.env.RUSTLOG_API_KEY,
       },
-      body: JSON.stringify({
+      json: {
         channels: [channelId],
-      }),
+      },
     });
 
-    if (response.statusCode !== 200) {
+    if (!response) {
+      fb.discord.logError(
+        `Failed to add channel ${channelId} to rustlog: Request failed`
+      );
       throw new Error(
-        `Failed to add channel ${channelId} to rustlog: ${response.statusCode}`
+        `Failed to add channel ${channelId} to rustlog: Request failed`
       );
     }
 
@@ -25,20 +28,23 @@ class RustlogApi {
   }
 
   async removeChannel(channelId) {
-    const response = await fb.request(`${this.baseUrl}/admin/channels`, {
+    const response = await fb.got(`${this.baseUrl}/admin/channels`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         "X-API-Key": process.env.RUSTLOG_API_KEY,
       },
-      body: JSON.stringify({
+      json: {
         channels: [channelId],
-      }),
+      },
     });
 
-    if (response.statusCode !== 200) {
+    if (!response) {
+      fb.discord.logError(
+        `Failed to remove channel ${channelId} from rustlog: Request failed`
+      );
       throw new Error(
-        `Failed to remove channel ${channelId} from rustlog: ${response.statusCode}`
+        `Failed to remove channel ${channelId} from rustlog: Request failed`
       );
     }
 

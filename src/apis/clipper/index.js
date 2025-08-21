@@ -8,20 +8,16 @@ class TwitchClipperAPI {
 
   async makeClip(channelName) {
     try {
-      const response = await fb.request(`${this.baseUrl}/clip/${channelName}`);
+      const res = await fb.got(`${this.baseUrl}/clip/${channelName}`);
 
-      // if (response.ok !== 200) {
-      //   throw new Error(
-      //     `Failed to add channel ${channelId} to rustlog: ${response.statusCode}`
-      //   );
-      // }
+      if (res === null) {
+        fb.discord.logError(`Twitch Clipper API returned null`);
+        return null;
+      }
 
-      const data = await response.body.json();
-
-      // Resolve the path to the "clips" folder inside "twitchClipper"
       const clipsFolder = path.join(process.cwd(), "twitchClipper/clips");
-      const clipPath = path.join(clipsFolder, data.path.replace(/^\//, ""));
-      console.log(clipPath);
+      const clipPath = path.join(clipsFolder, res.path.replace(/^\//, ""));
+
       // upload clip to feridinha
       const clipName = path.basename(clipPath);
       const clipContent = fs.readFileSync(clipPath);

@@ -14,19 +14,17 @@ class GithubApi {
       public: false,
       files: { "file.txt": { content } },
     };
-    const response = await fb.request(`${this.baseUrl}/gists`, {
+    const response = await fb.got(`${this.baseUrl}/gists`, {
       method: "POST",
       headers,
-      body: JSON.stringify(payload),
+      json: payload,
     });
 
-    if (response.statusCode !== 201) {
-      throw new Error(
-        `Github API: ${response.statusCode} - ${response.statusMessage}`
-      );
+    if (!response) {
+      throw new Error("Github API: Request failed");
     }
 
-    const data = await response.body.json();
+    const data = response;
     if (!data) {
       throw new Error("Github API: No data returned");
     }

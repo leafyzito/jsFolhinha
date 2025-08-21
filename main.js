@@ -2,7 +2,7 @@
 require("dotenv").config();
 
 // IMPORTS
-const { request } = require("undici");
+const { fetchData } = require("./src/utils/gotWrapper");
 const { loadCommands } = require("./src/commands/commandsList");
 const { loadReminders } = require("./src/handlers/listener/reminder");
 
@@ -15,8 +15,8 @@ const fb = global.fb;
 // Ensure fb is available globally for all modules
 global.fb = fb;
 
-// Add request to fb for easier access
-fb.request = request;
+// Add custom got function to fb
+fb.got = fetchData;
 
 // FB PROPERTIES INITIALIZATION
 // Add initialization status tracking

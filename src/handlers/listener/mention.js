@@ -25,7 +25,7 @@ const replyMentionListener = async (message) => {
     return;
   }
 
-  if (message.messageText.startsWith(message.commandPrefix)) {
+  if (message.messageText.startsWith(message.prefix)) {
     return;
   }
 

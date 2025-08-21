@@ -4,16 +4,8 @@ class IvrApi {
   }
 
   async getUser(username) {
-    const response = await fb.request(`${this.baseUrl}/user?login=${username}`);
+    const data = await fb.got(`${this.baseUrl}/user?login=${username}`);
 
-    if (response.statusCode !== 200) {
-      fb.discord.logError(
-        `IVR API: ${response.statusCode} - ${response.statusMessage}`
-      );
-      return null;
-    }
-
-    const data = await response.body.json();
     if (!Array.isArray(data) || data.length === 0) {
       return null;
     }
@@ -54,16 +46,8 @@ class IvrApi {
   }
 
   async getLive(username) {
-    const response = await fb.request(`${this.baseUrl}/live?login=${username}`);
+    const data = await fb.got(`${this.baseUrl}/live?login=${username}`);
 
-    if (response.statusCode !== 200) {
-      fb.discord.logError(
-        `IVR API: ${response.statusCode} - ${response.statusMessage}`
-      );
-      return null;
-    }
-
-    const data = await response.body.json();
     if (data === null || data == [] || data.length === 0) {
       return null;
     }
@@ -90,20 +74,9 @@ class IvrApi {
   }
 
   async getSubAge(user, channel) {
-    const response = await fb.request(
-      `${this.baseUrl}/subage/${user}/${channel}`
-    );
+    const data = await fb.got(`${this.baseUrl}/subage/${user}/${channel}`);
 
-    if (response.statusCode !== 200) {
-      fb.discord.logError(
-        `IVR API: ${response.statusCode} - ${response.statusMessage}`
-      );
-      return null;
-    }
-
-    const data = await response.body.json();
-
-    if (data?.statusCode) {
+    if (data === null || data == [] || data.length === 0) {
       return null;
     }
 
