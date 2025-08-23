@@ -11,8 +11,6 @@ function getCommandObjectByAlias(alias) {
 }
 
 const configCommand = async (message) => {
-  message.command = "config";
-
   if (message.args.length === 1) {
     return {
       reply: `Se estiver com dúvidas sobre o comando config, acesse https://folhinhabot.com/comandos/config 😁`,
@@ -27,39 +25,18 @@ const configCommand = async (message) => {
       return {
         reply: `Use o formato: ${
           message.prefix
-        }config prefixo <prefixo>. Prefixos disponíveis: ${possiblePrefixes.join(
-          ""
-        )}`,
+        }config prefixo <prefixo>. Prefixos disponíveis: ${fb.utils
+          .validPrefixes()
+          .join("")}`,
       };
     }
     const chosenPrefix = message.args[2];
-    const possiblePrefixes = [
-      "!",
-      "?",
-      "&",
-      "%",
-      "+",
-      "*",
-      "-",
-      "=",
-      "|",
-      "@",
-      "#",
-      "$",
-      "~",
-      "\\",
-      "_",
-      ",",
-      ";",
-      "<",
-      ">",
-    ];
 
-    if (!possiblePrefixes.includes(chosenPrefix)) {
+    if (!fb.utils.validPrefixes().includes(chosenPrefix)) {
       return {
-        reply: `Prefixo inválido. Prefixos disponíveis: ${possiblePrefixes.join(
-          ""
-        )}`,
+        reply: `Prefixo inválido. Prefixos disponíveis: ${fb.utils
+          .validPrefixes()
+          .join("")}`,
       };
     }
 

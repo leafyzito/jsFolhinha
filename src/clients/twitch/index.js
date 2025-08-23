@@ -50,9 +50,6 @@ class TwitchClient {
   }
 
   async init() {
-    // decorate main client with helpers/utilities
-    //await modifyClient(this.client, this.anonClient); // TODO: remove the need for this
-
     // connect
     this.client.connect();
     this.anonClient.connect();
@@ -77,26 +74,28 @@ class TwitchClient {
     this.anonClient.on("CLEARCHAT", (msg) => onClearChatHandler(msg));
 
     // main client whisper (since anon can't receive whispers)
-    this.client.on("WHISPER", (msg) => onWhisperHandler(this, msg));
+    this.client.on("WHISPER", (msg) => onWhisperHandler(msg));
   }
 
   // join given MULTIPLE channels login names and update channelsToJoin array
   join(channels = []) {
     if (channels.length === 0) {
-      return;
+      return false;
     }
 
     // add to channelsToJoin
-    this.anonClient.channelsToJoin = [
-      ...this.anonClient.channelsToJoin,
-      ...channels,
-    ];
+    this.anonClient.channelsToJoin.push(...channels);
 
     // join
     this.anonClient
       .joinAll(channels)
       .then(() => console.log("* Joined channels"))
-      .catch((error) => console.log("Error on joining channels:", error));
+      .catch((error) => {
+        console.log("Error on joining channels:", error);
+        return false;
+      });
+
+    return true;
   }
 
   // part given ONE channel and update channelsToJoin array

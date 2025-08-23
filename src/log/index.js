@@ -173,7 +173,7 @@ class Logger {
     message.notes = notes;
     response = fb.utils.checkRegex(response, message.senderUsername, message);
 
-    fb.api.helix.whisper(message.senderUsername, response);
+    fb.api.helix.whisper(message.senderUserID, response);
     fb.discord.logWhisper(message.senderUsername, response);
   }
 

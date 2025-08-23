@@ -259,6 +259,7 @@ class HelixApi {
     const headers = {
       "Client-ID": process.env.BOT_CLIENT_ID,
       Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
+      "Content-Type": "application/json",
     };
     const response = await fb.got(
       `${this.baseUrl}/moderation/bans?broadcaster_id=${channelId}&moderator_id=${process.env.BOT_USERID}`,
@@ -278,9 +279,6 @@ class HelixApi {
     if (!response) {
       return false; // request failed
     }
-
-    // Note: fb.got doesn't provide status codes, so we can't check for 403 specifically
-    // The API will return null on failure, which we handle above
 
     return true;
   }

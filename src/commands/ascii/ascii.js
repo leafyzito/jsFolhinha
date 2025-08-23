@@ -52,17 +52,11 @@ const asciiCommand = async (message) => {
     };
   }
 
-  let ascii = await getAscii(message.channelName, input);
+  const ascii = await getAscii(message.channelName, input);
   if (!ascii) {
     return {
       reply: `Não encontrei esse emote neste canal`,
     };
-  }
-
-  // replace \n and \r with \s
-  ascii = ascii.replace(/\n/g, " ").replace(/\r/g, " ");
-  if (ascii.length > 499) {
-    ascii = ascii.slice(0, 499);
   }
 
   return {

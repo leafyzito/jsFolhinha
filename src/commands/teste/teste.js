@@ -12,7 +12,6 @@ testeCommand.shortDescription = "Comando para verificar se o bot está vivo";
 testeCommand.cooldown = 5000;
 testeCommand.cooldownType = "channel";
 testeCommand.whisperable = true;
-testeCommand.permissions = ["mod", "admin"]; // Moderators and admins can use this command
 testeCommand.description = `Use para verificar se o Folhinha ainda está presente entre nós. Caso ele não responda, infelizmente ele se foi.`;
 testeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
   .split("/")

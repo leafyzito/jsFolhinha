@@ -6,9 +6,9 @@ async function fetchPendingJoins() {
   );
   for (const channelToJoin of pendingJoins) {
     const channelId = channelToJoin.channelid;
-    const channelName = await fb.api.helix.getUserByID(channelId);
+    const channelName = (await fb.api.helix.getUserByID(channelId))?.login;
     const inviterId = channelToJoin.inviterid;
-    const inviterName = await fb.api.helix.getUserByID(inviterId);
+    const inviterName = (await fb.api.helix.getUserByID(inviterId))?.login;
 
     if (channelName) {
       const alreadyJoinedChannels = [...fb.twitch.anonClient.channelsToJoin];
@@ -60,7 +60,7 @@ async function fetchPendingJoins() {
           `Erro ao entrar no chat ${channelName}. Por favor contacte o @${process.env.DEV_NICK}`
         );
         fb.log.whisper(
-          inviterName,
+          inviterId,
           `Erro ao entrar no chat ${channelName}. Por favor contacte o @${process.env.DEV_NICK}`
         );
         return;
@@ -78,7 +78,7 @@ async function fetchPendingJoins() {
         `${emote} Oioi! Fui convidado para me juntar aqui${inviterPart}! Para saber mais sobre mim, pode usar !ajuda ou !comandos`
       );
       fb.log.whisper(
-        inviterName,
+        inviterId,
         `Caso tenha follow-mode ativado no chat para o qual me convidou, me dê cargo de moderador ou vip para conseguir falar lá :D`
       );
 
