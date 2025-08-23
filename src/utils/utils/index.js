@@ -10,6 +10,35 @@ const { CreateRegex } = require("../../extras/Regex.js");
 const regexObj = new CreateRegex();
 
 class Utils {
+  sanitizeOtherPrefixes(input) {
+    // Remove common command prefixes from the beginning of input
+    return input.replace(/^[$*!|+?%=&/#.,<>@⠀\-_\\]+/, "");
+  }
+
+  validPrefixes() {
+    return [
+      "!",
+      "?",
+      "&",
+      "%",
+      "+",
+      "*",
+      "-",
+      "=",
+      "|",
+      "@",
+      "#",
+      "$",
+      "~",
+      "\\",
+      "_",
+      ",",
+      ";",
+      "<",
+      ">",
+    ];
+  }
+
   randomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
@@ -189,6 +218,15 @@ class Utils {
   }
 
   async createNewChannelConfig(channelId) {
+    // first check if config already exists
+    const config = await fb.db.get("config", { channelId: channelId });
+    if (config) {
+      fb.discord.importantLog(
+        `* Tried to create duplicate config for channelId ${channelId}`
+      );
+      return;
+    }
+
     const channelName = (await fb.api.helix.getUserByID(channelId)).login;
     const newConfig = {
       channel: channelName,
@@ -219,14 +257,41 @@ class Utils {
             .trim();
           console.log(msg.messageText);
         }
+
+        // Check if all specified conditions are met
+        let shouldResolve = true;
+
+        // Check channel name if specified
+        if (check.channelName && msg.channelName !== check.channelName) {
+          shouldResolve = false;
+        }
+
+        // Check sender user ID if specified
+        if (check.senderUserID && msg.senderUserID !== check.senderUserID) {
+          shouldResolve = false;
+        }
+
+        // Check sender username if specified
         if (
-          msg.channelName === check.channelName &&
-          check.content.some(
+          check.senderUsername &&
+          msg.senderUsername !== check.senderUsername
+        ) {
+          shouldResolve = false;
+        }
+
+        // Check message content if specified
+        if (check.content && check.content.length > 0) {
+          const messageMatches = check.content.some(
             (content) =>
               msg.messageText.toLowerCase().trim() ===
               content.toLowerCase().trim()
-          )
-        ) {
+          );
+          if (!messageMatches) {
+            shouldResolve = false;
+          }
+        }
+
+        if (shouldResolve) {
           clearTimeout(timer);
           resolve(msg);
         }

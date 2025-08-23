@@ -26,8 +26,8 @@ const sendReminderAndUpdate = async (reminder, finalRes) => {
   if (!channelData) {
     // If no channel config found, send via whisper
     const receiverUser = await fb.api.helix.getUserByID(reminder.receiverId);
-    if (receiverUser?.login) {
-      await fb.log.whisper(receiverUser.login, finalRes);
+    if (receiverUser?.id) {
+      await fb.log.whisper(receiverUser.id, finalRes);
     }
     return;
   }
@@ -49,8 +49,8 @@ const sendReminderAndUpdate = async (reminder, finalRes) => {
   if (shouldSendViaWhisper) {
     // Send in whisper if channel is paused, reminders are banned, or offline-only with stream online
     const receiverUser = await fb.api.helix.getUserByID(reminder.receiverId);
-    if (receiverUser?.login) {
-      await fb.log.whisper(receiverUser.login, finalRes);
+    if (receiverUser?.id) {
+      await fb.log.whisper(receiverUser.id, finalRes);
     }
   } else {
     // Send in channel if channel is not paused, reminders are not banned, and not offline-only

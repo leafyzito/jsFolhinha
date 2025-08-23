@@ -16,15 +16,14 @@ class IvrApi {
     const chatColor = user.chatColor ? user.chatColor : "Nenhuma";
     const badge = user.badges?.[0]?.title || "Nenhuma";
     const chatterCount = user.chatterCount;
-    const createdInfo = user.createdAt
-      ? fb.utils.relativeTime(user.createdAt)
-      : [null, null];
-    const createdAt = createdInfo[1];
-    const createdHowLongAgo = createdInfo[0];
+    const createdAt = new Date(user.createdAt)
+      .toLocaleDateString("pt-BR")
+      .replaceAll("/", "-");
+    const createdHowLongAgo = fb.utils.relativeTime(user.createdAt, true, true);
     const followers = user.followers;
     const isLive = !!user.stream;
     const lastStream = user.lastBroadcast?.startedAt
-      ? fb.utils.relativeTime(user.lastBroadcast.startedAt)[0]
+      ? fb.utils.relativeTime(user.lastBroadcast.startedAt, true, true)
       : null;
     const isBanned = user.banned;
     const banReason = user.banReason || null;
@@ -46,14 +45,20 @@ class IvrApi {
   }
 
   async getLive(username) {
-    const data = await fb.got(`${this.baseUrl}/live?login=${username}`);
+    const data = await fb.got(`${this.baseUrl}/user?login=${username}`);
 
     if (data === null || data == [] || data.length === 0) {
       return null;
     }
 
+    const lastStreamDate = data[0].lastBroadcast?.startedAt ?? null;
+
+    if (!lastStreamDate) {
+      return "never streamed";
+    }
+
     const user = data[0] || {};
-    const stream = user.stream || null;
+    const stream = user.stream ?? null;
     const isLive = !!stream;
 
     if (isLive) {
@@ -99,6 +104,20 @@ class IvrApi {
       user: data.user,
       channel: data.channel,
       followedAt: data.followedAt ?? null,
+    };
+  }
+
+  async getFollowAge(user, channel) {
+    const data = await fb.got(`${this.baseUrl}/subage/${user}/${channel}`);
+
+    if (data === null || data == [] || data.length === 0) {
+      return null;
+    }
+
+    const followedAt = data.followedAt ?? null;
+
+    return {
+      followedAt,
     };
   }
 }

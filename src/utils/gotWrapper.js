@@ -19,6 +19,15 @@ async function fetchData(url, options = {}) {
       return null;
     }
 
+    // If responseType is explicitly specified, respect it
+    if (options.responseType === "text") {
+      return rawBody.toString("utf8");
+    }
+
+    if (options.responseType === "buffer") {
+      return rawBody;
+    }
+
     const contentType = headers["content-type"] || "";
 
     if (contentType.includes("application/json")) {

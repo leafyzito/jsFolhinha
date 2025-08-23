@@ -44,11 +44,8 @@ async function commandHandler(message) {
   try {
     commandResult = await commandsList[command](message);
   } catch (err) {
-    console.log(
-      `Error in command in #${message.channelName}/${message.senderUsername} - ${command}: ${err}`
-    );
     fb.discord.logError(
-      `Error in command #${message.channelName}/${message.senderUsername} - ${command}: ${err}`
+      `Error in command in #${message.channelName}/${message.senderUsername} - ${command}: ${err}`
     );
     fb.log.logAndReply(
       message,
@@ -65,6 +62,9 @@ async function commandHandler(message) {
     // default reply type to reply if not specified
     commandResult.replyType = "reply";
   }
+
+  // sanitize reply - replace \n and \r with " "
+  commandResult.reply = commandResult.reply.replace(/[\n\r]/g, " ").trim();
 
   message.notes = commandResult.notes;
   message.responseTime = new Date().getTime() - message.serverTimestampRaw;
@@ -90,7 +90,7 @@ async function commandHandler(message) {
   }
 
   // update 7tv presence
-  fb.api.stv.updatePresence(process.env.BOT_7TV_UID, message.channelID);
+  await fb.api.stv.updatePresence(process.env.BOT_7TV_UID, message.channelID);
 }
 
 module.exports = {

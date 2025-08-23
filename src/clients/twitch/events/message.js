@@ -3,6 +3,7 @@ const { commandHandler, listenerHandler } = require("../../../handlers");
 const duplicateMessages = [];
 
 module.exports = async function onMessage(message) {
+  // handle duplicate messages from shared chats
   const sourceRoomId = message.ircTags["source-room-id"] || null;
   const sourceMessageId = message.ircTags["source-id"] || null;
   if (
@@ -19,6 +20,14 @@ module.exports = async function onMessage(message) {
     if (duplicateMessages.length > 100) {
       duplicateMessages.shift();
     }
+  }
+
+  // add content from parent message to message if exists and remove the first word (the reply)
+  if (message.replyParentMessageBody) {
+    message.messageText =
+      message.messageText.split(" ").slice(1).join(" ") +
+      " " +
+      message.replyParentMessageBody;
   }
 
   // sanitize message

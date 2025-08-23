@@ -7,28 +7,9 @@ module.exports = function onWhisper(message) {
   message.serverTimestampRaw = new Date().getTime();
   message.channelName = "whisper";
   message.isWhisper = true;
+  message.args = message.messageText.split(" ");
 
-  const validPrefixes = [
-    "?",
-    "&",
-    "%",
-    "+",
-    "*",
-    "-",
-    "=",
-    "|",
-    "@",
-    "#",
-    "$",
-    "~",
-    "\\",
-    "_",
-    ",",
-    ";",
-    "<",
-    ">",
-  ];
-  for (const prefix of validPrefixes) {
+  for (const prefix of fb.utils.validPrefixes()) {
     if (message.messageText.startsWith(prefix)) {
       message.messageText = message.messageText.replace(prefix, message.prefix);
     }

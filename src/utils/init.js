@@ -43,13 +43,26 @@ async function getChannelsToJoin() {
     throw new Error("fb object not properly initialized");
   }
 
-  // If not in production, return dev test channel
+  // If not in production, return dev test channels
   if (process.env.ENV !== "prod") {
-    const devTestChannel = process.env.DEV_TEST_CHANNEL;
-    const devTestChannelInfo = await fb.api.helix.getUserByUsername(
-      devTestChannel
-    );
-    return [devTestChannelInfo];
+    const devTestChannels = process.env.DEV_TEST_CHANNELS.split(",")
+      .map((channel) => channel.trim())
+      .filter((channel) => channel);
+
+    if (devTestChannels.length === 0) {
+      return [];
+    }
+
+    // Get channel info for each dev test channel
+    const devTestChannelsInfo = [];
+    for (const channel of devTestChannels) {
+      const channelInfo = await fb.api.helix.getUserByUsername(channel);
+      if (channelInfo) {
+        devTestChannelsInfo.push(channelInfo);
+      }
+    }
+
+    return devTestChannelsInfo;
   }
 
   try {
