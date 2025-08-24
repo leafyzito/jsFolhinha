@@ -4,6 +4,7 @@ const schedule = require("node-schedule");
 let processingReminder = [];
 const scheduledReminders = new Set(); // Track scheduled reminder IDs locally
 
+// MARKER: helper functions
 // Helper function to format reminder message
 const formatReminderMessage = (
   reminderSender,
@@ -20,7 +21,7 @@ const formatReminderMessage = (
 const sendReminderAndUpdate = async (reminder, finalRes) => {
   // Get channel config from database
   const channelData = await fb.db.get("config", {
-    channelID: reminder.fromChannelId,
+    channelId: reminder.fromChannelId,
   });
 
   if (!channelData) {
@@ -33,17 +34,14 @@ const sendReminderAndUpdate = async (reminder, finalRes) => {
   }
 
   // Handle case where channelData might be an array or single document
-  const channelConfig = Array.isArray(channelData)
-    ? channelData[0]
-    : channelData;
-  const channelName = channelConfig.channel;
+  const channelName = channelData.channel;
 
   // Check if channel is paused, reminders are banned, or offline-only with stream online
   const shouldSendViaWhisper =
-    channelConfig.isPaused ||
-    (channelConfig.disabledCommands &&
-      channelConfig.disabledCommands.includes("remind")) ||
-    (channelConfig.offlineOnly &&
+    channelData.isPaused ||
+    (channelData.disabledCommands &&
+      channelData.disabledCommands.includes("remind")) ||
+    (channelData.offlineOnly &&
       (await fb.api.helix.isStreamOnline(channelName)));
 
   if (shouldSendViaWhisper) {
@@ -54,7 +52,7 @@ const sendReminderAndUpdate = async (reminder, finalRes) => {
     }
   } else {
     // Send in channel if channel is not paused, reminders are not banned, and not offline-only
-    await fb.log.send(channelName, finalRes);
+    fb.log.send(channelName, finalRes);
   }
 
   await fb.db.update(
@@ -64,6 +62,7 @@ const sendReminderAndUpdate = async (reminder, finalRes) => {
   );
 };
 
+// MARKER: missed reminders
 // Function to handle missed reminders
 const handleMissedReminder = async (reminder) => {
   const reminderDate = new Date(reminder.remindAt * 1000);
@@ -101,6 +100,7 @@ const handleMissedReminder = async (reminder) => {
   await sendReminderAndUpdate(reminder, finalRes);
 };
 
+// MARKER: scheduled reminders
 // Function to schedule future reminders
 const scheduleFutureReminder = async (reminder) => {
   // const reminderDate = new Date(reminder.remindAt * 1000);
@@ -149,6 +149,7 @@ const scheduleFutureReminder = async (reminder) => {
   fb.reminderJobs[reminder._id] = job;
 };
 
+// MARKER: load reminders
 // Main function to load and process reminders
 const loadReminders = async () => {
   const currentTime = Math.floor(Date.now() / 1000);
@@ -178,11 +179,12 @@ const loadReminders = async () => {
   }
 };
 
+// MARKER: reminder responses
 // Function to handle reminder responses
 const handleReminderResponse = async (message, reminders) => {
-  // Add length property to single objects for compatibility
+  // Ensure reminders is always an array
   if (!Array.isArray(reminders)) {
-    reminders.length = 1;
+    reminders = [reminders];
   }
 
   if (reminders.length <= 3) {
@@ -234,6 +236,7 @@ const handleReminderResponse = async (message, reminders) => {
   );
 };
 
+// MARKER: main listener
 // Main reminder listener function
 const reminderListener = async (message) => {
   // Check if channel is paused or has reminders banned
@@ -263,8 +266,27 @@ const reminderListener = async (message) => {
       return;
     }
 
+    // Ensure reminders is always an array
+    const remindersArray = Array.isArray(reminders) ? reminders : [reminders];
+
+    // Filter out reminders that were created very recently (within 2 seconds) by the same user
+    // This prevents immediate execution of reminders on the same message that creates them
+    const currentTime = Date.now();
+    const filteredReminders = remindersArray.filter((reminder) => {
+      const reminderTime = reminder.remindTime * 1000; // Convert to milliseconds
+      const timeDiff = currentTime - reminderTime;
+      return timeDiff >= 2000; // Only process reminders older than 2 seconds
+    });
+
+    if (filteredReminders.length === 0) {
+      processingReminder = processingReminder.filter(
+        (user) => user !== message.senderUsername
+      );
+      return;
+    }
+
     // Handle the reminder response
-    await handleReminderResponse(message, reminders);
+    await handleReminderResponse(message, filteredReminders);
   } catch (error) {
     console.error("Error processing reminder:", error);
   } finally {

@@ -29,6 +29,36 @@ class TwitchClipperAPI {
       return null;
     }
   }
+
+  async makePreview(channelName) {
+    try {
+      const res = await fb.got(`${this.baseUrl}/preview/${channelName}`);
+
+      if (res === null) {
+        fb.discord.logError(`Twitch Clipper API returned null for preview`);
+        return null;
+      }
+
+      const previewsFolder = path.join(process.cwd(), "twitchClipper/previews");
+      const previewPath = path.join(
+        previewsFolder,
+        res.path.replace(/^\//, "")
+      );
+
+      // upload preview to feridinha
+      const previewName = path.basename(previewPath);
+      const previewContent = fs.readFileSync(previewPath);
+      const previewUrl = await fb.api.feridinha.uploadFile(
+        previewContent,
+        previewName
+      );
+
+      return { makePreviewUrl: previewUrl };
+    } catch (error) {
+      fb.discord.logError(`Error in makePreview: ${error.message}`);
+      return null;
+    }
+  }
 }
 
 module.exports = TwitchClipperAPI;

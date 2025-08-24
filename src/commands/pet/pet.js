@@ -1,4 +1,4 @@
-const petEmojis = require("./emojis");
+const { petEmojis } = require("./emojis");
 
 async function createPetBase(message) {
   const insert_doc = {

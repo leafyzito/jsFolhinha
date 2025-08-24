@@ -50,6 +50,25 @@ class RustlogApi {
 
     return true;
   }
+
+  async getRandomLine(channelId, userId = null) {
+    let url;
+    if (!userId) {
+      url = `${this.baseUrl}/channelid/${channelId}/random`;
+    } else {
+      url = `${this.baseUrl}/channelid/${channelId}/userid/${userId}/random`;
+    }
+
+    const response = await fb.got(url, {
+      headers: { accept: "application/json" },
+    });
+
+    if (!response) {
+      return null;
+    }
+
+    return response;
+  }
 }
 
 module.exports = RustlogApi;

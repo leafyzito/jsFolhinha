@@ -107,4 +107,4 @@ const petEmojis = [
   "🦨",
 ];
 
-module.exports = petEmojis;
+module.exports = { petEmojis };

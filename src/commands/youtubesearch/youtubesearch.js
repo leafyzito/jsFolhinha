@@ -1,4 +1,3 @@
-// TODO: check
 const durationRegex =
   /P((?<days>\d+)D)?(T((?<hours>\d+)H)?((?<minutes>\d+)M)?((?<seconds>\d+)S)?)?/;
 

@@ -12,70 +12,10 @@ const isDirectFileUrl = (url) => {
   return directFileExtensions.some((ext) => url.toLowerCase().includes(ext));
 };
 
-async function getVideoCobalt(urlToDownload) {
-  const apiUrl = "http://localhost:9000/"; // https://cobalt.tools/ local instance
-  const headers = {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-    Authorization: "ApiKey " + process.env.COBALT_API_KEY,
-  };
-  const payload = {
-    url: urlToDownload,
-  };
-
-  try {
-    const response = await fb.got(apiUrl, {
-      method: "POST",
-      headers: headers,
-      json: payload,
-    });
-
-    if (!response) {
-      return null;
-    }
-
-    const resData = response;
-    const resUrl = resData.url;
-
-    // Download the video content
-    const videoResponse = await fb.got(resUrl);
-    if (!videoResponse) {
-      return null;
-    }
-
-    // Upload to feridinha
-    const fileName = `video_${Date.now()}.mp4`;
-    const feridinhaUrl = await fb.api.feridinha.uploadVideo(
-      videoResponse,
-      fileName
-    );
-
-    if (!feridinhaUrl) {
-      console.log(
-        "Failed to upload to feridinha, falling back to original URL"
-      );
-      return resUrl;
-    }
-
-    return feridinhaUrl;
-  } catch (e) {
-    console.log(`erro no getVideoDownload: ${e}`);
-    return null;
-  }
-}
-
 async function makeClip(channelName) {
   try {
-    const response = await fb.got(`http://localhost:8989/clip/${channelName}`);
-
-    if (!response) {
-      return null;
-    }
-
-    // Note: This would need file system operations
-    // For now, we'll return a placeholder
-    console.log("Clip creation would happen here");
-    return null;
+    const result = await fb.api.clipper.makeClip(channelName);
+    return result;
   } catch (error) {
     console.log("Error making clip:", error);
     return null;
@@ -87,8 +27,13 @@ async function shazamIt(url) {
     // If it's not a direct file URL, download and upload to feridinha first
     if (!isDirectFileUrl(url)) {
       console.log("URL is not a direct file URL, getting video download...");
-      url = await getVideoCobalt(url);
-      if (!url) {
+      try {
+        url = await fb.api.cobalt.downloadVideo(url);
+        if (!url) {
+          return "cobalt-error";
+        }
+      } catch (e) {
+        console.log(`erro no getVideoDownload: ${e}`);
         return "cobalt-error";
       }
     }
