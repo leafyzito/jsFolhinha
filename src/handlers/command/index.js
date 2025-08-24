@@ -54,7 +54,7 @@ async function commandHandler(message) {
     return;
   }
 
-  if (!commandResult) {
+  if (!commandResult || !commandResult.reply) {
     return;
   }
 

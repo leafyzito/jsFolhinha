@@ -1,4 +1,3 @@
-// TODO: fix, continue from here
 const vanishCommand = async (message) => {
   if (message.isStreamer) {
     return {
@@ -12,19 +11,20 @@ const vanishCommand = async (message) => {
     };
   }
 
-  const vanish = await fb.twitch.timeoutUser(message, 1, "vanish");
+  const vanish = await fb.api.helix.timeoutUser(
+    message.channelID,
+    message.senderUserID,
+    1,
+    "vanish"
+  );
 
   if (!vanish) {
     return {
       reply: `Eu não tenho mod, então não consigo fazer isso`,
-      notes: `Vanish command failed - bot lacks moderator permissions`,
     };
   }
 
-  return {
-    reply: `✨ Poof! Você desapareceu!`,
-    notes: `Vanish command executed successfully - 1 second timeout applied`,
-  };
+  return;
 };
 
 vanishCommand.commandName = "vanish";

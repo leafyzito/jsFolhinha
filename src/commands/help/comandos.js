@@ -16,4 +16,4 @@ comandosCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/co
   .split("/")
   .pop()}/${__filename.split("/").pop()}`;
 
-module.exports = comandosCommand;
+module.exports = { comandosCommand };

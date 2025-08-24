@@ -11,7 +11,7 @@ const joinCommand = async (message) => {
     };
   }
 
-  await fb.utils.createNewChannelConfig(channelToJoin);
+  await fb.utils.createNewChannelConfig(message.senderUserID);
   const joinResult = await fb.twitch.join([channelToJoin]);
   if (!joinResult) {
     return {

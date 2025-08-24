@@ -6,6 +6,7 @@ const RustlogApi = require("./rustlog");
 const STVApi = require("./stv");
 const FeridinhaApi = require("./feridinha");
 const TwitchClipperApi = require("./clipper");
+const CobaltApi = require("./cobalt");
 
 const allApis = {
   helix: HelixApi,
@@ -16,6 +17,7 @@ const allApis = {
   stv: STVApi,
   feridinha: FeridinhaApi,
   clipper: TwitchClipperApi,
+  cobalt: CobaltApi,
 };
 
 module.exports = allApis;
