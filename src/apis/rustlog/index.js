@@ -1,6 +1,6 @@
 class RustlogApi {
   constructor() {
-    this.baseUrl = "http://localhost:8025";
+    this.baseUrl = "https://logs.folhinhabot.com";
   }
 
   async addChannel(channelId) {
