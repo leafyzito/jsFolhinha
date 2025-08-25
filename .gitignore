@@ -6,3 +6,4 @@ commands.json
 .vscode
 
 apps/twitchClipper/clips/*
+apps/twitchClipper/previews/*
