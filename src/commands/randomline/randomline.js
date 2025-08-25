@@ -46,6 +46,10 @@ const randomLineCommand = async (message) => {
     };
   }
 
+  if (randomLine.message.length > 450) {
+    randomLine.message = randomLine.message.slice(0, 450) + "...";
+  }
+
   return {
     reply: `(há ${randomLine.timeSince}) ${randomLine.user}: ${randomLine.message}`,
   };
