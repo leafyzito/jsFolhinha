@@ -1,10 +1,6 @@
 // check if channel is paused, offline only, or has a disabled command
 const shouldSkipMessage = async (channelID, commandName = null) => {
-  const channelName = await fb.api.helix.getUserByID(channelID);
-  // check if prod env
-  if (process.env.ENV === "prod") {
-    return false;
-  }
+  const channelName = (await fb.api.helix.getUserByID(channelID))?.login;
 
   const channelData = await fb.db.get("config", {
     channelId: channelID,
