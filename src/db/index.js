@@ -9,6 +9,7 @@ class MongoUtils {
   constructor() {
     this.client = clientMongo;
     this.db = db;
+    this.isConnected = false;
 
     // Initialize LRU cache for each collection
     this.collectionCaches = new Map();
@@ -20,6 +21,13 @@ class MongoUtils {
 
     // Initialize cache containers without loading data
     this.initializeCacheContainers();
+  }
+
+  async ensureConnection() {
+    if (!this.isConnected) {
+      await this.client.connect();
+      this.isConnected = true;
+    }
   }
 
   async initializeCacheContainers() {
@@ -51,7 +59,7 @@ class MongoUtils {
 
   async insert(collectionName, data) {
     // Insert into DB first to get _id
-    await this.client.connect();
+    await this.ensureConnection();
     const collection = this.db.collection(collectionName);
     const result = await collection.insertOne(data);
 
@@ -68,53 +76,26 @@ class MongoUtils {
 
     if (!forceDb) {
       // Search cache for matching documents
-      const matches = [];
-      for (const [, doc] of cache.entries()) {
-        let isMatch = true;
-        for (const [key, value] of Object.entries(query)) {
-          if (doc[key] !== value) {
-            isMatch = false;
-            break;
-          }
-        }
-        if (isMatch) {
-          matches.push(doc);
-        }
-      }
+      const matches = this.searchCache(cache, query);
 
       if (matches.length > 0) {
-        // Manually track cache hit
         cache.hits++;
-        // console.log(
-        //   `[DB DEBUG] Cache HIT for collection "${collectionName}" with query:`,
-        //   query
-        // );
-        // Return single item directly if only one result, otherwise return array
         return matches.length === 1 ? matches[0] : matches;
       }
 
       // Manually track cache miss
       cache.misses++;
-      // console.log(
-      //   `[DB DEBUG] Cache MISS for collection "${collectionName}" with query:`,
-      //   query,
-      //   "- fetching from DB"
-      // );
       // If not in cache, fetch from DB and update cache (lazy loading)
       return await this.fetchFromDbAndCache(collectionName, query);
     }
 
-    // console.log(
-    //   `[DB DEBUG] Force DB call for collection "${collectionName}" with query:`,
-    //   query
-    // );
     // If forceDb=true, fetch from DB and update cache
     return await this.fetchFromDbAndCache(collectionName, query);
   }
 
   async fetchFromDbAndCache(collectionName, query) {
     try {
-      await this.client.connect();
+      await this.ensureConnection();
       const collection = this.db.collection(collectionName);
       const results = await collection.find(query).toArray();
 
@@ -144,13 +125,13 @@ class MongoUtils {
     let currentDoc = await this.get(collectionName, query);
     if (!currentDoc) {
       // if not in cache, fetch from DB
-      await this.client.connect();
+      await this.ensureConnection();
       const collection = this.db.collection(collectionName);
       currentDoc = await collection.findOne(query);
     }
 
     // Update DB first to get the actual updated document
-    await this.client.connect();
+    await this.ensureConnection();
     const collection = this.db.collection(collectionName);
 
     // Apply the update to DB
@@ -182,7 +163,7 @@ class MongoUtils {
     }
 
     // Update DB first to get the actual updated documents
-    await this.client.connect();
+    await this.ensureConnection();
     const collection = this.db.collection(collectionName);
 
     // Apply the update to DB
@@ -213,7 +194,7 @@ class MongoUtils {
     cache.delete(JSON.stringify(docToDelete._id));
 
     // Delete from DB asynchronously
-    this.client.connect().then(() => {
+    this.ensureConnection().then(() => {
       const collection = this.db.collection(collectionName);
       collection.deleteOne(query).catch((err) => {
         console.error("Failed to delete from DB:", err);
@@ -236,20 +217,9 @@ class MongoUtils {
       return cache.size;
     }
 
-    // Check cache first
-    let count = 0;
-    for (const [, doc] of cache.entries()) {
-      let isMatch = true;
-      for (const [key, value] of Object.entries(query)) {
-        if (doc[key] !== value) {
-          isMatch = false;
-          break;
-        }
-      }
-      if (isMatch) {
-        count++;
-      }
-    }
+    // Check cache first using the helper function
+    const matches = this.searchCache(cache, query);
+    const count = matches.length;
 
     // If we have cached results, return them
     if (count > 0 || cache.size > 0) {
@@ -259,7 +229,7 @@ class MongoUtils {
     // If cache is empty and we have a query, fetch from DB
     // This ensures we get accurate counts even when cache is empty
     try {
-      await this.client.connect();
+      await this.ensureConnection();
       const collection = this.db.collection(collectionName);
       return await collection.countDocuments(query);
     } catch (err) {
@@ -278,6 +248,50 @@ class MongoUtils {
       this.collectionCaches.set(collectionName, cache);
     }
     return cache;
+  }
+
+  searchCache(cache, query) {
+    const queryKeys = Object.keys(query);
+
+    // For single field queries, try direct cache lookup first
+    if (queryKeys.length === 1) {
+      const key = queryKeys[0];
+      const value = query[key];
+
+      // If querying by _id, use direct cache lookup
+      if (key === "_id") {
+        const cacheKey = JSON.stringify(value);
+        const doc = cache.get(cacheKey);
+        if (doc) {
+          return [doc];
+        }
+      }
+
+      // For other single field queries, search cache
+      const matches = [];
+      for (const [, doc] of cache.entries()) {
+        if (doc[key] === value) {
+          matches.push(doc);
+        }
+      }
+      return matches;
+    } else {
+      // For multi-field queries, search cache
+      const matches = [];
+      for (const [, doc] of cache.entries()) {
+        let isMatch = true;
+        for (const [key, value] of Object.entries(query)) {
+          if (doc[key] !== value) {
+            isMatch = false;
+            break;
+          }
+        }
+        if (isMatch) {
+          matches.push(doc);
+        }
+      }
+      return matches;
+    }
   }
 
   // Utility methods for cache management
@@ -308,7 +322,7 @@ class MongoUtils {
       }
 
       // Fetch specific document from DB
-      await this.client.connect();
+      await this.ensureConnection();
       const collection = this.db.collection(collectionName);
       const doc = await collection.findOne({ _id: documentId });
 
