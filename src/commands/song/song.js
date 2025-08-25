@@ -1,7 +1,7 @@
 async function getSongInfo(lastfmUser) {
   const api_url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${lastfmUser}&limit=1&api_key=${process.env.LASTFM_API_KEY}&format=json`;
 
-  const data = await fb.got(api_url);
+  const data = await fb.got(api_url, { retry: { limit: 3 } });
   if (!data) {
     return null;
   }
@@ -83,7 +83,7 @@ const songCommand = async (message) => {
 
   const songTargetId =
     songTarget.toLowerCase() != message.senderUsername
-      ? await fb.api.helix.getUserByUsername(songTarget)?.id
+      ? (await fb.api.helix.getUserByUsername(songTarget))?.id
       : message.senderUserID;
 
   let lastfmUser = songTarget;
