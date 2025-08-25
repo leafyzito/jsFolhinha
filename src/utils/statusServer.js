@@ -4,7 +4,7 @@ const { createRateLimiter } = require("./rateLimit");
 class StatusServer {
   constructor() {
     this.app = express();
-    this.port = process.env.STATUS_PORT || 3000;
+    this.port = process.env.STATUS_PORT || 3323;
 
     // Create rate limiter for status endpoint
     this.rateLimiter = createRateLimiter();
@@ -36,9 +36,9 @@ class StatusServer {
   }
 
   start() {
-    this.server = this.app.listen(this.port, () => {
+    this.server = this.app.listen(this.port, "0.0.0.0", () => {
       console.log(`* Status server running on port ${this.port}`);
-      console.log(`* Status endpoint: http://localhost:${this.port}/`);
+      console.log(`* Status endpoint: http://0.0.0.0:${this.port}/`);
     });
 
     // Graceful shutdown

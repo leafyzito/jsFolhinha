@@ -15,7 +15,7 @@ class TwitchClipperAPI {
         return null;
       }
 
-      const clipsFolder = path.join(process.cwd(), "twitchClipper/clips");
+      const clipsFolder = path.join(process.cwd(), "apps/twitchClipper/clips");
       const clipPath = path.join(clipsFolder, res.path.replace(/^\//, ""));
 
       // upload clip to feridinha
