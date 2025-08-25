@@ -32,6 +32,7 @@ fb.log = null;
 fb.api = {};
 fb.twitch = null;
 fb.discord = null;
+fb.notifiedUsers = new Set(); // Cache to track users who have been notified about reminders
 
 // FB UTILITY FUNCTIONS
 // Function to mark fb as ready

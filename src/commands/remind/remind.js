@@ -1,5 +1,8 @@
 // TODO: check and test
 const schedule = require("node-schedule");
+const {
+  clearNotifiedCacheForUser,
+} = require("../../handlers/listener/reminder");
 
 async function newRemind(message, targetId, remindMessage, remindAt) {
   const newRemindId = (await fb.db.count("remind", {}, true)) + 1;
@@ -111,6 +114,9 @@ const createScheduledReminderJob = (
       { _id: newRemindId },
       { $set: { beenRead: true } }
     );
+
+    // Clear the user from notified cache since scheduled reminder was delivered
+    clearNotifiedCacheForUser(targetUserId);
   });
 };
 
@@ -170,6 +176,9 @@ const remindCommand = async (message) => {
       fb.reminderJobs[reminderId].cancel();
       delete fb.reminderJobs[reminderId];
     }
+
+    // Clear the user from notified cache since reminder was deleted
+    clearNotifiedCacheForUser(message.senderUserID);
 
     return {
       reply: `Lembrete apagado ${emote}`,
@@ -235,7 +244,7 @@ const remindCommand = async (message) => {
         }\n\n`;
       }
 
-      const gistUrl = await fb.utils.createNewGist(pendingReminders);
+      const gistUrl = await fb.api.github.createGist(pendingReminders);
 
       // Mark all reminders as read
       await fb.db.updateMany(
@@ -243,6 +252,9 @@ const remindCommand = async (message) => {
         { receiverId: message.senderUserID },
         { $set: { beenRead: true } }
       );
+
+      // Clear the user from notified cache since all reminders were read
+      clearNotifiedCacheForUser(message.senderUserID);
 
       return {
         reply: `Para ver todos os seus lembretes, acesse: ${gistUrl}`,
@@ -289,6 +301,9 @@ const remindCommand = async (message) => {
       { _id: parseInt(reminderId) },
       { $set: { beenRead: true } }
     );
+
+    // Clear the user from notified cache since reminder was read
+    clearNotifiedCacheForUser(message.senderUserID);
 
     return {
       reply: finalRes,

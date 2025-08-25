@@ -17,6 +17,47 @@ const formatReminderMessage = (
     : `@${receiverName}, lembrete de @${reminderSender} há ${howLongAgo}: ${reminderMessage}`;
 };
 
+// Helper function to clear notifiedUsers cache for a specific user
+const clearNotifiedCacheForUser = (userId) => {
+  if (fb.notifiedUsers && fb.notifiedUsers.has(userId)) {
+    fb.notifiedUsers.delete(userId);
+    console.log(`* Cleared notifiedUsers cache for user ${userId}`);
+  }
+};
+
+// Helper function to clear all notifiedUsers cache
+const clearAllNotifiedCache = () => {
+  if (fb.notifiedUsers) {
+    const cacheSize = fb.notifiedUsers.size;
+    fb.notifiedUsers.clear();
+    console.log(`* Cleared all notifiedUsers cache (${cacheSize} users)`);
+  }
+};
+
+// Helper function to check if user has pending reminders and clear cache if not
+const checkAndClearCacheIfNoReminders = async (userId) => {
+  try {
+    const pendingReminders = await fb.db.get(
+      "remind",
+      { receiverId: userId, beenRead: false, remindAt: null },
+      true
+    );
+
+    // If no pending reminders, clear the user from cache
+    if (
+      !pendingReminders ||
+      (Array.isArray(pendingReminders) && pendingReminders.length === 0)
+    ) {
+      clearNotifiedCacheForUser(userId);
+    }
+  } catch (error) {
+    console.error(
+      "Error checking pending reminders for cache clearing:",
+      error
+    );
+  }
+};
+
 // Helper function to send reminder and update database
 const sendReminderAndUpdate = async (reminder, finalRes) => {
   // Get channel config from database
@@ -152,6 +193,9 @@ const scheduleFutureReminder = async (reminder) => {
 // MARKER: load reminders
 // Main function to load and process reminders
 const loadReminders = async () => {
+  // Clear the notifiedUsers cache on startup to ensure a fresh state
+  clearAllNotifiedCache();
+
   const currentTime = Math.floor(Date.now() / 1000);
 
   try {
@@ -226,6 +270,9 @@ const handleReminderResponse = async (message, reminders) => {
       );
     }
 
+    // Clear the user from notified cache since reminders were actually read
+    clearNotifiedCacheForUser(message.senderUserID);
+
     return;
   }
 
@@ -246,6 +293,11 @@ const reminderListener = async (message) => {
 
   // Check if reminder is already being processed
   if (processingReminder.includes(message.senderUsername)) {
+    return;
+  }
+
+  // Check if user has already been notified about their reminders in this session
+  if (fb.notifiedUsers.has(message.senderUserID)) {
     return;
   }
 
@@ -285,6 +337,15 @@ const reminderListener = async (message) => {
       return;
     }
 
+    // Add user to notified cache to prevent duplicate notifications
+    // Add a small delay to allow users to see their reminders before being blocked
+    setTimeout(() => {
+      fb.notifiedUsers.add(message.senderUserID);
+      console.log(
+        `* Added user ${message.senderUserID} to notifiedUsers cache`
+      );
+    }, 5000); // 5 second delay
+
     // Handle the reminder response
     await handleReminderResponse(message, filteredReminders);
   } catch (error) {
@@ -300,4 +361,7 @@ const reminderListener = async (message) => {
 module.exports = {
   reminderListener,
   loadReminders,
+  clearNotifiedCacheForUser,
+  clearAllNotifiedCache,
+  checkAndClearCacheIfNoReminders,
 };
