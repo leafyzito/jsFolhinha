@@ -266,7 +266,7 @@ class DiscordClient {
 
     embed.addFields({
       name: "Mensagem:",
-      value: message.originalMessageText,
+      value: message.originalMessageText || message.messageText,
       inline: false,
     });
 
