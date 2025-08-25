@@ -96,7 +96,7 @@ class Logger {
     response = fb.utils.checkRegex(response, message.channelName, message);
 
     if (message.isWhisper || message.channelName == "whisper") {
-      fb.api.helix.whisper(message.senderUsername, response);
+      fb.api.helix.whisper(message.senderUserID, response);
     } else {
       await this.manageChannelMsgCooldown(message.channelName);
       fb.twitch.client
