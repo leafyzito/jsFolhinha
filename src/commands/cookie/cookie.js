@@ -46,7 +46,7 @@ async function createUserCookieBase(message) {
 async function loadUserCookieStats(targetId) {
   const findFilter = { userId: targetId };
   const userCookieStats = await fb.db.get("cookie", findFilter);
-  if (userCookieStats.length === 0) {
+  if (!userCookieStats) {
     return null;
   }
   return userCookieStats;
