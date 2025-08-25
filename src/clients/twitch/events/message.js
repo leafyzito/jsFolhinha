@@ -55,6 +55,6 @@ module.exports = async function onMessage(message) {
   message.args = message.messageText.split(" ");
 
   // handle listeners and commands
-  listenerHandler(message);
   commandHandler(message);
+  listenerHandler(message);
 };
