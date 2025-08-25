@@ -1,11 +1,6 @@
 const got = require("got");
 
 async function fetchData(url, options = {}) {
-  // Check if the URL is localhost and force IPv4
-  if (url.includes("localhost") || url.includes("127.0.0.1")) {
-    options.dnsLookupIpVersion = 4; // Force IPv4 for localhost calls
-  }
-
   try {
     // Always request as buffer first so we can decide ourselves
     const { rawBody, headers, statusCode } = await got(url, {
