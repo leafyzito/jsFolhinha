@@ -19,6 +19,7 @@ const shouldSkipMessage = async (channelID, commandName = null) => {
 
   if (
     channelData.offlineOnly &&
+    channelName &&
     (await fb.api.helix.isStreamOnline(channelName))
   ) {
     return true;
