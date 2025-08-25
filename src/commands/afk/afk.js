@@ -22,7 +22,11 @@ async function createAfkBase(message) {
 }
 
 const afkCommand = async (message) => {
-  const commandInvoker = message.args[0].trim().toLowerCase();
+  const commandInvoker = message.messageText
+    .split(" ")[0]
+    .split(`${message.prefix}`)[1]
+    .trim()
+    .toLowerCase();
   const afkInfoObject = afkInfoObjects.find((afk) =>
     afk.alias.includes(commandInvoker)
   );

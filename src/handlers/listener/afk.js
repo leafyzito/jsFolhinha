@@ -4,6 +4,10 @@ const { shouldSkipMessage } = require("./middleware");
 let processingAfk = [];
 
 const afkUserListener = async (message) => {
+  if (message.command === "afk" || message.command === "resumeafk") {
+    return;
+  }
+
   // check if channel is paused or has reminders banned
   if (await shouldSkipMessage(message.channelID, "afk")) {
     return;
