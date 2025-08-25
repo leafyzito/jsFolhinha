@@ -43,7 +43,7 @@ module.exports = async function onMessage(message) {
 
   // set custom properties
   message.prefix =
-    process.env.ENV === "prod" ? channelData[0].prefix || "!" : "!!";
+    process.env.ENV === "prod" ? channelData?.prefix || "!" : "!!";
 
   message.internalTimestamp = new Date().getTime();
   message.isStreamer = message.badges.hasBroadcaster;
