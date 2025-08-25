@@ -116,12 +116,16 @@ async function validateCommandExecution(cooldownDuration, type, message) {
   const currChannelConfigs = await fb.db.get("config", {
     channelId: message.channelID,
   });
-  const currUserBans = await fb.db.get("bans", {
+  let currUserBans = await fb.db.get("bans", {
     userId: message.senderUserID,
   });
 
+  if (currUserBans && !Array.isArray(currUserBans)) {
+    currUserBans = [currUserBans];
+  }
+
   // Check if user has any bans - iterate through all ban records
-  if (currUserBans && currUserBans.length > 0) {
+  if (currUserBans) {
     for (const banRecord of currUserBans) {
       if (
         banRecord.bannedCommands &&
