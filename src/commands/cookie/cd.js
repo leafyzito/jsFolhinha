@@ -36,7 +36,7 @@ const cookieDiarioCommand = async (message) => {
   };
 };
 
-cookieDiarioCommand.commandName = "cookie diário (cd)";
+cookieDiarioCommand.commandName = "cd";
 cookieDiarioCommand.aliases = ["cd"];
 cookieDiarioCommand.shortDescription = "Resgate o seu cookie diário";
 cookieDiarioCommand.cooldown = 5000;
