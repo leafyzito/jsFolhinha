@@ -1,4 +1,9 @@
-// TODO: fix and check
+// Shazam music recognition command
+const { Shazam } = require("node-shazam");
+const shazam = new Shazam();
+const fs = require("fs");
+const path = require("path");
+
 const isDirectFileUrl = (url) => {
   const directFileExtensions = [
     ".mp4",
@@ -45,12 +50,20 @@ async function shazamIt(url) {
       throw new Error("Failed to download audio content");
     }
 
-    // Note: This would need the Shazam library
-    // For now, we'll return a placeholder
-    console.log("Shazam recognition would happen here");
-    return {
-      track: { title: "Placeholder", subtitle: "Placeholder", url: "#" },
-    };
+    console.log("Audio content downloaded, saving to buffer...");
+    // Save the buffer to a temporary file
+    const tempFile = path.join(__dirname, `temp_audio_${Date.now()}.mp3`);
+    fs.writeFileSync(tempFile, response);
+
+    console.log(tempFile);
+    console.log("Using Shazam to recognize audio...");
+    // Use the file path with Shazam
+    const recognition = await shazam.recognise(tempFile, "en-US");
+
+    // Clean up the temporary file
+    fs.unlinkSync(tempFile);
+
+    return recognition;
   } catch (error) {
     console.error("Error in shazamIt:", error);
     return null;
@@ -91,7 +104,7 @@ const shazamCommand = async (message) => {
         reply: `Não consegui criar um clip para identificar a música, tente novamente. Se o problema persistir, avise o dev`,
       };
     }
-    urlToShazam = clip;
+    urlToShazam = clip.makeClipUrl;
   }
 
   const result = await shazamIt(urlToShazam);
