@@ -38,7 +38,7 @@ module.exports = async function onMessage(message) {
   message.messageText = message.messageText.trim();
 
   const channelData = await fb.db.get("config", {
-    channel: message.channelName,
+    channelId: message.channelID,
   });
 
   // set custom properties

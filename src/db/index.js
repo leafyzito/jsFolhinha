@@ -80,14 +80,27 @@ class MongoUtils {
       }
 
       if (matches.length > 0) {
+        // console.log(
+        //   `[DB DEBUG] Cache HIT for collection "${collectionName}" with query:`,
+        //   query
+        // );
         // Return single item directly if only one result, otherwise return array
         return matches.length === 1 ? matches[0] : matches;
       }
 
+      // console.log(
+      //   `[DB DEBUG] Cache MISS for collection "${collectionName}" with query:`,
+      //   query,
+      //   "- fetching from DB"
+      // );
       // If not in cache, fetch from DB and update cache (lazy loading)
       return await this.fetchFromDbAndCache(collectionName, query);
     }
 
+    // console.log(
+    //   `[DB DEBUG] Force DB call for collection "${collectionName}" with query:`,
+    //   query
+    // );
     // If forceDb=true, fetch from DB and update cache
     return await this.fetchFromDbAndCache(collectionName, query);
   }
