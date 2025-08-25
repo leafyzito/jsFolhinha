@@ -1,6 +1,6 @@
 class CobaltApi {
   constructor() {
-    this.baseUrl = "http://127.0.0.1:9000/";
+    this.baseUrl = "http://cobalt:9000/";
     this.headers = {
       Accept: "application/json",
       "Content-Type": "application/json",

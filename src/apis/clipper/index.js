@@ -3,7 +3,7 @@ const fs = require("fs");
 
 class TwitchClipperAPI {
   constructor() {
-    this.baseUrl = "http://127.0.0.1:8989";
+    this.baseUrl = "http://twitchclipper:8989";
   }
 
   async makeClip(channelName) {
