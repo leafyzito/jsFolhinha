@@ -1,12 +1,11 @@
 const got = require("got");
 
-/**
- * Smart fetch function with auto response-type detection
- * @param {string} url - API URL
- * @param {object} options - Extra got options
- * @returns {any|null} - Parsed JSON, string, Buffer, or null on failure
- */
 async function fetchData(url, options = {}) {
+  // Check if the URL is localhost and force IPv4
+  if (url.includes("localhost") || url.includes("127.0.0.1")) {
+    options.family = 4; // Force IPv4 for localhost calls
+  }
+
   try {
     // Always request as buffer first so we can decide ourselves
     const { rawBody, headers, statusCode } = await got(url, {
