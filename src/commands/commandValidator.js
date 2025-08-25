@@ -120,11 +120,17 @@ async function validateCommandExecution(cooldownDuration, type, message) {
     userId: message.senderUserID,
   });
 
-  if (
-    currUserBans &&
-    (currUserBans.includes("all") || currUserBans.includes(message.command))
-  ) {
-    return false;
+  // Check if user has any bans - iterate through all ban records
+  if (currUserBans && currUserBans.length > 0) {
+    for (const banRecord of currUserBans) {
+      if (
+        banRecord.bannedCommands &&
+        (banRecord.bannedCommands.includes("all") ||
+          banRecord.bannedCommands.includes(message.command))
+      ) {
+        return false;
+      }
+    }
   }
   if (currChannelConfigs && currChannelConfigs.isPaused) {
     return false;
