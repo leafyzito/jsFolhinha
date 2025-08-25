@@ -95,7 +95,7 @@ class Logger {
   async logAndReply(message, response, retryCount = 0) {
     response = fb.utils.checkRegex(response, message.channelName, message);
 
-    if (message.channelName == "whisper") {
+    if (message.isWhisper || message.channelName == "whisper") {
       fb.api.helix.whisper(message.senderUsername, response);
     } else {
       await this.manageChannelMsgCooldown(message.channelName);
