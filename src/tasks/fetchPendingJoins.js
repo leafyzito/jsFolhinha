@@ -4,7 +4,19 @@ async function fetchPendingJoins() {
     { status: "pending" },
     true
   );
-  for (const channelToJoin of pendingJoins) {
+
+  // Check if pendingJoins exists and handle both single document and array cases
+  if (!pendingJoins) {
+    //    console.log("* No pending joins to process");
+    return;
+  }
+
+  // Ensure we always work with an array
+  const joinsArray = Array.isArray(pendingJoins)
+    ? pendingJoins
+    : [pendingJoins];
+
+  for (const channelToJoin of joinsArray) {
     const channelId = channelToJoin.channelid;
     const channelName = (await fb.api.helix.getUserByID(channelId))?.login;
     const inviterId = channelToJoin.inviterid;
