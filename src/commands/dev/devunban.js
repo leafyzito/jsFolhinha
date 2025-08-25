@@ -51,7 +51,7 @@ const unbanDevCommand = async (message) => {
 
   // Check if user has ban record
   const banRecord = await fb.db.get("bans", { userId: targetUserId });
-  if (banRecord.length === 0) {
+  if (!banRecord) {
     return {
       reply: `Usuário não está banido de nenhum comando`,
     };

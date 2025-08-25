@@ -30,19 +30,13 @@ async function getPreview(previewTarget) {
   }
 
   // If clipper API fails, fall back to Helix API
-  const api_url = `https://api.twitch.tv/helix/streams?user_login=${previewTarget}`;
-  const headers = {
-    "Client-ID": process.env.BOT_CLIENT_ID,
-    Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
-  };
+  const data = await fb.api.helix.getStream(previewTarget);
 
-  const data = await fb.got(api_url, { headers });
-
-  if (!data || "error" in data) {
+  if (!data) {
     return "não existe";
   }
 
-  if (data.data.length === 0) {
+  if (!data.id) {
     // if offline, return the offline image
     const offlineImage = await getOfflineImage(previewTarget);
     return { isLive: false, image: offlineImage };
@@ -50,7 +44,7 @@ async function getPreview(previewTarget) {
 
   // Use Helix API thumbnail as fallback
   try {
-    const thumbPreviewRaw = data.data[0].thumbnail_url;
+    const thumbPreviewRaw = data.thumbnail_url;
     const thumbPreview = thumbPreviewRaw.replace(
       "{width}x{height}",
       "1280x720"
