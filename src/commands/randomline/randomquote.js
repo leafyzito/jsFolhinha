@@ -1,5 +1,5 @@
 // TODO: OK - test
-async function getRandomLine(userid, channelid) {
+async function getRandomQuote(userid, channelid) {
   const response = await fb.api.rustlog.getRandomLine(channelid, userid);
 
   if (!response) {
@@ -27,22 +27,22 @@ async function getRandomLine(userid, channelid) {
   };
 }
 
-const randomLineCommand = async (message) => {
+const randomQuoteCommand = async (message) => {
   const targetUser =
     message.args[1]?.replace(/^@/, "") || message.senderUsername;
   const targetId =
     targetUser !== message.senderUsername
-      ? await fb.api.helix.getUserByUsername(targetUser)?.id
+      ? (await fb.api.helix.getUserByUsername(targetUser))?.id
       : message.senderUserID;
 
-  const randomLine = await getRandomLine(targetId, message.channelID);
-  if (!targetId && !randomLine) {
+  const randomQuote = await getRandomQuote(targetId, message.channelID);
+  if (!targetId && !randomQuote) {
     return {
       reply: `Nunca loguei uma mensagem desse usuário neste chat (contando desde 06/03/2025)`,
     };
   }
 
-  if (!randomLine) {
+  if (!randomQuote) {
     // this should never happen
     return {
       reply: `Nunca loguei uma mensagem desse usuário neste chat (contando desde 06/03/2025). Se não for o caso, por favor contacte o @${process.env.DEV_NICK}`,
@@ -50,27 +50,27 @@ const randomLineCommand = async (message) => {
   }
 
   return {
-    reply: `(há ${randomLine.timeSince}) ${randomLine.user}: ${randomLine.message}`,
+    reply: `(há ${randomQuote.timeSince}) ${randomQuote.user}: ${randomQuote.message}`,
   };
 };
 
-randomLineCommand.commandName = "randomquote";
-randomLineCommand.aliases = ["randomquote", "rq"];
-randomLineCommand.shortDescription = "Veja uma mensagem aleatória sua";
-randomLineCommand.cooldown = 5000;
-randomLineCommand.cooldownType = "channel";
-randomLineCommand.whisperable = false;
-randomLineCommand.description = `Receba uma mensagem aleatória de um usuário fornecido ou, caso nenhum seja fornecido, da pessoa que executou o comando
+randomQuoteCommand.commandName = "randomquote";
+randomQuoteCommand.aliases = ["randomquote", "rq"];
+randomQuoteCommand.shortDescription = "Veja uma mensagem aleatória sua";
+randomQuoteCommand.cooldown = 5000;
+randomQuoteCommand.cooldownType = "channel";
+randomQuoteCommand.whisperable = false;
+randomQuoteCommand.description = `Receba uma mensagem aleatória de um usuário fornecido ou, caso nenhum seja fornecido, da pessoa que executou o comando
   
   • Exemplo: !randomquote - O bot vai mostrar uma mensagem aleatória de quem executou o comando no chat onde o comando foi executado
   
   • Exemplo: !randomquote @leafyzito - O bot vai mostrar uma mensagem aleatória de @leafyzito no chat onde o comando foi executado
   
   Começou a contar desde 06/03/2025`;
-randomLineCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
+randomQuoteCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
   .split("/")
   .pop()}/${__filename.split("/").pop()}`;
 
 module.exports = {
-  randomLineCommand,
+  randomQuoteCommand,
 };
