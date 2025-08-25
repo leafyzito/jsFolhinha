@@ -394,6 +394,7 @@ const cookieCommand = async (message) => {
     const slotResults = [
       fb.utils.randomChoice(["🍒", "🍊", "🍋", "🍇", "🍉", "🍓"]),
       fb.utils.randomChoice(["🍒", "🍊", "🍋", "🍇", "🍉", "🍓"]),
+      fb.utils.randomChoice(["🍒", "🍊", "🍋", "🍇", "🍉", "🍓"]),
     ];
     let reply = `[${slotResults[0]}${slotResults[1]}${slotResults[2]}] `;
 
