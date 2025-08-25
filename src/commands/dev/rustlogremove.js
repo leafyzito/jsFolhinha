@@ -16,7 +16,7 @@ const rustlogRemoveCommand = async (message) => {
       };
     }
     const userId = userData.id;
-    await fb.rustlog.removeChannel(userId);
+    await fb.api.rustlog.removeChannel(userId);
     return {
       reply: `🤖 Canal removido do rustlog: ${targetUser}`,
     };

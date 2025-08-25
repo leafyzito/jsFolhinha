@@ -16,7 +16,7 @@ const rustlogAddCommand = async (message) => {
       };
     }
     const userId = userData.id;
-    await fb.rustlog.addChannel(userId);
+    await fb.api.rustlog.addChannel(userId);
     return {
       reply: `🤖 Canal adicionado ao rustlog: ${targetUser}`,
     };
