@@ -29,7 +29,7 @@ async function getRandomLine(userid, channelid) {
 const randomLineCommand = async (message) => {
   const targetUser = message.args[1]?.replace(/^@/, "") || null;
   const targetId = targetUser
-    ? await fb.api.helix.getUserByUsername(targetUser)?.id
+    ? (await fb.api.helix.getUserByUsername(targetUser))?.id
     : null;
 
   const randomLine = await getRandomLine(targetId, message.channelID);
