@@ -1,59 +1,54 @@
-// TODO: OK - test
-// async function getRandomLine(userid, channelid) {
-//   const response = await fb.api.rustlog.getRandomLine(channelid, userid);
+async function getRandomLine(userid, channelid) {
+  const response = await fb.api.rustlog.getRandomLine(channelid, userid);
 
-//   if (!response) {
-//     return null;
-//   }
+  if (!response) {
+    return null;
+  }
 
-//   // Parse the log line into components
-//   const regex = /\[(.*?)\] #(.*?) (.*?): (.*)/;
-//   const match = response.match(regex);
+  // Parse the log line into components
+  const regex = /\[(.*?)\] #(.*?) (.*?): (.*)/;
+  const match = response.match(regex);
 
-//   if (!match) {
-//     return null;
-//   }
+  if (!match) {
+    return null;
+  }
 
-//   const [, timestamp, channelName, user, message] = match;
+  const [, timestamp, channelName, user, message] = match;
 
-//   // Convert timestamp to Unix time (assuming timestamp is in format "YYYY-MM-DD HH:mm:ss")
-//   const unixTimestamp = Math.floor(new Date(timestamp).getTime() / 1000);
+  // Convert timestamp to Unix time (assuming timestamp is in format "YYYY-MM-DD HH:mm:ss")
+  const unixTimestamp = Math.floor(new Date(timestamp).getTime() / 1000);
 
-//   return {
-//     channel: channelName,
-//     user: user,
-//     message: message,
-//     timeSince: fb.utils.relativeTime(unixTimestamp, true, true),
-//   };
-// }
-
-const randomLineCommand = async () => {
   return {
-    reply: `⚠️ Comando temporariamente desabilitado`,
+    channel: channelName,
+    user: user,
+    message: message,
+    timeSince: fb.utils.relativeTime(unixTimestamp, true, true),
   };
+}
 
-  // const targetUser = message.args[1]?.replace(/^@/, "") || null;
-  // const targetId = targetUser
-  //   ? await fb.api.helix.getUserByUsername(targetUser)?.id
-  //   : null;
+const randomLineCommand = async (message) => {
+  const targetUser = message.args[1]?.replace(/^@/, "") || null;
+  const targetId = targetUser
+    ? await fb.api.helix.getUserByUsername(targetUser)?.id
+    : null;
 
-  // const randomLine = await getRandomLine(targetId, message.channelID);
-  // if (!targetId && !randomLine) {
-  //   return {
-  //     reply: `Nunca loguei uma mensagem desse usuário neste chat (contando desde 06/03/2025)`,
-  //   };
-  // }
+  const randomLine = await getRandomLine(targetId, message.channelID);
+  if (!targetId && !randomLine) {
+    return {
+      reply: `Nunca loguei uma mensagem desse usuário neste chat (contando desde 06/03/2025)`,
+    };
+  }
 
-  // if (!randomLine) {
-  //   // this should never happen
-  //   return {
-  //     reply: `Nunca loguei uma mensagem desse usuário neste chat (contando desde 06/03/2025). Se não for o caso, por favor contacte o @${process.env.DEV_NICK}`,
-  //   };
-  // }
+  if (!randomLine) {
+    // this should never happen
+    return {
+      reply: `Nunca loguei uma mensagem desse usuário neste chat (contando desde 06/03/2025). Se não for o caso, por favor contacte o @${process.env.DEV_NICK}`,
+    };
+  }
 
-  // return {
-  //   reply: `(há ${randomLine.timeSince}) ${randomLine.user}: ${randomLine.message}`,
-  // };
+  return {
+    reply: `(há ${randomLine.timeSince}) ${randomLine.user}: ${randomLine.message}`,
+  };
 };
 
 randomLineCommand.commandName = "randomline";
