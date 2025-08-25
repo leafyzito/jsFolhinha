@@ -56,7 +56,7 @@ const reloadCommand = async (message) => {
     // Prepare response based on git result
     if (gitResult.warning) {
       return {
-        reply: `Comandos recarregados 👍 (Aviso: ${gitResult.stderr})`,
+        reply: `Comandos recarregados 👍`,
         notes: `Git pull success with warning: ${gitResult.stderr}`,
       };
     }
