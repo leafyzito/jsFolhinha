@@ -1,6 +1,6 @@
 class RustlogApi {
   constructor() {
-    this.baseUrl = "http://localhost:8025";
+    this.baseUrl = "http://127.0.0.1:8025";
   }
 
   async addChannel(channelId) {
