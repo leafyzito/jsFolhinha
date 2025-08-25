@@ -69,7 +69,12 @@ const updateUserListener = async (message) => {
 
       // Handle Twitch client operations for channel changes
       fb.twitch.part(knownUser.currAlias);
-      fb.twitch.join([message.senderUsername]);
+      const joinResult = fb.twitch.join([message.senderUsername]);
+      if (!joinResult) {
+        fb.discord.importantLog(
+          `Error joining ${message.senderUsername} after username change`
+        );
+      }
 
       fb.log.send(
         message.senderUsername,

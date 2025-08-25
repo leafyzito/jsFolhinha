@@ -40,7 +40,7 @@ async function fetchPendingJoins() {
 
       if (userInfo) {
         fb.discord.importantLog(
-          `* Joining to ${channelName} from website (inviter: ${inviterName})\n${
+          `* Joining to ${channelName} from website (inviter: ${inviterName}) \n${
             userInfo.isBanned ? `🚫 Banido: ${userInfo.banReason} • ` : ""
           }  @${userInfo.displayName} • ID: ${userInfo.userId} • Badge: ${
             userInfo.badge
@@ -62,11 +62,10 @@ async function fetchPendingJoins() {
 
       fb.utils.createNewChannelConfig(channelId);
 
-      fb.twitch.join([channelName]).catch((err) => {
-        console.error(`Erro ao entrar no chat ${channelName}: ${err}`);
-        fb.discord.importantLog(
-          `* Error joining ${channelName} from website: ${err}`
-        );
+      const joinResult = fb.twitch.join([channelName]);
+      if (!joinResult) {
+        console.error(`Erro ao entrar no chat ${channelName}`);
+        fb.discord.importantLog(`* Error joining ${channelName} from website`);
         fb.log.send(
           channelName,
           `Erro ao entrar no chat ${channelName}. Por favor contacte o @${process.env.DEV_NICK}`
@@ -75,8 +74,8 @@ async function fetchPendingJoins() {
           inviterId,
           `Erro ao entrar no chat ${channelName}. Por favor contacte o @${process.env.DEV_NICK}`
         );
-        return;
-      });
+        continue;
+      }
 
       const emote = await fb.emotes.getEmoteFromList(
         channelName,
