@@ -94,7 +94,7 @@ const replyMentionListener = async (message) => {
 const notifyDevMentionListener = async (message) => {
   const possibleDevMentions = process.env.DEV_POSSIBLE_MENTIONS.split(",");
   if (
-    message.messageText
+    message.originalMessageText
       .toLowerCase()
       .split(" ")
       .some((word) =>
