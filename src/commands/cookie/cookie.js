@@ -493,4 +493,7 @@ cookieCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/comm
 
 module.exports = {
   cookieCommand,
+  loadUserCookieStats,
+  createUserCookieBase,
+  getTimeUntilNext9AM,
 };

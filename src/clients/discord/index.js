@@ -29,6 +29,21 @@ class DiscordClient {
     this.notifyDevMention = this.notifyDevMention.bind(this);
   }
 
+  sanitizeEmbedValue(value, fallback = "No value") {
+    if (typeof value === "string") {
+      // Truncate if too long (Discord limit is 1024 characters)
+      if (value.length > 1024) {
+        return value.substring(0, 1000) + "...";
+      }
+      // Remove any null characters or other invalid characters
+      return value.replace(/\0/g, "").trim();
+    } else if (value === null || value === undefined) {
+      return fallback;
+    } else {
+      return String(value);
+    }
+  }
+
   async init() {
     // connect
     await this.client.login(process.env.DISCORD_TOKEN);
@@ -51,18 +66,22 @@ class DiscordClient {
       message.channelName == "whisper"
         ? "📨 Whisper"
         : `#${message.channelName}`;
+
     const embed = new this.client.EmbedBuilder()
       .setTitle(`${channelName}/${message.displayName} - ${message.command}`)
       .setURL(`${this.getLogsUrl(message.channelName, message.messageID)}`)
       .addFields(
         {
           name: "Comando:",
-          value: message.messageText,
+          value: this.sanitizeEmbedValue(
+            message.messageText,
+            "No command text"
+          ),
           inline: false,
         },
         {
           name: "Resposta:",
-          value: response,
+          value: this.sanitizeEmbedValue(response, "No response"),
           inline: false,
         }
       )
@@ -76,7 +95,7 @@ class DiscordClient {
     if (message.notes != null) {
       embed.addFields({
         name: "Notas:",
-        value: message.notes,
+        value: this.sanitizeEmbedValue(message.notes, "No notes"),
         inline: false,
       });
     }
@@ -95,7 +114,7 @@ class DiscordClient {
       .setURL(`${this.getLogsUrl(channel)}`)
       .addFields({
         name: "Conteúdo:",
-        value: content,
+        value: this.sanitizeEmbedValue(content, "No content"),
         inline: false,
       })
       .setColor("#008000")
