@@ -71,22 +71,18 @@ async function commandHandler(message) {
   message.internalResponseTime =
     new Date().getTime() - message.internalTimestamp;
 
-  if (message.isWhisper) {
-    fb.log.logAndWhisper(message, commandResult.reply);
-  } else {
-    switch (commandResult.replyType) {
-      case "reply":
-        fb.log.logAndReply(message, commandResult.reply);
-        break;
-      case "say":
-        fb.log.logAndSay(message, commandResult.reply);
-        break;
-      case "me":
-        fb.log.logAndMeAction(message, commandResult.reply);
-        break;
-      default:
-        break;
-    }
+  switch (commandResult.replyType) {
+    case "reply":
+      fb.log.logAndReply(message, commandResult.reply);
+      break;
+    case "say":
+      fb.log.logAndSay(message, commandResult.reply);
+      break;
+    case "me":
+      fb.log.logAndMeAction(message, commandResult.reply);
+      break;
+    default:
+      break;
   }
 
   // update 7tv presence
