@@ -16,6 +16,8 @@ const fillCommand = async (message) => {
     finalText += textToRepeat + " ";
   }
 
+  finalText = finalText.slice(0, maxLength);
+
   return {
     reply: finalText,
   };
