@@ -255,7 +255,6 @@ class Utils {
             .slice(1)
             .join(" ")
             .trim();
-          console.log(msg.messageText);
         }
 
         // Check if all specified conditions are met
