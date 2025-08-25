@@ -337,14 +337,7 @@ const reminderListener = async (message) => {
       return;
     }
 
-    // Add user to notified cache to prevent duplicate notifications
-    // Add a small delay to allow users to see their reminders before being blocked
-    setTimeout(() => {
-      fb.notifiedUsers.add(message.senderUserID);
-      console.log(
-        `* Added user ${message.senderUserID} to notifiedUsers cache`
-      );
-    }, 5000); // 5 second delay
+    fb.notifiedUsers.add(message.senderUserID);
 
     // Handle the reminder response
     await handleReminderResponse(message, filteredReminders);

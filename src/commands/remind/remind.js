@@ -560,6 +560,8 @@ const remindCommand = async (message) => {
     fb.reminderJobs[newRemindId] = job;
   }
 
+  clearNotifiedCacheForUser(targetUserId);
+
   return {
     reply: replyMessage,
   };
