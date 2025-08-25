@@ -205,10 +205,10 @@ const dungeonCommand = async (message) => {
 
   const dungeon = dungeonData[Math.floor(Math.random() * dungeonData.length)];
   fb.log.reply(
-    (message,
+    message,
     `${fb.utils.capitalize(dungeon.quote)} você quer ${
       dungeon["1"].option
-    } ou ${dungeon["2"].option}? Tem 10 segundos para responder (1 ou 2)`)
+    } ou ${dungeon["2"].option}? Tem 10 segundos para responder (1 ou 2)`
   );
 
   const userResponse = await fb.utils.waitForMessage(check, 10_000);
