@@ -38,6 +38,9 @@ class MongoUtils {
 
         // Create empty cache container for each collection
         const cache = new LRUCache(this.cacheOptions);
+        // Add manual hit/miss tracking
+        cache.hits = 0;
+        cache.misses = 0;
         this.collectionCaches.set(collectionName, cache);
       }
       console.log("* Cache containers initialized");
@@ -80,6 +83,8 @@ class MongoUtils {
       }
 
       if (matches.length > 0) {
+        // Manually track cache hit
+        cache.hits++;
         // console.log(
         //   `[DB DEBUG] Cache HIT for collection "${collectionName}" with query:`,
         //   query
@@ -88,6 +93,8 @@ class MongoUtils {
         return matches.length === 1 ? matches[0] : matches;
       }
 
+      // Manually track cache miss
+      cache.misses++;
       // console.log(
       //   `[DB DEBUG] Cache MISS for collection "${collectionName}" with query:`,
       //   query,
@@ -265,6 +272,9 @@ class MongoUtils {
     let cache = this.collectionCaches.get(collectionName);
     if (!cache) {
       cache = new LRUCache(this.cacheOptions);
+      // Add manual hit/miss tracking
+      cache.hits = 0;
+      cache.misses = 0;
       this.collectionCaches.set(collectionName, cache);
     }
     return cache;
