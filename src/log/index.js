@@ -26,7 +26,7 @@ class Logger {
     content,
     retryMethod,
     retryCount = 0,
-    lastResortWhisperTarger = null
+    lastResortWhisperTarget = null
   ) {
     // console.log('handleSendError: ', err);
 
@@ -39,12 +39,12 @@ class Logger {
     // Check if we've hit max retries
     if (retryCount >= 3) {
       // send whisper to user as last resort
-      if (lastResortWhisperTarger) {
+      if (lastResortWhisperTarget) {
         console.log("Max retries reached, whispering response to user");
         fb.discord.log(
-          `* Dropped message in #${channel}, whispering response to ${lastResortWhisperTarger}: ${content}`
+          `* Dropped message in #${channel}, whispering response to ${lastResortWhisperTarget}: ${content}`
         );
-        fb.api.helix.whisper(lastResortWhisperTarger, content);
+        fb.api.helix.whisper(lastResortWhisperTarget, content);
         return;
       }
       console.log("Max retries reached, dropping message");
@@ -63,7 +63,7 @@ class Logger {
     if (isRetryableError) {
       console.log(`${errorType} error, retrying (${retryCount + 1}/3)`);
       setTimeout(() => {
-        retryMethod(channel, content, retryCount + 1, lastResortWhisperTarger);
+        retryMethod(channel, content, retryCount + 1, lastResortWhisperTarget);
       }, 1500);
       return;
     }
@@ -109,7 +109,7 @@ class Logger {
             (channel, content, retryCount, senderUsername) =>
               this.send(channel, content, retryCount, senderUsername),
             retryCount,
-            message.senderUsername
+            message.senderUserID
           )
         );
     }
@@ -135,7 +135,7 @@ class Logger {
           (channel, content, retryCount, senderUsername) =>
             this.send(channel, content, retryCount, senderUsername),
           retryCount,
-          message.senderUsername
+          message.senderUserID
         )
       );
 
@@ -159,7 +159,7 @@ class Logger {
           (channel, content, retryCount, senderUsername) =>
             this.send(channel, content, retryCount, senderUsername),
           retryCount,
-          message.senderUsername
+          message.senderUserID
         )
       );
 
@@ -212,22 +212,22 @@ class Logger {
           (channel, content, retryCount, senderUsername) =>
             this.send(channel, content, retryCount, senderUsername),
           retryCount,
-          message.senderUsername
+          message.senderUserID
         )
       );
 
     fb.discord.logSend(message.channelName, response);
   }
 
-  async whisper(targetUser, content, retryCount = 0) {
-    content = fb.utils.checkRegex(content, targetUser);
+  async whisper(targetUserId, content, retryCount = 0) {
+    content = fb.utils.checkRegex(content, targetUserId);
 
     fb.api.helix
-      .whisper(targetUser, content)
+      .whisper(targetUserId, content)
       .catch((err) =>
         this.handleSendError(
           err,
-          targetUser,
+          targetUserId,
           content,
           this.whisper.bind(this),
           retryCount,
@@ -235,7 +235,7 @@ class Logger {
         )
       );
 
-    fb.discord.logWhisper(targetUser, content);
+    fb.discord.logWhisper(targetUserId, content);
   }
 }
 
