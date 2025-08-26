@@ -39,7 +39,10 @@ class TwitchClipperAPI {
         return null;
       }
 
-      const previewsFolder = path.join(process.cwd(), "twitchClipper/previews");
+      const previewsFolder = path.join(
+        process.cwd(),
+        "apps/twitchClipper/previews"
+      );
       const previewPath = path.join(
         previewsFolder,
         res.path.replace(/^\//, "")
