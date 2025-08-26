@@ -160,7 +160,7 @@ const dungeonCommand = async (message) => {
       let reply = `Top 5 ${rankOption}: `;
       for (let i = 0; i < top5.length; i++) {
         const username =
-          (await fb.api.helix.getUserByUserID(top5[i].userId)?.displayName) ||
+          (await fb.api.helix.getUserByID(top5[i].userId))?.displayName ||
           `id: ${top5[i].userId}`;
         reply += `${i + 1}º ${username}: (${Math.round(
           top5[i][rankOption]
