@@ -41,7 +41,7 @@ const liveCommand = async (message) => {
 };
 
 liveCommand.commandName = "live";
-liveCommand.aliases = ["live"];
+liveCommand.aliases = ["live", "streaminfo", "si"];
 liveCommand.shortDescription = "Mostra se um canal está fazendo live";
 liveCommand.cooldown = 5000;
 liveCommand.cooldownType = "channel";
