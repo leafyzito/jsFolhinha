@@ -49,7 +49,7 @@ function manageCooldown(cooldownDuration, type, message) {
   // Return false to indicate that the cooldown is not over
   console.log(
     `CD: #${message.channelName}/${message.senderUsername} - ${
-      message.command
+      message.command.commandName
     } (${Math.ceil((cooldownDuration - timeElapsed) / 1000)}s)`
   );
   return false;
