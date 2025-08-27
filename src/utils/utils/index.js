@@ -172,8 +172,110 @@ class Utils {
     });
   }
 
+  // New function to wait for multiple whispers from different users
+  async waitForMultipleWhispers(checks, timeout = 30_000) {
+    const results = {};
+    const pendingChecks = new Map();
+
+    return new Promise((resolve) => {
+      const timer = setTimeout(() => {
+        // Clean up any remaining waiters
+        for (const [, waiter] of pendingChecks) {
+          clearTimeout(waiter.timer);
+        }
+        resolve(results);
+      }, timeout);
+
+      // Create a waiter for each check
+      checks.forEach((check, index) => {
+        const waiterId = `multi_whisper_${
+          check.senderUserID || check.senderUsername || "any"
+        }_${index}_${Date.now()}`;
+
+        const waiter = {
+          check,
+          resolve: (msg) => {
+            // Store the result
+            const key =
+              check.senderUserID || check.senderUsername || `player_${index}`;
+            results[key] = msg;
+
+            // Remove this waiter
+            pendingChecks.delete(waiterId);
+
+            // Check if all checks are complete
+            if (pendingChecks.size === 0) {
+              clearTimeout(timer);
+              resolve(results);
+            }
+          },
+          timer: null, // Will be set by the multi-whisper waiter system
+        };
+
+        pendingChecks.set(waiterId, waiter);
+      });
+
+      // Store the multi-whisper waiter in a special map
+      if (!this.multiWhisperWaiters) {
+        this.multiWhisperWaiters = new Map();
+      }
+
+      const multiWaiterId = `multi_whisper_${Date.now()}`;
+      this.multiWhisperWaiters.set(multiWaiterId, {
+        pendingChecks,
+        timer,
+        resolve,
+      });
+    });
+  }
+
   // Method to check if a whisper matches any waiting criteria
   checkWhisperWaiters(msg) {
+    // Check multi-whisper waiters first
+    if (this.multiWhisperWaiters) {
+      for (const [, multiWaiter] of this.multiWhisperWaiters) {
+        const { pendingChecks } = multiWaiter;
+
+        for (const [, waiter] of pendingChecks) {
+          const { check, resolve } = waiter;
+
+          // Check if all specified conditions are met
+          let shouldResolve = true;
+
+          // Check sender user ID if specified
+          if (check.senderUserID && msg.senderUserID !== check.senderUserID) {
+            shouldResolve = false;
+          }
+
+          // Check sender username if specified (for backward compatibility)
+          if (
+            check.senderUsername &&
+            msg.senderUsername !== check.senderUsername
+          ) {
+            shouldResolve = false;
+          }
+
+          // Check message content if specified
+          if (check.content && check.content.length > 0) {
+            const messageMatches = check.content.some(
+              (content) =>
+                msg.messageText.toLowerCase().trim() ===
+                content.toLowerCase().trim()
+            );
+            if (!messageMatches) {
+              shouldResolve = false;
+            }
+          }
+
+          if (shouldResolve) {
+            resolve(msg);
+            break; // Only resolve one waiter per message
+          }
+        }
+      }
+    }
+
+    // Check regular single whisper waiters
     for (const [waiterId, waiter] of this.whisperWaiters) {
       const { check, resolve, timer } = waiter;
 
@@ -285,6 +387,63 @@ class Utils {
     });
   }
 
+  // New function to wait for multiple messages from different users
+  async waitForMultipleMessages(checks, timeout = 30_000) {
+    const results = {};
+    const pendingChecks = new Map();
+
+    return new Promise((resolve) => {
+      const timer = setTimeout(() => {
+        // Clean up any remaining waiters
+        for (const [, waiter] of pendingChecks) {
+          clearTimeout(waiter.timer);
+        }
+        resolve(results);
+      }, timeout);
+
+      // Create a waiter for each check
+      checks.forEach((check, index) => {
+        const waiterId = `multi_${check.channelName || "any"}_${
+          check.senderUsername || "any"
+        }_${check.senderUserID || "any"}_${index}_${Date.now()}`;
+
+        const waiter = {
+          check,
+          resolve: (msg) => {
+            // Store the result
+            const key =
+              check.senderUsername || check.senderUserID || `player_${index}`;
+            results[key] = msg;
+
+            // Remove this waiter
+            pendingChecks.delete(waiterId);
+
+            // Check if all checks are complete
+            if (pendingChecks.size === 0) {
+              clearTimeout(timer);
+              resolve(results);
+            }
+          },
+          timer: null, // Will be set by the multi-message waiter system
+        };
+
+        pendingChecks.set(waiterId, waiter);
+      });
+
+      // Store the multi-waiter in a special map
+      if (!this.multiMessageWaiters) {
+        this.multiMessageWaiters = new Map();
+      }
+
+      const multiWaiterId = `multi_${Date.now()}`;
+      this.multiMessageWaiters.set(multiWaiterId, {
+        pendingChecks,
+        timer,
+        resolve,
+      });
+    });
+  }
+
   // Method to check if a message matches any waiting criteria
   checkMessageWaiters(msg) {
     // Handle reply messages (same logic as before)
@@ -292,6 +451,56 @@ class Utils {
       msg.messageText = msg.messageText.split(" ").slice(1).join(" ").trim();
     }
 
+    // Check multi-message waiters first
+    if (this.multiMessageWaiters) {
+      for (const [, multiWaiter] of this.multiMessageWaiters) {
+        const { pendingChecks } = multiWaiter;
+
+        for (const [, waiter] of pendingChecks) {
+          const { check, resolve } = waiter;
+
+          // Check if all specified conditions are met
+          let shouldResolve = true;
+
+          // Check channel name if specified
+          if (check.channelName && msg.channelName !== check.channelName) {
+            shouldResolve = false;
+          }
+
+          // Check sender user ID if specified
+          if (check.senderUserID && msg.senderUserID !== check.senderUserID) {
+            shouldResolve = false;
+          }
+
+          // Check sender username if specified
+          if (
+            check.senderUsername &&
+            msg.senderUsername !== check.senderUsername
+          ) {
+            shouldResolve = false;
+          }
+
+          // Check message content if specified
+          if (check.content && check.content.length > 0) {
+            const messageMatches = check.content.some(
+              (content) =>
+                msg.messageText.toLowerCase().trim() ===
+                content.toLowerCase().trim()
+            );
+            if (!messageMatches) {
+              shouldResolve = false;
+            }
+          }
+
+          if (shouldResolve) {
+            resolve(msg);
+            break; // Only resolve one waiter per message
+          }
+        }
+      }
+    }
+
+    // Check regular single message waiters
     for (const [waiterId, waiter] of this.messageWaiters) {
       const { check, resolve, timer } = waiter;
 
