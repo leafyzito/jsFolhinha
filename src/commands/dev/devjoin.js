@@ -20,7 +20,7 @@ const devJoinChannelCommand = async (message) => {
 
   await fb.utils.createNewChannelConfig(targetChannelId);
 
-  const joinResult = await fb.twitch.join([targetChannel]);
+  const joinResult = fb.twitch.join([targetChannel]);
   if (!joinResult) {
     return {
       reply: `Erro ao entrar no canal ${targetChannel}`,
