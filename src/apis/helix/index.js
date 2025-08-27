@@ -29,7 +29,7 @@ class HelixApi {
     });
 
     if (!response) {
-      fb.discord.logError("Helix API: Request failed");
+      fb.discord.logError("Helix API (getUserByUsername): Request failed");
       return null;
     }
 
@@ -71,7 +71,7 @@ class HelixApi {
     });
 
     if (!response) {
-      fb.discord.logError("Helix API: Request failed");
+      fb.discord.logError("Helix API (getUserByID): Request failed");
       return null;
     }
 
@@ -118,7 +118,7 @@ class HelixApi {
     );
 
     if (!response) {
-      fb.discord.logError("Helix API: Request failed");
+      fb.discord.logError("Helix API (getColor): Request failed");
       return null;
     }
 
@@ -155,7 +155,7 @@ class HelixApi {
     );
 
     if (!response) {
-      fb.discord.logError("Helix API: Request failed");
+      fb.discord.logError("Helix API (getStream): Request failed");
       return null;
     }
 
@@ -224,7 +224,7 @@ class HelixApi {
       );
 
       if (!response) {
-        fb.discord.logError("Helix API: Request failed");
+        fb.discord.logError("Helix API (isStreamOnline): Request failed");
         return false;
       }
 
@@ -299,7 +299,7 @@ class HelixApi {
     );
 
     if (!response) {
-      fb.discord.logError("Helix API: Whisper request failed");
+      fb.discord.logError("Helix API (whisper): Request failed");
       return false;
     }
 
@@ -386,7 +386,7 @@ class HelixApi {
     );
 
     if (!response) {
-      fb.discord.logError("Helix API: Create clip request failed");
+      fb.discord.logError("Helix API (createClip): Request failed");
       return null;
     }
 

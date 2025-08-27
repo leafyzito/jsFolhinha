@@ -50,7 +50,7 @@ const updateUserListener = async (message) => {
 
     // Get channel config from database and update if applicable
     const channelConfig = await fb.db.get("config", {
-      channel: knownUser.currAlias.toLowerCase(),
+      channelId: message.senderUserID,
     });
 
     if (channelConfig) {
@@ -63,7 +63,7 @@ const updateUserListener = async (message) => {
 
       await fb.db.update(
         "config",
-        { channel: knownUser.currAlias.toLowerCase() },
+        { channelId: message.senderUserID },
         { $set: { channel: message.senderUsername } }
       );
 
