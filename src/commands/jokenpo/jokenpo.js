@@ -1,7 +1,7 @@
 let pendingPlayers = [];
 
 const jokenpoCommand = async (message) => {
-  if (pendingPlayers.includes(message.senderUsername.toLowerCase())) {
+  if (pendingPlayers.includes(message.senderUserID)) {
     return {
       reply: `Termine a sua partida atual antes de iniciar outra`,
     };
@@ -11,12 +11,6 @@ const jokenpoCommand = async (message) => {
   if (!gameTarget) {
     return {
       reply: `Desafie alguém para jogar jokenpo com ${message.prefix}jokenpo <usuário>`,
-    };
-  }
-
-  if (pendingPlayers.includes(gameTarget.toLowerCase())) {
-    return {
-      reply: `${gameTarget} já está numa partida. Deixe ele terminar para poder jogar outra partida`,
     };
   }
 
@@ -39,9 +33,16 @@ const jokenpoCommand = async (message) => {
     };
   }
 
+  // Check if target user is already in a game
+  if (pendingPlayers.includes(targetUserId)) {
+    return {
+      reply: `${gameTarget} já está numa partida. Deixe ele terminar para poder jogar outra partida`,
+    };
+  }
+
   // Add players to pending list
-  pendingPlayers.push(message.senderUsername.toLowerCase());
-  pendingPlayers.push(gameTarget.toLowerCase());
+  pendingPlayers.push(message.senderUserID);
+  pendingPlayers.push(targetUserId);
 
   // Send challenge message
   const challengeMessage = `Você desafiou ${gameTarget} para um jogo de jokenpô. Ambos têm 30 segundos para enviar no meu susurro as suas jogadas (pedra, papel ou tesoura)`;
@@ -50,45 +51,43 @@ const jokenpoCommand = async (message) => {
   // Wait for both players to respond using whisper
   const answers = {};
 
-  // Wait for first player's response
-  const firstPlayerResponse = await fb.utils.waitForWhisper(
-    {
-      senderUsername: message.senderUsername,
-      channelName: "whisper",
-      content: ["pedra", "papel", "tesoura"],
-    },
+  // Wait for both players to respond simultaneously
+  const playerResponses = await fb.utils.waitForMultipleWhispers(
+    [
+      {
+        senderUserID: message.senderUserID,
+        content: ["pedra", "papel", "tesoura"],
+      },
+      {
+        senderUserID: targetUserId,
+        content: ["pedra", "papel", "tesoura"],
+      },
+    ],
     30_000
   );
 
-  if (firstPlayerResponse) {
-    answers[message.senderUsername] = firstPlayerResponse.messageText;
+  // Process responses
+  if (playerResponses[message.senderUserID]) {
+    answers[message.senderUserID] =
+      playerResponses[message.senderUserID].messageText;
   }
 
-  // Wait for second player's response
-  const secondPlayerResponse = await fb.utils.waitForWhisper(
-    {
-      senderUsername: gameTarget.toLowerCase(),
-      channelName: "whisper",
-      content: ["pedra", "papel", "tesoura"],
-    },
-    30_000
-  );
-
-  if (secondPlayerResponse) {
-    answers[gameTarget.toLowerCase()] = secondPlayerResponse.messageText;
+  if (playerResponses[targetUserId]) {
+    answers[targetUserId] = playerResponses[targetUserId].messageText;
   }
 
   // Remove players from pending list
   pendingPlayers = pendingPlayers.filter(
-    (player) =>
-      player !== message.senderUsername.toLowerCase() &&
-      player !== gameTarget.toLowerCase()
+    (player) => player !== message.senderUserID && player !== targetUserId
   );
 
   if (Object.keys(answers).length !== 2) {
     // Check which player didn't answer
-    const players = [message.senderUsername, gameTarget.toLowerCase()];
-    const playerWhoDidntAnswer = players.find((player) => !answers[player]);
+    const players = [message.senderUsername, gameTarget];
+    const playerWhoDidntAnswer = players.find((player, index) => {
+      const userId = index === 0 ? message.senderUserID : targetUserId;
+      return !answers[userId];
+    });
     const emote = await fb.emotes.getEmoteFromList(
       message.channelName,
       ["pfff", "pffff", "pfft", "porvalo", "mock", "pointandlaugh", "wajaja"],
@@ -106,8 +105,8 @@ const jokenpoCommand = async (message) => {
     }
   }
 
-  const user1Answer = answers[message.senderUsername];
-  const user2Answer = answers[gameTarget.toLowerCase()];
+  const user1Answer = answers[message.senderUserID];
+  const user2Answer = answers[targetUserId];
 
   let gameResult = "";
 
