@@ -5,8 +5,8 @@ let processingAfk = [];
 
 const afkUserListener = async (message) => {
   if (
-    message.command.commandName === "afk" ||
-    message.command.commandName === "resumeafk"
+    message.command?.commandName === "afk" ||
+    message.command?.commandName === "resumeafk"
   ) {
     return;
   }
