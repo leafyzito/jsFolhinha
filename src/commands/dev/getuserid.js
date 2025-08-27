@@ -1,8 +1,19 @@
 const getUserIdCommand = async (message) => {
-  const targetUser = message.args[1];
+  const targetUser = message.args?.[1];
+
+  if (!targetUser) {
+    return {
+      reply: `Use o formato correto: ${message.prefix}getuserid <username> ou ${message.prefix}getuserid id <id>`,
+    };
+  }
 
   if (targetUser == "id") {
-    const targetID = message.args[2];
+    const targetID = message.args?.[2];
+    if (!targetID) {
+      return {
+        reply: `Use o formato correto: ${message.prefix}getuserid id <id>`,
+      };
+    }
     const targetUsername = (await fb.api.helix.getUserByID(targetID))?.login;
     return {
       reply: `Username de ${targetID}: ${targetUsername}`,
