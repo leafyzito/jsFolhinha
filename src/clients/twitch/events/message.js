@@ -31,9 +31,7 @@ module.exports = async function onMessage(message) {
   if (message.replyParentMessageBody) {
     message.isReply = true;
     message.messageText =
-      message.messageText.split(" ").slice(1).join(" ") +
-      " " +
-      message.replyParentMessageBody;
+      message.messageText + " " + message.replyParentMessageBody;
   }
 
   // sanitize message
