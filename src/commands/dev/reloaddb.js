@@ -1,6 +1,4 @@
-const reloadDbCommand = async (message) => {
-  message.command = "dev reloaddb";
-
+const reloadDbCommand = async () => {
   try {
     fb.db.clearCache();
 
@@ -22,5 +20,6 @@ reloadDbCommand.cooldown = 5_000;
 reloadDbCommand.cooldownType = "user";
 reloadDbCommand.permissions = ["admin"];
 reloadDbCommand.whisperable = false;
+reloadDbCommand.flags = ["dev"];
 
 module.exports = { reloadDbCommand };

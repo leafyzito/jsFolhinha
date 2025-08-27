@@ -1,6 +1,4 @@
 const shortenCommand = async (message) => {
-  message.command = "dev shorten";
-
   const url = message.args[1];
   if (!url) {
     return {
@@ -28,5 +26,6 @@ shortenCommand.cooldown = 5_000;
 shortenCommand.cooldownType = "user";
 shortenCommand.permissions = ["admin"];
 shortenCommand.whisperable = false;
+shortenCommand.flags = ["dev"];
 
 module.exports = { shortenCommand };

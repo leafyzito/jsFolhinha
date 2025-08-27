@@ -1,6 +1,4 @@
 const reloadEmotesCommand = async (message) => {
-  message.command = "dev reloademotes";
-
   const targetChannel =
     message.args[1]?.toLowerCase() || message.channelName.toLowerCase();
 
@@ -38,5 +36,6 @@ reloadEmotesCommand.cooldown = 5_000;
 reloadEmotesCommand.cooldownType = "user";
 reloadEmotesCommand.permissions = ["admin"];
 reloadEmotesCommand.whisperable = false;
+reloadEmotesCommand.flags = ["dev"];
 
 module.exports = { reloadEmotesCommand };

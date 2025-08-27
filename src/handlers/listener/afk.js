@@ -4,7 +4,10 @@ const { shouldSkipMessage } = require("./middleware");
 let processingAfk = [];
 
 const afkUserListener = async (message) => {
-  if (message.command === "afk" || message.command === "resumeafk") {
+  if (
+    message.command.commandName === "afk" ||
+    message.command.commandName === "resumeafk"
+  ) {
     return;
   }
 

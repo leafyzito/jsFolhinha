@@ -1,8 +1,6 @@
 const { exec } = require("child_process");
 
-const gitPullCommand = async (message) => {
-  message.command = "dev gitpull";
-
+const gitPullCommand = async () => {
   return new Promise((resolve) => {
     exec("git pull", (error, stdout) => {
       if (error) {
@@ -28,5 +26,6 @@ gitPullCommand.cooldown = 5_000;
 gitPullCommand.cooldownType = "user";
 gitPullCommand.permissions = ["admin"];
 gitPullCommand.whisperable = false;
+gitPullCommand.flags = ["dev"];
 
 module.exports = { gitPullCommand };

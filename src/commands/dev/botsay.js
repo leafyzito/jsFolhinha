@@ -1,6 +1,4 @@
 const botSayCommand = async (message) => {
-  message.command = "dev botsay";
-
   const args = message.messageText.split(" ");
   const targetChannel = args[1];
   const msgContent = args.slice(2).join(" ");
@@ -34,5 +32,6 @@ botSayCommand.cooldown = 5_000;
 botSayCommand.cooldownType = "user";
 botSayCommand.permissions = ["admin"];
 botSayCommand.whisperable = false;
+botSayCommand.flags = ["dev"];
 
 module.exports = { botSayCommand };

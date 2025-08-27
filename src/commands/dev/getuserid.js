@@ -1,6 +1,4 @@
 const getUserIdCommand = async (message) => {
-  message.command = "dev getuserid";
-
   const targetUser = message.args[1];
 
   if (targetUser == "id") {
@@ -24,6 +22,7 @@ getUserIdCommand.shortDescription = "Get user ID for a username";
 getUserIdCommand.cooldown = 5000;
 getUserIdCommand.cooldownType = "user";
 getUserIdCommand.permissions = ["admin"];
+getUserIdCommand.flags = ["dev"];
 getUserIdCommand.whisperable = false;
 
 module.exports = { getUserIdCommand };

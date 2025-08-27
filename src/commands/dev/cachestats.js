@@ -1,6 +1,4 @@
-const cacheStatsCommand = async (message) => {
-  message.command = "dev cachestats";
-
+const cacheStatsCommand = async () => {
   try {
     const cacheStats = await fb.db.getCacheStats();
     const hitRatio = await fb.db.getCacheHitRatio();
@@ -47,5 +45,6 @@ cacheStatsCommand.cooldown = 5_000;
 cacheStatsCommand.cooldownType = "user";
 cacheStatsCommand.permissions = ["admin"];
 cacheStatsCommand.whisperable = false;
+cacheStatsCommand.flags = ["dev"];
 
 module.exports = { cacheStatsCommand };

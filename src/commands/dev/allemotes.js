@@ -1,6 +1,4 @@
 const allEmotesCommand = async (message) => {
-  message.command = "dev allemotes";
-
   const targetChannel =
     message.messageText.split(" ")[1] || message.channelName;
   const channelEmotes = await fb.emotes.getChannelEmotes(targetChannel);
@@ -28,5 +26,6 @@ allEmotesCommand.cooldown = 5_000;
 allEmotesCommand.cooldownType = "user";
 allEmotesCommand.permissions = ["admin"];
 allEmotesCommand.whisperable = false;
+allEmotesCommand.flags = ["dev"];
 
 module.exports = { allEmotesCommand };

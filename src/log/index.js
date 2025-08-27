@@ -80,14 +80,17 @@ class Logger {
       channelId: message.channelID || null,
       user: message.senderUsername,
       userId: message.senderUserID,
-      command: message.command,
+      command: message.command.commandName,
       content: message.messageText,
       response: response,
       notes: message.notes || null,
     };
 
+    console.log(
+      `#${message.channelName}/${message.senderUsername} - ${message.command.commandName}`
+    );
     fb.discord.logCommand(message, response);
-    if (!message.command.includes("dev") && process.env.ENV == "prod") {
+    if (!message.command.flags?.includes("dev") && process.env.ENV == "prod") {
       await fb.db.insert("commandlog", insertDoc);
     }
   }
@@ -115,9 +118,6 @@ class Logger {
     }
 
     await this.createCommandLog(message, response);
-    console.log(
-      `#${message.channelName}/${message.senderUsername} - ${message.command}`
-    );
   }
 
   async logAndSay(message, response, notes = null, retryCount = 0) {
@@ -140,9 +140,6 @@ class Logger {
       );
 
     await this.createCommandLog(message, response);
-    console.log(
-      `#${message.channelName}/${message.senderUsername} - ${message.command}`
-    );
   }
 
   async logAndMeAction(message, response, retryCount = 0) {
@@ -164,9 +161,6 @@ class Logger {
       );
 
     await this.createCommandLog(message, "/me " + response);
-    console.log(
-      `#${message.channelName}/${message.senderUsername} - ${message.command}`
-    );
   }
 
   async logAndWhisper(message, response, notes = null) {

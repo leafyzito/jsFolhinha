@@ -1,6 +1,4 @@
-const resetPetCommand = async (message) => {
-  message.command = "dev resetpet";
-
+const resetPetCommand = async () => {
   const now = Math.floor(Date.now() / 1000);
   await fb.db.updateMany("pet", {}, { $set: { last_interaction: now } });
 
@@ -17,5 +15,6 @@ resetPetCommand.cooldown = 5_000;
 resetPetCommand.cooldownType = "user";
 resetPetCommand.permissions = ["admin"];
 resetPetCommand.whisperable = false;
+resetPetCommand.flags = ["dev"];
 
 module.exports = { resetPetCommand };

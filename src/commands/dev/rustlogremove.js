@@ -1,6 +1,4 @@
 const rustlogRemoveCommand = async (message) => {
-  message.command = "dev rustlogremove";
-
   const targetUser = message.args[1];
   if (!targetUser) {
     return {
@@ -40,5 +38,6 @@ rustlogRemoveCommand.cooldown = 5_000;
 rustlogRemoveCommand.cooldownType = "user";
 rustlogRemoveCommand.permissions = ["admin"];
 rustlogRemoveCommand.whisperable = false;
+rustlogRemoveCommand.flags = ["dev"];
 
 module.exports = { rustlogRemoveCommand };

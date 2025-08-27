@@ -1,6 +1,4 @@
-const joinedChannelsCommand = async (message) => {
-  message.command = "dev joinedchannels";
-
+const joinedChannelsCommand = async () => {
   return {
     reply: `🤖 ${[...fb.twitch.anonClient.joinedChannels].length}/${
       fb.twitch.anonClient.channelsToJoin.length
@@ -16,5 +14,6 @@ joinedChannelsCommand.cooldown = 5_000;
 joinedChannelsCommand.cooldownType = "user";
 joinedChannelsCommand.permissions = ["admin"];
 joinedChannelsCommand.whisperable = false;
+joinedChannelsCommand.flags = ["dev"];
 
 module.exports = { joinedChannelsCommand };
