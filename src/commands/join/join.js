@@ -12,7 +12,7 @@ const joinCommand = async (message) => {
   }
 
   await fb.utils.createNewChannelConfig(message.senderUserID);
-  const joinResult = fb.twitch.join([channelToJoin]);
+  const joinResult = await fb.twitch.join([channelToJoin]);
   if (!joinResult) {
     return {
       reply: `Erro ao entrar no chat ${channelToJoin}. Contacte o @${process.env.DEV_NICK}`,

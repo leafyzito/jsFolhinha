@@ -62,7 +62,7 @@ async function fetchPendingJoins() {
 
       fb.utils.createNewChannelConfig(channelId);
 
-      const joinResult = fb.twitch.join([channelName]);
+      const joinResult = await fb.twitch.join([channelName]);
       if (!joinResult) {
         console.error(`Erro ao entrar no chat ${channelName}`);
         fb.discord.importantLog(`* Error joining ${channelName} from website`);
