@@ -256,9 +256,9 @@ class DiscordClient {
         text: `${this.getFormattedDateTime()}`,
       });
 
-    if (message.replyParentMessageID) {
+    if (message.isReply) {
       embed.addFields({
-        name: "Respondendo a:",
+        name: `Respondendo a ${message.replyParentDisplayName}:`,
         value: message.replyParentMessageBody,
         inline: false,
       });
