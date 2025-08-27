@@ -36,7 +36,7 @@ rustlogRemoveCommand.aliases = [
   "rldel",
 ];
 rustlogRemoveCommand.shortDescription = "Remove a channel from rustlog";
-rustlogRemoveCommand.cooldown = 0;
+rustlogRemoveCommand.cooldown = 5_000;
 rustlogRemoveCommand.cooldownType = "user";
 rustlogRemoveCommand.permissions = ["admin"];
 rustlogRemoveCommand.whisperable = false;

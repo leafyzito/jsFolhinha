@@ -24,7 +24,7 @@ const shortenCommand = async (message) => {
 shortenCommand.commandName = "shorten";
 shortenCommand.aliases = ["shorten"];
 shortenCommand.shortDescription = "Shorten a URL";
-shortenCommand.cooldown = 0;
+shortenCommand.cooldown = 5_000;
 shortenCommand.cooldownType = "user";
 shortenCommand.permissions = ["admin"];
 shortenCommand.whisperable = false;

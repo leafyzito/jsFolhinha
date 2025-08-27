@@ -18,7 +18,7 @@ const reloadDbCommand = async (message) => {
 reloadDbCommand.commandName = "reloaddb";
 reloadDbCommand.aliases = ["reloaddb", "reloadbd"];
 reloadDbCommand.shortDescription = "Reload database";
-reloadDbCommand.cooldown = 0;
+reloadDbCommand.cooldown = 5_000;
 reloadDbCommand.cooldownType = "user";
 reloadDbCommand.permissions = ["admin"];
 reloadDbCommand.whisperable = false;

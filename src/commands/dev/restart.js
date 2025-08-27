@@ -25,7 +25,7 @@ const restartCommand = async (message) => {
 restartCommand.commandName = "restart";
 restartCommand.aliases = ["restart"];
 restartCommand.shortDescription = "Restart the bot";
-restartCommand.cooldown = 0;
+restartCommand.cooldown = 5_000;
 restartCommand.cooldownType = "user";
 restartCommand.permissions = ["admin"];
 restartCommand.whisperable = false;

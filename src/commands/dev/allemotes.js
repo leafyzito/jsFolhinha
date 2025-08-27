@@ -24,7 +24,7 @@ const allEmotesCommand = async (message) => {
 allEmotesCommand.commandName = "allemotes";
 allEmotesCommand.aliases = ["allemotes"];
 allEmotesCommand.shortDescription = "List all emotes for a channel";
-allEmotesCommand.cooldown = 0;
+allEmotesCommand.cooldown = 5_000;
 allEmotesCommand.cooldownType = "user";
 allEmotesCommand.permissions = ["admin"];
 allEmotesCommand.whisperable = false;

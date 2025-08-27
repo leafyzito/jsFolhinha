@@ -28,7 +28,7 @@ const devPartChannelCommand = async (message) => {
 devPartChannelCommand.commandName = "devpart";
 devPartChannelCommand.aliases = ["devpart", "dpart"];
 devPartChannelCommand.shortDescription = "Part a channel";
-devPartChannelCommand.cooldown = 0;
+devPartChannelCommand.cooldown = 5_000;
 devPartChannelCommand.cooldownType = "user";
 devPartChannelCommand.permissions = ["admin"];
 devPartChannelCommand.whisperable = false;

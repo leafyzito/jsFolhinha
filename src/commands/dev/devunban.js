@@ -81,8 +81,8 @@ const unbanDevCommand = async (message) => {
 // Command metadata
 unbanDevCommand.commandName = "devunban";
 unbanDevCommand.aliases = ["devunban", "dunban"];
-unbanDevCommand.shortDescription = "Unban a user from using dev commands";
-unbanDevCommand.cooldown = 0;
+unbanDevCommand.shortDescription = "Unban a user from using commands";
+unbanDevCommand.cooldown = 5_000;
 unbanDevCommand.cooldownType = "user";
 unbanDevCommand.permissions = ["admin"];
 unbanDevCommand.whisperable = false;

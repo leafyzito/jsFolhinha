@@ -21,7 +21,7 @@ const getUserIdCommand = async (message) => {
 getUserIdCommand.commandName = "getuserid";
 getUserIdCommand.aliases = ["getuserid", "uid"];
 getUserIdCommand.shortDescription = "Get user ID for a username";
-getUserIdCommand.cooldown = 0;
+getUserIdCommand.cooldown = 5000;
 getUserIdCommand.cooldownType = "user";
 getUserIdCommand.permissions = ["admin"];
 getUserIdCommand.whisperable = false;

@@ -48,7 +48,7 @@ const devJoinChannelCommand = async (message) => {
 devJoinChannelCommand.commandName = "devjoin";
 devJoinChannelCommand.aliases = ["devjoin", "djoin"];
 devJoinChannelCommand.shortDescription = "Join a channel";
-devJoinChannelCommand.cooldown = 0;
+devJoinChannelCommand.cooldown = 5_000;
 devJoinChannelCommand.cooldownType = "user";
 devJoinChannelCommand.permissions = ["admin"];
 devJoinChannelCommand.whisperable = false;

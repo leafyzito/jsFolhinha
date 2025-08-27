@@ -16,7 +16,7 @@ const resetCdCommand = async (message) => {
 resetCdCommand.commandName = "resetcd";
 resetCdCommand.aliases = ["resetcd"];
 resetCdCommand.shortDescription = "Reset cookies";
-resetCdCommand.cooldown = 0;
+resetCdCommand.cooldown = 5_000;
 resetCdCommand.cooldownType = "user";
 resetCdCommand.permissions = ["admin"];
 resetCdCommand.whisperable = false;

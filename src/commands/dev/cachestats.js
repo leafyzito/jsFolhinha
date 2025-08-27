@@ -43,7 +43,7 @@ const cacheStatsCommand = async (message) => {
 cacheStatsCommand.commandName = "cachestats";
 cacheStatsCommand.aliases = ["cachestats", "cstats"];
 cacheStatsCommand.shortDescription = "Display cache statistics and hit ratio";
-cacheStatsCommand.cooldown = 0;
+cacheStatsCommand.cooldown = 5_000;
 cacheStatsCommand.cooldownType = "user";
 cacheStatsCommand.permissions = ["admin"];
 cacheStatsCommand.whisperable = false;
