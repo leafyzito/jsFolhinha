@@ -39,7 +39,7 @@ const replyMentionListener = async (message) => {
   const msgContent = message.messageText.split(" ");
 
   // Skip if this is a reply to another message
-  if (message.replyParentMessageID) {
+  if (message.isReply) {
     return;
   }
 

@@ -26,8 +26,10 @@ module.exports = async function onMessage(message) {
   }
 
   // add content from parent message to message if exists and remove the first word (the reply)
+  message.isReply = false;
   message.originalMessageText = message.messageText;
   if (message.replyParentMessageBody) {
+    message.isReply = true;
     message.messageText =
       message.messageText.split(" ").slice(1).join(" ") +
       " " +
