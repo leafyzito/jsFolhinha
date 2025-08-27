@@ -13,7 +13,7 @@ const resetPetCommand = async (message) => {
 resetPetCommand.commandName = "resetpet";
 resetPetCommand.aliases = ["resetpet", "resetpat"];
 resetPetCommand.shortDescription = "Reset pet last interaction";
-resetPetCommand.cooldown = 0;
+resetPetCommand.cooldown = 5_000;
 resetPetCommand.cooldownType = "user";
 resetPetCommand.permissions = ["admin"];
 resetPetCommand.whisperable = false;

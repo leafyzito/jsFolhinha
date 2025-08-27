@@ -84,7 +84,7 @@ const reloadCommand = async (message) => {
 reloadCommand.commandName = "reload";
 reloadCommand.aliases = ["reload"];
 reloadCommand.shortDescription = "Reload bot commands";
-reloadCommand.cooldown = 0;
+reloadCommand.cooldown = 5_000;
 reloadCommand.cooldownType = "user";
 reloadCommand.permissions = ["admin"];
 reloadCommand.whisperable = false;

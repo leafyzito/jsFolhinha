@@ -12,7 +12,7 @@ const joinedChannelsCommand = async (message) => {
 joinedChannelsCommand.commandName = "joinedchannels";
 joinedChannelsCommand.aliases = ["joinedchannels", "jchannels"];
 joinedChannelsCommand.shortDescription = "List all joined channels";
-joinedChannelsCommand.cooldown = 0;
+joinedChannelsCommand.cooldown = 5_000;
 joinedChannelsCommand.cooldownType = "user";
 joinedChannelsCommand.permissions = ["admin"];
 joinedChannelsCommand.whisperable = false;

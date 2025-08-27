@@ -30,7 +30,7 @@ const botSayCommand = async (message) => {
 botSayCommand.commandName = "botsay";
 botSayCommand.aliases = ["botsay", "bsay"];
 botSayCommand.shortDescription = "Make the bot say something in a channel";
-botSayCommand.cooldown = 0;
+botSayCommand.cooldown = 5_000;
 botSayCommand.cooldownType = "user";
 botSayCommand.permissions = ["admin"];
 botSayCommand.whisperable = false;

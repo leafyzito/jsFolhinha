@@ -42,7 +42,7 @@ const revivePetCommand = async (message) => {
 revivePetCommand.commandName = "petrevive";
 revivePetCommand.aliases = ["petrevive", "revivepet"];
 revivePetCommand.shortDescription = "Revive pet";
-revivePetCommand.cooldown = 0;
+revivePetCommand.cooldown = 5_000;
 revivePetCommand.cooldownType = "user";
 revivePetCommand.permissions = ["admin"];
 revivePetCommand.whisperable = false;

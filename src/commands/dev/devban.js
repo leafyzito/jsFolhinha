@@ -70,8 +70,8 @@ const devBanCommand = async (message) => {
 // Command metadata
 devBanCommand.commandName = "devban";
 devBanCommand.aliases = ["devban", "dban"];
-devBanCommand.shortDescription = "Ban a user from using dev commands";
-devBanCommand.cooldown = 0;
+devBanCommand.shortDescription = "Ban a user from using commands";
+devBanCommand.cooldown = 5_000;
 devBanCommand.cooldownType = "user";
 devBanCommand.permissions = ["admin"];
 devBanCommand.whisperable = false;

@@ -34,7 +34,7 @@ const reloadEmotesCommand = async (message) => {
 reloadEmotesCommand.commandName = "reloademotes";
 reloadEmotesCommand.aliases = ["reloademotes"];
 reloadEmotesCommand.shortDescription = "Reload emotes";
-reloadEmotesCommand.cooldown = 0;
+reloadEmotesCommand.cooldown = 5_000;
 reloadEmotesCommand.cooldownType = "user";
 reloadEmotesCommand.permissions = ["admin"];
 reloadEmotesCommand.whisperable = false;

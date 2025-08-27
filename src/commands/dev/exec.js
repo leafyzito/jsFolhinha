@@ -33,7 +33,7 @@ const execCommand = async (message) => {
 execCommand.commandName = "exec";
 execCommand.aliases = ["exec", "eval"];
 execCommand.shortDescription = "Execute a shell command";
-execCommand.cooldown = 0;
+execCommand.cooldown = 5_000;
 execCommand.cooldownType = "user";
 execCommand.permissions = ["admin"];
 execCommand.whisperable = false;

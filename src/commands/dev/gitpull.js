@@ -24,7 +24,7 @@ const gitPullCommand = async (message) => {
 gitPullCommand.commandName = "gitpull";
 gitPullCommand.aliases = ["gitpull", "gpull"];
 gitPullCommand.shortDescription = "Pull latest changes from git";
-gitPullCommand.cooldown = 0;
+gitPullCommand.cooldown = 5_000;
 gitPullCommand.cooldownType = "user";
 gitPullCommand.permissions = ["admin"];
 gitPullCommand.whisperable = false;

@@ -31,7 +31,7 @@ const rustlogAddCommand = async (message) => {
 rustlogAddCommand.commandName = "rustlogadd";
 rustlogAddCommand.aliases = ["rustlogadd", "rladd"];
 rustlogAddCommand.shortDescription = "Add a channel to rustlog";
-rustlogAddCommand.cooldown = 0;
+rustlogAddCommand.cooldown = 5_000;
 rustlogAddCommand.cooldownType = "user";
 rustlogAddCommand.permissions = ["admin"];
 rustlogAddCommand.whisperable = false;
