@@ -3,6 +3,9 @@ const { commandHandler, listenerHandler } = require("../../../handlers");
 const duplicateMessages = [];
 
 module.exports = async function onMessage(message) {
+  // Check if this message matches any waiting criteria first
+  fb.utils.checkMessageWaiters(message);
+
   // handle duplicate messages from shared chats
   const sourceRoomId = message.ircTags["source-room-id"] || null;
   const sourceMessageId = message.ircTags["source-id"] || null;

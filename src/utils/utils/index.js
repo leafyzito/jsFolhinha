@@ -149,35 +149,55 @@ class Utils {
     return Math.floor(date.getTime() / 1000);
   }
 
+  // Centralized whisper waiting system
+  whisperWaiters = new Map();
+
   waitForWhisper(check, timeout = 30_000) {
+    const waiterId = `${check.channelName}_${
+      check.senderUsername || "any"
+    }_${Date.now()}`;
+
     return new Promise((resolve) => {
       const timer = setTimeout(() => {
+        this.whisperWaiters.delete(waiterId);
         resolve(null);
       }, timeout);
 
-      fb.twitch.client.on("WHISPER", (msg) => {
-        if (
-          check.senderUsername &&
+      // Store the waiter with its check criteria
+      this.whisperWaiters.set(waiterId, {
+        check,
+        resolve,
+        timer,
+      });
+    });
+  }
+
+  // Method to check if a whisper matches any waiting criteria
+  checkWhisperWaiters(msg) {
+    for (const [waiterId, waiter] of this.whisperWaiters) {
+      const { check, resolve, timer } = waiter;
+
+      const matches =
+        (check.senderUsername &&
           msg.senderUsername === check.senderUsername &&
           msg.channelName === check.channelName &&
           check.content.some(
             (content) => msg.messageText.toLowerCase() === content.toLowerCase()
-          )
-        ) {
-          clearTimeout(timer);
-          resolve(msg);
-        } else if (
-          !check.senderUsername &&
+          )) ||
+        (!check.senderUsername &&
           msg.channelName === check.channelName &&
           check.content.some(
             (content) => msg.messageText.toLowerCase() === content.toLowerCase()
-          )
-        ) {
-          clearTimeout(timer);
-          resolve(msg);
-        }
-      });
-    });
+          ));
+
+      if (matches) {
+        clearTimeout(timer);
+        this.whisperWaiters.delete(waiterId);
+        resolve(msg);
+        return true;
+      }
+    }
+    return false;
   }
 
   async manageLongResponse(content, sendOnlyLink = false) {
@@ -242,60 +262,77 @@ class Utils {
     await fb.api.rustlog.addChannel(channelId);
   }
 
+  // Centralized message waiting system
+  messageWaiters = new Map();
+
   async waitForMessage(check, timeout = 30_000) {
+    const waiterId = `${check.channelName || "any"}_${
+      check.senderUsername || "any"
+    }_${check.senderUserID || "any"}_${Date.now()}`;
+
     return new Promise((resolve) => {
       const timer = setTimeout(() => {
+        this.messageWaiters.delete(waiterId);
         resolve(null);
       }, timeout);
 
-      fb.twitch.anonClient.on("PRIVMSG", (msg) => {
-        if (msg.replyParentMessageID) {
-          msg.messageText = msg.messageText
-            .split(" ")
-            .slice(1)
-            .join(" ")
-            .trim();
-        }
-
-        // Check if all specified conditions are met
-        let shouldResolve = true;
-
-        // Check channel name if specified
-        if (check.channelName && msg.channelName !== check.channelName) {
-          shouldResolve = false;
-        }
-
-        // Check sender user ID if specified
-        if (check.senderUserID && msg.senderUserID !== check.senderUserID) {
-          shouldResolve = false;
-        }
-
-        // Check sender username if specified
-        if (
-          check.senderUsername &&
-          msg.senderUsername !== check.senderUsername
-        ) {
-          shouldResolve = false;
-        }
-
-        // Check message content if specified
-        if (check.content && check.content.length > 0) {
-          const messageMatches = check.content.some(
-            (content) =>
-              msg.messageText.toLowerCase().trim() ===
-              content.toLowerCase().trim()
-          );
-          if (!messageMatches) {
-            shouldResolve = false;
-          }
-        }
-
-        if (shouldResolve) {
-          clearTimeout(timer);
-          resolve(msg);
-        }
+      // Store the waiter with its check criteria
+      this.messageWaiters.set(waiterId, {
+        check,
+        resolve,
+        timer,
       });
     });
+  }
+
+  // Method to check if a message matches any waiting criteria
+  checkMessageWaiters(msg) {
+    // Handle reply messages (same logic as before)
+    if (msg.replyParentMessageID) {
+      msg.messageText = msg.messageText.split(" ").slice(1).join(" ").trim();
+    }
+
+    for (const [waiterId, waiter] of this.messageWaiters) {
+      const { check, resolve, timer } = waiter;
+
+      // Check if all specified conditions are met
+      let shouldResolve = true;
+
+      // Check channel name if specified
+      if (check.channelName && msg.channelName !== check.channelName) {
+        shouldResolve = false;
+      }
+
+      // Check sender user ID if specified
+      if (check.senderUserID && msg.senderUserID !== check.senderUserID) {
+        shouldResolve = false;
+      }
+
+      // Check sender username if specified
+      if (check.senderUsername && msg.senderUsername !== check.senderUsername) {
+        shouldResolve = false;
+      }
+
+      // Check message content if specified
+      if (check.content && check.content.length > 0) {
+        const messageMatches = check.content.some(
+          (content) =>
+            msg.messageText.toLowerCase().trim() ===
+            content.toLowerCase().trim()
+        );
+        if (!messageMatches) {
+          shouldResolve = false;
+        }
+      }
+
+      if (shouldResolve) {
+        clearTimeout(timer);
+        this.messageWaiters.delete(waiterId);
+        resolve(msg);
+        return true;
+      }
+    }
+    return false;
   }
 }
 

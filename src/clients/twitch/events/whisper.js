@@ -1,6 +1,9 @@
 const { commandHandler } = require("../../../handlers");
 
 module.exports = function onWhisper(message) {
+  // Check if this whisper matches any waiting criteria first
+  fb.utils.checkWhisperWaiters(message);
+
   message.prefix = "!";
   message.internalTimestamp = new Date().getTime();
   message.serverTimestamp = new Date();
