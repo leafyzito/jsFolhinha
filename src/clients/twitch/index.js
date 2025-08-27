@@ -78,43 +78,24 @@ class TwitchClient {
   }
 
   // join given MULTIPLE channels login names and update channelsToJoin array
-  async join(channels = []) {
+  join(channels = []) {
     if (channels.length === 0) {
       return false;
     }
 
-    // add to channelsToJoin and attempt to join
+    // add to channelsToJoin
     this.anonClient.channelsToJoin.push(...channels);
-    const joinResult = await this._attemptJoin(channels);
 
-    try {
-      // convert usernames to ids for rustlog api
-      const users = await fb.api.helix.getManyUsersByUsernames(channels);
-      const channelIds = users
-        .map((user) => user.id)
-        .filter((id) => id !== null);
+    // join
+    this.anonClient
+      .joinAll(channels)
+      .then(() => console.log("* Joined channels"))
+      .catch((error) => {
+        console.log("Error on joining channels:", error);
+        return false;
+      });
 
-      // add channel to rustlog using ids
-      if (channelIds.length > 0) {
-        fb.api.rustlog.addChannel(channelIds);
-      }
-    } catch (error) {
-      console.error("Error converting usernames to IDs:", error);
-    }
-
-    return joinResult;
-  }
-
-  // helper method to handle the actual joining logic
-  async _attemptJoin(channels) {
-    try {
-      await this.anonClient.joinAll(channels);
-      console.log("* Joined channels");
-      return true;
-    } catch (error) {
-      console.log("Error on joining channels:", error);
-      return false;
-    }
+    return true;
   }
 
   // part given ONE channel and update channelsToJoin array
