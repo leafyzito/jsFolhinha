@@ -43,9 +43,7 @@ const reloadCommands = () => {
   }
 };
 
-const reloadCommand = async (message) => {
-  message.command = "dev reload";
-
+const reloadCommand = async () => {
   try {
     // Pull git changes first
     const gitResult = await pullGitChanges();
@@ -88,5 +86,6 @@ reloadCommand.cooldown = 5_000;
 reloadCommand.cooldownType = "user";
 reloadCommand.permissions = ["admin"];
 reloadCommand.whisperable = false;
+reloadCommand.flags = ["dev"];
 
 module.exports = { reloadCommand };

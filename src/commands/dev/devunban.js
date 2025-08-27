@@ -11,8 +11,6 @@ function getCommandObjectByAlias(alias) {
 }
 
 const unbanDevCommand = async (message) => {
-  message.command = "dev devunban";
-
   const targetUser = message.args[1];
   if (!targetUser) {
     return {
@@ -86,5 +84,6 @@ unbanDevCommand.cooldown = 5_000;
 unbanDevCommand.cooldownType = "user";
 unbanDevCommand.permissions = ["admin"];
 unbanDevCommand.whisperable = false;
+unbanDevCommand.flags = ["dev"];
 
 module.exports = { unbanDevCommand };

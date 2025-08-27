@@ -1,6 +1,4 @@
 const revivePetCommand = async (message) => {
-  message.command = "dev petrevive";
-
   const targetChannel = message.args[1];
   if (!targetChannel) {
     return {
@@ -46,5 +44,6 @@ revivePetCommand.cooldown = 5_000;
 revivePetCommand.cooldownType = "user";
 revivePetCommand.permissions = ["admin"];
 revivePetCommand.whisperable = false;
+revivePetCommand.flags = ["dev"];
 
 module.exports = { revivePetCommand };

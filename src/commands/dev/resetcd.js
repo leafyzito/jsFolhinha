@@ -1,6 +1,4 @@
-const resetCdCommand = async (message) => {
-  message.command = "dev resetcd";
-
+const resetCdCommand = async () => {
   await fb.db.updateMany(
     "cookie",
     {},
@@ -20,5 +18,6 @@ resetCdCommand.cooldown = 5_000;
 resetCdCommand.cooldownType = "user";
 resetCdCommand.permissions = ["admin"];
 resetCdCommand.whisperable = false;
+resetCdCommand.flags = ["dev"];
 
 module.exports = { resetCdCommand };

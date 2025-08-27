@@ -68,7 +68,9 @@ class DiscordClient {
         : `#${message.channelName}`;
 
     const embed = new this.client.EmbedBuilder()
-      .setTitle(`${channelName}/${message.displayName} - ${message.command}`)
+      .setTitle(
+        `${channelName}/${message.displayName} - ${message.command.commandName}`
+      )
       .setURL(`${this.getLogsUrl(message.channelName, message.messageID)}`)
       .addFields(
         {

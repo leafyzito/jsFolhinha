@@ -1,6 +1,4 @@
 const devJoinChannelCommand = async (message) => {
-  message.command = "dev devjoin";
-
   const targetChannel = message.args[1];
   const announceFlag = message.args[2] === "true" || false;
 
@@ -52,5 +50,6 @@ devJoinChannelCommand.cooldown = 5_000;
 devJoinChannelCommand.cooldownType = "user";
 devJoinChannelCommand.permissions = ["admin"];
 devJoinChannelCommand.whisperable = false;
+devJoinChannelCommand.flags = ["dev"];
 
 module.exports = { devJoinChannelCommand };

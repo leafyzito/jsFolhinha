@@ -91,7 +91,7 @@ async function validateCommandExecution(cooldownDuration, type, message) {
   }
 
   // Check command permissions
-  const command = commandsList[message.command];
+  const command = message.command;
   // if command has permissions, check if user has permission
   if (command && command.permissions && command.permissions.length > 0) {
     const hasPermission = await checkUserPermissions(

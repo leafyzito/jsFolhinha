@@ -1,6 +1,4 @@
 const rustlogAddCommand = async (message) => {
-  message.command = "dev rustlogadd";
-
   const targetUser = message.args[1];
   if (!targetUser) {
     return {
@@ -35,5 +33,6 @@ rustlogAddCommand.cooldown = 5_000;
 rustlogAddCommand.cooldownType = "user";
 rustlogAddCommand.permissions = ["admin"];
 rustlogAddCommand.whisperable = false;
+rustlogAddCommand.flags = ["dev"];
 
 module.exports = { rustlogAddCommand };

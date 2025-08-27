@@ -35,7 +35,7 @@ async function commandHandler(message) {
     return;
   }
 
-  message.command = commandsList[command].commandName;
+  message.command = commandsList[command];
   if (!(await checkCommandExecution(command, message))) {
     return;
   }

@@ -1,8 +1,6 @@
 const { exec } = require("child_process");
 
 const execCommand = async (message) => {
-  message.command = "dev exec";
-
   const command = message.args.slice(1).join(" ");
 
   return new Promise((resolve) => {
@@ -37,5 +35,6 @@ execCommand.cooldown = 5_000;
 execCommand.cooldownType = "user";
 execCommand.permissions = ["admin"];
 execCommand.whisperable = false;
+execCommand.flags = ["dev"];
 
 module.exports = { execCommand };

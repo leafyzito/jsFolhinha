@@ -1,6 +1,4 @@
 const devPartChannelCommand = async (message) => {
-  message.command = "dev devpart";
-
   const targetChannel = message.args[1];
   if (!targetChannel) {
     return {
@@ -32,5 +30,6 @@ devPartChannelCommand.cooldown = 5_000;
 devPartChannelCommand.cooldownType = "user";
 devPartChannelCommand.permissions = ["admin"];
 devPartChannelCommand.whisperable = false;
+devPartChannelCommand.flags = ["dev"];
 
 module.exports = { devPartChannelCommand };

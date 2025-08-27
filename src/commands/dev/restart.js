@@ -3,9 +3,7 @@ const { promisify } = require("util");
 
 const execAsync = promisify(exec);
 
-const restartCommand = async (message) => {
-  message.command = "dev restart";
-
+const restartCommand = async () => {
   try {
     // Execute docker compose restart for all bot-related services
     await execAsync("docker compose -p folhinha restart");
@@ -29,5 +27,6 @@ restartCommand.cooldown = 5_000;
 restartCommand.cooldownType = "user";
 restartCommand.permissions = ["admin"];
 restartCommand.whisperable = false;
+restartCommand.flags = ["dev"];
 
 module.exports = { restartCommand };
