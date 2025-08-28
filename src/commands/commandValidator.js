@@ -130,7 +130,7 @@ async function validateCommandExecution(cooldownDuration, type, message) {
       if (
         banRecord.bannedCommands &&
         (banRecord.bannedCommands.includes("all") ||
-          banRecord.bannedCommands.includes(message.command))
+          banRecord.bannedCommands.includes(message.command.commandName))
       ) {
         return false;
       }
@@ -148,14 +148,14 @@ async function validateCommandExecution(cooldownDuration, type, message) {
   }
   if (
     currChannelConfigs &&
-    currChannelConfigs.disabledCommands.includes(message.command)
+    currChannelConfigs.disabledCommands.includes(message.command.commandName)
   ) {
     fb.log.logAndReply(message, `⚠️ Esse comando foi desativado neste chat`);
     return false;
   }
   if (
     currChannelConfigs &&
-    currChannelConfigs.devBanCommands.includes(message.command)
+    currChannelConfigs.devBanCommands.includes(message.command.commandName)
   ) {
     fb.log.logAndReply(
       message,
