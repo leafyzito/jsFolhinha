@@ -89,7 +89,7 @@ const fastDungeonCommand = async (message) => {
   };
 };
 
-fastDungeonCommand.commandName = "fastdungeon";
+fastDungeonCommand.commandName = "dungeon";
 fastDungeonCommand.aliases = ["fastdungeon", "fd"];
 fastDungeonCommand.shortDescription =
   "Entre em uma dungeon e tenha o seu destino escolhido aleatoriamente";
