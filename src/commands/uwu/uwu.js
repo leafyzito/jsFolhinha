@@ -6,7 +6,7 @@ const uwuCommand = async (message) => {
   const textToUwuify = message.args.slice(1).join(" ");
   if (!textToUwuify) {
     return {
-      reply: `Use o formato: ${message.commandPrefix}uwu <mensagem>`,
+      reply: `Use o formato: ${message.prefix}uwu <mensagem>`,
     };
   }
 
