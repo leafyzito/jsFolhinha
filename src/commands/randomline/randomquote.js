@@ -1,4 +1,3 @@
-// TODO: OK - test
 async function getRandomQuote(userid, channelid) {
   const response = await fb.api.rustlog.getRandomLine(channelid, userid);
 
@@ -28,24 +27,13 @@ async function getRandomQuote(userid, channelid) {
 }
 
 const randomQuoteCommand = async (message) => {
-  const targetUser =
-    message.args[1]?.replace(/^@/, "") || message.senderUsername;
-  const targetId =
-    targetUser !== message.senderUsername
-      ? (await fb.api.helix.getUserByUsername(targetUser))?.id
-      : message.senderUserID;
-
-  const randomQuote = await getRandomQuote(targetId, message.channelID);
-  if (!targetId && !randomQuote) {
+  const randomQuote = await getRandomQuote(
+    message.senderUserID,
+    message.channelID
+  );
+  if (!randomQuote) {
     return {
       reply: `Nunca loguei uma mensagem desse usuário neste chat (contando desde 06/03/2025)`,
-    };
-  }
-
-  if (!randomQuote) {
-    // this should never happen
-    return {
-      reply: `Nunca loguei uma mensagem desse usuário neste chat (contando desde 06/03/2025). Se não for o caso, por favor contacte o @${process.env.DEV_NICK}`,
     };
   }
 
@@ -60,11 +48,9 @@ randomQuoteCommand.shortDescription = "Veja uma mensagem aleatória sua";
 randomQuoteCommand.cooldown = 5000;
 randomQuoteCommand.cooldownType = "channel";
 randomQuoteCommand.whisperable = false;
-randomQuoteCommand.description = `Receba uma mensagem aleatória de um usuário fornecido ou, caso nenhum seja fornecido, da pessoa que executou o comando
+randomQuoteCommand.description = `Receba uma mensagem aleatória da pessoa que executou o comando
   
   • Exemplo: !randomquote - O bot vai mostrar uma mensagem aleatória de quem executou o comando no chat onde o comando foi executado
-  
-  • Exemplo: !randomquote @leafyzito - O bot vai mostrar uma mensagem aleatória de @leafyzito no chat onde o comando foi executado
   
   Começou a contar desde 06/03/2025`;
 randomQuoteCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
