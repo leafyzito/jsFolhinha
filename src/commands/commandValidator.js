@@ -1,6 +1,4 @@
 // Define variables to store the last execution time for each user and channel
-const { commandsList } = require("./commandsList");
-
 const userCooldowns = {};
 const channelCooldowns = {};
 
