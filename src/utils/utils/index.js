@@ -54,16 +54,17 @@ class Utils {
   relativeTime(input, returnOnlyTime = false, compact = true) {
     let date;
 
-    // Handle string numbers (e.g., "1725892920")
-    if (typeof input === "string" && /^\d+$/.test(input)) {
+    // Handle string numbers (e.g., "1725892920" or "1716003627.455552")
+    if (typeof input === "string" && /^\d+(\.\d+)?$/.test(input)) {
       input = Number(input);
     }
 
     if (typeof input === "number") {
       // Detect if it's in seconds or milliseconds
       date =
-        input.toString().length === 10
-          ? dayjs.unix(input) // seconds
+        input.toString().length === 10 ||
+        (input.toString().includes(".") && input < 1e12)
+          ? dayjs.unix(Math.floor(input)) // seconds (floor to remove decimal part)
           : dayjs(input); // milliseconds
     } else {
       // This will handle Date objects and ISO date strings
