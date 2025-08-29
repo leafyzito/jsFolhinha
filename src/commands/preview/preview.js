@@ -33,7 +33,9 @@ async function getPreview(previewTarget) {
   const data = await fb.api.helix.getStream(previewTarget);
 
   if (!data) {
-    return "não existe";
+    // if offline, return the offline image
+    const offlineImage = await getOfflineImage(previewTarget);
+    return { isLive: false, image: offlineImage };
   }
 
   if (!data.id) {
@@ -64,13 +66,15 @@ async function getPreview(previewTarget) {
 const previewCommand = async (message) => {
   const previewTarget =
     message.args[1]?.replace(/^@/, "") || message.channelName;
-  const preview = await getPreview(previewTarget);
 
-  if (preview === "não existe") {
+  const targetId = await fb.api.helix.getUserByUsername(previewTarget);
+  if (!targetId) {
     return {
-      reply: `O canal ${previewTarget} não existe`,
+      reply: `Esse canal não existe`,
     };
   }
+
+  const preview = await getPreview(previewTarget);
 
   if (!preview.isLive && preview.image === null) {
     return {
