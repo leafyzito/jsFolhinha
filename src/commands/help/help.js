@@ -1,5 +1,3 @@
-const { commandsList } = require("../commandsList");
-
 const helpCommand = async (message) => {
   const specificCommand = message.args[1]?.toLowerCase();
 
@@ -15,13 +13,13 @@ const helpCommand = async (message) => {
     };
   }
 
-  if (!(specificCommand in commandsList)) {
+  if (!(specificCommand in fb.commandsList)) {
     return {
       reply: `O comando ${specificCommand} não existe. Para uma lista de comandos, acesse https://folhinhabot.com/comandos`,
     };
   }
 
-  const commandInfo = commandsList[specificCommand];
+  const commandInfo = fb.commandsList[specificCommand];
   const shortDescription = commandInfo.shortDescription;
 
   return {

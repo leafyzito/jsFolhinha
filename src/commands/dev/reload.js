@@ -35,7 +35,7 @@ const reloadCommands = () => {
     });
 
     // Reload the commands
-    loadCommands();
+    fb.commandsList = loadCommands();
     return true;
   } catch (error) {
     console.error("Error reloading commands:", error);
