@@ -33,6 +33,7 @@ fb.api = {};
 fb.twitch = null;
 fb.discord = null;
 fb.notifiedUsers = new Set(); // Cache to track users who have been notified about reminders
+fb.commandsList = null;
 
 // FB UTILITY FUNCTIONS
 // Function to mark fb as ready
@@ -68,7 +69,7 @@ async function initializeApp() {
     console.log("* Twitch client initialized");
 
     // Load commands
-    loadCommands();
+    fb.commandsList = loadCommands();
     console.log("* Commands loaded");
 
     // Load and process reminders (handle missed and schedule future ones)

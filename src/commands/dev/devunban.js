@@ -1,8 +1,6 @@
-const { commandsList } = require("../../commands/commandsList");
-
 function getCommandObjectByAlias(alias) {
   return (
-    Object.values(commandsList)
+    Object.values(fb.commandsList)
       .flatMap((command) => [command, ...command.aliases])
       .find(
         (item) => item.aliases?.includes(alias) || item.commandName === alias
