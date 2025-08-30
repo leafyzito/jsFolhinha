@@ -1,6 +1,6 @@
 const joinedChannelsCommand = async () => {
   return {
-    reply: `🤖 ${[...fb.twitch.anonClient.joinedChannels].length}/${
+    reply: `🤖 ${fb.twitch.anonClient.currentChannels.length}/${
       fb.twitch.anonClient.channelsToJoin.length
     }`,
   };

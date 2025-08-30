@@ -1,6 +1,5 @@
 require("dotenv").config();
 const { Client, GatewayIntentBits, EmbedBuilder } = require("discord.js");
-const { colorToHexString } = require("@mastondzn/dank-twitch-irc");
 
 // Event handlers (kept in separate files for cleanliness)
 const onReadyHandler = require("./events/ready");
@@ -71,7 +70,7 @@ class DiscordClient {
       .setTitle(
         `${channelName}/${message.displayName} - ${message.command.commandName}`
       )
-      .setURL(`${this.getLogsUrl(message.channelName, message.messageID)}`)
+      .setURL(`${this.getLogsUrl(message.channelName, message.id)}`)
       .addFields(
         {
           name: "Comando:",
@@ -87,7 +86,7 @@ class DiscordClient {
           inline: false,
         }
       )
-      .setColor(message.color ? colorToHexString(message.color) : "#008000")
+      .setColor(message.userInfo.color ? message.userInfo.color : "#008000")
       .setFooter({
         text: `${message.responseTime}ms/${
           message.internalResponseTime
@@ -207,7 +206,7 @@ class DiscordClient {
         value: message.messageText,
         inline: false,
       })
-      .setColor(message.color ? colorToHexString(message.color) : "#008000")
+      .setColor(message.userInfo.color ? message.userInfo.color : "#008000")
       .setFooter({
         text: `${this.getFormattedDateTime()}`,
       });
@@ -252,8 +251,8 @@ class DiscordClient {
   async notifyDevMention(message) {
     const embed = new this.client.EmbedBuilder()
       .setTitle(`#${message.channelName}/${message.displayName}`)
-      .setURL(`${this.getLogsUrl(message.channelName, message.messageID)}`)
-      .setColor(message.color ? colorToHexString(message.color) : "#008000")
+      .setURL(`${this.getLogsUrl(message.channelName, message.id)}`)
+      .setColor(message.userInfo.color ? message.userInfo.color : "#008000")
       .setFooter({
         text: `${this.getFormattedDateTime()}`,
       });
