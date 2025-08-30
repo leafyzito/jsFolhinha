@@ -1,6 +1,4 @@
 // Define variables to store the last execution time for each user and channel
-const { commandsList } = require("./commandsList");
-
 const userCooldowns = {};
 const channelCooldowns = {};
 
@@ -9,7 +7,7 @@ function manageCooldown(cooldownDuration, type, message) {
   // Get the current time
   const currentTime = Date.now();
   let identifier = message.senderUsername;
-  const command = message.command;
+  const command = message.command.commandName;
 
   // if channel is whisper, set type to user, no matter what type is passed
   if (message.channelName === "whisper") {
@@ -130,7 +128,7 @@ async function validateCommandExecution(cooldownDuration, type, message) {
       if (
         banRecord.bannedCommands &&
         (banRecord.bannedCommands.includes("all") ||
-          banRecord.bannedCommands.includes(message.command))
+          banRecord.bannedCommands.includes(message.command.commandName))
       ) {
         return false;
       }
@@ -148,14 +146,14 @@ async function validateCommandExecution(cooldownDuration, type, message) {
   }
   if (
     currChannelConfigs &&
-    currChannelConfigs.disabledCommands.includes(message.command)
+    currChannelConfigs.disabledCommands.includes(message.command.commandName)
   ) {
     fb.log.logAndReply(message, `⚠️ Esse comando foi desativado neste chat`);
     return false;
   }
   if (
     currChannelConfigs &&
-    currChannelConfigs.devBanCommands.includes(message.command)
+    currChannelConfigs.devBanCommands.includes(message.command.commandName)
   ) {
     fb.log.logAndReply(
       message,

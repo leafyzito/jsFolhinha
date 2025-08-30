@@ -2,7 +2,6 @@ const { commandHandler } = require("../../../handlers");
 
 module.exports = function onWhisper(message) {
   // Check if this whisper matches any waiting criteria first
-  fb.utils.checkWhisperWaiters(message);
 
   message.prefix = "!";
   message.internalTimestamp = new Date().getTime();
@@ -11,6 +10,8 @@ module.exports = function onWhisper(message) {
   message.channelName = "whisper";
   message.isWhisper = true;
   message.args = message.messageText.split(" ");
+
+  fb.utils.checkWhisperWaiters(message);
 
   for (const prefix of fb.utils.validPrefixes()) {
     if (message.messageText.startsWith(prefix)) {
