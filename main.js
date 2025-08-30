@@ -56,9 +56,17 @@ async function initializeApp() {
     fb.log = log;
     console.log("* Utilities initialized");
 
+    // Initialize Auth Provider
+    fb.authProvider = await require("./src/utils/init").initializeAuthProvider();
+    console.log("* Twurple Auth provider initialized");
+
     // Initialize APIs
     fb.api = await require("./src/utils/init").initializeAPIs();
     console.log("* APIs initialized");
+
+    // Initialize API Client
+    fb.api.twurple = await require("./src/utils/init").initializeApiClient();
+    console.log("* Twurple API client initialized");
 
     // Initialize clients
     fb.discord = await require("./src/utils/init").initializeDiscord();

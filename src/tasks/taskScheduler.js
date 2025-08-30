@@ -12,7 +12,7 @@ function startFetchPendingJoinsTask() {
 }
 
 function startRejoinDisconnectedChannelsTask() {
-  setInterval(() => rejoinDisconnectedChannels(), 30_000);
+  // setInterval(() => rejoinDisconnectedChannels(), 30_000);
 }
 
 function startDiscordPresenceTask() {

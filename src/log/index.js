@@ -31,7 +31,7 @@ class Logger {
     // console.log('handleSendError: ', err);
 
     // Handle identical message error - no retries needed
-    if (err.cause.message.includes("identical to the previous one")) {
+    if (err.message.includes("identical to the previous one")) {
       console.log("sending identical message error, ending here");
       return;
     }
@@ -54,9 +54,9 @@ class Logger {
 
     // Handle retryable errors
     const isRetryableError =
-      err.cause.message.includes("too quickly") ||
-      err.cause.message.includes("waiting for response");
-    const errorType = err.cause.message.includes("too quickly")
+      err.message.includes("too quickly") ||
+      err.message.includes("waiting for response");
+    const errorType = err.message.includes("too quickly")
       ? "sending messages too quickly"
       : "waiting for response";
 
@@ -74,7 +74,7 @@ class Logger {
 
   async createCommandLog(message, response) {
     const insertDoc = {
-      messageid: message.messageID,
+      messageid: message.id,
       sentDate: message.serverTimestamp,
       channel: message.channelName,
       channelId: message.channelID || null,
@@ -103,7 +103,7 @@ class Logger {
     } else {
       await this.manageChannelMsgCooldown(message.channelName);
       fb.twitch.client
-        .reply(message.channelName, message.messageID, response)
+        .say(message.channelName, response, message.id)
         .catch((err) =>
           this.handleSendError(
             err,
@@ -147,7 +147,7 @@ class Logger {
 
     await this.manageChannelMsgCooldown(message.channelName);
     fb.twitch.client
-      .me(message.channelName, response)
+      .say(message.channelName, "/me "+response)
       .catch((err) =>
         this.handleSendError(
           err,
@@ -197,7 +197,7 @@ class Logger {
 
     await this.manageChannelMsgCooldown(message.channelName);
     fb.twitch.client
-      .reply(message.channelName, message.messageID, response)
+      .say(message.channelName, response, message.id)
       .catch((err) =>
         this.handleSendError(
           err,
