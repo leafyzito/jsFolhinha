@@ -29,10 +29,9 @@ module.exports = async function onMessage(channel, username, text, message) {
   // add content from parent message to message if exists and remove the first word (the reply)
   message.isReply = false;
   message.originalMessageText = message.messageText;
-  if (message.replyParentMessageBody) {
+  if (message.parentMessageText) {
     message.isReply = true;
-    message.messageText =
-      message.messageText + " " + message.replyParentMessageBody;
+    message.messageText = message.messageText + " " + message.parentMessageText;
   }
 
   // sanitize message

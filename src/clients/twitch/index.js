@@ -48,7 +48,8 @@ class TwitchClient {
       channelName,
       channelId = null,
       content,
-      replyToMessageId = null
+      replyToMessageId = null,
+      message = null
     ) => {
       let useApi = true;
       const helixParams = {};
@@ -57,44 +58,42 @@ class TwitchClient {
         helixParams.replyParentMessageId = replyToMessageId;
         ircParams.replyTo = replyToMessageId;
       }
-      const texts = splitOnSpaces(content, 500);
+      // Limit content to 500 characters
+      const msg = content.length > 500 ? content.substring(0, 500) : content;
       if (!channelId) {
         channelId = (await fb.api.twurple.users.getUserByName(channelName)).id;
       }
 
-      // Try API first, fallback to IRC on per-message basis
-      for (const msg of texts) {
-        if (useApi) {
-          try {
-            await fb.api.twurple.chat.sendChatMessageAsApp(
-              process.env.BOT_USERID,
-              channelId,
-              msg,
-              helixParams
-            );
-            // await fb.discord.log(`[Twitch API] #${channel}: ${msg}`);
-            continue; // Success, continue with API
-          } catch (err) {
-            console.warn(
-              `API failed for ${channelName}, switching to IRC:`,
-              err
-            );
-            useApi = false;
-            console.error(`API failed for ${channelName}:`, err);
-            throw err; // Re-throw unexpected errors
-          }
-        }
-
-        // (fallback) IRC send message
-        try {
-          await this.client.originalSay(channelName, msg, ircParams);
-          // await fb.discord.log(`[Twitch IRC] #${channel}: ${msg}`);
-        } catch (error) {
-          console.error(`IRC failed for ${channelName}, message lost:`, error);
-        }
+      if (message) {
+        message.sentVia = "API";
       }
 
-      return useApi;
+      // Try API first, fallback to IRC
+      if (useApi) {
+        try {
+          await fb.api.twurple.chat.sendChatMessageAsApp(
+            process.env.BOT_USERID,
+            channelId,
+            msg,
+            helixParams
+          );
+        } catch (err) {
+          console.warn(`API failed for ${channelName}, switching to IRC:`, err);
+          useApi = false;
+          console.error(`API failed for ${channelName}:`, err);
+          throw err; // Re-throw unexpected errors
+        }
+      }
+      if (message) {
+        message.sentVia = useApi ? "API" : "IRC";
+      }
+
+      // (fallback) IRC send message
+      try {
+        await this.client.originalSay(channelName, msg, ircParams);
+      } catch (error) {
+        console.error(`IRC failed for ${channelName}, message lost:`, error);
+      }
     };
   }
 
@@ -158,46 +157,6 @@ class TwitchClient {
       .part(channel)
       .catch((error) => console.log("Error on parting channel:", error));
   }
-}
-
-function splitOnSpaces(text, maxMsgLength) {
-  text = text.trim();
-  const isMe = text.startsWith("/me ");
-  const mePrefix = isMe ? "/me " : "";
-  const prefixLength = mePrefix.length;
-
-  if (text.length <= maxMsgLength) {
-    return [text];
-  }
-
-  const res = [];
-  let startIndex = 0;
-
-  // If /me, skip the prefix for splitting, but add it to each slice
-  const splitText = isMe ? text.slice(prefixLength) : text;
-
-  while (startIndex < splitText.length) {
-    const availableLength = maxMsgLength - prefixLength;
-    const endIndex = startIndex + availableLength;
-    let spaceIndex = splitText.lastIndexOf(" ", endIndex);
-
-    if (
-      spaceIndex === -1 ||
-      spaceIndex <= startIndex ||
-      splitText.length - startIndex <= availableLength
-    ) {
-      spaceIndex = Math.min(startIndex + availableLength, splitText.length);
-    }
-
-    const textSlice = splitText.slice(startIndex, spaceIndex).trim();
-    if (textSlice.length) {
-      res.push(mePrefix + textSlice);
-    }
-
-    startIndex = spaceIndex + (splitText[spaceIndex] === " " ? 1 : 0);
-  }
-
-  return res;
 }
 
 module.exports = TwitchClient;

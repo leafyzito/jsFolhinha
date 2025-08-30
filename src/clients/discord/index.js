@@ -90,7 +90,7 @@ class DiscordClient {
       .setFooter({
         text: `${message.responseTime}ms/${
           message.internalResponseTime
-        }ms • ${this.getFormattedDateTime()}`,
+        }ms • ${this.getFormattedDateTime()} • ${message.sentVia}`,
       });
 
     if (message.notes != null) {
@@ -259,8 +259,8 @@ class DiscordClient {
 
     if (message.isReply) {
       embed.addFields({
-        name: `Respondendo a ${message.replyParentDisplayName}:`,
-        value: message.replyParentMessageBody,
+        name: `Respondendo a ${message.parentDisplayName}:`,
+        value: message.parentMessageText,
         inline: false,
       });
     }
