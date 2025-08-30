@@ -35,7 +35,12 @@ async function commandHandler(message) {
     return;
   }
 
-  message.command = commandsList[command];
+  Object.defineProperty(message, "command", {
+    value: commandsList[command],
+    writable: true,
+    configurable: true,
+    enumerable: true,
+  });
   if (!(await checkCommandExecution(command, message))) {
     return;
   }
@@ -67,7 +72,7 @@ async function commandHandler(message) {
   commandResult.reply = commandResult.reply.replace(/[\n\r]/g, " ").trim();
 
   message.notes = commandResult.notes;
-  message.responseTime = new Date().getTime() - message.serverTimestampRaw;
+  message.responseTime = new Date().getTime() - message.internalTimestamp;
   message.internalResponseTime =
     new Date().getTime() - message.internalTimestamp;
 

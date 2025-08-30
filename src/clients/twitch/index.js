@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { ChatClient } = require("@mastondzn/dank-twitch-irc");
+const { ChatClient } = require("@twurple/chat");
 const { getChannelsToJoin } = require("../../utils/init");
 
 //const { modifyClient } = require("../../utils/startup");
@@ -8,38 +8,32 @@ const { getChannelsToJoin } = require("../../utils/init");
 const onReadyHandler = require("./events/ready.js");
 const onJoinHandler = require("./events/join.js");
 const onMessageHandler = require("./events/message.js");
-const onClearChatHandler = require("./events/clearChat.js");
-const onWhisperHandler = require("./events/whisper.js");
+const onTimeout = require("./events/timeout.js");
+// const onWhisperHandler = require("./events/whisper.js");
 
 class TwitchClient {
   constructor() {
+    // https://twurple.js.org/reference/chat/classes/ChatClient.html
     this.client = new ChatClient({
-      username: process.env.BOT_USERNAME,
-      password: process.env.BOT_IRC_TOKEN,
-      ignoreUnhandledPromiseRejections: true,
-      maxChannelCountPerConnection: 100,
-      connectionRateLimits: {
-        parallelConnections: 5,
-        releaseTime: 1000,
-      },
+      authProvider: fb.authProvider.provider,
+      isAlwaysMod: false,
+      logger: { minLevel: "ERROR" },
+      rejoinChannelsOnReconnect: true,
+      requestMembershipEvents: false,
+      //Your bot level (known, verified, or none).
+      //botLevel: none,
+
+      //Channels to join after connecting.
+      //channels: [],
     });
 
     this.anonClient = new ChatClient({
-      username: "justinfan12345",
-      password: undefined,
-      rateLimits: "verifiedBot",
-      connection: {
-        type: "websocket",
-        secure: true,
-      },
-      maxChannelCountPerConnection: 200,
-      connectionRateLimits: {
-        parallelConnections: 10,
-        releaseTime: 100,
-      },
-      requestMembershipCapability: false,
-      installDefaultMixins: false,
-      ignoreUnhandledPromiseRejections: true,
+      channels: async () =>
+        (await getChannelsToJoin()).map((channel) => channel.login),
+      logger: { minLevel: "ERROR" },
+      readOnly: true,
+      rejoinChannelsOnReconnect: true,
+      requestMembershipEvents: false,
     });
 
     // Useful state
@@ -47,6 +41,49 @@ class TwitchClient {
 
     // Initialize channelsToJoin arrays
     this.anonClient.channelsToJoin = [];
+
+    this.client.originalSay = this.client.say;
+    // Override chat send
+    this.client.say = async (channel, content, replyToMessageId = null) => {
+      const helixParams = {};
+      const ircParams = {};
+      if (replyToMessageId) {
+        helixParams.replyParentMessageId = replyToMessageId;
+        ircParams.replyTo = replyToMessageId;
+      }
+      const channelId = (await fb.api.twurple.users.getUserByName(channel)).id;
+      const texts = splitOnSpaces(content, 500);
+
+      // Try API first, fallback to IRC on per-message basis
+      let useApi = true;
+      for (const msg of texts) {
+        if (useApi) {
+          try {
+            await fb.api.twurple.chat.sendChatMessageAsApp(
+              process.env.BOT_USERID,
+              channelId,
+              msg,
+              helixParams
+            );
+            await fb.discord.log(`[Twitch API] #${channel}: ${msg}`);
+            continue; // Success, continue with API
+          } catch (err) {
+            console.warn(`API failed for ${channel}, switching to IRC:`, err);
+            useApi = false;
+            console.error(`API failed for ${channel}:`, err);
+            throw err; // Re-throw unexpected errors
+          }
+        }
+
+        // (fallback) IRC send message
+        try {
+          await this.client.originalSay(channel, msg, ircParams);
+          await fb.discord.log(`[Twitch IRC] #${channel}: ${msg}`);
+        } catch (error) {
+          console.error(`IRC failed for ${channel}, message lost:`, error);
+        }
+      }
+    };
   }
 
   async init() {
@@ -57,24 +94,23 @@ class TwitchClient {
     // register events
     this.registerEvents();
 
-    // get channels to join
-    const channelsToJoin = await getChannelsToJoin();
-
-    // join channels
-    this.join(channelsToJoin.map((channel) => channel.login));
+    this.anonClient.channelsToJoin = (await getChannelsToJoin()).map(
+      (channel) => channel.login
+    );
 
     // tasks are started from main.js
   }
 
   registerEvents() {
     // anon client events (read-only)
-    this.anonClient.on("ready", () => onReadyHandler());
-    this.anonClient.on("JOIN", (channel) => onJoinHandler(channel));
-    this.anonClient.on("PRIVMSG", (msg) => onMessageHandler(msg));
-    this.anonClient.on("CLEARCHAT", (msg) => onClearChatHandler(msg));
+    this.anonClient.onConnect(() => onReadyHandler());
+    this.anonClient.onJoin((channel) => onJoinHandler(channel));
+    this.anonClient.onTimeout((msg) => onTimeout(msg));
+    this.anonClient.onBan((msg) => onTimeout(msg, true));
+    this.anonClient.onMessage(onMessageHandler);
 
     // main client whisper (since anon can't receive whispers)
-    this.client.on("WHISPER", (msg) => onWhisperHandler(msg));
+    // this.client.on("WHISPER", (msg) => onWhisperHandler(msg));
   }
 
   // join given MULTIPLE channels login names and update channelsToJoin array
@@ -110,6 +146,47 @@ class TwitchClient {
       .part(channel)
       .catch((error) => console.log("Error on parting channel:", error));
   }
+
+}
+
+function splitOnSpaces(text, maxMsgLength) {
+  text = text.trim();
+  const isMe = text.startsWith("/me ");
+  const mePrefix = isMe ? "/me " : "";
+  const prefixLength = mePrefix.length;
+
+  if (text.length <= maxMsgLength) {
+    return [text];
+  }
+
+  const res = [];
+  let startIndex = 0;
+
+  // If /me, skip the prefix for splitting, but add it to each slice
+  const splitText = isMe ? text.slice(prefixLength) : text;
+
+  while (startIndex < splitText.length) {
+    const availableLength = maxMsgLength - prefixLength;
+    const endIndex = startIndex + availableLength;
+    let spaceIndex = splitText.lastIndexOf(" ", endIndex);
+
+    if (
+      spaceIndex === -1 ||
+      spaceIndex <= startIndex ||
+      splitText.length - startIndex <= availableLength
+    ) {
+      spaceIndex = Math.min(startIndex + availableLength, splitText.length);
+    }
+
+    const textSlice = splitText.slice(startIndex, spaceIndex).trim();
+    if (textSlice.length) {
+      res.push(mePrefix + textSlice);
+    }
+
+    startIndex = spaceIndex + (splitText[spaceIndex] === " " ? 1 : 0);
+  }
+
+  return res;
 }
 
 module.exports = TwitchClient;

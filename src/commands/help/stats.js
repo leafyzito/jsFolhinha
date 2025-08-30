@@ -1,6 +1,6 @@
 const statsCommand = async () => {
   const uptime = fb.utils.relativeTime(fb.startTime, true);
-  const channelsCount = fb.twitch.anonClient.joinedChannels.size || 0;
+  const channelsCount = fb.twitch.anonClient.currentChannels.length || 0;
   const usedRam = process.memoryUsage().heapUsed / 1024 / 1024;
 
   return {
