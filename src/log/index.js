@@ -103,7 +103,13 @@ class Logger {
     } else {
       await this.manageChannelMsgCooldown(message.channelName);
       fb.twitch.client
-        .say(message.channelName, message.channelID, response, message.id)
+        .say(
+          message.channelName,
+          message.channelID,
+          response,
+          message.id,
+          message
+        )
         .catch((err) =>
           this.handleSendError(
             err,
@@ -126,7 +132,7 @@ class Logger {
 
     await this.manageChannelMsgCooldown(message.channelName);
     fb.twitch.client
-      .say(message.channelName, message.channelID, response)
+      .say(message.channelName, message.channelID, response, null, message)
       .catch((err) =>
         this.handleSendError(
           err,
@@ -147,7 +153,13 @@ class Logger {
 
     await this.manageChannelMsgCooldown(message.channelName);
     fb.twitch.client
-      .say(message.channelName, message.channelID, "/me " + response)
+      .say(
+        message.channelName,
+        message.channelID,
+        "/me " + response,
+        null,
+        message
+      )
       .catch((err) =>
         this.handleSendError(
           err,
@@ -176,7 +188,7 @@ class Logger {
 
     await this.manageChannelMsgCooldown(channel);
     fb.twitch.client
-      .say(channel, content)
+      .say(channel, null, content)
       .catch((err) =>
         this.handleSendError(
           err,
@@ -197,7 +209,7 @@ class Logger {
 
     await this.manageChannelMsgCooldown(message.channelName);
     fb.twitch.client
-      .say(message.channelName, response, message.id)
+      .say(message.channelName, message.channelID, response, message.id)
       .catch((err) =>
         this.handleSendError(
           err,
