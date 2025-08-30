@@ -44,18 +44,25 @@ class TwitchClient {
 
     this.client.originalSay = this.client.say;
     // Override chat send
-    this.client.say = async (channel, content, replyToMessageId = null) => {
+    this.client.say = async (
+      channelName,
+      channelId = null,
+      content,
+      replyToMessageId = null
+    ) => {
+      let useApi = true;
       const helixParams = {};
       const ircParams = {};
       if (replyToMessageId) {
         helixParams.replyParentMessageId = replyToMessageId;
         ircParams.replyTo = replyToMessageId;
       }
-      const channelId = (await fb.api.twurple.users.getUserByName(channel)).id;
       const texts = splitOnSpaces(content, 500);
+      if (!channelId) {
+        channelId = (await fb.api.twurple.users.getUserByName(channelName)).id;
+      }
 
       // Try API first, fallback to IRC on per-message basis
-      let useApi = true;
       for (const msg of texts) {
         if (useApi) {
           try {
@@ -65,24 +72,29 @@ class TwitchClient {
               msg,
               helixParams
             );
-            await fb.discord.log(`[Twitch API] #${channel}: ${msg}`);
+            // await fb.discord.log(`[Twitch API] #${channel}: ${msg}`);
             continue; // Success, continue with API
           } catch (err) {
-            console.warn(`API failed for ${channel}, switching to IRC:`, err);
+            console.warn(
+              `API failed for ${channelName}, switching to IRC:`,
+              err
+            );
             useApi = false;
-            console.error(`API failed for ${channel}:`, err);
+            console.error(`API failed for ${channelName}:`, err);
             throw err; // Re-throw unexpected errors
           }
         }
 
         // (fallback) IRC send message
         try {
-          await this.client.originalSay(channel, msg, ircParams);
-          await fb.discord.log(`[Twitch IRC] #${channel}: ${msg}`);
+          await this.client.originalSay(channelName, msg, ircParams);
+          // await fb.discord.log(`[Twitch IRC] #${channel}: ${msg}`);
         } catch (error) {
-          console.error(`IRC failed for ${channel}, message lost:`, error);
+          console.error(`IRC failed for ${channelName}, message lost:`, error);
         }
       }
+
+      return useApi;
     };
   }
 
@@ -146,7 +158,6 @@ class TwitchClient {
       .part(channel)
       .catch((error) => console.log("Error on parting channel:", error));
   }
-
 }
 
 function splitOnSpaces(text, maxMsgLength) {

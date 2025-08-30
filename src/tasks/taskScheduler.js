@@ -1,6 +1,6 @@
 const petAttentionTask = require("./petAttention");
 const fetchPendingJoins = require("./fetchPendingJoins");
-const rejoinDisconnectedChannels = require("./rejoinDisconnectedChannels");
+// const rejoinDisconnectedChannels = require("./rejoinDisconnectedChannels");
 const updateDiscordPresence = require("./updateDiscordPresence");
 
 function startPetTask() {
@@ -11,9 +11,9 @@ function startFetchPendingJoinsTask() {
   setInterval(() => fetchPendingJoins(), 10_000);
 }
 
-function startRejoinDisconnectedChannelsTask() {
-  // setInterval(() => rejoinDisconnectedChannels(), 30_000);
-}
+// function startRejoinDisconnectedChannelsTask() {
+// setInterval(() => rejoinDisconnectedChannels(), 30_000);
+// }
 
 function startDiscordPresenceTask() {
   setInterval(() => updateDiscordPresence(), 60_000);
@@ -22,6 +22,6 @@ function startDiscordPresenceTask() {
 module.exports = {
   startPetTask,
   startFetchPendingJoinsTask,
-  startRejoinDisconnectedChannelsTask,
+  // startRejoinDisconnectedChannelsTask,
   startDiscordPresenceTask,
 };

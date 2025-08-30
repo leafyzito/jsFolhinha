@@ -95,7 +95,33 @@ async function getChannelsToJoin() {
 }
 
 async function getTokenData() {
-  return []; // get from your database
+  try {
+    // Ensure fb object is available
+    if (!fb || !fb.db) {
+      throw new Error("fb object not properly initialized");
+    }
+
+    // Get all auth tokens from the database
+    const authTokens = await fb.db.get("auth", {});
+
+    // Map database fields to the format expected by addUsers method
+    return authTokens.map((token) => ({
+      userId: token.user_id,
+      username: token.username,
+      accessToken: token.access_token,
+      refreshToken: token.refresh_token,
+      scope: token.scope,
+      expiresIn: token.expires_at
+        ? Math.floor((new Date(token.expires_at) - new Date()) / 1000)
+        : null,
+      obtainmentTimestamp: token.created_at
+        ? Math.floor(new Date(token.created_at).getTime() / 1000)
+        : null,
+    }));
+  } catch (error) {
+    console.error("Error fetching token data from database:", error);
+    return [];
+  }
 }
 
 module.exports = {
