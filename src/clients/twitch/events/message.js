@@ -41,6 +41,7 @@ module.exports = async function onMessage(channel, username, text, message) {
     ""
   );
   message.messageText = message.messageText.trim();
+  message.channelID = message.channelId;
 
   const channelData = await fb.db.get("config", {
     channelId: message.channelID,
@@ -48,7 +49,7 @@ module.exports = async function onMessage(channel, username, text, message) {
 
   // set custom properties
   message.prefix =
-    process.env.ENV === "prod" ? channelData?.prefix || "!" : "$";
+    process.env.ENV === "prod" ? channelData?.prefix || "!" : "!!";
   Object.defineProperty(message, "prefix", {
     value: process.env.ENV === "prod" ? channelData?.prefix || "!" : "!!",
     writable: true,
