@@ -37,9 +37,9 @@ const vipListCommand = async (message) => {
   }
 
   return {
-    reply: `${targetUser} é VIP em ${userVipList.totalVips} canais | ${
+    reply: `${targetUser} é VIP em ${userVipList.totalVips} canais • ${
       userVipList.totalPartners
-    } Parceiros | ${userVipList.totalAffiliates} Afiliados | ${
+    } Parceiros • ${userVipList.totalAffiliates} Afiliados • ${
       userVipList.totalFollowers
     } Seguidores no total - https://roles.tv/u/${targetUser.toLowerCase()}`,
   };

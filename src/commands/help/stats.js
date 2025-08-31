@@ -4,7 +4,7 @@ const statsCommand = async () => {
   const usedRam = process.memoryUsage().heapUsed / 1024 / 1024;
 
   return {
-    reply: `Uptime: ${uptime} | Canais: ${channelsCount} | RAM: ${
+    reply: `Uptime: ${uptime} • Canais: ${channelsCount} • RAM: ${
       Math.round(usedRam * 100) / 100
     }mb`,
   };
