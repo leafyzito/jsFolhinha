@@ -42,16 +42,14 @@ class TwitchClient {
     // Initialize channelsToJoin arrays
     this.anonClient.channelsToJoin = [];
 
-    this.client.originalSay = this.client.say;
+    this.client.IrcSay = this.client.say;
     // Override chat send
     this.client.say = async (
       channelName,
       channelId = null,
       content,
-      replyToMessageId = null,
-      message = null
+      replyToMessageId = null
     ) => {
-      let useApi = true;
       const helixParams = {};
       const ircParams = {};
       if (replyToMessageId) {
@@ -59,40 +57,37 @@ class TwitchClient {
         ircParams.replyTo = replyToMessageId;
       }
       // Limit content to 500 characters
-      const msg = content.length > 500 ? content.substring(0, 500) : content;
+      content = content.length > 500 ? content.substring(0, 500) : content;
       if (!channelId) {
         channelId = (await fb.api.helix.getUserByUsername(channelName))?.id;
       }
 
-      if (message) {
-        message.sentVia = "API";
+      // get channel scopes to decide to send using API or IRC
+      let channelScopes = [];
+      try {
+        channelScopes = await fb.authProvider.provider.getCurrentScopesForUser(
+          channelId
+        );
+      } catch {
+        // console.log(err);
       }
+      // console.log(channelScopes);
+
+      const useApi = channelScopes.includes("channel:bot");
 
       // Try API first, fallback to IRC
       if (useApi) {
-        try {
-          await fb.api.twurple.chat.sendChatMessageAsApp(
-            process.env.BOT_USERID,
-            channelId,
-            msg,
-            helixParams
-          );
-        } catch (err) {
-          console.warn(`API failed for ${channelName}, switching to IRC:`, err);
-          useApi = false;
-          console.error(`API failed for ${channelName}:`, err);
-          throw err; // Re-throw unexpected errors
-        }
-      }
-      if (message) {
-        message.sentVia = useApi ? "API" : "IRC";
+        await fb.api.twurple.chat.sendChatMessageAsApp(
+          process.env.BOT_USERID,
+          channelId,
+          content,
+          helixParams
+        );
       }
 
-      // (fallback) IRC send message
-      try {
-        await this.client.originalSay(channelName, msg, ircParams);
-      } catch (error) {
-        console.error(`IRC failed for ${channelName}, message lost:`, error);
+      // Use IRC if API failed or wasn't attempted
+      if (!useApi) {
+        await this.client.IrcSay(channelName, content, ircParams);
       }
     };
   }
