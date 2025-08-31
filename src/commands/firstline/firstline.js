@@ -54,7 +54,7 @@ const firstLineCommand = async (message) => {
     message.args[1]?.replace(/^@/, "") || message.senderUsername;
   const targetId =
     targetUser.toLowerCase() !== message.senderUsername.toLowerCase()
-      ? await fb.api.helix.getUserByUsername(targetUser)?.id
+      ? (await fb.api.helix.getUserByUsername(targetUser))?.id
       : message.senderUserID;
 
   const firstLine = await getFirstLine(message.channelID, targetId);
