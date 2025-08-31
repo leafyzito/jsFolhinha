@@ -97,7 +97,7 @@ const dungeonCommand = async (message) => {
     const targetId =
       targetUser.toLowerCase() === message.senderUsername
         ? message.senderUserID
-        : await fb.api.helix.getUserByUsername(targetUser)?.id;
+        : (await fb.api.helix.getUserByUsername(targetUser))?.id;
 
     // MARKER: show
     if (["show", "stats", "mostrar", "level", "lvl"].includes(userOption)) {
