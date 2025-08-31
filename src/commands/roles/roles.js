@@ -57,7 +57,7 @@ const rolesCommand = async (message) => {
   if (userRoles.artists > 0)
     response += ` | 🎨 Artist em ${formatNumber(userRoles.artists)}`;
   if (userRoles.subscribers > 0)
-    response += ` | 🎤 Subscriber em ${formatNumber(userRoles.subscribers)}`;
+    response += ` | 🎤 Sub em ${formatNumber(userRoles.subscribers)}`;
 
   response += ` - https://roles.tv/u/${targetUser.toLowerCase()}`;
 
