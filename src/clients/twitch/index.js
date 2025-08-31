@@ -61,7 +61,7 @@ class TwitchClient {
       // Limit content to 500 characters
       const msg = content.length > 500 ? content.substring(0, 500) : content;
       if (!channelId) {
-        channelId = (await fb.api.twurple.users.getUserByName(channelName)).id;
+        channelId = (await fb.api.helix.getUserByUsername(channelName))?.id;
       }
 
       if (message) {
