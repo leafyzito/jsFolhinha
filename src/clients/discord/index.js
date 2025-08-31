@@ -90,7 +90,7 @@ class DiscordClient {
       .setFooter({
         text: `${message.responseTime}ms/${
           message.internalResponseTime
-        }ms • ${this.getFormattedDateTime()} • ${message.sentVia}`,
+        }ms • ${this.getFormattedDateTime()}`,
       });
 
     if (message.notes != null) {
