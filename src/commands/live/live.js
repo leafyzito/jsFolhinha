@@ -32,7 +32,7 @@ const liveCommand = async (message) => {
   if (live.isLive) {
     const liveUrl =
       liveTarget !== message.channelName
-        ? ` | https://twitch.tv/${liveTarget}`
+        ? ` • https://twitch.tv/${liveTarget}`
         : "";
     return {
       reply: `${liveTarget} está agora fazendo live de ${live.game} para ${live.viewers} viewers - ${live.title}${liveUrl}`,

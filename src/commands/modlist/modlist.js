@@ -37,9 +37,9 @@ const modListCommand = async (message) => {
   }
 
   return {
-    reply: `${targetUser} é moderador em ${userModList.totalMods} canais | ${
+    reply: `${targetUser} é moderador em ${userModList.totalMods} canais • ${
       userModList.totalPartners
-    } Parceiros | ${userModList.totalAffiliates} Afiliados | ${
+    } Parceiros • ${userModList.totalAffiliates} Afiliados • ${
       userModList.totalFollowers
     } Seguidores no total - https://roles.tv/u/${targetUser.toLowerCase()}`,
   };
