@@ -1,10 +1,10 @@
-module.exports = function onTimeout(message, ban = false) {
-  if (message.user === process.env.BOT_USERNAME) {
+module.exports = function onTimeout(channel, user, duration) {
+  if (user === process.env.BOT_USERNAME) {
     fb.discord.importantLog(
       `* ${
-        ban
-          ? `Tomei timeout em #${message.channel} por ${message.duration} segundos`
-          : `Fui banido em #${message.channel}`
+        duration != null
+          ? `Tomei timeout em #${channel} por ${duration} segundos`
+          : `Fui banido em #${channel}`
       }`
     );
   }
