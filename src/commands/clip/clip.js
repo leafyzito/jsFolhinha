@@ -16,6 +16,8 @@ async function getClip(channelName, forceTwitchClipFlag) {
     return "error";
   }
   if (helixClip) {
+    // Add a 1 second timeout, to give time for the clip to be created correctly
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     return helixClip;
   }
 
