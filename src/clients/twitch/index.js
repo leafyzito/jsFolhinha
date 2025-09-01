@@ -21,7 +21,7 @@ class TwitchClient {
       rejoinChannelsOnReconnect: true,
       requestMembershipEvents: false,
       //Your bot level (known, verified, or none).
-      //botLevel: none,
+      //botLevel: "none",
 
       //Channels to join after connecting.
       //channels: [],
@@ -31,6 +31,7 @@ class TwitchClient {
       channels: async () =>
         (await getChannelsToJoin()).map((channel) => channel.login),
       logger: { minLevel: "ERROR" },
+      botLevel: "verified",
       readOnly: true,
       rejoinChannelsOnReconnect: true,
       requestMembershipEvents: false,
@@ -65,15 +66,13 @@ class TwitchClient {
       // get channel scopes to decide to send using API or IRC
       let channelScopes = [];
       try {
-        channelScopes = await fb.authProvider.provider.getCurrentScopesForUser(
+        channelScopes = fb.authProvider.provider.getCurrentScopesForUser(
           channelId
         );
       } catch {
         // console.log(err);
       }
-      // console.log(channelScopes);
-
-      const useApi = channelScopes.includes("channel:bot");
+      let useApi = channelScopes.includes("channel:bot");
 
       // Try API first, fallback to IRC
       if (useApi) {
@@ -82,7 +81,11 @@ class TwitchClient {
           channelId,
           content,
           helixParams
-        );
+        ).catch(async (err) => {
+          console.log(`Twitch API message send failed, falling back to IRC: ${err}`);
+          // await this.client.IrcSay(channelName, content, ircParams);
+          useApi = false;
+        });
       }
 
       // Use IRC if API failed or wasn't attempted
@@ -109,49 +112,16 @@ class TwitchClient {
 
   registerEvents() {
     // anon client events (read-only)
-    this.anonClient.onConnect(() => onReadyHandler());
-    this.anonClient.onJoin((channel) => onJoinHandler(channel));
-    this.anonClient.onTimeout((msg) => onTimeout(msg));
-    this.anonClient.onBan((msg) => onTimeout(msg, true));
+    this.anonClient.onConnect(onReadyHandler);
+    this.anonClient.onJoin(onJoinHandler);
+    this.anonClient.onTimeout(onTimeout);
+    this.anonClient.onBan((channel, user) => onTimeout(channel, user, null));
     this.anonClient.onMessage(onMessageHandler);
 
     // main client whisper (since anon can't receive whispers)
     // this.client.on("WHISPER", (msg) => onWhisperHandler(msg));
   }
 
-  // join given MULTIPLE channels login names and update channelsToJoin array
-  join(channels = []) {
-    if (channels.length === 0) {
-      return false;
-    }
-
-    // add to channelsToJoin
-    this.anonClient.channelsToJoin.push(...channels);
-
-    // join
-    this.anonClient
-      .joinAll(channels)
-      .then(() => console.log("* Joined channels"))
-      .catch((error) => {
-        console.log("Error on joining channels:", error);
-        return false;
-      });
-
-    return true;
-  }
-
-  // part given ONE channel and update channelsToJoin array
-  part(channel) {
-    // remove from channelsToJoin
-    this.anonClient.channelsToJoin = this.anonClient.channelsToJoin.filter(
-      (c) => c.toLowerCase() !== channel.toLowerCase()
-    );
-
-    // part
-    this.anonClient
-      .part(channel)
-      .catch((error) => console.log("Error on parting channel:", error));
-  }
 }
 
 module.exports = TwitchClient;
