@@ -32,7 +32,9 @@ const cookieDiarioCommand = async (message) => {
     }
   );
   return {
-    reply: `Você resgatou seu cookie diário e agora tem ${userCookieStats.total} cookies! 🍪`,
+    reply: `Você resgatou seu cookie diário e agora tem ${
+      userCookieStats.total + 1
+    } cookies! 🍪`,
   };
 };
 
