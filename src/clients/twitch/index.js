@@ -1,5 +1,6 @@
 require("dotenv").config();
 const { ChatClient } = require("@twurple/chat");
+const { ChatClient: DankChatClient } = require("@mastondzn/dank-twitch-irc");
 const { getChannelsToJoin } = require("../../utils/init");
 
 //const { modifyClient } = require("../../utils/startup");
@@ -9,7 +10,7 @@ const onReadyHandler = require("./events/ready.js");
 const onJoinHandler = require("./events/join.js");
 const onMessageHandler = require("./events/message.js");
 const onTimeout = require("./events/timeout.js");
-// const onWhisperHandler = require("./events/whisper.js");
+const onWhisperHandler = require("./events/whisper.js");
 
 class TwitchClient {
   constructor() {
@@ -21,10 +22,17 @@ class TwitchClient {
       rejoinChannelsOnReconnect: true,
       requestMembershipEvents: false,
       //Your bot level (known, verified, or none).
-      //botLevel: "none",
+      botLevel: "known",
 
       //Channels to join after connecting.
-      //channels: [],
+      channels: async () =>
+        (await getChannelsToJoin()).map((channel) => channel.login),
+    });
+
+    this.whisperClient = new DankChatClient({
+      username: process.env.BOT_USERNAME,
+      password: process.env.BOT_IRC_TOKEN,
+      ignoreUnhandledPromiseRejections: true,
     });
 
     this.anonClient = new ChatClient({
@@ -66,9 +74,8 @@ class TwitchClient {
       // get channel scopes to decide to send using API or IRC
       let channelScopes = [];
       try {
-        channelScopes = fb.authProvider.provider.getCurrentScopesForUser(
-          channelId
-        );
+        channelScopes =
+          fb.authProvider.provider.getCurrentScopesForUser(channelId);
       } catch {
         // console.log(err);
       }
@@ -76,16 +83,20 @@ class TwitchClient {
 
       // Try API first, fallback to IRC
       if (useApi) {
-        await fb.api.twurple.chat.sendChatMessageAsApp(
-          process.env.BOT_USERID,
-          channelId,
-          content,
-          helixParams
-        ).catch(async (err) => {
-          console.log(`Twitch API message send failed, falling back to IRC: ${err}`);
-          // await this.client.IrcSay(channelName, content, ircParams);
-          useApi = false;
-        });
+        await fb.api.twurple.chat
+          .sendChatMessageAsApp(
+            process.env.BOT_USERID,
+            channelId,
+            content,
+            helixParams
+          )
+          .catch(async (err) => {
+            console.log(
+              `Twitch API message send failed, falling back to IRC: ${err}`
+            );
+            // await this.client.IrcSay(channelName, content, ircParams);
+            useApi = false;
+          });
       }
 
       // Use IRC if API failed or wasn't attempted
@@ -96,18 +107,17 @@ class TwitchClient {
   }
 
   async init() {
+    // register events BEFORE connecting
+    this.registerEvents();
+
     // connect
     this.client.connect();
     this.anonClient.connect();
-
-    // register events
-    this.registerEvents();
+    this.whisperClient.connect();
 
     this.anonClient.channelsToJoin = (await getChannelsToJoin()).map(
       (channel) => channel.login
     );
-
-    // tasks are started from main.js
   }
 
   registerEvents() {
@@ -119,9 +129,11 @@ class TwitchClient {
     this.anonClient.onMessage(onMessageHandler);
 
     // main client whisper (since anon can't receive whispers)
-    // this.client.on("WHISPER", (msg) => onWhisperHandler(msg));
-  }
+    // this.client.onWhisper(onWhisperHandler);
 
+    // whisper client events
+    this.whisperClient.on("WHISPER", (msg) => onWhisperHandler(msg));
+  }
 }
 
 module.exports = TwitchClient;

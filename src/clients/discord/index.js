@@ -1,5 +1,6 @@
 require("dotenv").config();
 const { Client, GatewayIntentBits, EmbedBuilder } = require("discord.js");
+const { colorToHexString } = require("@mastondzn/dank-twitch-irc");
 
 // Event handlers (kept in separate files for cleanliness)
 const onReadyHandler = require("./events/ready");
@@ -86,7 +87,7 @@ class DiscordClient {
           inline: false,
         }
       )
-      .setColor(message.userInfo.color ? message.userInfo.color : "#008000")
+      .setColor(this.getColorForEmbed(message))
       .setFooter({
         text: `${message.responseTime}ms/${
           message.internalResponseTime
@@ -206,7 +207,8 @@ class DiscordClient {
         value: message.messageText,
         inline: false,
       })
-      .setColor(message.userInfo.color ? message.userInfo.color : "#008000")
+      .setColor(this.getColorForEmbed(message))
+
       .setFooter({
         text: `${this.getFormattedDateTime()}`,
       });
@@ -252,7 +254,7 @@ class DiscordClient {
     const embed = new this.client.EmbedBuilder()
       .setTitle(`#${message.channelName}/${message.displayName}`)
       .setURL(`${this.getLogsUrl(message.channelName, message.id)}`)
-      .setColor(message.userInfo.color ? message.userInfo.color : "#008000")
+      .setColor(this.getColorForEmbed(message))
       .setFooter({
         text: `${this.getFormattedDateTime()}`,
       });
@@ -303,6 +305,16 @@ class DiscordClient {
     return `https://tv.supa.sh/logs?c=${channel}&d=${year}-${month}-${day}${
       messageId ? `#${messageId}` : ""
     }`;
+  }
+
+  getColorForEmbed(message) {
+    if (message.userInfo) {
+      return message.userInfo.color ? message.userInfo.color : "#008000";
+    }
+    if (message.color) {
+      return colorToHexString(message.color);
+    }
+    return "#008000";
   }
 }
 
