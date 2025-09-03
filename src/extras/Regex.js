@@ -457,10 +457,10 @@ class CreateRegex {
         return text;
     }
     check(mainInput, arrayInput, channelID) {
-        let _a;
         if (!mainInput && !arrayInput)
             {return;}
-        const fullInput = (mainInput + ((_a = arrayInput === null || arrayInput === void 0 ? void 0 : arrayInput.toString()) !== null && _a !== void 0 ? _a : ''));
+        // Use mainInput as the primary text to check, don't concatenate with arrayInput
+        const fullInput = mainInput || '';
         const cleansedText = fullInput.replace(this.invisChars, '').toLowerCase();
         const moreCleansedText = this.normalizeUnicode(cleansedText);
         const testString = this.replaceConfusables(moreCleansedText);
