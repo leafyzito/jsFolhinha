@@ -1,7 +1,7 @@
 async function getColorName(hexCode) {
   hexCode = hexCode.replace("#", "");
   const res = await fb.got(`https://www.thecolorapi.com/id?hex=${hexCode}`);
-  return res.data.name.value;
+  return res.name.value;
 }
 
 const corCommand = async (message) => {
