@@ -23,7 +23,7 @@ const nicksCommand = async (message) => {
 
   // to allow searching for old nicks
   const userDbInfo = await fb.db.get("users", { aliases: nicksTarget });
-  if (userDbInfo) {
+  if (userDbInfo && userDbInfo.length === 1) {
     targetId = userDbInfo.userid;
   } else {
     targetId = (await fb.api.helix.getUserByUsername(nicksTarget))?.id;
