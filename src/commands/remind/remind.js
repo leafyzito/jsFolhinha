@@ -1,4 +1,3 @@
-// TODO: check and test
 const schedule = require("node-schedule");
 const {
   clearNotifiedCacheForUser,

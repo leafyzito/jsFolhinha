@@ -1,4 +1,3 @@
-// TODO: OK - test clipper api
 async function getOfflineImage(previewTarget) {
   try {
     const userData = await fb.api.helix.getUserByUsername(previewTarget);

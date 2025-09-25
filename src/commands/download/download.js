@@ -1,5 +1,3 @@
-// TODO: test
-
 const downloadCommand = async (message) => {
   if (message.args.length < 2) {
     return {
