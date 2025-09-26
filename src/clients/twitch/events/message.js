@@ -36,7 +36,7 @@ module.exports = async function onMessage(message) {
 
   // sanitize message
   message.messageText = message.messageText.replace(
-    /\u200B|\u200C|\u200D|\u200E|\u200F|\u{E0000}/gu,
+    /\u200B|\u200C|\u200D|\u200E|\u200F|\u034F|\u{E0000}/gu,
     ""
   );
   message.messageText = message.messageText.trim();
