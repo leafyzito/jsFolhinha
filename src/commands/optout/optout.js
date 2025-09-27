@@ -1,3 +1,4 @@
+const path = require("path");
 const optoutCommand = async (message) => {
   if (message.args.length === 1) {
     return {
@@ -136,9 +137,7 @@ optoutCommand.description = `Alterne entre o estado ativado e desativado de ser 
 !optout lastseen - Alterne o estado da possibilidade de ser alvo de comandos lastseen
 !optout remind - Alterne o estado da possibilidade de ser alvo de comandos remind
 !optout channel - Alterne o estado da censura do nome do seu canal no uso de comandos stalk`;
-optoutCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+optoutCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   optoutCommand,

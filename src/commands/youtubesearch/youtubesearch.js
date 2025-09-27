@@ -1,3 +1,4 @@
+const path = require("path");
 const durationRegex =
   /P((?<days>\d+)D)?(T((?<hours>\d+)H)?((?<minutes>\d+)M)?((?<seconds>\d+)S)?)?/;
 
@@ -132,9 +133,7 @@ youtubeSearchCommand.cooldown = 5000;
 youtubeSearchCommand.cooldownType = "channel";
 youtubeSearchCommand.whisperable = true;
 youtubeSearchCommand.description = `Pesquise vídeos no YouTube e veja detalhes sobre eles, como título, autor, views, data de publicação e duração`;
-youtubeSearchCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+youtubeSearchCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   youtubeSearchCommand,

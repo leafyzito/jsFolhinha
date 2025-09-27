@@ -1,3 +1,4 @@
+const path = require("path");
 async function getChatters(channel) {
   const api_url = "https://api.fuchsty.com/twitch/chatters/" + channel;
   const response = await fb.got(api_url);
@@ -78,9 +79,7 @@ chattersCommand.description = `Exibe uma lista de usuários totais online no can
 O comando funcionará mesmo em canais que o Folhinha não esteja presente
 • Exemplo: !chatters - Exibe a lista de chatters do canal atual
 • Exemplo: !chatters {canal} - Exibe a lista de chatters do canal escolhido`;
-chattersCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+chattersCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   chattersCommand,

@@ -1,3 +1,4 @@
+const path = require("path");
 const unpauseCommand = async (message) => {
   const channelConfig = await fb.db.get("config", {
     channelId: message.channelID,
@@ -46,8 +47,6 @@ unpauseCommand.permissions = ["mod", "admin"];
 unpauseCommand.flags = ["always"];
 unpauseCommand.description =
   "Uso: !unpause; Resposta esperada: despausado. O bot irá voltar a responder";
-unpauseCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+unpauseCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = { unpauseCommand };

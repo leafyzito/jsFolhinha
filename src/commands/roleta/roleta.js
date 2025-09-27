@@ -1,3 +1,4 @@
+const path = require("path");
 const Frases = [
   "Foi de arrasta pra cima",
   "Foi de base",
@@ -106,9 +107,7 @@ O tempo do timeout pode ser customizado, sendo o tempo padrão 10 minutos
 • Exemplo: !roleta 2 - Caso calhe de rolar um timeout, quem executou o comando tomará um timeout de 2 minutos
 
 Para este comando funcione corretamente, o Folhinha precisa do cargo de moderador`;
-roletaCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+roletaCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   roletaCommand,

@@ -1,3 +1,4 @@
+const path = require("path");
 const carinhoCommand = async (message) => {
   const petStats = await fb.db.get("pet", { channelId: message.channelID });
 
@@ -37,8 +38,6 @@ carinhoCommand.cooldownType = "channel";
 carinhoCommand.whisperable = false;
 carinhoCommand.description =
   "Faça carinho no pet do canal e ajude a mantê-lo saudável.";
-carinhoCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+carinhoCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = { carinhoCommand };

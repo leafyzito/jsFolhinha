@@ -1,3 +1,4 @@
+const path = require("path");
 const { afkInfoObjects } = require("./afk_info_model.js");
 
 let afkAliasList = [];
@@ -85,9 +86,7 @@ Esse comando não afetará seu estado de AFK em outros canais
 Além de AFK, você poderá escolher entre uma variedade de ações, como !ler ou !desenhar, que terão o mesmo efeito do AFK, mas com uma mensagem diferente.
 
 Nos aliases do comando poderá ver todas as opções de ações disponíveis`;
-afkCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+afkCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   afkCommand,

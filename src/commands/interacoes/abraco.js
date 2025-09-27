@@ -1,3 +1,4 @@
+const path = require("path");
 const abracoCommand = async (message) => {
   if (message.args.length === 1) {
     return {
@@ -52,8 +53,6 @@ abracoCommand.cooldownType = "channel";
 abracoCommand.whisperable = true;
 abracoCommand.description = `Marque alguém do chat para dar um abraço virtual
 • Exemplo: !abraco @pessoa`;
-abracoCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+abracoCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = { abracoCommand };

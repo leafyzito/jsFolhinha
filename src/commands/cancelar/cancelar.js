@@ -1,3 +1,4 @@
+const path = require("path");
 const Cancelamentos = [
   "ser atraente demais",
   "ter charme demais",
@@ -61,9 +62,7 @@ cancelarCommand.cooldownType = "channel";
 cancelarCommand.whisperable = true;
 cancelarCommand.description = `Marque alguém para que seja cancelado por algo aleatório
 A lista de motivos aleatórios foi tirada do site https://perchance.org/gerador-cancelamento`;
-cancelarCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+cancelarCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   cancelarCommand,

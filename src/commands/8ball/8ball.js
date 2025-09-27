@@ -1,3 +1,4 @@
+const path = require("path");
 const ball_responses = [
   "É certo",
   "É decididamente assim",
@@ -36,9 +37,7 @@ EightBallCommand.cooldownType = "channel";
 EightBallCommand.whisperable = true;
 EightBallCommand.description =
   "Uso: !8ball; Resposta esperada: Sinais apontam que sim/Não conte com isso/etc";
-EightBallCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+EightBallCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   EightBallCommand,

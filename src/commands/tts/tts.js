@@ -1,3 +1,4 @@
+const path = require("path");
 async function getTts(voice, text) {
   const url = `https://api.streamelements.com/kappa/v2/speech?voice=${voice}&text=${encodeURIComponent(
     text
@@ -77,9 +78,7 @@ Poderá alterar a voz da mensagem através do nome da voz.
 
 Acesse a lista de vozes disponíveis aqui: https://github.com/chrisjp/tts/blob/master/assets/js/voices.json
 Um dia irá ter uma página bonitinha com as possíveis vozes`;
-ttsCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+ttsCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   ttsCommand,

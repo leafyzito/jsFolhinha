@@ -1,3 +1,4 @@
+const path = require("path");
 const weatherCodes = {
   0: "☀️ Céu Limpo",
   1: "🌤️ Predominantemente Limpo",
@@ -214,9 +215,7 @@ weatherCommand.description = `Comando para verificar o clima de uma localizaçã
 !weather set secret - Alterna o estado da localização entre público e secreto, para que não seja exibida para outros usuários
 
 !weather - Caso tenha configurado uma localização, verifica o clima da sua localização configurada`;
-weatherCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+weatherCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   weatherCommand,

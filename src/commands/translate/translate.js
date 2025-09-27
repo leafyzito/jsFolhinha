@@ -1,3 +1,4 @@
+const path = require("path");
 const { LANGUAGE_MAPPINGS } = require("./langs.js");
 
 function capitalize(str) {
@@ -138,9 +139,7 @@ A percentagem na resposta do bot é a confiança da tradução, ou seja, a proba
 
 A língua fornecida deve ser o seu código ou o nome do idioma em inglês
 Pode ver uma lista de idiomas suportados aqui: https://folhinhabot.com/linguagens`;
-translateCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+translateCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   translateCommand,

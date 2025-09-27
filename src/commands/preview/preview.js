@@ -1,3 +1,4 @@
+const path = require("path");
 async function getOfflineImage(previewTarget) {
   try {
     const userData = await fb.api.helix.getUserByUsername(previewTarget);
@@ -104,9 +105,7 @@ previewCommand.whisperable = false;
 previewCommand.description = `Exibe uma imagem do momento atual da live do canal fornecido ou a tela offline caso não esteja em live
 
 • Exemplo: !preview omeiaum - Se o canal "omeiaum" estiver ao vivo, o bot vai enviar uma imagem do momento atual da live`;
-previewCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+previewCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   previewCommand,

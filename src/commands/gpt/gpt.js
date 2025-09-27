@@ -1,3 +1,4 @@
+const path = require("path");
 const { OpenAI } = require("openai");
 
 const gptClient = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -64,9 +65,7 @@ gptCommand.description = `Envie uma mensagem para o GPT com a personalidade do F
 Use esse comando para diversão apenas
 Caso deseje usar para perguntar alguma dúvida genuina, use o comando !gptserio que lhe responderá de maneira mais acertiva e extensa, sem a personalidade brincalhona do !gpt normal
 Tem também o !gptuwu que tem uma personalidade meio uwuástica...`;
-gptCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+gptCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   gptCommand,

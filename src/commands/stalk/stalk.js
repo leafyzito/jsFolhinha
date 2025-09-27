@@ -1,3 +1,4 @@
+const path = require("path");
 const stalkCommand = async (message) => {
   if (message.args.length === 1) {
     return {
@@ -69,9 +70,7 @@ stalkCommand.whisperable = false;
 stalkCommand.description = `Pesquise há quanto tempo um usuário foi visto pela última vez, em algum canal onde o Folhinha esteja presente, em qual canal e o conteúdo da mensagem
 
 Se quiser desabilitar a função de outras pessoas usarem este comando em você, use !optout stalk`;
-stalkCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+stalkCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   stalkCommand,

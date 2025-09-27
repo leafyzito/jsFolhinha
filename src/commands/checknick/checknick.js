@@ -1,3 +1,4 @@
+const path = require("path");
 async function checkNick(nick) {
   const api_url = `https://api.fuchsty.com/twitch/checkname?username=${nick}`;
   const response = await fb.got(api_url);
@@ -68,9 +69,7 @@ checkNickCommand.cooldownType = "channel";
 checkNickCommand.whisperable = true;
 checkNickCommand.description = `Use este comando para ver se um nick específico é válido e está disponível ou não
 • Exemplo: !checknick leafyzito - Verifica se o nick "leafyzito" está disponível`;
-checkNickCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+checkNickCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   checkNickCommand,

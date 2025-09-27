@@ -1,94 +1,288 @@
-// this is to gather the info for the website
+// Script to generate commands.json for the website
+// This gathers command information from all command files and creates a clean JSON file
 
 const fs = require("fs");
 const path = require("path");
 
-// load environment variables
+// Load environment variables
 require("dotenv").config();
 const { loadCommands } = require("../src/commands/commandsList.js");
 
-const rawCommandsList = loadCommands();
+/**
+ * Attempts to fix common URL issues
+ * @param {string} url - The URL to fix
+ * @returns {string} - The fixed URL or original if no fixes needed
+ */
+function fixCommonUrlIssues(url) {
+  if (typeof url !== "string") return url;
 
-const agoraVai = {};
+  let fixedUrl = url;
 
-const loadCommands2 = () => {
-  // Clear existing commandsList
-  // console.log(rawCommandsList);
-
-  const teste = Object.entries(rawCommandsList);
-
-  for (const [, value] of teste) {
-    const commandName = value.commandName;
-    const aliases = value.aliases;
-    const shortDescription = value.shortDescription;
-    const cooldown = value.cooldown;
-    const whisperable = value.whisperable;
-    const description = value.description;
-    const code = value.code;
-    const emojis = value.emojis ? value.emojis : null;
-    const langCodes = value.langCodes ? value.langCodes : null;
-
-    console.log(
-      commandName,
-      aliases,
-      shortDescription,
-      cooldown,
-      whisperable,
-      description,
-      code
+  // Fix missing src/ in path
+  if (fixedUrl.includes("/blob/main/commands/")) {
+    fixedUrl = fixedUrl.replace(
+      "/blob/main/commands/",
+      "/blob/main/src/commands/"
     );
+    console.log(`🔧 Fixed missing src/ in URL: ${url} → ${fixedUrl}`);
+  }
 
-    if (
-      !commandName ||
-      !aliases ||
-      !shortDescription ||
-      (!cooldown && cooldown != 0) ||
-      whisperable == null ||
-      !description ||
-      !code
-    ) {
-      console.log("não existe, skipping");
-      continue;
-    }
-
-    // if already existes, skip
-    if (agoraVai[commandName]) {
-      console.log("já existe");
-      continue;
-    }
-
-    agoraVai[commandName] = {
-      commandName: commandName,
-      aliases: aliases,
-      shortDescription: shortDescription,
-      cooldown: cooldown,
-      whisperable: whisperable,
-      description: description,
-      code: code,
-    };
-    if (emojis) {
-      agoraVai[commandName]["emojis"] = emojis;
-    }
-    if (langCodes) {
-      agoraVai[commandName]["langCodes"] = langCodes;
+  // Fix Windows paths with backslashes
+  if (fixedUrl.includes("\\")) {
+    const pathMatch = fixedUrl.match(
+      /\/src\/commands\/([^\/]+)\/([^\/]+\.js)$/
+    );
+    if (pathMatch) {
+      const [, commandName, fileName] = pathMatch;
+      fixedUrl = fixedUrl.replace(
+        /\/src\/commands\/[^\/]+\/[^\/]+\.js$/,
+        `/src/commands/${commandName}/${fileName}`
+      );
+      console.log(`🔧 Fixed Windows path in URL: ${url} → ${fixedUrl}`);
     }
   }
 
-  // console.log(agoraVai);
+  // Fix wrong username (fchstbot -> leafyzito)
+  if (fixedUrl.includes("fchstbot")) {
+    fixedUrl = fixedUrl.replace("fchstbot", "leafyzito");
+    console.log(`🔧 Fixed username in URL: ${url} → ${fixedUrl}`);
+  }
 
-  return agoraVai;
+  return fixedUrl;
+}
+
+/**
+ * Validates that a command has all required properties
+ * @param {Object} command - The command object to validate
+ * @param {string} commandName - The name of the command for logging
+ * @param {string} fixedCode - The fixed code URL (optional)
+ * @returns {boolean} - True if valid, false otherwise
+ */
+function validateCommand(command, commandName, fixedCode = null) {
+  const requiredFields = [
+    "commandName",
+    "aliases",
+    "shortDescription",
+    "cooldown",
+    "whisperable",
+    "description",
+    "code",
+  ];
+
+  for (const field of requiredFields) {
+    if (command[field] === undefined || command[field] === null) {
+      console.warn(
+        `⚠️  Skipping ${commandName}: Missing required field '${field}'`
+      );
+      return false;
+    }
+  }
+
+  // Additional validation
+  if (!Array.isArray(command.aliases) || command.aliases.length === 0) {
+    console.warn(
+      `⚠️  Skipping ${commandName}: 'aliases' must be a non-empty array`
+    );
+    return false;
+  }
+
+  if (typeof command.cooldown !== "number" || command.cooldown < 0) {
+    console.warn(
+      `⚠️  Skipping ${commandName}: 'cooldown' must be a non-negative number`
+    );
+    return false;
+  }
+
+  if (typeof command.whisperable !== "boolean") {
+    console.warn(
+      `⚠️  Skipping ${commandName}: 'whisperable' must be a boolean`
+    );
+    return false;
+  }
+
+  if (
+    typeof command.description !== "string" ||
+    command.description.trim() === ""
+  ) {
+    console.warn(
+      `⚠️  Skipping ${commandName}: 'description' must be a non-empty string`
+    );
+    return false;
+  }
+
+  // Use fixed code if provided, otherwise use original
+  const codeToValidate = fixedCode || command.code;
+
+  if (
+    typeof codeToValidate !== "string" ||
+    !codeToValidate.startsWith("https://github.com/")
+  ) {
+    console.warn(
+      `⚠️  Skipping ${commandName}: 'code' must be a valid GitHub URL`
+    );
+    return false;
+  }
+
+  // Validate GitHub URL structure
+  const githubUrlPattern =
+    /^https:\/\/github\.com\/[^\/]+\/[^\/]+\/blob\/[^\/]+\/src\/commands\/[^\/]+\/[^\/]+\.js$/;
+  if (!githubUrlPattern.test(codeToValidate)) {
+    console.warn(
+      `⚠️  Skipping ${commandName}: 'code' URL must follow pattern: https://github.com/owner/repo/blob/branch/src/commands/command/file.js`
+    );
+    console.warn(`   Current URL: ${codeToValidate}`);
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * Processes all commands and creates a clean JSON structure
+ * @returns {Object} - Processed commands object
+ */
+function processCommands() {
+  console.log("🔄 Loading commands from files...");
+  const rawCommandsList = loadCommands();
+
+  console.log(
+    `📊 Found ${Object.keys(rawCommandsList).length} command entries`
+  );
+
+  const processedCommands = {};
+  let validCommands = 0;
+  let skippedCommands = 0;
+  let duplicateCommands = 0;
+
+  // Process each command
+  for (const [alias, command] of Object.entries(rawCommandsList)) {
+    const commandName = command.commandName;
+
+    // Skip if we've already processed this command (avoid duplicates)
+    if (processedCommands[commandName]) {
+      console.log(`🔄 Skipping duplicate: ${commandName} (alias: ${alias})`);
+      duplicateCommands++;
+      continue;
+    }
+
+    // Fix common URL issues first
+    const fixedCode = fixCommonUrlIssues(command.code);
+
+    // Validate command with fixed code
+    if (!validateCommand(command, commandName, fixedCode)) {
+      skippedCommands++;
+      continue;
+    }
+
+    // Create clean command object
+    const cleanCommand = {
+      commandName: command.commandName,
+      aliases: command.aliases,
+      shortDescription: command.shortDescription,
+      cooldown: command.cooldown,
+      whisperable: command.whisperable,
+      description: command.description,
+      code: fixedCode,
+    };
+
+    // Add optional fields if they exist
+    if (
+      command.emojis &&
+      Array.isArray(command.emojis) &&
+      command.emojis.length > 0
+    ) {
+      cleanCommand.emojis = command.emojis;
+    }
+
+    if (
+      command.langCodes &&
+      Array.isArray(command.langCodes) &&
+      command.langCodes.length > 0
+    ) {
+      cleanCommand.langCodes = command.langCodes;
+    }
+
+    processedCommands[commandName] = cleanCommand;
+    validCommands++;
+
+    console.log(
+      `✅ Processed: ${commandName} (${command.aliases.length} aliases)`
+    );
+  }
+
+  console.log("\n📈 Processing Summary:");
+  console.log(`   ✅ Valid commands: ${validCommands}`);
+  console.log(`   ⚠️  Skipped commands: ${skippedCommands}`);
+  console.log(`   🔄 Duplicate commands: ${duplicateCommands}`);
+  console.log(
+    `   📊 Total processed: ${Object.keys(processedCommands).length}`
+  );
+
+  return processedCommands;
+}
+
+/**
+ * Sorts commands alphabetically by command name
+ * @param {Object} commands - Commands object to sort
+ * @returns {Object} - Sorted commands object
+ */
+function sortCommands(commands) {
+  return Object.fromEntries(
+    Object.entries(commands).sort(([a], [b]) => a.localeCompare(b))
+  );
+}
+
+/**
+ * Main function to generate the commands.json file
+ */
+function generateCommandsJson() {
+  try {
+    console.log("🚀 Starting commands.json generation...\n");
+
+    // Process all commands
+    const processedCommands = processCommands();
+
+    if (Object.keys(processedCommands).length === 0) {
+      console.error("❌ No valid commands found! Exiting...");
+      process.exit(1);
+    }
+
+    // Sort commands alphabetically
+    console.log("\n🔄 Sorting commands alphabetically...");
+    const sortedCommands = sortCommands(processedCommands);
+
+    // Write to file
+    console.log("💾 Writing to commands.json...");
+    const outputPath = path.join(__dirname, "commands.json");
+    const jsonContent = JSON.stringify(sortedCommands, null, 2);
+
+    fs.writeFileSync(outputPath, jsonContent, "utf8");
+
+    console.log(
+      `✅ Successfully generated commands.json with ${
+        Object.keys(sortedCommands).length
+      } commands`
+    );
+    console.log(`📁 File saved to: ${outputPath}`);
+
+    // Verify the file was written correctly
+    const fileStats = fs.statSync(outputPath);
+    console.log(`📊 File size: ${(fileStats.size / 1024).toFixed(2)} KB`);
+  } catch (error) {
+    console.error("❌ Error generating commands.json:", error.message);
+    process.exit(1);
+  }
+}
+
+// Run the script
+if (require.main === module) {
+  generateCommandsJson();
+}
+
+module.exports = {
+  generateCommandsJson,
+  processCommands,
+  validateCommand,
+  sortCommands,
+  fixCommonUrlIssues,
 };
-
-let jsonToSave = loadCommands2();
-
-// sort jsonToSave by keys
-jsonToSave = Object.fromEntries(
-  Object.entries(jsonToSave).sort((a, b) => a[0].localeCompare(b[0]))
-);
-
-fs.writeFileSync(
-  path.join(__dirname, "commands.json"),
-  JSON.stringify(jsonToSave, null, 2)
-);
-
-console.log("a");

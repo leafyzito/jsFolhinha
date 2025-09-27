@@ -1,3 +1,4 @@
+const path = require("path");
 const createLinearIssue = async (
   sugestao,
   channelName,
@@ -84,9 +85,7 @@ sugerirCommand.whisperable = true;
 sugerirCommand.description = `Deixe a sua contribuição para a caixinha de sugestões do Folhinha, poderá relatar bugs, erros, inovações...
 
 Qualquer coisa que ache que possa melhorar a experiência com o Folhinha e suas funcionalidades`;
-sugerirCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+sugerirCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   sugerirCommand,

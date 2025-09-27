@@ -1,3 +1,4 @@
+const path = require("path");
 async function getAvatar(avatarTarget) {
   const avatarUrl = (await fb.api.helix.getUserByUsername(avatarTarget))
     ?.profileImageUrl;
@@ -39,9 +40,7 @@ avatarCommand.cooldownType = "channel";
 avatarCommand.whisperable = true;
 avatarCommand.description = `Marque alguém para ver a foto de perfil.
 • Exemplo: !avatar @pessoa`;
-avatarCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+avatarCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   avatarCommand,

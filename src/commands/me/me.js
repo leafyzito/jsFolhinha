@@ -1,3 +1,4 @@
+const path = require("path");
 const meCommand = async (message) => {
   if (message.args.length < 2) {
     return {
@@ -29,9 +30,7 @@ meCommand.cooldownType = "channel";
 meCommand.whisperable = false;
 meCommand.description = `Forneça uma mensagem para o bot enviar
 • Exemplo: !me Olá mundo - O bot irá enviar: Olá mundo`;
-meCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+meCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   meCommand,

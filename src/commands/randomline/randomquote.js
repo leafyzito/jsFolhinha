@@ -1,3 +1,4 @@
+const path = require("path");
 async function getRandomQuote(userid, channelid) {
   const response = await fb.api.rustlog.getRandomLine(channelid, userid);
 
@@ -53,9 +54,7 @@ randomQuoteCommand.description = `Receba uma mensagem aleatória da pessoa que e
   • Exemplo: !randomquote - O bot vai mostrar uma mensagem aleatória de quem executou o comando no chat onde o comando foi executado
   
   Começou a contar desde 06/03/2025`;
-randomQuoteCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+randomQuoteCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   randomQuoteCommand,

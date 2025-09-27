@@ -1,3 +1,4 @@
+const path = require("path");
 const lastSeenCommand = async (message) => {
   if (message.args.length === 1) {
     return {
@@ -57,9 +58,7 @@ lastSeenCommand.whisperable = false;
 lastSeenCommand.description = `Pesquise há quanto tempo um usuário foi visto pela última vez em algum canal onde o Folhinha esteja presente
 
 Se quiser desabilitar a função de outras pessoas usarem este comando em você, use !optout lastseen`;
-lastSeenCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+lastSeenCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   lastSeenCommand,

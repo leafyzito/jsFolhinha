@@ -1,3 +1,4 @@
+const path = require("path");
 const { petEmojis } = require("./emojis");
 
 async function createPetBase(message) {
@@ -162,9 +163,7 @@ Para ver algumas informações sobre o pet, use o comando !pet stats
 Este comando mostra quantos carinhos o pet já recebeu, quantas vezes ele brincou e o total de dias desde que ele foi criado
 
 Se quiser sacrificar o seu pet, para talvez criar um outro com nome diferente, use o comando !pet matar`;
-petCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+petCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 petCommand.emojis = petEmojis;
 

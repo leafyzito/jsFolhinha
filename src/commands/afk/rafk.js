@@ -1,3 +1,4 @@
+const path = require("path");
 const { afkInfoObjects } = require("./afk_info_model.js");
 
 const rafkCommand = async (message) => {
@@ -75,9 +76,7 @@ Este comando poderá apenas ser usado nos primeiros 5 minutos de ter voltado do 
 Caso contrário, para voltar a ficar AFK, use o comando !afk
 
 Para evitar spam de !rafk, o AFK tem um limite de quantos !rafk podem ser usados, sendo esse limite de 3 usos apenas`;
-rafkCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+rafkCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   rafkCommand,
