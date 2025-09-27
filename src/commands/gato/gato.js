@@ -1,3 +1,4 @@
+const path = require("path");
 async function getCat() {
   const api_url = "https://www.googleapis.com/customsearch/v1";
   const query = "cute funny cat pinterest";
@@ -52,9 +53,7 @@ gatoCommand.cooldownType = "channel";
 gatoCommand.whisperable = true;
 gatoCommand.description = `Receba uma imagem aleatória de um gato
 A pesquisa das fotos é feita usando o Google, então meio que pode vir qualquer coisa relacionada com gatos`;
-gatoCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+gatoCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   gatoCommand,

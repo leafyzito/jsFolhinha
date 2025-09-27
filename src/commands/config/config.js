@@ -1,3 +1,4 @@
+const path = require("path");
 function getCommandObjectByAlias(alias) {
   return (
     Object.values(fb.commandsList)
@@ -151,9 +152,7 @@ Caso queira que o bot apenas funcione quando o canal estiver offline, pode usar 
 Usar o comando !config offline alterna entre o estado ativado e desativado. Por padrão, esta função está desativada
 
 Este comandos podem ser executados apenas pelo streamer ou os moderadores do canal`;
-configCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+configCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   configCommand,

@@ -1,4 +1,5 @@
 const schedule = require("node-schedule");
+const path = require("path");
 const {
   clearNotifiedCacheForUser,
 } = require("../../handlers/listener/reminder");
@@ -591,9 +592,7 @@ Para ver um lembrete específico: !remind show <ID>
 Para ver todos os lembretes: !remind show all
 Para apagar um lembrete: !remind delete <ID>
 Para bloquear usuários: !remind block/unblock <usuário>`;
-remindCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+remindCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   remindCommand,

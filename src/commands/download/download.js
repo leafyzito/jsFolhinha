@@ -1,3 +1,4 @@
+const path = require("path");
 const downloadCommand = async (message) => {
   if (message.args.length < 2) {
     return {
@@ -93,9 +94,7 @@ Pode também fazer download apenas do audio (mp3), utilizando o formato !downloa
 
 Sites mais famosos suportados: Youtube, Instagram, Facebook, Reddit, Tiktok, Twitter, clipes da Twitch
 Para mais informações sobre a API utilizada, acesse https://github.com/imputnet/cobalt/tree/main/api#supported-services`;
-downloadCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+downloadCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   downloadCommand,

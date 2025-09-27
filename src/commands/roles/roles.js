@@ -1,3 +1,4 @@
+const path = require("path");
 async function getModList(user) {
   const api_url = `https://roles.tv/api/user/login/${user}`;
   const data = await fb.got(api_url);
@@ -79,9 +80,7 @@ rolesCommand.description = `Exibe uma lista de cargos que o usuário fornecido t
     • Exemplo: !roles {usuário} - Exibe a lista de cargos que o usuário fornecido tem por toda a Twitch
     
     Nota: De momento o site está a exibir informação não atualizada`;
-rolesCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+rolesCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   rolesCommand,

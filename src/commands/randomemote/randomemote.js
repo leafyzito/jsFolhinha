@@ -1,3 +1,4 @@
+const path = require("path");
 const randomEmoteCommand = async (message) => {
   let amount = message.args[1] || 1;
   amount = parseInt(amount);
@@ -42,9 +43,7 @@ Estes emotes são apenas do FFZ, BTTV e 7TV
 • Exemplo: !randomemote - O bot vai escolher 1 emote aleatório do seu chat
 • Exemplo: !randomemote 10 - O bot vai escolher 10 emotes aleatórios do seu chat`;
 
-randomEmoteCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+randomEmoteCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   randomEmoteCommand,

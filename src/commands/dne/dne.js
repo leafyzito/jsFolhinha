@@ -1,3 +1,4 @@
+const path = require("path");
 async function getDne() {
   const url = "https://this-person-does-not-exist.com/new";
   const res = await fb.got(url);
@@ -32,9 +33,7 @@ dneCommand.cooldownType = "channel";
 dneCommand.whisperable = true;
 dneCommand.description =
   "Veja uma foto aleatória gerada pelo site thispersondoesnotexist.com";
-dneCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+dneCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   dneCommand,

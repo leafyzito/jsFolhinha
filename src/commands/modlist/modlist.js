@@ -1,3 +1,4 @@
+const path = require("path");
 async function getModList(user) {
   const api_url = `https://roles.tv/api/summary/moderators/login/${user}`;
   const data = await fb.got(api_url);
@@ -58,9 +59,7 @@ modListCommand.description = `Exibe uma lista de canais onde o usuário fornecid
 • Exemplo: !modlist {usuário} - Exibe a lista de canais que o usuário fornecido é moderador
 
 Nota: De momento o site está a exibir informação não atualizada`;
-modListCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+modListCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   modListCommand,

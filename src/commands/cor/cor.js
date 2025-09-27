@@ -1,3 +1,4 @@
+const path = require("path");
 async function getColorName(hexCode) {
   hexCode = hexCode.replace("#", "");
   const res = await fb.got(`https://www.thecolorapi.com/id?hex=${hexCode}`);
@@ -46,9 +47,7 @@ corCommand.whisperable = true;
 corCommand.description = `Veja a cor de algum usuário. O bot responderá com o código hexadecimal da cor juntamente com o nome da mesma. Caso nenhum usuário tenha sido marcado, exibirá a cor de quem realizou o comando
 • Exemplo: !cor - O bot vai responder com a informações sobre a cor de quem realizou o comando
 • Exemplo: !cor @usuário - O bot vai responder com a informações sobre a cor de @usuário`;
-corCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+corCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   corCommand,

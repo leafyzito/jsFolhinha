@@ -1,3 +1,4 @@
+const path = require("path");
 const vanishCommand = async (message) => {
   if (message.isStreamer) {
     return {
@@ -37,9 +38,7 @@ vanishCommand.description = `O clássico vanish
 Use este comando para tomar um timeout de 1 segundo e apagar as sua mensagens do chat
 
 Para este comando funcione corretamente, o Folhinha precisa do cargo de moderador`;
-vanishCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+vanishCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   vanishCommand,

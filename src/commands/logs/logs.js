@@ -1,3 +1,4 @@
+const path = require("path");
 // https://tv.supa.sh/logs?c=channelName&u=userName
 
 const getLogsLink = async (channelName, userName) => {
@@ -38,9 +39,7 @@ logsCommand.description = `Obtenha um link para os logs de chat de um determinad
 • Exemplo: !logs - Mostra os logs do canal atual
 • Exemplo: !logs @usuario - Mostra os logs do usuário no canal atual
 • Exemplo: !logs @canal @usuario - Mostra os logs do usuário no canal especificado`;
-logsCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+logsCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   logsCommand,

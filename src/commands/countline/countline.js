@@ -1,3 +1,4 @@
+const path = require("path");
 // TODO: fix, get countline from rustlog clickhouse
 
 const countlineCommand = async () => {
@@ -134,9 +135,7 @@ countlineCommand.whisperable = false;
 countlineCommand.description = `Veja quantas mensagem você ou algum usuário já mandou no chat no qual o comando foi realizado
 
 Pode também utilizar !countline top para ver o top 5 de pessoas que mais falaram no chat`;
-countlineCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+countlineCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   countlineCommand,

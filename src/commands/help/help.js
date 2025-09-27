@@ -1,3 +1,4 @@
+const path = require("path");
 const helpCommand = async (message) => {
   const specificCommand = message.args[1]?.toLowerCase();
 
@@ -39,8 +40,6 @@ helpCommand.cooldownType = "channel";
 helpCommand.whisperable = true;
 helpCommand.description =
   "Apenas um comando para direcionar o usuário para a página do bot";
-helpCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+helpCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = { helpCommand };

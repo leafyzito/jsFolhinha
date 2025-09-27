@@ -1,3 +1,4 @@
+const path = require("path");
 const explodeCommand = async (message) => {
   if (message.args.length === 1) {
     return {
@@ -44,8 +45,6 @@ explodeCommand.cooldownType = "channel";
 explodeCommand.whisperable = true;
 explodeCommand.description = `Exploda virtualmente alguém do chat
 • Exemplo: !explode @pessoa`;
-explodeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+explodeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = { explodeCommand };

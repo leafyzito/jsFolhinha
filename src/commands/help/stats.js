@@ -1,3 +1,4 @@
+const path = require("path");
 const statsCommand = async () => {
   const uptime = fb.utils.relativeTime(fb.startTime, true);
   const channelsCount = fb.twitch.anonClient.joinedChannels.size || 0;
@@ -18,8 +19,6 @@ statsCommand.cooldownType = "channel";
 statsCommand.whisperable = true;
 statsCommand.description =
   "Exibe algumas informações sobre o bot, como uptime, quantidade de canais ativos e RAM utilizada";
-statsCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+statsCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = { statsCommand };

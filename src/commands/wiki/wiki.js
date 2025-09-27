@@ -1,3 +1,4 @@
+const path = require("path");
 async function getRandomWiki() {
   const api_url = `https://pt.wikipedia.org/w/api.php?action=query&list=random&rnnamespace=0&format=json`;
   const data = await fb.got(api_url);
@@ -29,7 +30,7 @@ wikiCommand.cooldown = 5000;
 wikiCommand.cooldownType = "channel";
 wikiCommand.whisperable = true;
 wikiCommand.description = `Apenas um comando para receber um artigo aleatório do Wikipedia`;
-wikiCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split("/").pop()}/${__filename.split("/").pop()}`;
+wikiCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   wikiCommand,
