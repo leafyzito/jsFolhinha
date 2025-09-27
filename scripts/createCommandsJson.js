@@ -30,11 +30,13 @@ function fixCommonUrlIssues(url) {
   // Fix Windows paths with backslashes
   if (fixedUrl.includes("\\")) {
     const pathMatch = fixedUrl.match(
+      // eslint-disable-next-line
       /\/src\/commands\/([^\/]+)\/([^\/]+\.js)$/
     );
     if (pathMatch) {
       const [, commandName, fileName] = pathMatch;
       fixedUrl = fixedUrl.replace(
+        // eslint-disable-next-line
         /\/src\/commands\/[^\/]+\/[^\/]+\.js$/,
         `/src/commands/${commandName}/${fileName}`
       );
@@ -125,6 +127,7 @@ function validateCommand(command, commandName, fixedCode = null) {
 
   // Validate GitHub URL structure
   const githubUrlPattern =
+    // eslint-disable-next-line
     /^https:\/\/github\.com\/[^\/]+\/[^\/]+\/blob\/[^\/]+\/src\/commands\/[^\/]+\/[^\/]+\.js$/;
   if (!githubUrlPattern.test(codeToValidate)) {
     console.warn(
