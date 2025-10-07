@@ -76,7 +76,7 @@ const translateCommand = async (message) => {
   }
   if (!isLanguageSupported(targetLanguage)) {
     return {
-      reply: `O idioma "${targetLanguage}" não é válido. Tente colocar o código do idioma ou em inglês, por exemplo: "pt" ou "portuguese"`,
+      reply: `O idioma "${targetLanguage}" não é válido. Tente colocar o código do idioma ou em inglês, por exemplo: "pt" ou "portuguese". Lista completa aqui: https://folhinhabot.com/linguagens`,
     };
   }
 
@@ -139,7 +139,9 @@ A percentagem na resposta do bot é a confiança da tradução, ou seja, a proba
 
 A língua fornecida deve ser o seu código ou o nome do idioma em inglês
 Pode ver uma lista de idiomas suportados aqui: https://folhinhabot.com/linguagens`;
-translateCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
+translateCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
+  .split(path.sep)
+  .pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   translateCommand,
