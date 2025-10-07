@@ -564,6 +564,11 @@ const remindCommand = async (message) => {
 
   return {
     reply: replyMessage,
+    notes: remindAt
+      ? new Date(remindAt * 1000).toLocaleString("pt-PT", {
+          timeZone: "Europe/Lisbon",
+        })
+      : null,
   };
 };
 
@@ -592,7 +597,9 @@ Para ver um lembrete específico: !remind show <ID>
 Para ver todos os lembretes: !remind show all
 Para apagar um lembrete: !remind delete <ID>
 Para bloquear usuários: !remind block/unblock <usuário>`;
-remindCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
+remindCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
+  .split(path.sep)
+  .pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   remindCommand,
