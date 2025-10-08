@@ -29,9 +29,10 @@ async function getRandomLine(userid, channelid) {
 
 const randomLineCommand = async (message) => {
   const targetUser = message.args[1]?.replace(/^@/, "") || null;
-  const targetId = targetUser !== null
-    ? (await fb.api.helix.getUserByUsername(targetUser))?.id
-    : null;
+  const targetId =
+    targetUser !== null
+      ? (await fb.api.helix.getUserByUsername(targetUser))?.id
+      : null;
 
   const randomLine = await getRandomLine(targetId, message.channelID);
   if (!targetId && !randomLine) {
@@ -69,8 +70,10 @@ randomLineCommand.description = `Receba uma mensagem aleatória de um usuário f
 
 • Exemplo: !randomline @leafyzito - O bot vai mostrar uma mensagem aleatória de @leafyzito no chat onde o comando foi executado
 
-Começou a contar desde 06/03/2025`;
-randomLineCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
+Contando desde 06/03/2025`;
+randomLineCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
+  .split(path.sep)
+  .pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   randomLineCommand,
