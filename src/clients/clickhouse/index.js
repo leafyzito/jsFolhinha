@@ -18,6 +18,17 @@ class ClickHouseClient {
   }
 
   async init() {
+    if (
+      !process.env.CLICKHOUSE_HOST ||
+      !process.env.CLICKHOUSE_PORT ||
+      !process.env.CLICKHOUSE_USERNAME ||
+      !process.env.CLICKHOUSE_PASSWORD ||
+      !process.env.CLICKHOUSE_DATABASE
+    ) {
+      // don't connect to clickhouse
+      return;
+    }
+
     try {
       // Create ClickHouse client
       this.client = createClient({
