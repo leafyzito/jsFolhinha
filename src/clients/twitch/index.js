@@ -103,6 +103,8 @@ class TwitchClient {
       if (!useApi) {
         await this.client.IrcSay(channelName, content, ircParams);
       }
+
+      return { sentVia: useApi ? "api" : "irc" };
     };
   }
 

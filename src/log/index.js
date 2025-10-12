@@ -72,7 +72,7 @@ class Logger {
     console.log("send error: ", err);
   }
 
-  async createCommandLog(message, response) {
+  async createCommandLog(message, response, sentVia = null) {
     const insertDoc = {
       messageid: message.id,
       sentDate: message.serverTimestamp,
@@ -89,7 +89,7 @@ class Logger {
     console.log(
       `#${message.channelName}/${message.senderUsername} - ${message.command.commandName}`
     );
-    fb.discord.logCommand(message, response);
+    fb.discord.logCommand(message, response, sentVia);
     if (!message.command.flags?.includes("dev") && process.env.ENV == "prod") {
       await fb.db.insert("commandlog", insertDoc);
     }
@@ -98,11 +98,12 @@ class Logger {
   async logAndReply(message, response, retryCount = 0) {
     response = fb.utils.checkRegex(response, message.channelName, message);
 
+    let res;
     if (message.isWhisper || message.channelName == "whisper") {
       fb.api.helix.whisper(message.senderUserID, response);
     } else {
       await this.manageChannelMsgCooldown(message.channelName);
-      fb.twitch.client
+      res = await fb.twitch.client
         .say(message.channelName, message.channelID, response, message.id)
         .catch((err) =>
           this.handleSendError(
@@ -116,8 +117,7 @@ class Logger {
           )
         );
     }
-
-    await this.createCommandLog(message, response);
+    await this.createCommandLog(message, response, res.sentVia);
   }
 
   async logAndSay(message, response, notes = null, retryCount = 0) {
@@ -125,7 +125,7 @@ class Logger {
     response = fb.utils.checkRegex(response, message.channelName, message);
 
     await this.manageChannelMsgCooldown(message.channelName);
-    fb.twitch.client
+    const res = await fb.twitch.client
       .say(message.channelName, message.channelID, response, null)
       .catch((err) =>
         this.handleSendError(
@@ -139,14 +139,14 @@ class Logger {
         )
       );
 
-    await this.createCommandLog(message, response);
+    await this.createCommandLog(message, response, res.sentVia);
   }
 
   async logAndMeAction(message, response, retryCount = 0) {
     response = fb.utils.checkRegex(response, message.channelName, message);
 
     await this.manageChannelMsgCooldown(message.channelName);
-    fb.twitch.client
+    const res = await fb.twitch.client
       .say(message.channelName, message.channelID, "/me " + response, null)
       .catch((err) =>
         this.handleSendError(
@@ -160,7 +160,7 @@ class Logger {
         )
       );
 
-    await this.createCommandLog(message, "/me " + response);
+    await this.createCommandLog(message, "/me " + response, res.sentVia);
   }
 
   async logAndWhisper(message, response, notes = null) {
@@ -175,7 +175,7 @@ class Logger {
     content = fb.utils.checkRegex(content, channel);
 
     await this.manageChannelMsgCooldown(channel);
-    fb.twitch.client
+    const res = await fb.twitch.client
       .say(channel, null, content)
       .catch((err) =>
         this.handleSendError(
@@ -189,14 +189,14 @@ class Logger {
         )
       );
 
-    fb.discord.logSend(channel, content);
+    fb.discord.logSend(channel, content, res.sentVia);
   }
 
   async reply(message, response, retryCount = 0) {
     response = fb.utils.checkRegex(response, message.channelName, message);
 
     await this.manageChannelMsgCooldown(message.channelName);
-    fb.twitch.client
+    const res = await fb.twitch.client
       .say(message.channelName, message.channelID, response, message.id)
       .catch((err) =>
         this.handleSendError(
@@ -210,7 +210,7 @@ class Logger {
         )
       );
 
-    fb.discord.logSend(message.channelName, response);
+    fb.discord.logSend(message.channelName, response, res.sentVia);
   }
 
   async whisper(targetUserId, content, retryCount = 0) {
