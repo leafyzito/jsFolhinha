@@ -117,7 +117,7 @@ class Logger {
           )
         );
     }
-    await this.createCommandLog(message, response, res.sentVia);
+    await this.createCommandLog(message, response, res?.sentVia);
   }
 
   async logAndSay(message, response, notes = null, retryCount = 0) {
