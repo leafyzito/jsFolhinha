@@ -54,6 +54,8 @@ module.exports = async function onMessage(channel, username, text, message) {
   message.displayName = message.userInfo.displayName;
   message.channelName = channel.toLowerCase();
   message.internalTimestamp = new Date().getTime();
+  message.serverTimestamp = new Date();
+  message.serverTimestampRaw = new Date().getTime();
   message.isMod = message.userInfo.isMod;
   message.isStreamer = message.userInfo.isBroadcaster;
   if (message.isStreamer) message.isMod = true;
@@ -69,7 +71,6 @@ module.exports = async function onMessage(channel, username, text, message) {
   const channelData = await fb.db.get("config", {
     channelId: message.channelID,
   });
-
 
   Object.defineProperty(message, "prefix", {
     value: process.env.ENV === "prod" ? channelData?.prefix || "!" : "!!",
