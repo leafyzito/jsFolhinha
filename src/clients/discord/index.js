@@ -261,7 +261,7 @@ class DiscordClient {
 
     if (message.isReply) {
       embed.addFields({
-        name: `Respondendo a ${message.parentDisplayName}:`,
+        name: `Respondendo a ${message.parentMessageUserDisplayName}:`,
         value: message.parentMessageText,
         inline: false,
       });
