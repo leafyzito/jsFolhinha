@@ -61,7 +61,7 @@ class DiscordClient {
   // intentionally empty: tasks are started in main.js
 
   // Utility methods for logging and notifications
-  async logCommand(message, response) {
+  async logCommand(message, response, sentVia = null) {
     const channelName =
       message.channelName == "whisper"
         ? "📨 Whisper"
@@ -91,7 +91,9 @@ class DiscordClient {
       .setFooter({
         text: `${message.responseTime}ms/${
           message.internalResponseTime
-        }ms • ${this.getFormattedDateTime()}`,
+        }ms • ${this.getFormattedDateTime()}${
+          sentVia !== null ? ` • ${sentVia}` : ""
+        }`,
       });
 
     if (message.notes != null) {
@@ -110,7 +112,7 @@ class DiscordClient {
     });
   }
 
-  async logSend(channel, content) {
+  async logSend(channel, content, sentVia = null) {
     const embed = new this.client.EmbedBuilder()
       .setTitle(`Enviado para #${channel}`)
       .setURL(`${this.getLogsUrl(channel)}`)
@@ -121,7 +123,9 @@ class DiscordClient {
       })
       .setColor("#008000")
       .setFooter({
-        text: `${this.getFormattedDateTime()}`,
+        text: `${this.getFormattedDateTime()}${
+          sentVia !== null ? ` • ${sentVia}` : ""
+        }`,
       });
 
     const logChannel = await this.client.channels.fetch(
