@@ -1,3 +1,4 @@
+const path = require("path");
 const beijoCommand = async (message) => {
   if (message.args.length === 1) {
     return {
@@ -43,8 +44,6 @@ beijoCommand.cooldownType = "channel";
 beijoCommand.whisperable = true;
 beijoCommand.description = `Marque alguém do chat para dar um beijo virtual
 • Exemplo: !beijo @pessoa`;
-beijoCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+beijoCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = { beijoCommand };

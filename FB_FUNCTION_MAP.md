@@ -39,6 +39,9 @@ This document lists all functions available in the global `fb` object for refere
   fb.api.feridinha.uploadFile(fileData, filename);
   fb.api.feridinha.uploadFromUrl(url, filename);
 
+  // LINEAR
+  fb.api.linear.createIssue(title, description);
+
 
 // DATABASE FUNCTIONS
 fb.db.get(collectionName, query, forceDb);

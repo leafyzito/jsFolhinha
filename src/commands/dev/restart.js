@@ -3,14 +3,11 @@ const { promisify } = require("util");
 
 const execAsync = promisify(exec);
 
-const restartCommand = async () => {
+const restartCommand = async (message) => {
   try {
+    fb.twitch.client.say(message.channelName, "Reiniciando...");
     // Execute docker compose restart for all bot-related services
     await execAsync("docker compose -p folhinha restart");
-
-    return {
-      reply: `🔄 Reiniciando...`,
-    };
   } catch (error) {
     console.error("Error restarting container:", error);
     return {

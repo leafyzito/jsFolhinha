@@ -1,3 +1,4 @@
+const path = require("path");
 async function getSubAge(user, channel) {
   const data = await fb.api.ivr.getSubAge(user, channel);
 
@@ -96,9 +97,7 @@ Apenas !subage: O bot vai responder com a quantidade de tempo que o usuário que
 !subage @usuário: O bot vai responder com a quantidade de tempo que o usuário que executou o comando é sub do canal que foi fornecido
 
 !subage @usuário1 @usuário2: O bot vai responder com a quantidade de tempo que o @usuário1 é sub do @usuário2`;
-subAgeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+subAgeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   subAgeCommand,

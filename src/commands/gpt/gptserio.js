@@ -1,3 +1,4 @@
+const path = require("path");
 const { gptClient } = require("./gpt");
 
 async function askGptSerio(message, prompt) {
@@ -57,9 +58,7 @@ gptSerioCommand.cooldown = 15000;
 gptSerioCommand.cooldownType = "channel";
 gptSerioCommand.whisperable = true;
 gptSerioCommand.description = `Envie uma mensagem para o GPT com uma personalidade mais séria e sem teor humorístico`;
-gptSerioCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+gptSerioCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   gptSerioCommand,

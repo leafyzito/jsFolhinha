@@ -20,7 +20,7 @@ const cacheStatsCommand = async () => {
 
     const cacheUsage = ((totalCached / totalMax) * 100).toFixed(1);
 
-    let reply = `📊 Cache: ${totalCached} size (${cacheUsage}%) | Hits/Misses: ${totalHits}/${totalMisses} | Hit Ratio: ${hitRatio} | Collections: ${collectionCount}`;
+    let reply = `📊 Cache: ${totalCached} size (${cacheUsage}%) • Hits/Misses: ${totalHits}/${totalMisses} • Hit Ratio: ${hitRatio} • Collections: ${collectionCount}`;
 
     // Truncate if over 500 characters
     if (reply.length > 500) {

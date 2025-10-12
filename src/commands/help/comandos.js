@@ -1,3 +1,4 @@
+const path = require("path");
 const comandosCommand = async () => {
   return {
     reply: `Para uma lista de comandos acesse https://folhinhabot.com/comandos`,
@@ -12,8 +13,6 @@ comandosCommand.cooldownType = "channel";
 comandosCommand.whisperable = true;
 comandosCommand.description =
   "Apenas um comando para direcionar o usuário para a página de comandos do bot";
-comandosCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+comandosCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = { comandosCommand };

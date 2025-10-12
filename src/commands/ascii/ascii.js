@@ -1,3 +1,4 @@
+const path = require("path");
 async function getAscii(channel, input) {
   if (input.includes(".avif")) {
     input = input.replace(".avif", ".webp");
@@ -90,9 +91,7 @@ invert:true(default)|false
 removeTransparency:false(default)|true
 threshold:0-254(default: 127)
 mode:simple(default)|ec|hc|nd`;
-asciiCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+asciiCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   asciiCommand,

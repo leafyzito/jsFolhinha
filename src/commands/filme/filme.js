@@ -1,3 +1,4 @@
+const path = require("path");
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
@@ -88,9 +89,7 @@ filmeCommand.whisperable = true;
 filmeCommand.description = `Veja informações como sinopse, classificação, duração, gênero, bilheteria e avaliações de um filme ou série
 
 Tente usar o nome exato do filme ou série`;
-filmeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+filmeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   filmeCommand,

@@ -1,3 +1,4 @@
+const path = require("path");
 async function getFirstLineDate(channelId, userId) {
   const data = await fb.got(
     `https://logs.zonian.dev/list?channelid=${channelId}&userid=${userId}`
@@ -54,7 +55,7 @@ const firstLineCommand = async (message) => {
     message.args[1]?.replace(/^@/, "") || message.senderUsername;
   const targetId =
     targetUser.toLowerCase() !== message.senderUsername.toLowerCase()
-      ? await fb.api.helix.getUserByUsername(targetUser)?.id
+      ? (await fb.api.helix.getUserByUsername(targetUser))?.id
       : message.senderUserID;
 
   const firstLine = await getFirstLine(message.channelID, targetId);
@@ -84,9 +85,7 @@ firstLineCommand.description = `Receba a primeira mensagem de um usuário fornec
 • Exemplo: !firstline - O bot vai mostrar a primeira mensagem de quem executou o comando no chat onde o comando foi executado
 
 • Exemplo: !firstline @leafyzito - O bot vai mostrar a primeira mensagem de @leafyzito no chat onde o comando foi executado`;
-firstLineCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+firstLineCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   firstLineCommand,

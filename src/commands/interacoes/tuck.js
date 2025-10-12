@@ -1,3 +1,4 @@
+const path = require("path");
 const tuckCommand = async (message) => {
   if (message.args.length === 1) {
     return {
@@ -51,8 +52,6 @@ tuckCommand.cooldownType = "channel";
 tuckCommand.whisperable = true;
 tuckCommand.description = `Deseje bons sonhos a alguém do chat
 • Exemplo !tuck @pessoa`;
-tuckCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+tuckCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = { tuckCommand };

@@ -1,3 +1,4 @@
+const path = require("path");
 // Need to fetch a randomized hash to attach to the API request
 // Solution from Supinic - https://github.com/Supinic/supibot/blob/master/commands/howlongtobeat/index.ts
 
@@ -9,7 +10,7 @@ let HLTB_ENDPOINT_HASH_KEY = "hltb-endpoint-hash";
 const FILE_PREFIX = "_next/static/chunks/pages";
 const FILE_HASH_REGEX = /static\/chunks\/pages\/(_app-\w+?\.js)/;
 const ENDPOINT_HASH_REGEX =
-  /\/api\/seek\/".concat\("(\w+)"\)\s*(.concat\("(\w+)"\))?/;
+  /\/api\/locate\/".concat\("(\w+)"\)\s*(.concat\("(\w+)"\))?/;
 
 async function fetchFileHash() {
   const body = await fb.got("https://howlongtobeat.com/", {
@@ -70,7 +71,7 @@ async function hltbSearch(query) {
   }
 
   const response = await fb.got(
-    `https://howlongtobeat.com/api/seek/${endpointHash}`,
+    `https://howlongtobeat.com/api/locate/${endpointHash}`,
     {
       method: "POST",
       headers: {
@@ -169,8 +170,8 @@ howLongToBeatCommand.whisperable = true;
 howLongToBeatCommand.description = `Descubra o tempo que leva para um jogo ser completado em média
 • Exemplo: !howlongtobeat Hollow Knight - O bot vai responder com o tempo que leva para completar o jogo fornecido juntamente com um link para a página do jogo no site howlongtobeat.com`;
 howLongToBeatCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+  .split(path.sep)
+  .pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   howLongToBeatCommand,

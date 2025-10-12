@@ -1,3 +1,4 @@
+const path = require("path");
 const fillCommand = async (message) => {
   if (message.args.length < 2) {
     return {
@@ -33,9 +34,7 @@ fillCommand.whisperable = true;
 fillCommand.description = `O bot vai repetir o que você fornecer até que o limite de caracteres seja atingido (500)
 
 • Exemplo: !fill OMEGALUL - O bot vai repetir OMEGALUL até que o limite de caracteres seja atingido`;
-fillCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+fillCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   fillCommand,

@@ -49,6 +49,13 @@ async function initializeTwitch() {
   return twitch;
 }
 
+async function initializeClickHouse() {
+  const ClickHouseClient = require("../clients/clickhouse");
+  const clickhouse = new ClickHouseClient();
+  await clickhouse.init();
+  return clickhouse;
+}
+
 async function getChannelsToJoin() {
   // Ensure fb object is available
   if (!fb || !fb.api || !fb.api.helix || !fb.db) {
@@ -131,6 +138,7 @@ module.exports = {
   initializeDiscord,
   initializeAuthProvider,
   initializeTwitch,
+  initializeClickHouse,
   getChannelsToJoin,
   getTokenData,
 };

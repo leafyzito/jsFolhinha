@@ -1,3 +1,4 @@
+const path = require("path");
 const talkieCommand = async (message) => {
   if (message.args.length === 1) {
     return {
@@ -83,9 +84,7 @@ talkieCommand.description = `Envie uma mensagem misteriosa para um canal aleató
 • Exemplo: !talkie Olá mundo - O bot irá enviar a mensagem "Olá mundo" para um canal aleatório
 
 Se quiser desabilitar a possibilidade do seu chat ser um dos canais onde o bot irá enviar mensagens misteriosas, use o comando !config ban talkie`;
-talkieCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+talkieCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   talkieCommand,

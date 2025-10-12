@@ -1,3 +1,4 @@
+const path = require("path");
 const {
   loadUserCookieStats,
   createUserCookieBase,
@@ -32,7 +33,9 @@ const cookieDiarioCommand = async (message) => {
     }
   );
   return {
-    reply: `Você resgatou seu cookie diário e agora tem ${userCookieStats.total} cookies! 🍪`,
+    reply: `Você resgatou seu cookie diário e agora tem ${
+      userCookieStats.total + 1
+    } cookies! 🍪`,
   };
 };
 
@@ -44,9 +47,7 @@ cookieDiarioCommand.cooldownType = "user";
 cookieDiarioCommand.whisperable = true;
 cookieDiarioCommand.description =
   "Uso: !cd; Resposta esperada: Você resgatou seu cookie diário e agora tem {cookies}";
-cookieDiarioCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+cookieDiarioCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   cookieDiarioCommand,

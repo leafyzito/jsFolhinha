@@ -1,3 +1,4 @@
+const path = require("path");
 const userCommand = async (message) => {
   const userTarget =
     message.args[1]?.replace(/^@/, "").toLowerCase() || message.senderUsername;
@@ -35,9 +36,7 @@ userCommand.whisperable = true;
 userCommand.description = `Exibe várias informações sobre quem executou o comando ou sobre o usuário fornecido
 
 Informações a serem exibidas: Nick, ID, Cor, Badge, Chatters no canal, Seguidores e Tempo de criação da conta`;
-userCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+userCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   userCommand,

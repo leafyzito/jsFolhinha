@@ -46,9 +46,7 @@ filosofiaCommand.description = `Veja uma filosofia aleatória ou específica qua
 
 • Exemplo: "!filosofia - O bot vai enviar uma filosofia aleatória
 • Exemplo: "!filosofia 4 - O bot vai enviar a filosofia número 4 da lista de filosofias`;
-filosofiaCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+filosofiaCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   filosofiaCommand,

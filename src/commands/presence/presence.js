@@ -1,3 +1,4 @@
+const path = require("path");
 async function get7tvUserId(twitchUid) {
   const data = await fb.got(`https://7tv.io/v3/users/twitch/${twitchUid}`);
   if (data && data.user && data.user.id) {
@@ -53,9 +54,7 @@ presenceCommand.description = `Use este comando para atualizar a sua presença n
 Pode também fornecer um usuário para atualizar a sua presença, caso queira atualizar a presença de outro usuário
 
 Se você não sabe o que isso significa, este comando provavelmente não é útil para você`;
-presenceCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+presenceCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   presenceCommand,

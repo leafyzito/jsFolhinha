@@ -1,3 +1,4 @@
+const path = require("path");
 async function getAllNicks(userId) {
   const api_url = `https://logs.spanix.team/namehistory/${userId}`;
   const data = await fb.got(api_url);
@@ -23,7 +24,7 @@ const nicksCommand = async (message) => {
 
   // to allow searching for old nicks
   const userDbInfo = await fb.db.get("users", { aliases: nicksTarget });
-  if (userDbInfo) {
+  if (userDbInfo && userDbInfo.length === 1) {
     targetId = userDbInfo.userid;
   } else {
     targetId = (await fb.api.helix.getUserByUsername(nicksTarget))?.id;
@@ -66,9 +67,7 @@ nicksCommand.whisperable = true;
 nicksCommand.description = `Exibe o histórico de nicks de um usuário ou de quem executou o comando caso nenhum usuário seja fornecido
 
 • Exemplo: !nicks @leafyzito - O bot irá responder com o histórico de nicks de leafyzito`;
-nicksCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+nicksCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   nicksCommand,
