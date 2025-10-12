@@ -1,3 +1,4 @@
+const path = require("path");
 async function getChannelFounders(channel) {
   const api_url = `https://roles.tv/api/channel/login/${channel}`;
   const data = await fb.got(api_url);
@@ -44,9 +45,7 @@ foundersCommand.description = `Exibe uma lista de founders do canal fornecido ou
 O comando funcionará mesmo em canais que o Folhinha não esteja presente
 • Exemplo: !founders - Exibe a lista de founders do canal atual
 • Exemplo: !founders {canal} - Exibe a lista de founders do canal escolhido`;
-foundersCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+foundersCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   foundersCommand,

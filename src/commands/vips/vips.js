@@ -1,3 +1,4 @@
+const path = require("path");
 async function getChannelVips(channel) {
   const api_url = `https://roles.tv/api/channel/login/${channel}`;
   const data = await fb.got(api_url);
@@ -44,9 +45,7 @@ vipsCommand.description = `Exibe uma lista de vips do canal fornecido ou, caso n
 O comando funcionará mesmo em canais que o Folhinha não esteja presente
 • Exemplo: !vips - Exibe a lista de vips do canal atual
 • Exemplo: !vips {canal} - Exibe a lista de vips do canal escolhido`;
-vipsCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+vipsCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   vipsCommand,

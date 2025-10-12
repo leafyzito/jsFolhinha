@@ -1,3 +1,4 @@
+const path = require("path");
 async function getSongInfo(lastfmUser) {
   const api_url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${lastfmUser}&limit=1&api_key=${process.env.LASTFM_API_KEY}&format=json`;
 
@@ -157,9 +158,7 @@ Por fim, use o comando !song set {nome_da_sua_conta_do_lastfm} para configurar a
 
 Caso já tenha a sua conta configurada, use !song set {nome_da_sua_conta_do_lastfm}
 Pode também ver qual música outra pessoa está ouvindo usando !song {nome_da_pessoa}`;
-songCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+songCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   songCommand,

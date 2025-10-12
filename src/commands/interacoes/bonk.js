@@ -1,3 +1,4 @@
+const path = require("path");
 const bonkCommand = async (message) => {
   if (message.args.length === 1) {
     return {
@@ -71,8 +72,6 @@ bonkCommand.cooldownType = "channel";
 bonkCommand.whisperable = true;
 bonkCommand.description = `Marque alguém do chat para dar um bonk com uam força aleatória entre 0% e 100%
 • Exemplo: !bonk @pessoa`;
-bonkCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+bonkCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = { bonkCommand };

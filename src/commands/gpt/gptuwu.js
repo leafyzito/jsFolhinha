@@ -1,3 +1,4 @@
+const path = require("path");
 const { gptClient } = require("./gpt");
 const Uwuifier = require("uwuifier").default;
 
@@ -64,9 +65,7 @@ gptUwuCommand.cooldown = 15000;
 gptUwuCommand.cooldownType = "channel";
 gptUwuCommand.whisperable = true;
 gptUwuCommand.description = `Envie uma mensagem para o GPT com uma personalidade meio uwuástica`;
-gptUwuCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+gptUwuCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   gptUwuCommand,

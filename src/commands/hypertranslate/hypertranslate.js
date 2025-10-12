@@ -1,3 +1,4 @@
+const path = require("path");
 const { LANGUAGE_MAPPINGS } = require("../translate/langs.js");
 
 async function translateText(targetLanguage, textToTranslate) {
@@ -145,9 +146,7 @@ hypertranslateCommand.description = `Traduz o texto fornecido o número de vezes
 
 • Exemplo: !hypertranslate Olá mundo - O bot vai traduzir aleatoriamente "Olá mundo" 10 vezes
 • Exemplo: !hypertranslate 15 Olá mundo - O bot vai traduzir aleatoriamente "Olá mundo" 15 vezes`;
-hypertranslateCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+hypertranslateCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   hypertranslateCommand,

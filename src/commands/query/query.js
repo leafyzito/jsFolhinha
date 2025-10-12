@@ -1,3 +1,4 @@
+const path = require("path");
 async function getQuery(query) {
   const urlEncodedExpression = encodeURIComponent(query);
   const apiUrl = `http://api.wolframalpha.com/v1/result?appid=${process.env.WOLFRAM_API_KEY}&i=${urlEncodedExpression}&units=metric`;
@@ -58,9 +59,7 @@ Pode também fazer algumas conversões, apenas em inglês, como:
 • Distância entre dois pontos: !query distance between portugal and brazil - O bot irá responder com o resultado: 7318 km (kilometers)
 
 Para mais informações, consulte o site oficial do Wolfram Alpha`;
-queryCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+queryCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   mathCommand: queryCommand,

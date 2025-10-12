@@ -39,9 +39,7 @@ piadaCommand.description = `Veja uma piada aleatória ou específica quando dete
 
 • Exemplo: "!piada - O bot vai enviar uma piada aleatória
 • Exemplo: "!piada 4 - O bot vai enviar a piada número 4 da lista de piadas`;
-piadaCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+piadaCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   piadaCommand,

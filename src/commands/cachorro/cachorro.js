@@ -1,3 +1,4 @@
+const path = require("path");
 async function getDog() {
   const api_url = "https://www.googleapis.com/customsearch/v1";
   const query = "cute funny dog pinterest";
@@ -52,9 +53,7 @@ cachorroCommand.cooldownType = "channel";
 cachorroCommand.whisperable = true;
 cachorroCommand.description = `Receba uma imagem aleatória de um cachorro
 A pesquisa das fotos é feita usando o Google, então meio que pode vir qualquer coisa relacionada com cachorros`;
-cachorroCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+cachorroCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   cachorroCommand,

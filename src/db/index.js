@@ -69,6 +69,9 @@ class MongoUtils {
     // Update cache with document containing _id
     const cache = this.getCollectionCache(collectionName);
     cache.set(JSON.stringify(result.insertedId), dataWithId);
+
+    // Return the result so we can access insertedId
+    return result;
   }
 
   async get(collectionName, query, forceDb = false) {

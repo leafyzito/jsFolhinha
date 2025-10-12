@@ -1,3 +1,4 @@
+const path = require("path");
 async function getFA(user, channel) {
   const data = await fb.api.ivr.getFollowAge(user, channel);
 
@@ -80,9 +81,7 @@ Apenas !followage: O bot vai responder com a quantidade de tempo que o usuário 
 
 !followage @usuário1 @usuário2: O bot vai responder com a quantidade de tempo que o @usuário1 segue @usuário2`;
 
-followAgeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+followAgeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   followAgeCommand,

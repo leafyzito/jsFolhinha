@@ -1,3 +1,4 @@
+const path = require("path");
 const { afkInfoObjects } = require("./afk_info_model.js");
 
 const isAfkCommand = async (message) => {
@@ -57,9 +58,7 @@ isAfkCommand.cooldown = 5000;
 isAfkCommand.cooldownType = "user";
 isAfkCommand.whisperable = false;
 isAfkCommand.description = `Veja se algum usuário está AFK e há quanto tempo no chat em que o comando foi executado`;
-isAfkCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+isAfkCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   isAfkCommand,

@@ -1,22 +1,31 @@
-async function getClip(channelName, forceTwitchClipFlag) {
+async function getClip(channelName, forceMakeClipFlag) {
   const targetId = (await fb.api.helix.getUserByUsername(channelName))?.id;
   if (!targetId) {
     return null;
   }
-  if (!forceTwitchClipFlag) {
-    const clipperClip = await fb.api.clipper.makeClip(channelName);
-    if (clipperClip) {
-      return clipperClip;
+
+  // Try Helix first (unless forceMakeClipFlag is true, which means use makeClip)
+  if (!forceMakeClipFlag) {
+    const helixClip = await fb.api.helix.createClip(targetId);
+    if (helixClip === "error") {
+      // 403 or 503 (internal errors) - fall back to makeClip
+      const clipperClip = await fb.api.clipper.makeClip(channelName);
+      if (clipperClip) {
+        return clipperClip;
+      }
+      return "error";
+    }
+    if (helixClip) {
+      // Add a 1 second timeout, to give time for the clip to be created correctly
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      return helixClip;
     }
   }
 
-  const helixClip = await fb.api.helix.createClip(targetId);
-  if (helixClip === "error") {
-    // 403 or 503 (internal errors)
-    return "error";
-  }
-  if (helixClip) {
-    return helixClip;
+  // Use makeClip if explicitly requested or if Helix didn't work
+  const clipperClip = await fb.api.clipper.makeClip(channelName);
+  if (clipperClip) {
+    return clipperClip;
   }
 
   return null;
@@ -26,9 +35,10 @@ const clipCommand = async (message) => {
   const targetChannel =
     message.args[1]?.replace(/^@/, "") || message.channelName;
 
-  // flag to force the creation of the clip using the twitch api over makeClip
-  const forceTwitchClipFlag = message.args.includes("-twitch");
-  const clip = await getClip(targetChannel, forceTwitchClipFlag);
+  // flag to force the creation of the clip using makeClip over the twitch api
+  const forceMakeClipFlag =
+    message.args.includes("-makeclip") || message.args.includes("-supa");
+  const clip = await getClip(targetChannel, forceMakeClipFlag);
 
   if (!clip) {
     return {
@@ -64,7 +74,7 @@ clipCommand.whisperable = false;
 clipCommand.description = `Crie um clip de alguma live. Se nenhum canal for especificado, o comando irá criar um clip do canal onde o comando foi executado
 • Exemplo: !clip - O bot vai criar um clip do canal onde o comando foi executado
 • Exemplo: !clip @leafyzito - O bot vai criar um clip do canal do usuário @leafyzito, caso ele esteja em live
-• Exemplo: !clip @leafyzito -twitch - O bot vai criar um clip do canal do usuário @leafyzito, caso ele esteja em live, usando a api do twitch ao invés de upar o clip para o feridinha`;
+• Exemplo: !clip @leafyzito -makeclip/-supa - O bot vai criar um clip do canal do usuário @leafyzito, caso ele esteja em live, usando o makeClip/supa e upa pro Feridinha ao invés da API da twitch`;
 clipCommand.code = `https://github.com/fchstbot/jsFolhinha/blob/main/src/commands/${__dirname
   .split("/")
   .pop()}/${__filename.split("/").pop()}`;

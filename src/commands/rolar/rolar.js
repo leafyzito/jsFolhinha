@@ -1,3 +1,4 @@
+const path = require("path");
 const rolarCommand = async (message) => {
   if (message.args.length === 1) {
     return {
@@ -77,9 +78,7 @@ rolarCommand.whisperable = true;
 rolarCommand.description = `Lance até 10 dados com quantos lados você quiser, com limite de 100 lados
 • Exemplo: !rolar 2 10 - O bot irá lançar 2 dados de 10 lados
 • Exemplo: !rolar 6d10 - O bot irá lançar 6 dados de 10 lados`;
-rolarCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+rolarCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   rolarCommand,

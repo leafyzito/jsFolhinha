@@ -1,3 +1,4 @@
+const path = require("path");
 const slapCommand = async (message) => {
   if (message.args.length === 1) {
     return {
@@ -49,8 +50,6 @@ slapCommand.cooldownType = "channel";
 slapCommand.whisperable = true;
 slapCommand.description = `Dê um tapa virtual em alguém do chat
 • Exemplo: !slap @pessoa`;
-slapCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+slapCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = { slapCommand };

@@ -1,3 +1,4 @@
+const path = require("path");
 const { domainToASCII } = require("node:url");
 
 async function checkSite(url) {
@@ -70,9 +71,7 @@ isDownCommand.cooldown = 5000;
 isDownCommand.cooldownType = "channel";
 isDownCommand.whisperable = true;
 isDownCommand.description = `Verifica se um site está fora do ar ou se é só você que não consegue ver o site, de acordo com a API do Sucuri`;
-isDownCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+isDownCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   isDownCommand: isDownCommand,

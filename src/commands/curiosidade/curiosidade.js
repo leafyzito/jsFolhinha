@@ -48,9 +48,7 @@ curiosidadeCommand.description = `Veja uma curiosidade aleatória ou específica
 
 • Exemplo: "!curiosidade - O bot vai enviar uma curiosidade aleatória
 • Exemplo: "!curiosidade 4 - O bot vai enviar a curiosidade número 4 da lista de curiosidades`;
-curiosidadeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
-  .split("/")
-  .pop()}/${__filename.split("/").pop()}`;
+curiosidadeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   curiosidadeCommand,
