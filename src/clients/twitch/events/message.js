@@ -1,29 +1,29 @@
 const { commandHandler, listenerHandler } = require("../../../handlers");
 
 // const duplicateMessages = [];
-function handleDuplicateMessages(message) {
-  const sourceRoomId = message.tags.get("source-room-id") || null;
-  const sourceMessageId = message.tags.get("source-id") || null;
+// function handleDuplicateMessages(message) {
+//   const sourceRoomId = message.tags.get("source-room-id") || null;
+//   const sourceMessageId = message.tags.get("source-id") || null;
 
-  //   if (
-  //     sourceRoomId &&
-  //     sourceRoomId !== message.channelID &&
-  //     fb.twitch.anonClient.channelsToJoin
-  //       .map((channel) => channel.id)
-  //       .includes(sourceRoomId)
-  //   ) {
-  //     return true; // Should skip this message
-  //   }
+//   if (
+//     sourceRoomId &&
+//     sourceRoomId !== message.channelID &&
+//     fb.twitch.anonClient.channelsToJoin
+//       .map((channel) => channel.id)
+//       .includes(sourceRoomId)
+//   ) {
+//     return true; // Should skip this message
+//   }
 
-  //   if (sourceMessageId) {
-  //     duplicateMessages.push(sourceMessageId);
-  //     if (duplicateMessages.length > 100) {
-  //       duplicateMessages.shift();
-  //     }
-  //   }
+//   if (sourceMessageId) {
+//     duplicateMessages.push(sourceMessageId);
+//     if (duplicateMessages.length > 100) {
+//       duplicateMessages.shift();
+//     }
+//   }
 
-  //   return false; // Continue processing
-}
+//   return false; // Continue processing
+// }
 
 module.exports = async function onMessage(channel, username, text, message) {
   message.messageText = text;
