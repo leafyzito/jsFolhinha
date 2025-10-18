@@ -35,7 +35,7 @@ async function fetchData(url, options = {}) {
     // fallback → return raw buffer (useful for images, pdfs, etc.)
     return rawBody;
   } catch (err) {
-    console.error("Request error:", err.message);
+    console.error(`Request error for url ${url}:`, err.message);
     return null;
   }
 }
