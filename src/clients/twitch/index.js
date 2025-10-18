@@ -136,6 +136,45 @@ class TwitchClient {
     // whisper client events
     this.whisperClient.on("WHISPER", (msg) => onWhisperHandler(msg));
   }
+
+  // join given channels login names and update channelsToJoin array
+  async join(channels = []) {
+    if (channels.length === 0) {
+      return false;
+    }
+
+    // add to channelsToJoin and attempt to join
+    this.anonClient.channelsToJoin.push(...channels);
+    await this.joinMultiple(channels);
+
+    return;
+  }
+
+  async joinMultiple(channels = []) {
+    if (channels.length === 0) {
+      console.log(`* No channels to join`);
+      return;
+    }
+
+    for (const channel of channels) {
+      await this.anonClient.join(channel);
+    }
+
+    return;
+  }
+
+  // part given ONE channel and update channelsToJoin array
+  async part(channel) {
+    // remove from channelsToJoin
+    this.anonClient.channelsToJoin = this.anonClient.channelsToJoin.filter(
+      (c) => c.toLowerCase() !== channel.toLowerCase()
+    );
+
+    // part
+    await this.anonClient.part(channel);
+
+    return;
+  }
 }
 
 module.exports = TwitchClient;
