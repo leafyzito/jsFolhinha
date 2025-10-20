@@ -5,7 +5,7 @@ const dailyCookieResetTask = require("./dailyCookieReset");
 const {
   startPetTask,
   startFetchPendingJoinsTask,
-  startRejoinDisconnectedChannelsTask,
+  // startRejoinDisconnectedChannelsTask,
   startDiscordPresenceTask,
 } = require("./taskScheduler");
 
@@ -21,7 +21,7 @@ const startAllTasks = () => {
     startPetTask();
     startFetchPendingJoinsTask();
   }
-  startRejoinDisconnectedChannelsTask();
+  // startRejoinDisconnectedChannelsTask();
   startDiscordPresenceTask();
 };
 
@@ -29,7 +29,7 @@ module.exports = {
   dailyCookieResetTask,
   startPetTask,
   startFetchPendingJoinsTask,
-  startRejoinDisconnectedChannelsTask,
+  // startRejoinDisconnectedChannelsTask,
   startDiscordPresenceTask,
   startAllTasks,
 };

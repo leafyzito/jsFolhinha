@@ -1,5 +1,5 @@
 async function updateDiscordPresence() {
-  const joinedChannels = [...fb.twitch.anonClient.joinedChannels];
+  const joinedChannels = [...fb.twitch.anonClient.currentChannels];
   const channelsToJoin = [...fb.twitch.anonClient.channelsToJoin];
   fb.discord.client.user.setActivity({
     type: 4,

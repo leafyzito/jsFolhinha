@@ -193,6 +193,9 @@ const scheduleFutureReminder = async (reminder) => {
 // MARKER: load reminders
 // Main function to load and process reminders
 const loadReminders = async () => {
+  if (process.env.ENV !== "prod") {
+    return;
+  }
   // Clear the notifiedUsers cache on startup to ensure a fresh state
   clearAllNotifiedCache();
 

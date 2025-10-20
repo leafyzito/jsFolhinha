@@ -1,6 +1,6 @@
 const joinCommand = async (message) => {
   const channelToJoin = message.senderUsername;
-  const alreadyJoinedChannels = [...fb.twitch.anonClient.joinedChannels];
+  const alreadyJoinedChannels = fb.twitch.anonClient.currentChannels.map((c) => c.name.replace("#",""));
 
   if (alreadyJoinedChannels.includes(channelToJoin)) {
     return {

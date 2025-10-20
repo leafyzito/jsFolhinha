@@ -1,4 +1,5 @@
 // Initialization utilities for the application
+const { ApiClient } = require("@twurple/api");
 
 async function initializeUtilities() {
   const Utils = require("./utils/index");
@@ -13,6 +14,12 @@ async function initializeUtilities() {
 
   return { utils, emotes, db, log };
 }
+async function initializeAuthProvider() {
+  const AuthProvider = require("../clients/twitch/authProvider");
+  const authProvider = new AuthProvider();
+  await authProvider.init();
+  return authProvider;
+}
 
 async function initializeAPIs() {
   const allApis = require("../apis/index");
@@ -21,6 +28,11 @@ async function initializeAPIs() {
       Object.entries(allApis).map(([key, Api]) => [key, new Api()])
     ),
   };
+}
+
+async function initializeApiClient() {
+  const apiClient = new ApiClient({ authProvider: fb.authProvider.provider });
+  return apiClient;
 }
 
 async function initializeDiscord() {
@@ -89,11 +101,44 @@ async function getChannelsToJoin() {
   }
 }
 
+async function getTokenData() {
+  try {
+    // Ensure fb object is available
+    if (!fb || !fb.db) {
+      throw new Error("fb object not properly initialized");
+    }
+
+    // Get all auth tokens from the database
+    const authTokens = await fb.db.get("auth", {});
+
+    // Map database fields to the format expected by addUsers method
+    return authTokens.map((token) => ({
+      userId: token.user_id,
+      username: token.username,
+      accessToken: token.access_token,
+      refreshToken: token.refresh_token,
+      scope: token.scope,
+      expiresIn: token.expires_at
+        ? Math.floor((new Date(token.expires_at) - new Date()) / 1000)
+        : null,
+      obtainmentTimestamp: token.created_at
+        ? Math.floor(new Date(token.created_at).getTime() / 1000)
+        : null,
+    }));
+  } catch (error) {
+    console.error("Error fetching token data from database:", error);
+    return [];
+  }
+}
+
 module.exports = {
   initializeUtilities,
   initializeAPIs,
+  initializeApiClient,
   initializeDiscord,
+  initializeAuthProvider,
   initializeTwitch,
   initializeClickHouse,
   getChannelsToJoin,
+  getTokenData,
 };

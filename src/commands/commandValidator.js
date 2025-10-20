@@ -7,7 +7,7 @@ function manageCooldown(cooldownDuration, type, message) {
   // Get the current time
   const currentTime = Date.now();
   let identifier = message.senderUsername;
-  const command = message.command;
+  const command = message.command.commandName;
 
   // if channel is whisper, set type to user, no matter what type is passed
   if (message.channelName === "whisper") {

@@ -1,5 +1,6 @@
 moderator:manage:banned_users
 user:manage:whispers
+user:read:whispers
 channel:manage:broadcast
 user:read:follows
 moderator:read:followers
@@ -10,7 +11,6 @@ channel:moderate
 user:bot
 user:read:chat
 user:write:chat
-user:manage:whispers
 chat:read
 chat:edit
 user:read:moderated_channels

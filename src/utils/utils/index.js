@@ -447,11 +447,6 @@ class Utils {
 
   // Method to check if a message matches any waiting criteria
   checkMessageWaiters(msg) {
-    // Handle reply messages (same logic as before)
-    if (msg.replyParentMessageID) {
-      msg.messageText = msg.messageText.split(" ").slice(1).join(" ").trim();
-    }
-
     // Check multi-message waiters first
     if (this.multiMessageWaiters) {
       for (const [, multiWaiter] of this.multiMessageWaiters) {
