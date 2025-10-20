@@ -1,10 +1,11 @@
 const { validateCommandExecution } = require("../../commands/commandValidator");
+const { commandsList } = require("../../commands/commandsList");
 
 async function checkCommandExecution(command, message) {
   if (
     !(await validateCommandExecution(
-      fb.commandsList[command].cooldown,
-      fb.commandsList[command].cooldownType,
+      commandsList[command].cooldown,
+      commandsList[command].cooldownType,
       message
     ))
   ) {
@@ -12,7 +13,7 @@ async function checkCommandExecution(command, message) {
   }
 
   // check if command is whisperable
-  if (message.isWhisper && !fb.commandsList[command].whisperable) {
+  if (message.isWhisper && !commandsList[command].whisperable) {
     return false;
   }
 
@@ -30,18 +31,23 @@ async function commandHandler(message) {
 
   const command = message.args[0].slice(message.prefix.length).toLowerCase();
 
-  if (!(command in fb.commandsList)) {
+  if (!(command in commandsList)) {
     return;
   }
 
-  message.command = fb.commandsList[command];
+  Object.defineProperty(message, "command", {
+    value: commandsList[command],
+    writable: true,
+    configurable: true,
+    enumerable: true,
+  });
   if (!(await checkCommandExecution(command, message))) {
     return;
   }
 
   let commandResult;
   try {
-    commandResult = await fb.commandsList[command](message);
+    commandResult = await commandsList[command](message);
   } catch (err) {
     fb.discord.logError(
       `Error in command in #${message.channelName}/${message.senderUsername} - ${command}: ${err}`
@@ -66,7 +72,7 @@ async function commandHandler(message) {
   commandResult.reply = commandResult.reply.replace(/[\n\r]/g, " ").trim();
 
   message.notes = commandResult.notes;
-  message.responseTime = new Date().getTime() - message.serverTimestampRaw;
+  message.responseTime = new Date().getTime() - message.internalTimestamp;
   message.internalResponseTime =
     new Date().getTime() - message.internalTimestamp;
 

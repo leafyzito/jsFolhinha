@@ -61,7 +61,7 @@ class DiscordClient {
   // intentionally empty: tasks are started in main.js
 
   // Utility methods for logging and notifications
-  async logCommand(message, response) {
+  async logCommand(message, response, sentVia = null) {
     const channelName =
       message.channelName == "whisper"
         ? "📨 Whisper"
@@ -71,7 +71,7 @@ class DiscordClient {
       .setTitle(
         `${channelName}/${message.displayName} - ${message.command.commandName}`
       )
-      .setURL(`${this.getLogsUrl(message.channelName, message.messageID)}`)
+      .setURL(`${this.getLogsUrl(message.channelName, message.id)}`)
       .addFields(
         {
           name: "Comando:",
@@ -87,11 +87,13 @@ class DiscordClient {
           inline: false,
         }
       )
-      .setColor(message.color ? colorToHexString(message.color) : "#008000")
+      .setColor(this.getColorForEmbed(message))
       .setFooter({
         text: `${message.responseTime}ms/${
           message.internalResponseTime
-        }ms • ${this.getFormattedDateTime()}`,
+        }ms • ${this.getFormattedDateTime()}${
+          sentVia !== null ? ` • ${sentVia}` : ""
+        }`,
       });
 
     if (message.notes != null) {
@@ -110,7 +112,7 @@ class DiscordClient {
     });
   }
 
-  async logSend(channel, content) {
+  async logSend(channel, content, sentVia = null) {
     const embed = new this.client.EmbedBuilder()
       .setTitle(`Enviado para #${channel}`)
       .setURL(`${this.getLogsUrl(channel)}`)
@@ -121,7 +123,9 @@ class DiscordClient {
       })
       .setColor("#008000")
       .setFooter({
-        text: `${this.getFormattedDateTime()}`,
+        text: `${this.getFormattedDateTime()}${
+          sentVia !== null ? ` • ${sentVia}` : ""
+        }`,
       });
 
     const logChannel = await this.client.channels.fetch(
@@ -207,7 +211,8 @@ class DiscordClient {
         value: message.messageText,
         inline: false,
       })
-      .setColor(message.color ? colorToHexString(message.color) : "#008000")
+      .setColor(this.getColorForEmbed(message))
+
       .setFooter({
         text: `${this.getFormattedDateTime()}`,
       });
@@ -252,16 +257,16 @@ class DiscordClient {
   async notifyDevMention(message) {
     const embed = new this.client.EmbedBuilder()
       .setTitle(`#${message.channelName}/${message.displayName}`)
-      .setURL(`${this.getLogsUrl(message.channelName, message.messageID)}`)
-      .setColor(message.color ? colorToHexString(message.color) : "#008000")
+      .setURL(`${this.getLogsUrl(message.channelName, message.id)}`)
+      .setColor(this.getColorForEmbed(message))
       .setFooter({
         text: `${this.getFormattedDateTime()}`,
       });
 
     if (message.isReply) {
       embed.addFields({
-        name: `Respondendo a ${message.replyParentDisplayName}:`,
-        value: message.replyParentMessageBody,
+        name: `Respondendo a ${message.parentMessageUserDisplayName}:`,
+        value: message.parentMessageText,
         inline: false,
       });
     }
@@ -304,6 +309,16 @@ class DiscordClient {
     return `https://tv.supa.sh/logs?c=${channel}&d=${year}-${month}-${day}${
       messageId ? `#${messageId}` : ""
     }`;
+  }
+
+  getColorForEmbed(message) {
+    if (message.userInfo) {
+      return message.userInfo.color ? message.userInfo.color : "#008000";
+    }
+    if (message.color) {
+      return colorToHexString(message.color);
+    }
+    return "#008000";
   }
 }
 

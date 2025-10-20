@@ -29,7 +29,7 @@ class StatusServer {
         uptime: uptime,
         uptimeHumanized: fb.utils.relativeTime(fb.startTime, true),
         startTime: global.fb?.startTime || null,
-        connectedChannels: [...fb.twitch.anonClient.joinedChannels].length || 0,
+        connectedChannels: fb.twitch.anonClient.currentChannels.length || 0,
         channelsToJoin: [...fb.twitch.anonClient.channelsToJoin].length || 0,
       });
     });
