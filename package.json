@@ -31,6 +31,7 @@
     "node-schedule": "^2.1.1",
     "node-shazam": "^1.2.7",
     "openai": "^4.53.2",
+    "strip-ansi": "^7.1.2",
     "uwuifier": "^4.2.2"
   },
   "description": "https://folhinhabot.com/",

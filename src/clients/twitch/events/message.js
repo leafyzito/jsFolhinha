@@ -1,4 +1,5 @@
 const { commandHandler, listenerHandler } = require("../../../handlers");
+const { sanitizeText } = require("../../../utils/sanitizeText");
 
 // const duplicateMessages = [];
 // function handleDuplicateMessages(message) {
@@ -32,20 +33,17 @@ module.exports = async function onMessage(channel, username, text, message) {
   // handle duplicate messages from shared chats
   // if (handleDuplicateMessages(message)) return;
 
-  // add content from parent message to message if exists and remove the first word (the reply)
+  // Handle reply messages and sanitize text
   message.isReply = false;
   message.originalMessageText = message.messageText;
+  
   if (message.parentMessageText) {
     message.isReply = true;
     message.messageText = message.messageText + " " + message.parentMessageText;
   }
 
-  // sanitize message
-  message.messageText = message.messageText.replace(
-    /\u200B|\u200C|\u200D|\u200E|\u200F|\u034F|\u{E0000}/gu,
-    ""
-  );
-  message.messageText = message.messageText.trim();
+  // Sanitize message text to remove invisible characters
+  message.messageText = sanitizeText(message.messageText);
   message.channelID = message.channelId;
 
   // set custom properties
