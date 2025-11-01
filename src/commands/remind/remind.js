@@ -384,6 +384,12 @@ const remindCommand = async (message) => {
     };
   }
 
+  if (targetUser.toLowerCase() == "in") {
+    return {
+      reply: `Use o formato: ${message.prefix}remind <usuário> in <tempo> <mensagem> (ex: in 10s/10m/10h/10d)`,
+    };
+  }
+
   // MARKER: main reminder logic
   // Handle "me" or self-reminder
   if (["me", message.senderUsername].includes(targetUser)) {
