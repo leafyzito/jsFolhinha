@@ -1,4 +1,12 @@
-const stripAnsi = require('strip-ansi').default;
+let stripAnsi = null;
+
+// Dynamically import strip-ansi (ES module) at module load
+// This starts loading immediately, and by the time sanitizeText is called
+// (after initialization), it should be ready. If not, we fallback to text.
+(async () => {
+  const stripAnsiModule = await import('strip-ansi');
+  stripAnsi = stripAnsiModule.default;
+})();
 
 /**
  * Comprehensive text sanitization function that removes invisible characters
@@ -10,7 +18,7 @@ function sanitizeText(text) {
     return text;
   }
 
-  let sanitized = stripAnsi(text);
+  let sanitized = stripAnsi ? stripAnsi(text) : text;
 
   // Remove invisible characters using targeted patterns
   // Zero-width characters
