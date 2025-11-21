@@ -599,10 +599,10 @@ Pode também deixar lembretes cronometrados:
 • Exemplo: !remind @leafyzito in 15d 10h - @leafyzito será lembrado passado 15 dias e 10 horas
 
 Para ver seus lembretes pendentes: !remind show
-Para ver um lembrete específico: !remind show <ID>
+Para ver um lembrete específico: !remind show {ID do lembrete}
 Para ver todos os lembretes: !remind show all
-Para apagar um lembrete: !remind delete <ID>
-Para bloquear usuários: !remind block/unblock <usuário>`;
+Para apagar um lembrete: !remind delete {ID do lembrete}
+Para bloquear usuários: !remind block/unblock {usuário}`;
 remindCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
   .split(path.sep)
   .pop()}/${__filename.split(path.sep).pop()}`;
