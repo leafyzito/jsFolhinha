@@ -1,6 +1,8 @@
 const joinCommand = async (message) => {
   const channelToJoin = message.senderUsername;
-  const alreadyJoinedChannels = fb.twitch.anonClient.currentChannels.map((c) => c.name.replace("#",""));
+  const alreadyJoinedChannels = fb.twitch.anonClient.currentChannels.map((c) =>
+    c.replace("#", "")
+  );
 
   if (alreadyJoinedChannels.includes(channelToJoin)) {
     return {
@@ -11,7 +13,7 @@ const joinCommand = async (message) => {
   }
 
   return {
-    reply: `Para convidar o bot para o seu chat ou um que você modera, acesse https://folhinhabot.com/ e convide por lá!`,
+    reply: `Para convidar o bot para o seu chat ou um que você modera, acesse https://folhinhabot.com e convide por lá!`,
   };
 
   // await fb.utils.createNewChannelConfig(message.senderUserID);
