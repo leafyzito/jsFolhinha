@@ -89,9 +89,9 @@ class DiscordClient {
       )
       .setColor(this.getColorForEmbed(message))
       .setFooter({
-        text: `${message.responseTime}ms/${
-          message.internalResponseTime
-        }ms • ${this.getFormattedDateTime()}${
+        text: `${this.formatResponseTime(
+          message.responseTime
+        )} • ${this.getFormattedDateTime()}${
           sentVia !== null ? ` • ${sentVia}` : ""
         }`,
       });
@@ -319,6 +319,10 @@ class DiscordClient {
       return colorToHexString(message.color);
     }
     return "#008000";
+  }
+
+  formatResponseTime(responseTime) {
+    return `${responseTime}ms (${(responseTime / 1000).toFixed(1)}s)`;
   }
 }
 
