@@ -8,7 +8,7 @@ async function getRlQuiz(channelId) {
   const userId = response.messages[0].tags["user-id"];
   const rlUsername = response.messages[0].displayName.toLowerCase();
   const currUsername =
-    (await fb.api.helix.getUserByUsername(rlUsername)?.login) || rlUsername;
+    (await fb.api.helix.getUserByID(userId))?.login || rlUsername;
   const timestamp = response.messages[0].timestamp;
   const message = response.messages[0].text;
 
