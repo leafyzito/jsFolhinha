@@ -44,8 +44,8 @@ const rlquizCommand = async (message) => {
 
   const emote = await fb.emotes.getEmoteFromList(
     message.channelName,
-    ["nerd", "nerdge", "catnerd", "dognerd", "giganerd"],
-    "🤓"
+    fb.emotes.pogEmotes,
+    "PogChamp"
   );
   return {
     reply: `${responseMsg.senderUsername} acertou quem enviou a mensagem! ${emote}`,
