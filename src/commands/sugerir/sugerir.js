@@ -77,7 +77,13 @@ const sugerirCommand = async (message) => {
 };
 
 sugerirCommand.commandName = "sugerir";
-sugerirCommand.aliases = ["sugerir", "sugestao", "sugestão"];
+sugerirCommand.aliases = [
+  "sugerir",
+  "sugestao",
+  "sugestão",
+  "suggest",
+  "suggestion",
+];
 sugerirCommand.shortDescription = "Envia uma sugestão para o bot";
 sugerirCommand.cooldown = 5000;
 sugerirCommand.cooldownType = "channel";
@@ -85,7 +91,9 @@ sugerirCommand.whisperable = true;
 sugerirCommand.description = `Deixe a sua contribuição para a caixinha de sugestões do Folhinha, poderá relatar bugs, erros, inovações...
 
 Qualquer coisa que ache que possa melhorar a experiência com o Folhinha e suas funcionalidades`;
-sugerirCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
+sugerirCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
+  .split(path.sep)
+  .pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   sugerirCommand,
