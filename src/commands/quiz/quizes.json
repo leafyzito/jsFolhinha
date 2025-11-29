@@ -5,7 +5,9 @@
         "categoria": "Esporte",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Puma",
+        "resposta": [
+            "Puma"
+        ],
         "dicas": [
             "Nike",
             "Adidas",
@@ -19,7 +21,9 @@
         "categoria": "Ciência: Computadores",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Amazon",
+        "resposta": [
+            "Amazon"
+        ],
         "dicas": [
             "eBay",
             "Overstock",
@@ -33,7 +37,9 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "The Joker",
+        "resposta": [
+            "The Joker"
+        ],
         "dicas": [
             "Fandango",
             "Take The Money and Run",
@@ -47,7 +53,9 @@
         "categoria": "Entretenimento: Televisão",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "David Duchovny",
+        "resposta": [
+            "David Duchovny"
+        ],
         "dicas": [
             "Gillian Anderson",
             "David Duchovny",
@@ -61,7 +69,9 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Eddie Vedder",
+        "resposta": [
+            "Eddie Vedder"
+        ],
         "dicas": [
             "Eddie Vedder",
             "Ozzy Osbourne",
@@ -75,7 +85,9 @@
         "categoria": "Celebridades",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Christopher Poole",
+        "resposta": [
+            "Christopher Poole"
+        ],
         "dicas": [
             "Mark Zuckerberg",
             "Allison Harvard",
@@ -89,7 +101,10 @@
         "categoria": "Entretenimento: Livros",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Números",
+        "resposta": [
+            "Números",
+            "Numeros"
+        ],
         "dicas": [
             "Números",
             "Gênesis",
@@ -103,7 +118,9 @@
         "categoria": "Entretenimento: Filmes",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Top Gun",
+        "resposta": [
+            "Top Gun"
+        ],
         "dicas": [
             "Days of Thunder",
             "Top Gun",
@@ -117,7 +134,9 @@
         "categoria": "Conhecimento geral",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "India",
+        "resposta": [
+            "India"
+        ],
         "dicas": [
             "Papua New Guinea",
             "Ethiopia",
@@ -131,7 +150,9 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "V",
+        "resposta": [
+            "V"
+        ],
         "dicas": [
             "X",
             "III",
@@ -145,7 +166,10 @@
         "categoria": "Ciência e Natureza",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Arteéria pulmonar",
+        "resposta": [
+            "Artéria pulmonar",
+            "Arteria pulmonar"
+        ],
         "dicas": [
             "Arteéria pulmonar",
             "Veia pulmonar",
@@ -159,7 +183,9 @@
         "categoria": "Entretenimento: Televisão",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "4 de Setembro de 2013",
+        "resposta": [
+            "4 de Setembro de 2013"
+        ],
         "dicas": [
             "25 de Dezembro de 2010",
             "28 de Março de 1999",
@@ -173,7 +199,9 @@
         "categoria": "Animais",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Hyaenidae",
+        "resposta": [
+            "Hyaenidae"
+        ],
         "dicas": [
             "Canidae",
             "Felidae",
@@ -187,7 +215,9 @@
         "categoria": "Conhecimento geral",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "amigo",
+        "resposta": [
+            "amigo"
+        ],
         "dicas": [
             "Pessoa",
             "Amigo",
@@ -201,7 +231,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Alonsus Faol",
+        "resposta": [
+            "Alonsus Faol"
+        ],
         "dicas": [
             "Uther",
             "Alexandros Mograine",
@@ -215,7 +247,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Segunda guerra mundial",
+        "resposta": [
+            "Segunda guerra mundial"
+        ],
         "dicas": [
             "Primeira guerra mundial",
             "Guerra do vietnã",
@@ -229,7 +263,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "carros",
+        "resposta": [
+            "carros"
+        ],
         "dicas": [
             "Carros",
             "Aviões",
@@ -243,7 +279,9 @@
         "categoria": "Entretenimento: Livros",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Frankenstein",
+        "resposta": [
+            "Frankenstein"
+        ],
         "dicas": [
             "Drácula",
             "Frankenstein",
@@ -257,7 +295,9 @@
         "categoria": "Conhecimento geral",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "a verdade",
+        "resposta": [
+            "a verdade"
+        ],
         "dicas": [
             "A verdade",
             "A resposta",
@@ -271,7 +311,10 @@
         "categoria": "Ciência: Computadores",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "CPU, processador",
+        "resposta": [
+            "CPU",
+            "processador"
+        ],
         "dicas": [
             "Placa Mãe",
             "Placa de vídeo",
@@ -285,7 +328,9 @@
         "categoria": "Política",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Donald Trump",
+        "resposta": [
+            "Donald Trump"
+        ],
         "dicas": [
             "Donald Trump",
             "Barack Obama",
@@ -299,7 +344,10 @@
         "categoria": "Ciência: Computadores",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "1 Kibibyte, Kibibyte",
+        "resposta": [
+            "1 Kibibyte",
+            "Kibibyte"
+        ],
         "dicas": [
             "1 Kylobyte",
             "1 Kilobyte",
@@ -313,7 +361,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "169",
+        "resposta": [
+            "169"
+        ],
         "dicas": [
             "100",
             "132",
@@ -327,7 +377,9 @@
         "categoria": "Conhecimento geral",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "28%",
+        "resposta": [
+            "28%"
+        ],
         "dicas": [
             "13%",
             "20%",
@@ -341,7 +393,9 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "1993",
+        "resposta": [
+            "1993"
+        ],
         "dicas": [
             "1992",
             "1993",
@@ -355,7 +409,9 @@
         "categoria": "Entretenimento: Anime",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Restauração",
+        "resposta": [
+            "Restauração"
+        ],
         "dicas": [
             "Emissão",
             "Transmutação",
@@ -369,7 +425,9 @@
         "categoria": "História",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "New Amsterdam",
+        "resposta": [
+            "New Amsterdam"
+        ],
         "dicas": [
             "New Amsterdam",
             "New London",
@@ -383,7 +441,9 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Robbie Williams",
+        "resposta": [
+            "Robbie Williams"
+        ],
         "dicas": [
             "Justin Timberlake",
             "Harry Styles",
@@ -397,7 +457,9 @@
         "categoria": "História",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "União Soviética",
+        "resposta": [
+            "União Soviética"
+        ],
         "dicas": [
             "Itália",
             "Alemanha",
@@ -411,7 +473,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Roxo",
+        "resposta": [
+            "Roxo"
+        ],
         "dicas": [
             "Vermelho",
             "Verde",
@@ -425,7 +489,11 @@
         "categoria": "Entretenimento: Televisão",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Ricdifícil 'Dick' Whitman, Dick, Ricdifícil Whitman",
+        "resposta": [
+            "Ricdifícil 'Dick' Whitman",
+            "Dick",
+            "Ricdifícil Whitman"
+        ],
         "dicas": [
             "Donald Draper",
             "John Ashbury",
@@ -439,7 +507,9 @@
         "categoria": "Animais",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Pan troglodytes",
+        "resposta": [
+            "Pan troglodytes"
+        ],
         "dicas": [
             "Pan troglodytes",
             "Gorilla gorilla",
@@ -453,7 +523,9 @@
         "categoria": "Geography",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Hampshire",
+        "resposta": [
+            "Hampshire"
+        ],
         "dicas": [
             "Hampshire",
             "Oxfordshire",
@@ -467,7 +539,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Alexey Pajitnov",
+        "resposta": [
+            "Alexey Pajitnov"
+        ],
         "dicas": [
             "Alexey Pajitnov",
             "Toru Iwatani",
@@ -481,7 +555,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "7",
+        "resposta": [
+            "7"
+        ],
         "dicas": [
             "6",
             "7",
@@ -495,7 +571,9 @@
         "categoria": "Entretenimento: Livros",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Herman Melville",
+        "resposta": [
+            "Herman Melville"
+        ],
         "dicas": [
             "William Golding",
             "William Shakespeare",
@@ -509,7 +587,9 @@
         "categoria": "Entretenimento: Livros",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Nautilus",
+        "resposta": [
+            "Nautilus"
+        ],
         "dicas": [
             "Nautilus",
             "Neptuno",
@@ -523,7 +603,9 @@
         "categoria": "Entretenimento: Televisão",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Ursula",
+        "resposta": [
+            "Ursula"
+        ],
         "dicas": [
             "Madam Mim",
             "Maleficent",
@@ -537,7 +619,9 @@
         "categoria": "História",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "6",
+        "resposta": [
+            "6"
+        ],
         "dicas": [
             "1",
             "3",
@@ -551,7 +635,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Lee Everett",
+        "resposta": [
+            "Lee Everett"
+        ],
         "dicas": [
             "Clementine",
             "Lee Everett",
@@ -565,7 +651,9 @@
         "categoria": "História",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Winston Churchill",
+        "resposta": [
+            "Winston Churchill"
+        ],
         "dicas": [
             "Neville Chamberlain",
             "Harold Macmillan",
@@ -579,7 +667,9 @@
         "categoria": "Geography",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Carson City",
+        "resposta": [
+            "Carson City"
+        ],
         "dicas": [
             "Las Vegas",
             "Henderson",
@@ -593,7 +683,9 @@
         "categoria": "Geography",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Olympia",
+        "resposta": [
+            "Olympia"
+        ],
         "dicas": [
             "Washington D.C.",
             "Olympia",
@@ -607,7 +699,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Jill",
+        "resposta": [
+            "Jill"
+        ],
         "dicas": [
             "Jill",
             "Dana",
@@ -621,7 +715,9 @@
         "categoria": "Conhecimento geral",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "India",
+        "resposta": [
+            "India"
+        ],
         "dicas": [
             "India",
             "USA",
@@ -635,7 +731,9 @@
         "categoria": "Veículos",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Toyota Prius",
+        "resposta": [
+            "Toyota Prius"
+        ],
         "dicas": [
             "Chevrolet Volt",
             "Honda Fit",
@@ -649,7 +747,9 @@
         "categoria": "Entretenimento: Anime",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Class 3-E",
+        "resposta": [
+            "Class 3-E"
+        ],
         "dicas": [
             "Class 3-A",
             "Class 3-E",
@@ -663,7 +763,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Flash",
+        "resposta": [
+            "Flash"
+        ],
         "dicas": [
             "Flash",
             "Strength",
@@ -677,7 +779,9 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Yeezus",
+        "resposta": [
+            "Yeezus"
+        ],
         "dicas": [
             "My Beautiful Dark Twisted Fantasy",
             "The Life of Pablo",
@@ -691,7 +795,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Telepatia",
+        "resposta": [
+            "Telepatia"
+        ],
         "dicas": [
             "Invisível",
             "Bolhas de água",
@@ -705,7 +811,9 @@
         "categoria": "Entretenimento: Anime",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Coils",
+        "resposta": [
+            "Coils"
+        ],
         "dicas": [
             "Wires",
             "Collectors",
@@ -719,7 +827,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Sligs",
+        "resposta": [
+            "Sligs"
+        ],
         "dicas": [
             "Scrabs",
             "Sligs",
@@ -733,7 +843,9 @@
         "categoria": "Entretenimento: Filmes",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Christian Bale",
+        "resposta": [
+            "Christian Bale"
+        ],
         "dicas": [
             "Michael Caine",
             "Ron Dean",
@@ -742,26 +854,15 @@
         ]
     },
     {
-        "id": 54,
-        "pergunta": "Quando o Batman vasculha os chats online, qual apelido ele usa?",
-        "categoria": "Entertainment: Comics",
-        "tipo": "multiple",
-        "dificuldade": "difícil",
-        "resposta": "JonDoe297",
-        "dicas": [
-            "iAmBatman",
-            "BWayne13",
-            "JonDoe297",
-            "BW1129"
-        ]
-    },
-    {
         "id": 55,
         "pergunta": "Onde o filme original de 'Friday The 13th' acontece?",
         "categoria": "Entretenimento: Filmes",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Camp Crystal Lake,  Crystal Lake",
+        "resposta": [
+            "Camp Crystal Lake",
+            "Crystal Lake"
+        ],
         "dicas": [
             "Packanack",
             "Higgins Haven",
@@ -775,7 +876,9 @@
         "categoria": "Conhecimento geral",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Brasil",
+        "resposta": [
+            "Brasil"
+        ],
         "dicas": [
             "Brasil",
             "China",
@@ -789,10 +892,12 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Michael Jackson ",
+        "resposta": [
+            "Michael Jackson"
+        ],
         "dicas": [
             "Prince",
-            "Michael Jackson ",
+            "Michael Jackson",
             "George Michael",
             "Vanilla Ice "
         ]
@@ -803,7 +908,9 @@
         "categoria": "Celebridades",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "1962 ",
+        "resposta": [
+            "1962 "
+        ],
         "dicas": [
             "1970",
             "1960",
@@ -817,7 +924,10 @@
         "categoria": "Geography",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Indonésia",
+        "resposta": [
+            "Indonésia",
+            "Indonesia"
+        ],
         "dicas": [
             "Chile",
             "Indonésia",
@@ -831,7 +941,9 @@
         "categoria": "Conhecimento geral",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "12",
+        "resposta": [
+            "12"
+        ],
         "dicas": [
             "10",
             "12",
@@ -845,7 +957,9 @@
         "categoria": "Esporte",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "6",
+        "resposta": [
+            "6"
+        ],
         "dicas": [
             "4",
             "9",
@@ -859,7 +973,9 @@
         "categoria": "Entertainment: Board Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "20",
+        "resposta": [
+            "20"
+        ],
         "dicas": [
             "30",
             "15",
@@ -873,7 +989,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Super Mario 64",
+        "resposta": [
+            "Super Mario 64"
+        ],
         "dicas": [
             "Mario Party 2",
             "Paper Mario",
@@ -887,7 +1005,9 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Kyoko Ito",
+        "resposta": [
+            "Kyoko Ito"
+        ],
         "dicas": [
             "Yoko Ono",
             "Kyary Pamyu",
@@ -901,7 +1021,10 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "John, John Lennon",
+        "resposta": [
+            "John",
+            "John Lennon"
+        ],
         "dicas": [
             "Paul",
             "John",
@@ -915,7 +1038,9 @@
         "categoria": "Veículos",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Toyota",
+        "resposta": [
+            "Toyota"
+        ],
         "dicas": [
             "Toyota",
             "Honda",
@@ -929,7 +1054,9 @@
         "categoria": "História",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "5%",
+        "resposta": [
+            "5%"
+        ],
         "dicas": [
             "5%",
             "12%",
@@ -943,7 +1070,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Mark Hamill",
+        "resposta": [
+            "Mark Hamill"
+        ],
         "dicas": [
             "Jason Dohring",
             "Jesse McCartney",
@@ -957,7 +1086,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Frisk e Chara",
+        "resposta": [
+            "Frisk e Chara"
+        ],
         "dicas": [
             "Sans e Papyrus",
             "Toriel e Asgore",
@@ -970,7 +1101,9 @@
         "categoria": "Entretenimento: Filmes",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Jimmy Cooper",
+        "resposta": [
+            "Jimmy Cooper"
+        ],
         "dicas": [
             "Pete Townshend",
             "Franc Roddam",
@@ -984,7 +1117,9 @@
         "categoria": "Entretenimento: Anime",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Naruto",
+        "resposta": [
+            "Naruto"
+        ],
         "dicas": [
             "Ten Ten",
             "Sasuke",
@@ -998,7 +1133,9 @@
         "categoria": "Esporte",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Mazda",
+        "resposta": [
+            "Mazda"
+        ],
         "dicas": [
             "Toyota",
             "Subaru",
@@ -1012,7 +1149,9 @@
         "categoria": "Entretenimento: Televisão",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Ridgid studios",
+        "resposta": [
+            "Ridgid studios"
+        ],
         "dicas": [
             "Ridgid studios",
             "Dan Bell",
@@ -1026,7 +1165,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Flowey",
+        "resposta": [
+            "Flowey"
+        ],
         "dicas": [
             "Toriel",
             "Sans",
@@ -1040,7 +1181,9 @@
         "categoria": "Geography",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Austria",
+        "resposta": [
+            "Austria"
+        ],
         "dicas": [
             "Austria",
             "Alemanha",
@@ -1054,7 +1197,9 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Daft Punk",
+        "resposta": [
+            "Daft Punk"
+        ],
         "dicas": [
             "Daft Punk",
             "deadmau5",
@@ -1068,7 +1213,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "1998",
+        "resposta": [
+            "1998"
+        ],
         "dicas": [
             "2000",
             "1999",
@@ -1082,7 +1229,9 @@
         "categoria": "História",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "1066",
+        "resposta": [
+            "1066"
+        ],
         "dicas": [
             "1066",
             "1108",
@@ -1096,7 +1245,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Scout",
+        "resposta": [
+            "Scout"
+        ],
         "dicas": [
             "Spy",
             "Scout",
@@ -1110,7 +1261,9 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "1999",
+        "resposta": [
+            "1999"
+        ],
         "dicas": [
             "1997",
             "1999",
@@ -1124,7 +1277,9 @@
         "categoria": "História",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "John Macdonald",
+        "resposta": [
+            "John Macdonald"
+        ],
         "dicas": [
             "John Abbott",
             "Alexander Mackenzie",
@@ -1138,7 +1293,9 @@
         "categoria": "Geography",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "4",
+        "resposta": [
+            "4"
+        ],
         "dicas": [
             "5",
             "2",
@@ -1152,7 +1309,9 @@
         "categoria": "Geography",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Minsk",
+        "resposta": [
+            "Minsk"
+        ],
         "dicas": [
             "Minsk",
             "Warsaw",
@@ -1166,7 +1325,9 @@
         "categoria": "Ciência: Computadores",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Radia Perlman",
+        "resposta": [
+            "Radia Perlman"
+        ],
         "dicas": [
             "Paul Vixie",
             "Vint Cerf",
@@ -1180,7 +1341,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Donkey Kong",
+        "resposta": [
+            "Donkey Kong"
+        ],
         "dicas": [
             "Super Mario Bros.",
             "Super Mario Land",
@@ -1194,7 +1357,9 @@
         "categoria": "Geography",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "0",
+        "resposta": [
+            "0"
+        ],
         "dicas": [
             "0",
             "1",
@@ -1208,7 +1373,9 @@
         "categoria": "Ciência: Gadgets",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "7.62x39mm",
+        "resposta": [
+            "7.62x39mm"
+        ],
         "dicas": [
             "7.62x51mm",
             "5.56x45mm",
@@ -1222,7 +1389,9 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Red Hot Chilli Peppers",
+        "resposta": [
+            "Red Hot Chilli Peppers"
+        ],
         "dicas": [
             "Green Day",
             "Linkin Park",
@@ -1236,7 +1405,10 @@
         "categoria": "Entretenimento: Anime",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Kaname Chidori, Kaname",
+        "resposta": [
+            "Kaname Chidori",
+            "Kaname"
+        ],
         "dicas": [
             "Teletha Testarossa",
             "Melissa Mao",
@@ -1250,7 +1422,9 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Alex Turner",
+        "resposta": [
+            "Alex Turner"
+        ],
         "dicas": [
             "Alex Turner",
             "Jamie Cook",
@@ -1264,7 +1438,10 @@
         "categoria": "Geography",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Leão",
+        "resposta": [
+            "Leão",
+            "Leao"
+        ],
         "dicas": [
             "Tigre",
             "Leão",
@@ -1278,7 +1455,12 @@
         "categoria": "Entretenimento: Televisão",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Mr. Potato Head, Senhor cabeça de batata",
+        "resposta": [
+            "Mr. Potato Head",
+            "Mr Potato Head",
+            "Senhor cabeça de batata",
+            "Senhor cabeca de batata"
+        ],
         "dicas": [
             "Betty",
             "Woody",
@@ -1292,7 +1474,10 @@
         "categoria": "Conhecimento geral",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Relógio",
+        "resposta": [
+            "Relógio",
+            "Relogio"
+        ],
         "dicas": [
             "Relógio",
             "Dinheiro",
@@ -1306,7 +1491,9 @@
         "categoria": "Science: Mathematics",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "D",
+        "resposta": [
+            "D"
+        ],
         "dicas": [
             "L",
             "D",
@@ -1320,7 +1507,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Slalom",
+        "resposta": [
+            "Slalom"
+        ],
         "dicas": [
             "R.C. Pro-Am",
             "Donkey Kong Country",
@@ -1334,7 +1523,9 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Branco",
+        "resposta": [
+            "Branco"
+        ],
         "dicas": [
             "Preto",
             "Branco",
@@ -1348,7 +1539,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Wings Gaming",
+        "resposta": [
+            "Wings Gaming"
+        ],
         "dicas": [
             "Wings Gaming",
             "Digital Chaos",
@@ -1362,7 +1555,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "1000  km/h",
+        "resposta": [
+            "1000  km/h"
+        ],
         "dicas": [
             "1000  km/h",
             "500 km/h",
@@ -1376,7 +1571,9 @@
         "categoria": "Ciência e Natureza",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Vitamina B",
+        "resposta": [
+            "Vitamina B"
+        ],
         "dicas": [
             "Vitamina A",
             "Vitamina B",
@@ -1390,7 +1587,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "ZUN",
+        "resposta": [
+            "ZUN"
+        ],
         "dicas": [
             "SUN",
             "RUN",
@@ -1404,7 +1603,10 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Fotojornalista, foto jornalista",
+        "resposta": [
+            "Fotojornalista",
+            "foto jornalista"
+        ],
         "dicas": [
             "Zelador",
             "Chefe",
@@ -1418,7 +1620,10 @@
         "categoria": "História",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Roubando trens, assaltando trens",
+        "resposta": [
+            "Roubando trens",
+            "assaltando trens"
+        ],
         "dicas": [
             "Assassino",
             "Evasão fiscal",
@@ -1432,7 +1637,9 @@
         "categoria": "Entretenimento: Televisão",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Pendleton Ward",
+        "resposta": [
+            "Pendleton Ward"
+        ],
         "dicas": [
             "Pendleton Ward",
             "J. G. Quintel",
@@ -1446,7 +1653,10 @@
         "categoria": "Ciência e Natureza",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Marte e Júpiter",
+        "resposta": [
+            "Marte e Júpiter",
+            "Marte e Jupiter"
+        ],
         "dicas": [
             "Júpiter e Saturno",
             "Marte e Júpiter",
@@ -1460,7 +1670,9 @@
         "categoria": "História",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Golfe",
+        "resposta": [
+            "Golfe"
+        ],
         "dicas": [
             "Futebol",
             "Tênis",
@@ -1474,7 +1686,9 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Nevermind",
+        "resposta": [
+            "Nevermind"
+        ],
         "dicas": [
             "Bleach",
             "In Utero",
@@ -1488,7 +1702,9 @@
         "categoria": "Mitologia",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Min",
+        "resposta": [
+            "Min"
+        ],
         "dicas": [
             "Min",
             "Menu",
@@ -1502,7 +1718,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "s",
+        "resposta": [
+            "s"
+        ],
         "dicas": [
             "n",
             "i",
@@ -1516,7 +1734,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Liam Neeson",
+        "resposta": [
+            "Liam Neeson"
+        ],
         "dicas": [
             "Kiefer Sutherland",
             "Liam Neeson",
@@ -1530,7 +1750,9 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "4",
+        "resposta": [
+            "4"
+        ],
         "dicas": [
             "5",
             "2",
@@ -1544,7 +1766,9 @@
         "categoria": "Entretenimento: Televisão",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Pinwheel",
+        "resposta": [
+            "Pinwheel"
+        ],
         "dicas": [
             "MTVKids",
             "Pinwheel",
@@ -1558,7 +1782,9 @@
         "categoria": "Ciência: Computadores",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "2016",
+        "resposta": [
+            "2016"
+        ],
         "dicas": [
             "2016",
             "2013",
@@ -1572,7 +1798,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Gerador 5",
+        "resposta": [
+            "Gerador 5"
+        ],
         "dicas": [
             "Gerador 3",
             "Gerador 4",
@@ -1586,7 +1814,10 @@
         "categoria": "Mitologia",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Nova Zelândia",
+        "resposta": [
+            "Nova Zelândia",
+            "Nova Zelandia"
+        ],
         "dicas": [
             "Vanuatu",
             "Nova Zelândia",
@@ -1600,7 +1831,9 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Brave New World",
+        "resposta": [
+            "Brave New World"
+        ],
         "dicas": [
             "Brave New World",
             "Dance of Death",
@@ -1614,7 +1847,9 @@
         "categoria": "Geography",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Nuuk",
+        "resposta": [
+            "Nuuk"
+        ],
         "dicas": [
             "Nuuk",
             "Sisimiut",
@@ -1628,7 +1863,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Final Fantasy X-2",
+        "resposta": [
+            "Final Fantasy X-2"
+        ],
         "dicas": [
             "Final Fantasy X-2",
             "Final Fantasy IX",
@@ -1642,7 +1879,9 @@
         "categoria": "História",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Luís XIV",
+        "resposta": [
+            "Luís XIV"
+        ],
         "dicas": [
             "Luís XIII",
             "Luís XIV",
@@ -1656,7 +1895,9 @@
         "categoria": "Esporte",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Boston Bruins",
+        "resposta": [
+            "Boston Bruins"
+        ],
         "dicas": [
             "Montreal Canadiens",
             "New York Rangers",
@@ -1670,7 +1911,9 @@
         "categoria": "Conhecimento geral",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Loonie",
+        "resposta": [
+            "Loonie"
+        ],
         "dicas": [
             "Boolie",
             "Foolie",
@@ -1684,7 +1927,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Moto",
+        "resposta": [
+            "Moto"
+        ],
         "dicas": [
             "PG-117",
             "Dacia",
@@ -1698,7 +1943,9 @@
         "categoria": "Ciência: Computadores",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Active Directory",
+        "resposta": [
+            "Active Directory"
+        ],
         "dicas": [
             "Alternative Drive",
             "Automated Database",
@@ -1712,7 +1959,9 @@
         "categoria": "Entretenimento: Televisão",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Walter White",
+        "resposta": [
+            "Walter White"
+        ],
         "dicas": [
             "Walter White",
             "Saul Goodman",
@@ -1726,7 +1975,9 @@
         "categoria": "História",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "1923",
+        "resposta": [
+            "1923"
+        ],
         "dicas": [
             "1903",
             "1913",
@@ -1740,7 +1991,9 @@
         "categoria": "Geography",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Casablanca",
+        "resposta": [
+            "Casablanca"
+        ],
         "dicas": [
             "Rabat",
             "Fes",
@@ -1754,7 +2007,9 @@
         "categoria": "Entretenimento: Livros",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "George Orwell",
+        "resposta": [
+            "George Orwell"
+        ],
         "dicas": [
             "George Orwell",
             "Aldous Huxley",
@@ -1768,7 +2023,9 @@
         "categoria": "Ciência: Computadores",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Placa de vídeo",
+        "resposta": [
+            "Placa de vídeo"
+        ],
         "dicas": [
             "HD",
             "Processador",
@@ -1782,7 +2039,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Victor Branco",
+        "resposta": [
+            "Victor Branco"
+        ],
         "dicas": [
             "Victor Branco",
             "Álvaro Neves",
@@ -1796,7 +2055,9 @@
         "categoria": "Ciência e Natureza",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "2",
+        "resposta": [
+            "2"
+        ],
         "dicas": [
             "2",
             "1",
@@ -1810,7 +2071,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "4",
+        "resposta": [
+            "4"
+        ],
         "dicas": [
             "5",
             "3",
@@ -1824,7 +2087,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "61",
+        "resposta": [
+            "61"
+        ],
         "dicas": [
             "59",
             "65",
@@ -1838,7 +2103,9 @@
         "categoria": "Entretenimento: Televisão",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Monty Oum",
+        "resposta": [
+            "Monty Oum"
+        ],
         "dicas": [
             "Miles Luna",
             "Monty Oum",
@@ -1852,7 +2119,9 @@
         "categoria": "História",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "1792",
+        "resposta": [
+            "1792"
+        ],
         "dicas": [
             "1782",
             "1798",
@@ -1866,7 +2135,9 @@
         "categoria": "Veículos",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Lamborghini",
+        "resposta": [
+            "Lamborghini"
+        ],
         "dicas": [
             "Lamborghini",
             "Ferrari",
@@ -1880,7 +2151,10 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Group 935, grupo 935",
+        "resposta": [
+            "Group 935",
+            "grupo 935"
+        ],
         "dicas": [
             "Group Reanimate",
             "Group Rezurrection",
@@ -1894,7 +2168,9 @@
         "categoria": "Celebridades",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Bing Crosby",
+        "resposta": [
+            "Bing Crosby"
+        ],
         "dicas": [
             "Bing Crosby",
             "Elvis Presley",
@@ -1908,7 +2184,9 @@
         "categoria": "Entretenimento: Anime",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Production I.G",
+        "resposta": [
+            "Production I.G"
+        ],
         "dicas": [
             "Kyoto Animation",
             "Shaft",
@@ -1922,7 +2200,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "A-Spec",
+        "resposta": [
+            "A-Spec"
+        ],
         "dicas": [
             "Championship",
             "A-Spec",
@@ -1936,7 +2216,10 @@
         "categoria": "Celebridades",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Ivana Zelníčková",
+        "resposta": [
+            "Ivana Zelníčková",
+            "Ivana Zelnickova"
+        ],
         "dicas": [
             "Ivana Zelníčková",
             "Melania Knauss",
@@ -1950,7 +2233,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Bloodstar",
+        "resposta": [
+            "Bloodstar"
+        ],
         "dicas": [
             "Sachs",
             "Bloodstar",
@@ -1964,7 +2249,9 @@
         "categoria": "Entretenimento: Anime",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Egoist",
+        "resposta": [
+            "Egoist"
+        ],
         "dicas": [
             "Goose house",
             "Babymetal",
@@ -1978,7 +2265,9 @@
         "categoria": "Entretenimento: Televisão",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Beth",
+        "resposta": [
+            "Beth"
+        ],
         "dicas": [
             "Beth",
             "Rick",
@@ -1992,7 +2281,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "2007",
+        "resposta": [
+            "2007"
+        ],
         "dicas": [
             "2007",
             "2009",
@@ -2006,7 +2297,9 @@
         "categoria": "Entretenimento: Livros",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Texugo",
+        "resposta": [
+            "Texugo"
+        ],
         "dicas": [
             "Raposa",
             "Sapo",
@@ -2020,7 +2313,9 @@
         "categoria": "Veículos",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Touro",
+        "resposta": [
+            "Touro"
+        ],
         "dicas": [
             "Touro",
             "Morcego",
@@ -2034,7 +2329,10 @@
         "categoria": "História",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Alemão",
+        "resposta": [
+            "Alemão",
+            "Alemao"
+        ],
         "dicas": [
             "Americano",
             "Alemão",
@@ -2048,7 +2346,9 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Miami",
+        "resposta": [
+            "Miami"
+        ],
         "dicas": [
             "New York",
             "Detroit",
@@ -2062,7 +2362,9 @@
         "categoria": "História",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "1415",
+        "resposta": [
+            "1415"
+        ],
         "dicas": [
             "1415",
             "1463",
@@ -2076,7 +2378,11 @@
         "categoria": "Esporte",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "7-1, 7 a 1, 7x1",
+        "resposta": [
+            "7-1",
+            "7 a 1",
+            "7x1"
+        ],
         "dicas": [
             "0-1",
             "3-4",
@@ -2090,7 +2396,12 @@
         "categoria": "Ciência: Computadores",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "1000000, 1 000 000, 1 milhão",
+        "resposta": [
+            "1000000",
+            "1 000 000",
+            "1 milhão",
+            "1 milhao"
+        ],
         "dicas": [
             "1024",
             "1000",
@@ -2104,7 +2415,9 @@
         "categoria": "Ciência e Natureza",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Umbilicus",
+        "resposta": [
+            "Umbilicus"
+        ],
         "dicas": [
             "Umbiligos",
             "Nares",
@@ -2118,7 +2431,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Lance",
+        "resposta": [
+            "Lance"
+        ],
         "dicas": [
             "Agatha",
             "Bruno",
@@ -2131,7 +2446,9 @@
         "categoria": "Animais",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Cauda",
+        "resposta": [
+            "Cauda"
+        ],
         "dicas": [
             "Cabeça",
             "Dentes",
@@ -2145,7 +2462,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "1995",
+        "resposta": [
+            "1995"
+        ],
         "dicas": [
             "1995",
             "1989",
@@ -2159,7 +2478,10 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Billie Joe Armstrong, Billie Joe",
+        "resposta": [
+            "Billie Joe Armstrong",
+            "Billie Joe"
+        ],
         "dicas": [
             "Mike Dirnt",
             "Sean Hughes",
@@ -2173,7 +2495,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "RTS",
+        "resposta": [
+            "RTS"
+        ],
         "dicas": [
             "RPG",
             "TBS",
@@ -2187,7 +2511,10 @@
         "categoria": "Ciência: Gadgets",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Theodore Harold Maiman, Theodore Maiman",
+        "resposta": [
+            "Theodore Harold Maiman",
+            "Theodore Maiman"
+        ],
         "dicas": [
             "Nikola Tesla",
             "Jack Kilby",
@@ -2201,7 +2528,10 @@
         "categoria": "Entretenimento: Televisão",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Um holograma, holograma",
+        "resposta": [
+            "Um holograma",
+            "holograma"
+        ],
         "dicas": [
             "Um holograma",
             "Uma ilusão",
@@ -2215,7 +2545,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Fluffy",
+        "resposta": [
+            "Fluffy"
+        ],
         "dicas": [
             "Fluffy",
             "Baxter",
@@ -2229,7 +2561,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Coins",
+        "resposta": [
+            "Coins"
+        ],
         "dicas": [
             "Stamps",
             "Tickets",
@@ -2242,7 +2576,9 @@
         "categoria": "Entretenimento: Filmes",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Ridley Scott",
+        "resposta": [
+            "Ridley Scott"
+        ],
         "dicas": [
             "Ridley Scott",
             "Christopher Nolan",
@@ -2256,7 +2592,9 @@
         "categoria": "História",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "116",
+        "resposta": [
+            "116"
+        ],
         "dicas": [
             "100",
             "90",
@@ -2270,7 +2608,10 @@
         "categoria": "História",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "28 de Julho, 28/07",
+        "resposta": [
+            "28 de Julho",
+            "28/07"
+        ],
         "dicas": [
             "28 de Janeiro",
             "28 de Junho",
@@ -2284,7 +2625,10 @@
         "categoria": "Ciência: Computadores",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Overloading, sobrecarga",
+        "resposta": [
+            "Overloading",
+            "sobrecarga"
+        ],
         "dicas": [
             "Overloading",
             "Overriding",
@@ -2298,7 +2642,9 @@
         "categoria": "Entretenimento: Televisão",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Danger Mouse",
+        "resposta": [
+            "Danger Mouse"
+        ],
         "dicas": [
             "Bananaman",
             "Danger Mouse",
@@ -2312,7 +2658,12 @@
         "categoria": "Entretenimento: Televisão",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "The Joker, joker, coringa, o coringa",
+        "resposta": [
+            "The Joker",
+            "joker",
+            "coringa",
+            "o coringa"
+        ],
         "dicas": [
             "Coringa",
             "Pinguim",
@@ -2326,7 +2677,9 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "França",
+        "resposta": [
+            "França"
+        ],
         "dicas": [
             "EUA",
             "França",
@@ -2340,7 +2693,11 @@
         "categoria": "Arte",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "The Starry Night, A Noite Estrelada, Noite Estrelada",
+        "resposta": [
+            "The Starry Night",
+            "A Noite Estrelada",
+            "Noite Estrelada"
+        ],
         "dicas": [
             "Oliveiras",
             "Casa de camponeses na Provença",
@@ -2354,7 +2711,10 @@
         "categoria": "Conhecimento geral",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Mercúrio",
+        "resposta": [
+            "Mercúrio",
+            "Mercurio"
+        ],
         "dicas": [
             "Marte",
             "Venus",
@@ -2368,7 +2728,9 @@
         "categoria": "Entretenimento: Televisão",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Dexter",
+        "resposta": [
+            "Dexter"
+        ],
         "dicas": [
             "Marvel's Daredevil",
             "Boardwalk Empire",
@@ -2382,7 +2744,9 @@
         "categoria": "Esporte",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Eagle",
+        "resposta": [
+            "Eagle"
+        ],
         "dicas": [
             "Eagle",
             "Birdie",
@@ -2396,7 +2760,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Dolphin",
+        "resposta": [
+            "Dolphin"
+        ],
         "dicas": [
             "Nitro",
             "Revolution",
@@ -2410,7 +2776,9 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Prince",
+        "resposta": [
+            "Prince"
+        ],
         "dicas": [
             "Michael Jackson",
             "Cameo",
@@ -2424,7 +2792,9 @@
         "categoria": "Entretenimento: Televisão",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Bambi",
+        "resposta": [
+            "Bambi"
+        ],
         "dicas": [
             "Bambi",
             "Cinderela",
@@ -2438,7 +2808,9 @@
         "categoria": "Ciência e Natureza",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Joey",
+        "resposta": [
+            "Joey"
+        ],
         "dicas": [
             "Calf",
             "Pup",
@@ -2452,7 +2824,12 @@
         "categoria": "Geografia",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Groenlândia, gronelândia",
+        "resposta": [
+            "Groenlândia",
+            "Groenlandia",
+            "Gronelândia",
+            "Gronelandia"
+        ],
         "dicas": [
             "Nova Guiné",
             "Maldivas",
@@ -2466,7 +2843,9 @@
         "categoria": "História",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Saigon",
+        "resposta": [
+            "Saigon"
+        ],
         "dicas": [
             "Ho Chi Minh City",
             "Saigon",
@@ -2480,7 +2859,9 @@
         "categoria": "Entretenimento: Livros",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Bard",
+        "resposta": [
+            "Bard"
+        ],
         "dicas": [
             "Bilbo Baggins",
             "Gandalf",
@@ -2494,7 +2875,11 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Crowbar, pé de cabra",
+        "resposta": [
+            "Crowbar",
+            "pé de cabra",
+            "pe de cabra"
+        ],
         "dicas": [
             "Pistola",
             "Faca",
@@ -2508,7 +2893,9 @@
         "categoria": "Celebridades",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Overdose",
+        "resposta": [
+            "Overdose"
+        ],
         "dicas": [
             "Incêndio",
             "Overdose",
@@ -2522,7 +2909,9 @@
         "categoria": "Entretenimento: Anime",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Elizabeth Midford",
+        "resposta": [
+            "Elizabeth Midford"
+        ],
         "dicas": [
             "Rachel Phantomhive",
             "Elizabeth Midford",
@@ -2536,7 +2925,9 @@
         "categoria": "Entretenimento: Filmes",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Anguirus",
+        "resposta": [
+            "Anguirus"
+        ],
         "dicas": [
             "King Kong",
             "Mothra",
@@ -2550,7 +2941,9 @@
         "categoria": "Geografia",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Ilha de Baffin",
+        "resposta": [
+            "Ilha de Baffin"
+        ],
         "dicas": [
             "Ilha Banks",
             "Ilha de Baffin",
@@ -2564,7 +2957,9 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Get Lucky",
+        "resposta": [
+            "Get Lucky"
+        ],
         "dicas": [
             "Get Lucky",
             "Doin' It Right",
@@ -2578,7 +2973,9 @@
         "categoria": "Entretenimento: Anime",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Koala",
+        "resposta": [
+            "Koala"
+        ],
         "dicas": [
             "Koala",
             "Boa Hancock",
@@ -2592,7 +2989,9 @@
         "categoria": "Entretenimento: Anime",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Raditz",
+        "resposta": [
+            "Raditz"
+        ],
         "dicas": [
             "Gohan",
             "Vegeta",
@@ -2606,7 +3005,11 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Rico Rodriguez, rico, rodriguez",
+        "resposta": [
+            "Rico Rodriguez",
+            "rico",
+            "rodriguez"
+        ],
         "dicas": [
             "Rico Rodriguez",
             "Tom Sheldon",
@@ -2620,7 +3023,9 @@
         "categoria": "Geografia",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "49",
+        "resposta": [
+            "49"
+        ],
         "dicas": [
             "51",
             "43",
@@ -2634,7 +3039,9 @@
         "categoria": "Entretenimento: Filmes",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Shan Yu",
+        "resposta": [
+            "Shan Yu"
+        ],
         "dicas": [
             "Chien-Po",
             "Li Shang",
@@ -2648,7 +3055,9 @@
         "categoria": "História",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "1983",
+        "resposta": [
+            "1983"
+        ],
         "dicas": [
             "1934",
             "1984",
@@ -2662,7 +3071,9 @@
         "categoria": "Conhecimento geral",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Cavalo",
+        "resposta": [
+            "Cavalo"
+        ],
         "dicas": [
             "Cachorro",
             "Elefante",
@@ -2676,7 +3087,9 @@
         "categoria": "Entretenimento: Televisão",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Strong Bad",
+        "resposta": [
+            "Strong Bad"
+        ],
         "dicas": [
             "Strong Bad",
             "Strong Sad",
@@ -2690,7 +3103,9 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "1985",
+        "resposta": [
+            "1985"
+        ],
         "dicas": [
             "1985",
             "1973",
@@ -2704,7 +3119,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Madotsuki",
+        "resposta": [
+            "Madotsuki"
+        ],
         "dicas": [
             "Masada",
             "Uboa",
@@ -2718,7 +3135,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Magolor",
+        "resposta": [
+            "Magolor"
+        ],
         "dicas": [
             "Magolor",
             "Landia",
@@ -2732,7 +3151,10 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Multiplayer Online Battle Arena, MOBA",
+        "resposta": [
+            "Multiplayer Online Battle Arena",
+            "MOBA"
+        ],
         "dicas": [
             "RTS",
             "MOBA",
@@ -2746,7 +3168,9 @@
         "categoria": "História",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "1969",
+        "resposta": [
+            "1969"
+        ],
         "dicas": [
             "1969",
             "1965",
@@ -2760,7 +3184,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Normandy",
+        "resposta": [
+            "Normandy"
+        ],
         "dicas": [
             "Osiris",
             "Infinity",
@@ -2774,7 +3200,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Need for Speed",
+        "resposta": [
+            "Need for Speed"
+        ],
         "dicas": [
             "Infamous 2",
             "Saints Row: The Third",
@@ -2788,7 +3216,9 @@
         "categoria": "Ciência: Computadores",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Santa Clara",
+        "resposta": [
+            "Santa Clara"
+        ],
         "dicas": [
             "Palo Alto",
             "Santa Clara",
@@ -2802,7 +3232,9 @@
         "categoria": "Entretenimento: Filmes",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Twin Ion Engine",
+        "resposta": [
+            "Twin Ion Engine"
+        ],
         "dicas": [
             "Twin Iron Engine",
             "Twin Intercepter Engine",
@@ -2816,7 +3248,10 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Numa batata, batata",
+        "resposta": [
+            "Numa batata",
+            "batata"
+        ],
         "dicas": [
             "Tomate",
             "Batata",
@@ -2830,7 +3265,9 @@
         "categoria": "Conhecimento geral",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Gorila",
+        "resposta": [
+            "Gorila"
+        ],
         "dicas": [
             "Tigre",
             "Gorila",
@@ -2844,7 +3281,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Lionel Messi",
+        "resposta": [
+            "Lionel Messi"
+        ],
         "dicas": [
             "Cristiano Ronaldo",
             "Wayne Rooney",
@@ -2858,7 +3297,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "James McCaffrey",
+        "resposta": [
+            "James McCaffrey"
+        ],
         "dicas": [
             "Sam Lake",
             "Troy Baker",
@@ -2872,7 +3313,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Mario's Game Gallery",
+        "resposta": [
+            "Mario's Game Gallery"
+        ],
         "dicas": [
             "Super Mario 64",
             "Mario Tennis",
@@ -2886,7 +3329,10 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "BMW M3 GTR, bmw",
+        "resposta": [
+            "BMW M3 GTR",
+            "bmw"
+        ],
         "dicas": [
             "Porsche",
             "Nissan",
@@ -2900,7 +3346,9 @@
         "categoria": "Entretenimento: Televisão",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Leni",
+        "resposta": [
+            "Leni"
+        ],
         "dicas": [
             "Leni",
             "Luan",
@@ -2914,7 +3362,10 @@
         "categoria": "Mitologia",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Paris, páris",
+        "resposta": [
+            "Paris",
+            "páris"
+        ],
         "dicas": [
             "Paris",
             "Hector",
@@ -2928,7 +3379,9 @@
         "categoria": "História",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "1990",
+        "resposta": [
+            "1990"
+        ],
         "dicas": [
             "1992",
             "1990",
@@ -2942,7 +3395,9 @@
         "categoria": "Celebridades",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Kanye West",
+        "resposta": [
+            "Kanye West"
+        ],
         "dicas": [
             "Kanye West",
             "Tom Cruise",
@@ -2956,7 +3411,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "1",
+        "resposta": [
+            "1"
+        ],
         "dicas": [
             "1",
             "3",
@@ -2970,7 +3427,9 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Sueco",
+        "resposta": [
+            "Sueco"
+        ],
         "dicas": [
             "Húngaro",
             "Japonês",
@@ -2984,7 +3443,11 @@
         "categoria": "Entretenimento: Filmes",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Replicantes, replicants, replicante",
+        "resposta": [
+            "Replicantes",
+            "replicants",
+            "replicante"
+        ],
         "dicas": [
             "Ciclones",
             "Replicantes",
@@ -2998,7 +3461,9 @@
         "categoria": "Geografia",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "103",
+        "resposta": [
+            "103"
+        ],
         "dicas": [
             "10",
             "59",
@@ -3012,7 +3477,10 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Rank 1 Legend, legend",
+        "resposta": [
+            "Rank 1 Legend",
+            "legend"
+        ],
         "dicas": [
             "Rank 1 Elite",
             "Rank 1 Master",
@@ -3026,7 +3494,10 @@
         "categoria": "Entretenimento: Anime",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Sacred Gear, Boosted Gear",
+        "resposta": [
+            "Sacred Gear",
+            "Boosted Gear"
+        ],
         "dicas": [
             "Imperial Arm",
             "Hallowed Relic",
@@ -3040,7 +3511,10 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Hideo Kojima, kojima",
+        "resposta": [
+            "Hideo Kojima",
+            "kojima"
+        ],
         "dicas": [
             "Hiroshi Yamauchi",
             "Shigeru Miyamoto",
@@ -3054,7 +3528,9 @@
         "categoria": "Entretenimento: Anime",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Satelite",
+        "resposta": [
+            "Satelite"
+        ],
         "dicas": [
             "Sunrise",
             "Satelite",
@@ -3068,7 +3544,10 @@
         "categoria": "História",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Vladimir Lenin, Lenin",
+        "resposta": [
+            "Vladimir Lenin",
+            "Lenin"
+        ],
         "dicas": [
             "Joseph Stalin",
             "Vladimir Putin",
@@ -3082,7 +3561,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Morgana",
+        "resposta": [
+            "Morgana"
+        ],
         "dicas": [
             "Morgana",
             "Teddie",
@@ -3096,7 +3577,11 @@
         "categoria": "Geografia",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Rhodesia, rodésia",
+        "resposta": [
+            "Rhodesia",
+            "rodésia",
+            "rodesia"
+        ],
         "dicas": [
             "Zambia",
             "Moçambique",
@@ -3110,7 +3595,12 @@
         "categoria": "Geografia",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "País",
+        "resposta": [
+            "País",
+            "Pais",
+            "Um pais",
+            "Um país"
+        ],
         "dicas": [
             "Cidade",
             "País",
@@ -3124,7 +3614,9 @@
         "categoria": "Entretenimento: Filmes",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Kurt Russell",
+        "resposta": [
+            "Kurt Russell"
+        ],
         "dicas": [
             "Patrick Swayze",
             "John Cusack",
@@ -3138,7 +3630,9 @@
         "categoria": "Geografia",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Tenerife",
+        "resposta": [
+            "Tenerife"
+        ],
         "dicas": [
             "Fuerteventura",
             "Gran Canaria",
@@ -3152,7 +3646,9 @@
         "categoria": "Esporte",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "1",
+        "resposta": [
+            "1"
+        ],
         "dicas": [
             "1",
             "2",
@@ -3166,7 +3662,9 @@
         "categoria": "Entretenimento: Comics",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Spiral City",
+        "resposta": [
+            "Spiral City"
+        ],
         "dicas": [
             "Mega-City One",
             "Rockwood",
@@ -3180,7 +3678,9 @@
         "categoria": "Entretenimento: Televisão",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Michael Emerson",
+        "resposta": [
+            "Michael Emerson"
+        ],
         "dicas": [
             "Jim Caviezel",
             "Michael Emerson",
@@ -3194,7 +3694,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "6",
+        "resposta": [
+            "6"
+        ],
         "dicas": [
             "7",
             "6",
@@ -3208,7 +3710,9 @@
         "categoria": "Geografia",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Lima",
+        "resposta": [
+            "Lima"
+        ],
         "dicas": [
             "Lima",
             "Santiago",
@@ -3222,7 +3726,9 @@
         "categoria": "Entretenimento: Filmes",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Johnny Depp",
+        "resposta": [
+            "Johnny Depp"
+        ],
         "dicas": [
             " Clint Eastwood",
             "Leonardo DiCaprio",
@@ -3236,7 +3742,9 @@
         "categoria": "Veículos",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Alfa Romeo",
+        "resposta": [
+            "Alfa Romeo"
+        ],
         "dicas": [
             "Alfa Romeo",
             "Auto Union",
@@ -3250,7 +3758,9 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Atlanta",
+        "resposta": [
+            "Atlanta"
+        ],
         "dicas": [
             "Savannah",
             "Augusta",
@@ -3264,7 +3774,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Ocarina of Time",
+        "resposta": [
+            "Ocarina of Time"
+        ],
         "dicas": [
             "Majora's Mask",
             "Ocarina of Time",
@@ -3278,7 +3790,9 @@
         "categoria": "Conhecimento geral",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "7",
+        "resposta": [
+            "7"
+        ],
         "dicas": [
             "7",
             "8",
@@ -3292,7 +3806,9 @@
         "categoria": "Conhecimento geral",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "15",
+        "resposta": [
+            "15"
+        ],
         "dicas": [
             "20",
             "15",
@@ -3306,7 +3822,9 @@
         "categoria": "Entretenimento: Anime",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Einstein",
+        "resposta": [
+            "Einstein"
+        ],
         "dicas": [
             "Edward",
             "Rocket",
@@ -3320,7 +3838,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Cabeça",
+        "resposta": [
+            "Cabeça"
+        ],
         "dicas": [
             "Braço",
             "Perna",
@@ -3334,7 +3854,10 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Gordon e Freeman, Freeman e Gordon",
+        "resposta": [
+            "Gordon e Freeman",
+            "Freeman e Gordon"
+        ],
         "dicas": [
             "Gordon e Freeman",
             "Sam e Fisher",
@@ -3348,7 +3871,9 @@
         "categoria": "Ciência: Computadores",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "10",
+        "resposta": [
+            "10"
+        ],
         "dicas": [
             "10",
             "12",
@@ -3362,7 +3887,12 @@
         "categoria": "Geografia",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Península Ibérica, ibérica",
+        "resposta": [
+            "Península Ibérica",
+            "Peninsula Iberica",
+            "ibérica",
+            "iberica"
+        ],
         "dicas": [
             "Península Europeia",
             "Península Portuguesa",
@@ -3376,7 +3906,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "105",
+        "resposta": [
+            "105"
+        ],
         "dicas": [
             "100",
             "98",
@@ -3390,7 +3922,9 @@
         "categoria": "Entretenimento: Televisão",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Blue Sky",
+        "resposta": [
+            "Blue Sky"
+        ],
         "dicas": [
             "Baby Blue",
             "Blue Sky",
@@ -3404,7 +3938,9 @@
         "categoria": "Ciência: Computadores",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Long Term Support",
+        "resposta": [
+            "Long Term Support"
+        ],
         "dicas": [
             "Long Taco Service",
             "Ludicrous Transfer Speed",
@@ -3418,7 +3954,9 @@
         "categoria": "Mitologia",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Hefesto",
+        "resposta": [
+            "Hefesto"
+        ],
         "dicas": [
             "Dyntos",
             "Vulcano",
@@ -3432,7 +3970,10 @@
         "categoria": "Celebridades",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Atlanta, Georgia",
+        "resposta": [
+            "Atlanta",
+            "Georgia"
+        ],
         "dicas": [
             "Chicago",
             "Los Angeles",
@@ -3446,7 +3987,9 @@
         "categoria": "Ciência: Gadgets",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "1982",
+        "resposta": [
+            "1982"
+        ],
         "dicas": [
             "1992",
             "1972",
@@ -3460,7 +4003,10 @@
         "categoria": "Geografia",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "São Paulo",
+        "resposta": [
+            "São Paulo",
+            "Sao Paulo"
+        ],
         "dicas": [
             "São Paulo",
             "New York",
@@ -3474,7 +4020,9 @@
         "categoria": "Conhecimento geral",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Bobby Henderson",
+        "resposta": [
+            "Bobby Henderson"
+        ],
         "dicas": [
             "Bobby Henderson",
             "Eric Tignor",
@@ -3488,7 +4036,9 @@
         "categoria": "Politica",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Nikita Khrushchev",
+        "resposta": [
+            "Nikita Khrushchev"
+        ],
         "dicas": [
             "Leonid Brezhnev",
             "Nikita Khrushchev",
@@ -3502,7 +4052,9 @@
         "categoria": "Ciência: Computadores",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Java",
+        "resposta": [
+            "Java"
+        ],
         "dicas": [
             "Python",
             "Java",
@@ -3516,7 +4068,9 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Coolio",
+        "resposta": [
+            "Coolio"
+        ],
         "dicas": [
             "Dr Dre",
             "Coolio",
@@ -3530,7 +4084,9 @@
         "categoria": "História",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Primeira Guerra Mundial",
+        "resposta": [
+            "Primeira Guerra Mundial"
+        ],
         "dicas": [
             "Primeira Guerra Mundial",
             "Segunda Guerra Mundia",
@@ -3544,7 +4100,10 @@
         "categoria": "Ciência e Natureza",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Botulínica",
+        "resposta": [
+            "Botulínica",
+            "Botulinica"
+        ],
         "dicas": [
             "Botulínica",
             "Ricina",
@@ -3558,7 +4117,9 @@
         "categoria": "Mitologia",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Aristeu",
+        "resposta": [
+            "Aristeu"
+        ],
         "dicas": [
             "Acteon",
             "Carme",
@@ -3572,7 +4133,9 @@
         "categoria": "Esporte",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Daniel Ricciardo",
+        "resposta": [
+            "Daniel Ricciardo"
+        ],
         "dicas": [
             "Daniel Ricciardo",
             "Sebastian Vettel",
@@ -3586,7 +4149,9 @@
         "categoria": "Geografia",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Jacarta",
+        "resposta": [
+            "Jacarta"
+        ],
         "dicas": [
             "Bandungue",
             "Medã",
@@ -3599,7 +4164,9 @@
         "categoria": "Esporte",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Moscovo",
+        "resposta": [
+            "Moscovo"
+        ],
         "dicas": [
             "Barcelona",
             "Tóquio",
@@ -3612,7 +4179,12 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Junkrat e Roadhog, Roadhog e Junkrat, Junkrat Roadhog, Roadhog Junkrat",
+        "resposta": [
+            "Junkrat e Roadhog",
+            "Roadhog e Junkrat",
+            "Junkrat Roadhog",
+            "Roadhog Junkrat"
+        ],
         "dicas": [
             "Roadrat e Junkhog",
             "Junkrat e Roadhog",
@@ -3626,7 +4198,9 @@
         "categoria": "Animais",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Raposa",
+        "resposta": [
+            "Raposa"
+        ],
         "dicas": [
             "Raposa",
             "Pombo",
@@ -3640,7 +4214,9 @@
         "categoria": "Esporte",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Penrith Panthers",
+        "resposta": [
+            "Penrith Panthers"
+        ],
         "dicas": [
             "Melbourne Storm",
             "Penrith Panthers",
@@ -3654,7 +4230,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "2012",
+        "resposta": [
+            "2012"
+        ],
         "dicas": [
             "2011",
             "2008",
@@ -3668,7 +4246,9 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Duran Duran",
+        "resposta": [
+            "Duran Duran"
+        ],
         "dicas": [
             "The Cure",
             "New Order",
@@ -3682,7 +4262,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "474",
+        "resposta": [
+            "474"
+        ],
         "dicas": [
             "474",
             "376",
@@ -3696,7 +4278,11 @@
         "categoria": "Animais",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "chimpanzé, macaco",
+        "resposta": [
+            "chimpanzé",
+            "chimpanze",
+            "macaco"
+        ],
         "dicas": [
             "Leão",
             "Papagaio",
@@ -3710,7 +4296,9 @@
         "categoria": "Esporte",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "25",
+        "resposta": [
+            "25"
+        ],
         "dicas": [
             "19",
             "69",
@@ -3724,7 +4312,10 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Barreira, barrier",
+        "resposta": [
+            "Barreira",
+            "barrier"
+        ],
         "dicas": [
             "Obsidian",
             "Bedrock",
@@ -3738,7 +4329,9 @@
         "categoria": "Entretenimento: Televisão",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Klingon",
+        "resposta": [
+            "Klingon"
+        ],
         "dicas": [
             "Klingon",
             "Vulcan",
@@ -3752,7 +4345,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Trico",
+        "resposta": [
+            "Trico"
+        ],
         "dicas": [
             "Nico",
             "Trico",
@@ -3766,7 +4361,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Shulk",
+        "resposta": [
+            "Shulk"
+        ],
         "dicas": [
             "Shulk",
             "Reyn",
@@ -3780,7 +4377,9 @@
         "categoria": "História",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Constantinopla",
+        "resposta": [
+            "Constantinopla"
+        ],
         "dicas": [
             "Roma",
             "Hamburgo",
@@ -3794,7 +4393,9 @@
         "categoria": "Animais",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Toca",
+        "resposta": [
+            "Toca"
+        ],
         "dicas": [
             "Toca",
             "Ninho",
@@ -3808,7 +4409,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "14",
+        "resposta": [
+            "14"
+        ],
         "dicas": [
             "13",
             "16",
@@ -3822,7 +4425,9 @@
         "categoria": "Conhecimento geral",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Economia",
+        "resposta": [
+            "Economia"
+        ],
         "dicas": [
             "Filosofia",
             "Politica",
@@ -3836,7 +4441,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "David",
+        "resposta": [
+            "David"
+        ],
         "dicas": [
             "Solid Snake",
             "John",
@@ -3850,7 +4457,9 @@
         "categoria": "Ciência e Natureza",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Nariz",
+        "resposta": [
+            "Nariz"
+        ],
         "dicas": [
             "Orelha",
             "Peito",
@@ -3864,7 +4473,10 @@
         "categoria": "Ciência e Natureza",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Fémur",
+        "resposta": [
+            "Fémur",
+            "Femur"
+        ],
         "dicas": [
             "Fémur",
             "Tíbia",
@@ -3878,7 +4490,10 @@
         "categoria": "Geografia",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Alasca, alaska",
+        "resposta": [
+            "Alasca",
+            "alaska"
+        ],
         "dicas": [
             "California",
             "Texas",
@@ -3892,7 +4507,10 @@
         "categoria": "Entretenimento: Filmes",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Quentin Tarantino, tarantino",
+        "resposta": [
+            "Quentin Tarantino",
+            "tarantino"
+        ],
         "dicas": [
             "Martin Scorcese",
             "Steven Spielberg",
@@ -3906,7 +4524,10 @@
         "categoria": "Entretenimento: Televisão",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "24 FPS, 24",
+        "resposta": [
+            "24 FPS",
+            "24"
+        ],
         "dicas": [
             "12 FPS",
             "24 FPS",
@@ -3920,7 +4541,10 @@
         "categoria": "Entretenimento: Música",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Caranguejo, siri",
+        "resposta": [
+            "Caranguejo",
+            "siri"
+        ],
         "dicas": [
             "Raposa",
             "Elefante",
@@ -3934,7 +4558,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "4",
+        "resposta": [
+            "4"
+        ],
         "dicas": [
             "1",
             "2",
@@ -3948,7 +4574,10 @@
         "categoria": "Mitologia",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Nórdica",
+        "resposta": [
+            "Nórdica",
+            "Nordica"
+        ],
         "dicas": [
             "Egipcia",
             "Grega",
@@ -3962,7 +4591,11 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Caixa de papelão, caixa",
+        "resposta": [
+            "Caixa de papelão",
+            "Caixa de pepelao",
+            "caixa"
+        ],
         "dicas": [
             "Escudo",
             "Caixa de metal",
@@ -3976,7 +4609,11 @@
         "categoria": "Entretenimento: Livros",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Procompsognathus, Procompsógnato",
+        "resposta": [
+            "Procompsognathus",
+            "Procompsógnato",
+            "Procompsognato"
+        ],
         "dicas": [
             "Dilophosaurus",
             "Tiranossauro Rex",
@@ -3990,7 +4627,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "John O'Groats",
+        "resposta": [
+            "John O'Groats"
+        ],
         "dicas": [
             "John O'Groats",
             "Brawl",
@@ -4004,7 +4643,10 @@
         "categoria": "Ciência: Computadores",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Honeycomb, 3.0",
+        "resposta": [
+            "Honeycomb",
+            "3.0"
+        ],
         "dicas": [
             "Eclair",
             "Froyo",
@@ -4018,7 +4660,10 @@
         "categoria": "Veículos",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Audi A8, A8",
+        "resposta": [
+            "Audi A8",
+            "A8"
+        ],
         "dicas": [
             "Audi TT",
             "Audi S3",
@@ -4032,7 +4677,9 @@
         "categoria": "Entretenimento: Filmes",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Guillermo Del Toro",
+        "resposta": [
+            "Guillermo Del Toro"
+        ],
         "dicas": [
             "Guillermo Del Toro",
             "Alfonso Cuarón",
@@ -4046,7 +4693,9 @@
         "categoria": "Entretenimento: Televisão",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "Bandit",
+        "resposta": [
+            "Bandit"
+        ],
         "dicas": [
             "Lucky",
             "Rocky",
@@ -4060,7 +4709,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Machado de gelo",
+        "resposta": [
+            "Machado de gelo"
+        ],
         "dicas": [
             "Machado de fogo",
             "Chave inglesa",
@@ -4074,7 +4725,10 @@
         "categoria": "Conhecimento geral",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Amarela, amarelo",
+        "resposta": [
+            "Amarela",
+            "amarelo"
+        ],
         "dicas": [
             "Amarela",
             "Verde",
@@ -4088,7 +4742,10 @@
         "categoria": "Ciência e Natureza",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Polar, estrela polar",
+        "resposta": [
+            "Polar",
+            "estrela polar"
+        ],
         "dicas": [
             "Eridanus",
             "Errai",
@@ -4102,7 +4759,10 @@
         "categoria": "Conhecimento geral",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "35 Pounds, 35",
+        "resposta": [
+            "35 Pounds",
+            "35"
+        ],
         "dicas": [
             "30 Pounds",
             "40 Pounds",
@@ -4116,7 +4776,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "difícil",
-        "resposta": "13",
+        "resposta": [
+            "13"
+        ],
         "dicas": [
             "13",
             "6",
@@ -4130,7 +4792,9 @@
         "categoria": "Cultura geral",
         "tipo": "multiple",
         "dificuldade": "médio",
-        "resposta": "Rosa",
+        "resposta": [
+            "Rosa"
+        ],
         "dicas": [
             "Preto",
             "Laranja",
@@ -4144,7 +4808,9 @@
         "categoria": "Entretenimento: Anime",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Solar Kamehameha",
+        "resposta": [
+            "Solar Kamehameha"
+        ],
         "dicas": [
             "Super Kamehameha",
             "Cell Kamehameha",
@@ -4158,7 +4824,9 @@
         "categoria": "Entretenimento: Video Games",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Marth",
+        "resposta": [
+            "Marth"
+        ],
         "dicas": [
             "Roy",
             "Eliwood",
@@ -4172,7 +4840,10 @@
         "categoria": "Entretenimento: Filmes",
         "tipo": "multiple",
         "dificuldade": "fácil",
-        "resposta": "Inquisição Espanhola",
+        "resposta": [
+            "Inquisição Espanhola",
+            "Inquisicao Espanhola"
+        ],
         "dicas": [
             "Era Vitoriana",
             "Revolução Francesa",

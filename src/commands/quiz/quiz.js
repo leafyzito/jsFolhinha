@@ -45,7 +45,7 @@ const quizCommand = async (message) => {
 
   const check = {
     channelName: message.channelName,
-    content: [quiz.resposta],
+    content: quiz.resposta,
   };
   const responseMsg = await fb.utils.waitForMessage(check);
   if (!responseMsg) {
@@ -55,8 +55,8 @@ const quizCommand = async (message) => {
       ":("
     );
     return {
-      reply: `Ninguém respondeu o quiz a tempo! ${emote} A resposta era: ${quiz.resposta}`,
-      notes: `${quiz.pergunta} -> ${quiz.resposta}`,
+      reply: `Ninguém respondeu o quiz a tempo! ${emote} A resposta era: ${quiz.resposta[0]}`,
+      notes: `${quiz.pergunta} -> ${quiz.resposta[0]}`,
     };
   }
 
@@ -67,7 +67,7 @@ const quizCommand = async (message) => {
   );
   return {
     reply: `${responseMsg.senderUsername} acertou a resposta! ${emote}`,
-    notes: `${quiz.pergunta} -> ${quiz.resposta}`,
+    notes: `${quiz.pergunta} -> ${quiz.resposta[0]}`,
   };
 };
 
