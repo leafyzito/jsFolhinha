@@ -39,6 +39,7 @@ const rlquizCommand = async (message) => {
     );
     return {
       reply: `Ninguém adivinhou quem enviou a mensagem! ${emote} A resposta era: ${rlQuiz.currUsername}`,
+      notes: `${rlQuiz.message} -> ${rlQuiz.currUsername}`,
     };
   }
 
@@ -49,6 +50,7 @@ const rlquizCommand = async (message) => {
   );
   return {
     reply: `${responseMsg.senderUsername} acertou quem enviou a mensagem! ${emote}`,
+    notes: `${rlQuiz.message} -> ${rlQuiz.currUsername}`,
   };
 };
 
