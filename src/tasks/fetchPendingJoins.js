@@ -52,7 +52,7 @@ async function fetchPendingJoins() {
             userInfo.lastStream && !userInfo.isLive
               ? `• Última live: há ${userInfo.lastStream}`
               : ""
-          }`
+          } • Logs: https://tv.supa.sh/logs?c=${channelName}`
         );
       } else {
         fb.discord.importantLog(

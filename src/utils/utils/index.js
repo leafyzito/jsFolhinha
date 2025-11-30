@@ -324,7 +324,7 @@ class Utils {
         `* Caught by ${result.caughtCategory} (${result.matchedWord}) - original content: ${content}`
       );
       fb.discord.importantLog(
-        `* Caught by ${result.caughtCategory} (${result.matchedWord}) - original content: ${content}`
+        `* Caught by ${result.caughtCategory} (${result.matchedWord}) in #${channelName} - original content: ${content}`
       );
       if (message) {
         if (!message.notes) {
