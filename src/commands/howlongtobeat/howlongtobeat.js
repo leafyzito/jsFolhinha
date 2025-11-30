@@ -1,113 +1,71 @@
 const path = require("path");
-// Need to fetch a randomized hash to attach to the API request
+
 // Solution from Supinic - https://github.com/Supinic/supibot/blob/master/commands/howlongtobeat/index.ts
+// let HLTB_TOKEN = "hltb-token-cache";
 
-// eslint-disable-next-line no-unused-vars
-let HLTB_JS_FILE_HASH_KEY = "hltb-file-hash";
-// eslint-disable-next-line no-unused-vars
-let HLTB_ENDPOINT_HASH_KEY = "hltb-endpoint-hash";
-
-const FILE_PREFIX = "_next/static/chunks/pages";
-const FILE_HASH_REGEX = /static\/chunks\/pages\/(_app-\w+?\.js)/;
-const ENDPOINT_HASH_REGEX =
-  /\/api\/locate\/".concat\("(\w+)"\)\s*(.concat\("(\w+)"\))?/;
-
-async function fetchFileHash() {
-  const body = await fb.got("https://howlongtobeat.com/", {
-    headers: {
-      "User-Agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36",
-    },
-    responseType: "text",
-  });
-  if (!body) {
-    return null;
-  }
-
-  const match = body.match(FILE_HASH_REGEX);
-  if (!match) {
-    return null;
-  }
-
-  HLTB_JS_FILE_HASH_KEY = match[1];
-
-  return match[1];
-}
-
-async function fetchEndpointHash(fileHash) {
-  const body = await fb.got(
-    `https://howlongtobeat.com/${FILE_PREFIX}/${fileHash}`,
+async function fetchToken() {
+  const now = Date.now();
+  const response = await fb.got(
+    `https://howlongtobeat.com/api/search/init?t=${now}`,
     {
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36",
-      },
-      responseType: "text",
+      headers: { Referer: "https://howlongtobeat.com/" },
     }
   );
-  if (!body) {
+
+  if (!response) {
     return null;
   }
 
-  const match = body.match(ENDPOINT_HASH_REGEX);
-  if (!match) {
-    return null;
-  }
+  const token = response.token;
+  // HLTB_TOKEN = token;
 
-  HLTB_ENDPOINT_HASH_KEY = match[1];
-
-  return match[3] ? `${match[1]}${match[3]}` : match[1];
+  return token;
 }
 
 async function hltbSearch(query) {
-  const fileHash = await fetchFileHash();
-  if (!fileHash) {
-    throw new Error("file error");
+  const token = await fetchToken();
+  console.log(token);
+  if (!token) {
+    throw new Error("Token not fetched");
   }
 
-  const endpointHash = await fetchEndpointHash(fileHash);
-  if (!endpointHash) {
-    throw new Error("endpoint error");
-  }
-
-  const response = await fb.got(
-    `https://howlongtobeat.com/api/locate/${endpointHash}`,
-    {
-      method: "POST",
-      headers: {
-        Referer: "https://howlongtobeat.com/",
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36",
-        "Content-Type": "application/json",
-      },
-      json: {
-        searchType: "games",
-        searchTerms: [...query],
-        searchPage: 1,
-        searchOptions: {
-          filter: "",
-          games: {
-            gameplay: { perspective: "", flow: "", genre: "", difficulty: "" },
-            modifier: "",
-            platform: "",
-            rangeCategory: "main",
-            rangeTime: { min: null, max: null },
-            rangeYear: { min: "", max: "" },
-            sortCategory: "popular",
-            userId: 0,
-          },
-          randomizer: 0,
-          sort: 0,
+  const response = await fb.got(`https://howlongtobeat.com/api/search`, {
+    method: "POST",
+    headers: {
+      Referer: "https://howlongtobeat.com/",
+      "User-Agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36",
+      "Content-Type": "application/json",
+      "X-Auth-Token": token,
+    },
+    json: {
+      searchType: "games",
+      searchTerms: [...query],
+      searchPage: 1,
+      searchOptions: {
+        filter: "",
+        games: {
+          gameplay: { perspective: "", flow: "", genre: "", difficulty: "" },
+          modifier: "",
+          platform: "",
+          rangeCategory: "main",
+          rangeTime: { min: null, max: null },
+          rangeYear: { min: "", max: "" },
+          sortCategory: "popular",
+          userId: 0,
         },
-        size: 1,
+        randomizer: 0,
+        sort: 0,
       },
-    }
-  );
+      size: 1,
+    },
+  });
 
   if (!response) {
     return "HTTP request failed";
   }
 
+  // console.log(response);
   return response;
 }
 
