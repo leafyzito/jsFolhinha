@@ -86,7 +86,7 @@ sugerirCommand.aliases = [
 ];
 sugerirCommand.shortDescription = "Envia uma sugestão para o bot";
 sugerirCommand.cooldown = 5000;
-sugerirCommand.cooldownType = "channel";
+sugerirCommand.cooldownType = "user";
 sugerirCommand.whisperable = true;
 sugerirCommand.description = `Deixe a sua contribuição para a caixinha de sugestões do Folhinha, poderá relatar bugs, erros, inovações...
 
