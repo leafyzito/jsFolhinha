@@ -520,7 +520,7 @@
     {
         "id": 33,
         "pergunta": "Em que condado inglês é a cidade de Portsmouth?",
-        "categoria": "Geography",
+        "categoria": "Geografia",
         "tipo": "multiple",
         "dificuldade": "médio",
         "resposta": [
@@ -664,7 +664,7 @@
     {
         "id": 42,
         "pergunta": "Qual é a capital do estado americano de Nevada?",
-        "categoria": "Geography",
+        "categoria": "Geografia",
         "tipo": "multiple",
         "dificuldade": "médio",
         "resposta": [
@@ -680,7 +680,7 @@
     {
         "id": 43,
         "pergunta": "Qual é a capital do estado de Washington, Estados Unidos?",
-        "categoria": "Geography",
+        "categoria": "Geografia",
         "tipo": "multiple",
         "dificuldade": "médio",
         "resposta": [
@@ -921,7 +921,7 @@
     {
         "id": 59,
         "pergunta": "As ilhas Maluku (informalmente conhecidas como Ilhas das Especiarias) pertencem a que país?",
-        "categoria": "Geography",
+        "categoria": "Geografia",
         "tipo": "multiple",
         "dificuldade": "difícil",
         "resposta": [
@@ -1178,7 +1178,7 @@
     {
         "id": 75,
         "pergunta": "'Fucking' é uma vila em qual país?",
-        "categoria": "Geography",
+        "categoria": "Geografia",
         "tipo": "multiple",
         "dificuldade": "difícil",
         "resposta": [
@@ -1290,7 +1290,7 @@
     {
         "id": 82,
         "pergunta": "Quantas estrelas aparecem na bandeira da Nova Zelândia?",
-        "categoria": "Geography",
+        "categoria": "Geografia",
         "tipo": "multiple",
         "dificuldade": "fácil",
         "resposta": [
@@ -1306,7 +1306,7 @@
     {
         "id": 83,
         "pergunta": "Qual é a capital da Bielo-Rússia?",
-        "categoria": "Geography",
+        "categoria": "Geografia",
         "tipo": "multiple",
         "dificuldade": "médio",
         "resposta": [
@@ -1354,7 +1354,7 @@
     {
         "id": 86,
         "pergunta": "Quantos rios existem na Arábia Saudita?",
-        "categoria": "Geography",
+        "categoria": "Geografia",
         "tipo": "multiple",
         "dificuldade": "médio",
         "resposta": [
@@ -1435,7 +1435,7 @@
     {
         "id": 91,
         "pergunta": "O corpo da Esfinge egípcia foi baseado em qual animal?",
-        "categoria": "Geography",
+        "categoria": "Geografia",
         "tipo": "multiple",
         "dificuldade": "fácil",
         "resposta": [
@@ -1844,7 +1844,7 @@
     {
         "id": 116,
         "pergunta": "Qual é a capital da Groenlândia?",
-        "categoria": "Geography",
+        "categoria": "Geografia",
         "tipo": "multiple",
         "dificuldade": "médio",
         "resposta": [
@@ -1988,7 +1988,7 @@
     {
         "id": 125,
         "pergunta": "Qual é a maior cidade de Marrocos?",
-        "categoria": "Geography",
+        "categoria": "Geografia",
         "tipo": "multiple",
         "dificuldade": "médio",
         "resposta": [
