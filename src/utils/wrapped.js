@@ -34,44 +34,70 @@ async function getWrapped(username) {
     },
   ]);
 
+  // reminders sent/received
+  const sentReminders = await fb.db.count("remind", {
+    senderId: userInfo.id,
+    remindTime: { $lte: Math.floor(START_DATE / 1000) },
+  });
+
+  const receivedReminders = await fb.db.count("remind", {
+    receiverId: userInfo.id,
+    remindTime: { $lte: Math.floor(START_DATE / 1000) },
+  });
+
+  // pet interactions
+  const carinhoPetCount = await fb.db.count("commandlog", {
+    userId: userInfo.id,
+    command: "carinho",
+  });
+
+  const brincarPetCount = await fb.db.count("commandlog", {
+    userId: userInfo.id,
+    command: "brincar",
+  });
+
   const mostUsedCommandsObject = mostUsedCommands.map((command) => ({
     command: command._id,
     count: command.count,
   }));
 
-  // get msg count
-  const msgCount = await fb.clickhouse.query(
-    `
-      SELECT
-        user_id,
-        COUNT(*) AS message_count
-      FROM message_structured
-      WHERE
-        user_id = {userId:String}
-        AND timestamp >= toStartOfYear(now())
-      GROUP BY user_id
-   `,
-    { userId: userInfo.id }
-  );
+  let msgCountData = [{ message_count: 0 }];
+  let top5ChannelsData = [];
 
-  const top5Channels = await fb.clickhouse.query(
-    `
-      SELECT
-        channel_login,
-        COUNT(*) AS message_count
-      FROM message_structured
-      WHERE
-        user_id = {userId:String}
-        AND timestamp >= toStartOfYear(now())
-      GROUP BY channel_login
-      ORDER BY message_count DESC
-      LIMIT 5
-   `,
-    { userId: userInfo.id }
-  );
+  if (fb.clickhouse && fb.clickhouse.isConnected == true) {
+    const msgCount = await fb.clickhouse.query(
+      `
+        SELECT
+          user_id,
+          COUNT(*) AS message_count
+        FROM message_structured
+        WHERE
+          user_id = {userId:String}
+          AND timestamp >= toStartOfYear(now())
+        GROUP BY user_id
+     `,
+      { userId: userInfo.id }
+    );
 
-  const msgCountData = msgCount.data || msgCount;
-  const top5ChannelsData = top5Channels.data || top5Channels;
+    const top5Channels = await fb.clickhouse.query(
+      `
+        SELECT
+          channel_login,
+          COUNT(*) AS message_count
+        FROM message_structured
+        WHERE
+          user_id = {userId:String}
+          AND timestamp >= toStartOfYear(now())
+        GROUP BY channel_login
+        ORDER BY message_count DESC
+        LIMIT 5
+     `,
+      { userId: userInfo.id }
+    );
+
+    msgCountData = msgCount.data || msgCount;
+    top5ChannelsData = top5Channels.data || top5Channels;
+  }
 
   return {
     statusCode: 200,
@@ -85,6 +111,14 @@ async function getWrapped(username) {
     cmdCount: {
       count: commandsCount,
       top: mostUsedCommandsObject,
+    },
+    reminders: {
+      sent: sentReminders,
+      received: receivedReminders,
+    },
+    pet: {
+      carinho: carinhoPetCount,
+      brincar: brincarPetCount,
     },
   };
 }
