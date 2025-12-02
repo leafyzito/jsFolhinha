@@ -7,10 +7,14 @@ async function getWrapped(username) {
   }
 
   // commands count since 1-1-2025
-  const commandsCount = await fb.db.count("commandlog", {
-    userId: userInfo.id,
-    sentDate: { $gte: START_DATE },
-  });
+  const commandsCount = await fb.db.count(
+    "commandlog",
+    {
+      userId: userInfo.id,
+      sentDate: { $gte: START_DATE },
+    },
+    true
+  );
 
   // top 5 most used commands
   const mostUsedCommands = await fb.db.aggregate("commandlog", [
@@ -35,26 +39,40 @@ async function getWrapped(username) {
   ]);
 
   // reminders sent/received
-  const sentReminders = await fb.db.count("remind", {
-    senderId: userInfo.id,
-    remindTime: { $lte: Math.floor(START_DATE / 1000) },
-  });
+  const sentReminders = await fb.db.count(
+    "remind",
+    {
+      senderId: userInfo.id,
+      remindTime: { $lte: Math.floor(START_DATE / 1000) },
+    },
+    true
+  );
 
-  const receivedReminders = await fb.db.count("remind", {
-    receiverId: userInfo.id,
-    remindTime: { $lte: Math.floor(START_DATE / 1000) },
-  });
+  const receivedReminders = await fb.db.count(
+    "remind",
+    {
+      receiverId: userInfo.id,
+      remindTime: { $lte: Math.floor(START_DATE / 1000) },
+    },
+    true
+  );
 
   // pet interactions
   const carinhoPetCount = await fb.db.count("commandlog", {
     userId: userInfo.id,
+    sentDate: { $gte: START_DATE },
     command: "carinho",
   });
 
-  const brincarPetCount = await fb.db.count("commandlog", {
-    userId: userInfo.id,
-    command: "brincar",
-  });
+  const brincarPetCount = await fb.db.count(
+    "commandlog",
+    {
+      userId: userInfo.id,
+      sentDate: { $gte: START_DATE },
+      command: "brincar",
+    },
+    true
+  );
 
   const mostUsedCommandsObject = mostUsedCommands.map((command) => ({
     command: command._id,
