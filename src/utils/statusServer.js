@@ -1,6 +1,6 @@
 const express = require("express");
 const { createRateLimiter } = require("./rateLimit");
-
+const { getWrapped } = require("./wrapped.js");
 class StatusServer {
   constructor() {
     this.app = express();
@@ -32,6 +32,19 @@ class StatusServer {
         connectedChannels: fb.twitch.anonClient.currentChannels.length || 0,
         channelsToJoin: [...fb.twitch.anonClient.channelsToJoin].length || 0,
       });
+    });
+
+    this.app.get("/wrapped/:username", async (req, res) => {
+      if (!req.params.username) {
+        return res.status(400).json({ error: "Username is required" });
+      }
+
+      const wrapped = await getWrapped(req.params.username);
+      if (wrapped.statusCode == 404) {
+        return res.status(404).json({ error: wrapped.errorMessage });
+      }
+
+      return res.status(200).json(wrapped);
     });
   }
 
