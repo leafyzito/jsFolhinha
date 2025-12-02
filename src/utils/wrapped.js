@@ -17,6 +17,9 @@ async function getWrapped(username) {
     return { statusCode: 404, errorMessage: "User not found" };
   }
 
+  const userColor = await fb.api.helix.getColor(userInfo.id);
+  userInfo.color = userColor.color || null;
+
   // commands count since 1-1-2025
   const commandsCount = await fb.db.count(
     "commandlog",
@@ -159,6 +162,7 @@ async function getWrapped(username) {
     username: userInfo.login,
     displayName: userInfo.displayName,
     profilePicture: userInfo.profileImageUrl,
+    color: userInfo.color,
     data: {
       activeDays: activeDays?.[0]?.activeDays || 0,
       reminders: {
