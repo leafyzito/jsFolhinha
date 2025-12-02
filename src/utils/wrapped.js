@@ -47,23 +47,45 @@ async function getWrapped(username) {
         COUNT(*) AS message_count
       FROM message_structured
       WHERE
-        created_at >= toStartOfYear(now())
+        user_id = {userId:String}
+        AND timestamp >= toStartOfYear(now())
       GROUP BY user_id
-
-   `
+   `,
+    { userId: userInfo.id }
   );
 
-  // Access the data array from ClickHouse result
+  const top5Channels = await fb.clickhouse.query(
+    `
+      SELECT
+        channel_login,
+        COUNT(*) AS message_count
+      FROM message_structured
+      WHERE
+        user_id = {userId:String}
+        AND timestamp >= toStartOfYear(now())
+      GROUP BY channel_login
+      ORDER BY message_count DESC
+      LIMIT 5
+   `,
+    { userId: userInfo.id }
+  );
+
   const msgCountData = msgCount.data || msgCount;
+  const top5ChannelsData = top5Channels.data || top5Channels;
 
   return {
     statusCode: 200,
     userId: userInfo.id,
     username: userInfo.login,
     displayName: userInfo.displayName,
-    msgCount: msgCountData,
-    commandsCount: commandsCount,
-    mostUsedCommands: mostUsedCommandsObject,
+    msgCount: {
+      count: msgCountData[0]?.message_count || 0,
+      top: top5ChannelsData,
+    },
+    cmdCount: {
+      count: commandsCount,
+      top: mostUsedCommandsObject,
+    },
   };
 }
 
