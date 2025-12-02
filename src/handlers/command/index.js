@@ -73,8 +73,6 @@ async function commandHandler(message) {
 
   message.notes = commandResult.notes;
   message.responseTime = new Date().getTime() - message.internalTimestamp;
-  message.internalResponseTime =
-    new Date().getTime() - message.internalTimestamp;
 
   switch (commandResult.replyType) {
     case "reply":
