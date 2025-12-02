@@ -35,16 +35,24 @@ class StatusServer {
     });
 
     this.app.get("/wrapped/:username", async (req, res) => {
-      if (!req.params.username) {
-        return res.status(400).json({ error: "Username is required" });
-      }
+      try {
+        if (!req.params.username) {
+          return res.status(400).json({ error: "Username is required" });
+        }
 
-      const wrapped = await getWrapped(req.params.username);
-      if (wrapped.statusCode == 404) {
-        return res.status(404).json({ error: wrapped.errorMessage });
-      }
+        const wrapped = await getWrapped(req.params.username);
+        if (wrapped.statusCode == 404) {
+          return res.status(404).json({ error: wrapped.errorMessage });
+        }
 
-      return res.status(200).json(wrapped);
+        return res.status(200).json(wrapped);
+      } catch (error) {
+        console.error("Error in /wrapped/:username:", error);
+        fb.discord.logError(
+          `Error in /wrapped/:username (${req.params.username || ""}): ${error}`
+        );
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
     });
   }
 
