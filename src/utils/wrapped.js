@@ -1,6 +1,17 @@
 const START_DATE = new Date("2025-01-01");
 
+const CACHE_DURATION_MS = 30 * 60 * 1000; // 30 minutes
+const wrappedCache = new Map();
+
 async function getWrapped(username) {
+  const now = Date.now();
+
+  // Check cache
+  const cached = wrappedCache.get(username?.toLowerCase?.());
+  if (cached && cached.expiry > now && typeof cached.data === "object") {
+    return cached.data;
+  }
+
   const userInfo = await fb.api.helix.getUserByUsername(username);
   if (!userInfo) {
     return { statusCode: 404, errorMessage: "User not found" };
@@ -121,7 +132,7 @@ async function getWrapped(username) {
     top5ChannelsData = top5Channels.data || top5Channels;
   }
 
-  return {
+  const result = {
     statusCode: 200,
     userId: userInfo.id,
     username: userInfo.login,
@@ -145,6 +156,13 @@ async function getWrapped(username) {
       },
     },
   };
+
+  wrappedCache.set(username.toLowerCase(), {
+    data: result,
+    expiry: now + CACHE_DURATION_MS,
+  });
+
+  return result;
 }
 
 module.exports = { getWrapped };
