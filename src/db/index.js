@@ -246,7 +246,7 @@ class MongoUtils {
     const collection = this.db.collection(collectionName);
     try {
       const results = await collection.aggregate(pipeline).toArray();
-      return results.length === 1 ? results[0] : results;
+      return results;
     } catch (err) {
       console.error(`Failed to aggregate documents in ${collectionName}:`, err);
       return [];
