@@ -49,12 +49,33 @@ async function getWrapped(username) {
     },
   ]);
 
+  // days where user sent at least 1 command
+  const activeDays = await fb.db.aggregate("commandlog", [
+    {
+      $match: {
+        userId: userInfo.id,
+        sentDate: { $gte: START_DATE },
+      },
+    },
+    {
+      $group: {
+        _id: {
+          $dateToString: { format: "%Y-%m-%d", date: "$sentDate" },
+        },
+        count: { $sum: 1 },
+      },
+    },
+    {
+      $count: "activeDays",
+    },
+  ]);
+
   // reminders sent/received
   const sentReminders = await fb.db.count(
     "remind",
     {
       senderId: userInfo.id,
-      remindTime: { $lte: Math.floor(START_DATE / 1000) },
+      remindTime: { $lte: fb.utils.unix(START_DATE) },
     },
     true
   );
@@ -63,7 +84,7 @@ async function getWrapped(username) {
     "remind",
     {
       receiverId: userInfo.id,
-      remindTime: { $lte: Math.floor(START_DATE / 1000) },
+      remindTime: { $lte: fb.utils.unix(START_DATE) },
     },
     true
   );
@@ -137,7 +158,9 @@ async function getWrapped(username) {
     userId: userInfo.id,
     username: userInfo.login,
     displayName: userInfo.displayName,
+    profilePicture: userInfo.profileImageUrl,
     data: {
+      activeDays: activeDays?.[0]?.activeDays || 0,
       reminders: {
         sent: sentReminders,
         received: receivedReminders,
