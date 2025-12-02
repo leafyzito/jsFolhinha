@@ -130,6 +130,7 @@ async function getWrapped(username) {
         FROM message_structured
         WHERE
           user_id = {userId:String}
+          AND message_type = 1
           AND timestamp >= toStartOfYear(now())
         GROUP BY user_id
      `,
@@ -144,6 +145,7 @@ async function getWrapped(username) {
         FROM message_structured
         WHERE
           user_id = {userId:String}
+          AND message_type = 1
           AND timestamp >= toStartOfYear(now())
         GROUP BY channel_login
         ORDER BY message_count DESC
