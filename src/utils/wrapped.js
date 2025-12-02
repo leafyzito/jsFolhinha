@@ -126,21 +126,23 @@ async function getWrapped(username) {
     userId: userInfo.id,
     username: userInfo.login,
     displayName: userInfo.displayName,
-    msgCount: {
-      count: msgCountData[0]?.message_count || 0,
-      top: top5ChannelsData,
-    },
-    cmdCount: {
-      count: commandsCount,
-      top: mostUsedCommandsObject,
-    },
-    reminders: {
-      sent: sentReminders,
-      received: receivedReminders,
-    },
-    pet: {
-      carinho: carinhoPetCount,
-      brincar: brincarPetCount,
+    data: {
+      reminders: {
+        sent: sentReminders,
+        received: receivedReminders,
+      },
+      pets: {
+        carinho: carinhoPetCount,
+        brincar: brincarPetCount,
+      },
+      msgCount: {
+        count: msgCountData[0]?.message_count || 0,
+        top: top5ChannelsData,
+      },
+      cmdCount: {
+        count: commandsCount,
+        top: mostUsedCommandsObject,
+      },
     },
   };
 }
