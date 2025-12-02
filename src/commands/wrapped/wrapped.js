@@ -1,13 +1,20 @@
 const path = require("path");
 const wrappedCommand = async (message) => {
+  const wrappedTarget =
+    message.args[1]?.replace(/^@/, "") || message.senderUsername;
   const emote = await fb.emotes.getEmoteFromList(
     message.channelName,
     fb.emotes.pogEmotes,
     "PogChamp"
   );
+  if (wrappedTarget.toLowerCase() != message.senderUsername) {
+    return {
+      reply: `${emote} Veja o Wrapped do Folhinha de ${wrappedTarget} aqui: https://folhinhabot.com/wrapped/${wrappedTarget}`,
+    };
+  }
 
   return {
-    reply: `${emote} Veja o seu Wrapped do Folhinha aqui: https://folhinhabot.com/wrapped/${message.senderUsername}`,
+    reply: `${emote} Veja o seu Wrapped do Folhinha aqui: https://folhinhabot.com/wrapped/${wrappedTarget}`,
   };
 };
 
