@@ -58,11 +58,15 @@ async function getWrapped(username) {
   );
 
   // pet interactions
-  const carinhoPetCount = await fb.db.count("commandlog", {
-    userId: userInfo.id,
-    sentDate: { $gte: START_DATE },
-    command: "carinho",
-  });
+  const carinhoPetCount = await fb.db.count(
+    "commandlog",
+    {
+      userId: userInfo.id,
+      sentDate: { $gte: START_DATE },
+      command: "carinho",
+    },
+    true
+  );
 
   const brincarPetCount = await fb.db.count(
     "commandlog",
