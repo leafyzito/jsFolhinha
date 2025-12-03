@@ -84,9 +84,11 @@ const banStatsCommand = async (message) => {
   return {
     reply: `🔨 ${bansTarget} foi banido ${
       banStats.bans
-    } vezes e levou timeout ${banStats.timeouts} vezes (somando ${humanizedTime(
-      banStats.timeoutsDuration
-    )}) em todos os canais logados`,
+    } vezes e levou timeout ${banStats.timeouts} vezes ${
+      banStats.timeouts > 0
+        ? `(somando ${humanizedTime(banStats.timeoutsDuration)})`
+        : ""
+    } em todos os canais logados`,
   };
 };
 
