@@ -241,6 +241,17 @@ class MongoUtils {
     }
   }
 
+  async aggregate(collectionName, pipeline) {
+    await this.ensureConnection();
+    const collection = this.db.collection(collectionName);
+    try {
+      const results = await collection.aggregate(pipeline).toArray();
+      return results;
+    } catch (err) {
+      console.error(`Failed to aggregate documents in ${collectionName}:`, err);
+      return [];
+    }
+  }
   getCollectionCache(collectionName) {
     let cache = this.collectionCaches.get(collectionName);
     if (!cache) {
