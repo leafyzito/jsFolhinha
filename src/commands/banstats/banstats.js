@@ -1,13 +1,16 @@
 const path = require("path");
 
 async function getBanStats(userid) {
-  // Query for number of timeouts for the user
-  const timeoutsCountRes = await fb.clickhouse.query(
+  // Query for total timeout duration (sum of all extra_tags['ban-duration']) for the user
+  const timeoutsSumRes = await fb.clickhouse.query(
     `
-      SELECT COUNT(*) AS count FROM message_structured 
+      SELECT 
+        SUM(CAST(extra_tags['ban-duration'], 'Int64')) AS total_duration, 
+        COUNT(*) AS count 
+      FROM message_structured 
       WHERE user_id = {userId:String}
-      AND has(extra_tags, 'target-user-id')
-      AND has(extra_tags, 'ban-duration')
+        AND has(extra_tags, 'target-user-id')
+        AND has(extra_tags, 'ban-duration')
     `,
     { userId: userid }
   );
@@ -27,13 +30,43 @@ async function getBanStats(userid) {
     (bansCountRes.data && bansCountRes.data[0]?.count) || 0
   );
   const timeouts = parseInt(
-    (timeoutsCountRes.data && timeoutsCountRes.data[0]?.count) || 0
+    (timeoutsSumRes.data && timeoutsSumRes.data[0]?.count) || 0
+  );
+  const timeoutsDuration = parseInt(
+    (timeoutsSumRes.data && timeoutsSumRes.data[0]?.total_duration) || 0
   );
 
   return {
     bans,
     timeouts,
+    timeoutsDuration, // total seconds of timeout
   };
+}
+
+function humanizedTime(seconds) {
+  seconds = Number(seconds);
+  if (isNaN(seconds) || seconds < 1) return "0s";
+
+  const units = [
+    { label: "d", secs: 86400 },
+    { label: "h", secs: 3600 },
+    { label: "m", secs: 60 },
+    { label: "s", secs: 1 },
+  ];
+
+  const result = [];
+
+  for (const { label, secs } of units) {
+    if (seconds >= secs) {
+      const val = Math.floor(seconds / secs);
+      result.push(`${val}${label}`);
+      seconds -= val * secs;
+    }
+  }
+
+  // If for some reason nothing collected (0s)
+  if (result.length === 0) return "0s";
+  return result.join(" ");
 }
 
 const banStatsCommand = async (message) => {
@@ -49,7 +82,11 @@ const banStatsCommand = async (message) => {
   const banStats = await getBanStats(bansTargetId);
 
   return {
-    reply: `🔨 ${bansTarget} foi banido ${banStats.bans} vezes e levou timeout ${banStats.timeouts} vezes em todos os canais logados`,
+    reply: `🔨 ${bansTarget} foi banido ${
+      banStats.bans
+    } vezes e levou timeout ${banStats.timeouts} vezes (somando ${humanizedTime(
+      banStats.timeoutsDuration
+    )}) em todos os canais logados`,
   };
 };
 
