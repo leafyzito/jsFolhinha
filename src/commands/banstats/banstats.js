@@ -60,7 +60,7 @@ banStatsCommand.shortDescription =
 banStatsCommand.cooldown = 5000;
 banStatsCommand.cooldownType = "channel";
 banStatsCommand.whisperable = true;
-banStatsCommand.description = `Veja quantos bans e/ou timeouts você tem registrados em todos os canais onde o bot está`;
+banStatsCommand.description = `Veja quantos bans e/ou timeouts você (ou um usuário fornecido) tem registrados em todos os canais onde o bot está`;
 banStatsCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
   .split(path.sep)
   .pop()}/${__filename.split(path.sep).pop()}`;
