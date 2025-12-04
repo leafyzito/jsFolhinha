@@ -106,4 +106,6 @@ banStatsCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/co
 
 module.exports = {
   banStatsCommand,
+  getBanStats,
+  humanizedTime,
 };

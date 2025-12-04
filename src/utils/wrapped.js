@@ -1,3 +1,5 @@
+const { getBanStats, humanizedTime } = require("../commands/banstats/banstats");
+
 const START_DATE = new Date("2025-01-01");
 
 const CACHE_DURATION_MS = 30 * 60 * 1000; // 30 minutes
@@ -158,6 +160,8 @@ async function getWrapped(username) {
     top5ChannelsData = top5Channels.data || top5Channels;
   }
 
+  const banStats = await getBanStats(userInfo.id);
+
   const result = {
     statusCode: 200,
     userId: userInfo.id,
@@ -174,6 +178,12 @@ async function getWrapped(username) {
       pets: {
         carinho: carinhoPetCount,
         brincar: brincarPetCount,
+      },
+      bans: {
+        bans: banStats.bans,
+        timeouts: banStats.timeouts,
+        timeoutsDuration: banStats.timeoutsDuration,
+        humanizedTime: humanizedTime(banStats.timeoutsDuration),
       },
       msgCount: {
         count: msgCountData[0]?.message_count || 0,
