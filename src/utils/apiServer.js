@@ -1,7 +1,7 @@
 const express = require("express");
-const { createRateLimiter } = require("./rateLimit");
+const { createRateLimiter } = require("./rateLimit/index.js");
 const { getWrapped } = require("./wrapped.js");
-class StatusServer {
+class ApiServer {
   constructor() {
     this.app = express();
     this.port = process.env.STATUS_PORT || 3323;
@@ -38,6 +38,27 @@ class StatusServer {
       });
     });
 
+    this.app.get("/commands", (req, res) => {
+      if (!fb.commandsList) {
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      // Build an array of command info, ensure unique by commandName
+      const commandsSeen = new Set();
+      const commandsDetailed = Object.entries(fb.commandsList)
+        .map(([commandName, info]) => ({
+          commandName,
+          ...info,
+        }))
+        .filter((cmd) => {
+          if (commandsSeen.has(cmd.commandName)) return false;
+          commandsSeen.add(cmd.commandName);
+          return true;
+        });
+
+      res.status(200).json({ commands: commandsDetailed });
+    });
+
     this.app.get("/wrapped/:username", async (req, res) => {
       try {
         if (!req.params.username) {
@@ -62,8 +83,8 @@ class StatusServer {
 
   start() {
     this.server = this.app.listen(this.port, "0.0.0.0", () => {
-      console.log(`* Status server running on port ${this.port}`);
-      console.log(`* Status endpoint: http://0.0.0.0:${this.port}/`);
+      console.log(`* API server running on port ${this.port}`);
+      console.log(`* API endpoint: http://0.0.0.0:${this.port}/`);
     });
 
     // Graceful shutdown
@@ -73,11 +94,11 @@ class StatusServer {
 
   shutdown() {
     if (this.server) {
-      console.log("* Shutting down status server...");
+      console.log("* Shutting down API server...");
     }
     // Force exit
     process.exit(0);
   }
 }
 
-module.exports = StatusServer;
+module.exports = ApiServer;

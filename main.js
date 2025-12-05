@@ -97,10 +97,10 @@ async function initializeApp() {
     const { startAllTasks } = require("./src/tasks/index");
     startAllTasks();
 
-    // Start status server
-    const StatusServer = require("./src/utils/statusServer");
-    fb.statusServer = new StatusServer();
-    fb.statusServer.start();
+    // Start api server
+    const apiServer = require("./src/utils/apiServer");
+    fb.apiServer = new apiServer();
+    fb.apiServer.start();
 
     fb.totalCommandsUsed = await fb.db.count("commandlog", {}, true);
 

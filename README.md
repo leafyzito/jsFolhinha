@@ -66,9 +66,9 @@ docker compose down
 - `scripts/` - Additional scripts and tools
 - `apps/twitchClipper/` - [Go-based Twitch clipping functionality](https://github.com/leafyzito/twitch-clipper/)
 
-## Status Endpoint
+## API
 
-The bot includes a built-in HTTP status server for monitoring and uptime tracking:
+The bot includes a built-in HTTP api server for monitoring and uptime tracking:
 
 ### Endpoint
 
@@ -76,7 +76,7 @@ The bot includes a built-in HTTP status server for monitoring and uptime trackin
 
 ### Configuration
 
-The status server runs on port 3000 by default. You can customize this by setting the `STATUS_PORT` environment variable:
+The api server runs on port 3000 by default. You can customize this by setting the `STATUS_PORT` environment variable:
 
 ```bash
 STATUS_PORT=8080
