@@ -59,7 +59,8 @@ async function initializeApp() {
     console.log("* Utilities initialized");
 
     // Initialize Auth Provider
-    fb.authProvider = await require("./src/utils/init").initializeAuthProvider();
+    fb.authProvider =
+      await require("./src/utils/init").initializeAuthProvider();
     console.log("* Twurple Auth provider initialized");
 
     // Initialize APIs
@@ -100,6 +101,8 @@ async function initializeApp() {
     const StatusServer = require("./src/utils/statusServer");
     fb.statusServer = new StatusServer();
     fb.statusServer.start();
+
+    fb.totalCommandsUsed = await fb.db.count("commandlog", {}, true);
 
     console.log("* Application initialization complete!");
   } catch (error) {

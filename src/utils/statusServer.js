@@ -31,6 +31,10 @@ class StatusServer {
         startTime: global.fb?.startTime || null,
         connectedChannels: fb.twitch.anonClient.currentChannels.length || 0,
         channelsToJoin: [...fb.twitch.anonClient.channelsToJoin].length || 0,
+        stats: {
+          totalCommandsUsed: fb.totalCommandsUsed,
+          totalChannels: [...fb.twitch.anonClient.channelsToJoin].length || 0,
+        },
       });
     });
 

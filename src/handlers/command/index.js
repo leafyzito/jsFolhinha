@@ -29,6 +29,8 @@ async function commandHandler(message) {
     return;
   }
 
+  fb.totalCommandsUsed++;
+
   const command = message.args[0].slice(message.prefix.length).toLowerCase();
 
   if (!(command in commandsList)) {
