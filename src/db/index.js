@@ -137,6 +137,10 @@ class MongoUtils {
     try {
       console.log("Initializing cache containers...");
       await this.ensureRedisConnection();
+
+      // Clear all cache on startup
+      await this.clearCache();
+
       await this.ensureConnection();
       const collections = await this.db.listCollections().toArray();
 
