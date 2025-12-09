@@ -21,6 +21,7 @@ services:
       - cobalt
     networks:
       - app-network
+      - folhinha-network
     restart: unless-stopped
 
   twitchclipper:
@@ -57,3 +58,6 @@ services:
 networks:
   app-network:
     driver: bridge
+  folhinha-network:
+    external: true
+    name: folhinha-network
