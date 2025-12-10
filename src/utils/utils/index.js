@@ -447,6 +447,9 @@ class Utils {
 
   // Method to check if a message matches any waiting criteria
   checkMessageWaiters(msg) {
+    if (msg.senderUserID == process.env.BOT_USERID) {
+      return false;
+    }
     // Check multi-message waiters first
     if (this.multiMessageWaiters) {
       for (const [, multiWaiter] of this.multiMessageWaiters) {
