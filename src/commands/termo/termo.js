@@ -171,8 +171,9 @@ const termoCommand = async (message) => {
         gameState.acertou = true;
         break;
       } else {
-        const wordleRes = getWordleResponse(gameState.randomWord, guess);
+        if (i == 5) break;
 
+        const wordleRes = getWordleResponse(gameState.randomWord, guess);
         if (
           typeof wordleRes === "string" ||
           wordleRes.feedback.startsWith("A palavra tem")
@@ -195,7 +196,6 @@ const termoCommand = async (message) => {
             gameState.globalWrongLetters.delete(ch)
           );
 
-          if (i == 5) break;
           fb.log.reply(
             gameState.lastCheckRes,
             `Tentativa ${i + 1} de 6: ${
