@@ -126,12 +126,15 @@ const termoGamesByChannel = new Map();
 const termoCommand = async (message) => {
   // Only allow one game per channel at a time
   if (termoGamesByChannel.has(message.channelName)) {
-    return;
+    return {
+      reply:
+        "Já existe um jogo a decorrer neste chat, ajude a adivinhar a palavra!",
+    };
   }
 
   // Setup the game state for this channel
   const gameState = {
-    startTime: new Date(Date.now() + 2 * 60 * 1000), // 2 min from now
+    startTime: new Date(Date.now() + 5 * 60 * 1000), // 5 min from now
     randomWord: fb.utils.randomChoice(palavras),
     usedLetters: new Set(),
     globalCorrectLetters: new Set(),
@@ -156,7 +159,7 @@ const termoCommand = async (message) => {
   };
 
   for (let i = 0; i < 6; i++) {
-    gameState.lastCheckRes = await fb.utils.waitForMessage(check);
+    gameState.lastCheckRes = await fb.utils.waitForMessage(check, 120_000);
     if (gameState.lastCheckRes) {
       const guess = gameState.lastCheckRes.messageText.toLowerCase();
       updateUsedLetters(gameState.usedLetters, guess);
@@ -259,7 +262,7 @@ const termoCommand = async (message) => {
 termoCommand.commandName = "termo";
 termoCommand.aliases = ["termo", "wordle", "raiosfunde"];
 termoCommand.shortDescription = "Jogo do Termo no chat";
-termoCommand.cooldown = 120_000;
+termoCommand.cooldown = 300_000;
 termoCommand.cooldownType = "channel";
 termoCommand.whisperable = false;
 termoCommand.description = `Comece um jogo do Termo no chat! Tente adivinhar a palavra secreta de 5 letras em até 6 tentativas consecutivas. O bot responde após cada tentativa com 🟩 (letra correta no lugar correto), 🟨 (letra correta no lugar errado) ou ⬛ (letra ausente). Seu progresso de letras certas e erradas é exibido a cada rodada 
