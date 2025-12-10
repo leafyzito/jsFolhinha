@@ -144,7 +144,7 @@ const termoCommand = async (message) => {
 
   fb.log.send(
     message.channelName,
-    `🎲 ${message.displayName} começou um jogo de Termo! Quem será o primeiro a acertar a palavra de 5 letras? `
+    `🎲 ${message.displayName} começou um jogo de Termo! Tem 6 tentativas para adivinhar a palavra de 5 letras`
   );
   console.log(
     `[TERMO][${message.channelName}] Palavra: ${gameState.randomWord}`
