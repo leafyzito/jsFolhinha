@@ -1,5 +1,5 @@
 const { MongoClient } = require("mongodb");
-const { createClient } = require("redis");
+const RedisClient = require("./redis");
 
 const mongoUri = process.env.MONGO_URI;
 const clientMongo = new MongoClient(mongoUri);
@@ -13,111 +13,12 @@ class MongoUtils {
     this.client = clientMongo;
     this.db = db;
     this.isConnected = false;
-    this.redisConnecting = false;
 
-    // Initialize Redis client with fallback to localhost
-    this.redisClient = this.createRedisClient(
-      redisHost,
-      parseInt(redisPort, 10)
-    );
-    this.redisHost = redisHost;
-    this.redisPort = parseInt(redisPort, 10);
-
-    // Cache TTL: 24 hours in seconds
-    this.cacheTTL = 24 * 60 * 60;
+    // Initialize Redis client
+    this.redis = new RedisClient(redisHost, redisPort);
 
     // Initialize cache containers
     this.initializeCacheContainers();
-  }
-
-  createRedisClient(host, port, isFallback = false) {
-    const client = createClient({
-      socket: {
-        host: host,
-        port: port,
-        reconnectStrategy: (retries) => {
-          // Stop retrying after 10 attempts
-          if (retries > 10) {
-            return false;
-          }
-          return Math.min(retries * 50, 1000);
-        },
-      },
-    });
-
-    client.on("error", (err) => {
-      // Only log error if it's not a connection error that we're handling
-      if (
-        err.code !== "ENOTFOUND" ||
-        host === "localhost" ||
-        host === "127.0.0.1"
-      ) {
-        console.error("Redis Client Error:", err);
-      }
-    });
-
-    client.on("connect", () => {
-      console.log(`* Redis client connected to ${host}:${port}`);
-    });
-
-    // Connect to Redis with fallback logic
-    if (!isFallback) {
-      client.connect().catch(async (err) => {
-        if (
-          err.code === "ENOTFOUND" &&
-          host !== "localhost" &&
-          host !== "127.0.0.1" &&
-          !this.redisConnecting
-        ) {
-          this.redisConnecting = true;
-          console.log(
-            `Cannot resolve ${host}, trying localhost as fallback...`
-          );
-
-          // Disconnect the old client
-          try {
-            if (client.isOpen || client.isReady) {
-              await client.quit().catch(() => {
-                // Ignore quit errors
-              });
-            }
-            await client.disconnect().catch(() => {
-              // Ignore disconnect errors
-            });
-          } catch {
-            // Ignore errors when closing
-          }
-
-          // Create new client with localhost
-          const fallbackClient = this.createRedisClient(
-            "localhost",
-            port,
-            true
-          );
-          this.redisClient = fallbackClient;
-          this.redisHost = "localhost";
-          try {
-            await fallbackClient.connect();
-            this.redisConnecting = false;
-          } catch (fallbackErr) {
-            this.redisConnecting = false;
-            console.error(
-              "Failed to connect to Redis (localhost fallback):",
-              fallbackErr
-            );
-          }
-        } else {
-          console.error("Failed to connect to Redis:", err);
-        }
-      });
-    } else {
-      // For fallback client, connect immediately
-      client.connect().catch((err) => {
-        console.error("Failed to connect to Redis (fallback):", err);
-      });
-    }
-
-    return client;
   }
 
   async ensureConnection() {
@@ -127,63 +28,14 @@ class MongoUtils {
     }
   }
 
-  async ensureRedisConnection() {
-    if (!this.redisClient.isOpen) {
-      await this.redisClient.connect();
-    }
-  }
-
   async initializeCacheContainers() {
     try {
-      console.log("Initializing cache containers...");
-      await this.ensureRedisConnection();
-
-      // Clear all cache on startup
-      await this.clearCache();
-
       await this.ensureConnection();
       const collections = await this.db.listCollections().toArray();
-
-      const collectionsToIgnore = ["commandlog"]; // for ram's sake
-
-      // Initialize stats for each collection
-      for (const collection of collections) {
-        const collectionName = collection.name;
-        if (collectionsToIgnore.includes(collectionName)) {
-          continue;
-        }
-
-        // Initialize hit/miss counters if they don't exist
-        const hitsKey = this.getStatsKey(collectionName, "hits");
-        const missesKey = this.getStatsKey(collectionName, "misses");
-        await this.redisClient.setNX(hitsKey, "0");
-        await this.redisClient.setNX(missesKey, "0");
-      }
-      console.log("* Cache containers initialized");
+      await this.redis.initializeCacheContainers(collections);
     } catch (err) {
       console.error("Failed to initialize cache containers:", err);
     }
-  }
-
-  getCacheKey(collectionName, documentId) {
-    return `cache:${collectionName}:${JSON.stringify(documentId)}`;
-  }
-
-  getStatsKey(collectionName, statType) {
-    return `stats:${collectionName}:${statType}`;
-  }
-
-  async incrementStat(collectionName, statType) {
-    await this.ensureRedisConnection();
-    const key = this.getStatsKey(collectionName, statType);
-    await this.redisClient.incr(key);
-  }
-
-  async getStat(collectionName, statType) {
-    await this.ensureRedisConnection();
-    const key = this.getStatsKey(collectionName, statType);
-    const value = await this.redisClient.get(key);
-    return value ? parseInt(value, 10) : 0;
   }
 
   async insert(collectionName, data) {
@@ -203,39 +55,29 @@ class MongoUtils {
   }
 
   async setCache(collectionName, documentId, document) {
-    await this.ensureRedisConnection();
-    const key = this.getCacheKey(collectionName, documentId);
-    await this.redisClient.setEx(key, this.cacheTTL, JSON.stringify(document));
+    await this.redis.setCache(collectionName, documentId, document);
   }
 
   async getCache(collectionName, documentId) {
-    await this.ensureRedisConnection();
-    const key = this.getCacheKey(collectionName, documentId);
-    const value = await this.redisClient.get(key);
-    if (value) {
-      return JSON.parse(value);
-    }
-    return null;
+    return await this.redis.getCache(collectionName, documentId);
   }
 
   async deleteCache(collectionName, documentId) {
-    await this.ensureRedisConnection();
-    const key = this.getCacheKey(collectionName, documentId);
-    await this.redisClient.del(key);
+    await this.redis.deleteCache(collectionName, documentId);
   }
 
   async get(collectionName, query, forceDb = false) {
     if (!forceDb) {
       // Search cache for matching documents
-      const matches = await this.searchCache(collectionName, query);
+      const matches = await this.redis.searchCache(collectionName, query);
 
       if (matches.length > 0) {
-        await this.incrementStat(collectionName, "hits");
+        await this.redis.incrementStat(collectionName, "hits");
         return matches.length === 1 ? matches[0] : matches;
       }
 
       // Manually track cache miss
-      await this.incrementStat(collectionName, "misses");
+      await this.redis.incrementStat(collectionName, "misses");
       // If not in cache, fetch from DB and update cache (lazy loading)
       return await this.fetchFromDbAndCache(collectionName, query);
     }
@@ -364,7 +206,7 @@ class MongoUtils {
     }
 
     // Check cache first using the helper function
-    const matches = await this.searchCache(collectionName, query);
+    const matches = await this.redis.searchCache(collectionName, query);
     const count = matches.length;
 
     // If we have cached results, return them
@@ -385,10 +227,7 @@ class MongoUtils {
   }
 
   async getCacheSize(collectionName) {
-    await this.ensureRedisConnection();
-    const pattern = `cache:${collectionName}:*`;
-    const keys = await this.redisClient.keys(pattern);
-    return keys.length;
+    return await this.redis.getCacheSize(collectionName);
   }
 
   async aggregate(collectionName, pipeline) {
@@ -400,74 +239,6 @@ class MongoUtils {
     } catch (err) {
       console.error(`Failed to aggregate documents in ${collectionName}:`, err);
       return [];
-    }
-  }
-
-  async searchCache(collectionName, query) {
-    await this.ensureRedisConnection();
-    const queryKeys = Object.keys(query);
-    const matches = [];
-
-    // For single field queries, try direct cache lookup first
-    if (queryKeys.length === 1) {
-      const key = queryKeys[0];
-      const value = query[key];
-
-      // If querying by _id, use direct cache lookup
-      if (key === "_id") {
-        const doc = await this.getCache(collectionName, value);
-        if (doc) {
-          return [doc];
-        }
-        return [];
-      }
-
-      // For other single field queries, search all cached documents
-      const pattern = `cache:${collectionName}:*`;
-      const keys = await this.redisClient.keys(pattern);
-
-      for (const cacheKey of keys) {
-        const docStr = await this.redisClient.get(cacheKey);
-        if (docStr) {
-          try {
-            const doc = JSON.parse(docStr);
-            if (doc[key] === value) {
-              matches.push(doc);
-            }
-          } catch {
-            // Skip invalid JSON
-            continue;
-          }
-        }
-      }
-      return matches;
-    } else {
-      // For multi-field queries, search all cached documents
-      const pattern = `cache:${collectionName}:*`;
-      const keys = await this.redisClient.keys(pattern);
-
-      for (const cacheKey of keys) {
-        const docStr = await this.redisClient.get(cacheKey);
-        if (docStr) {
-          try {
-            const doc = JSON.parse(docStr);
-            let isMatch = true;
-            for (const [key, value] of Object.entries(query)) {
-              if (doc[key] !== value) {
-                isMatch = false;
-                break;
-              }
-            }
-            if (isMatch) {
-              matches.push(doc);
-            }
-          } catch {
-            // Skip invalid JSON
-            continue;
-          }
-        }
-      }
-      return matches;
     }
   }
 
@@ -514,104 +285,32 @@ class MongoUtils {
   }
 
   async clearCache(collectionName = null) {
-    await this.ensureRedisConnection();
-    if (collectionName) {
-      const pattern = `cache:${collectionName}:*`;
-      const keys = await this.redisClient.keys(pattern);
-      if (keys.length > 0) {
-        await this.redisClient.del(keys);
-      }
-      // Also clear stats
-      await this.redisClient.del(
-        this.getStatsKey(collectionName, "hits"),
-        this.getStatsKey(collectionName, "misses")
-      );
-      console.log(`Cleared cache for collection: ${collectionName}`);
-    } else {
-      // Clear all caches
-      const pattern = "cache:*";
-      const keys = await this.redisClient.keys(pattern);
-      if (keys.length > 0) {
-        await this.redisClient.del(keys);
-      }
-      // Clear all stats
-      const statsPattern = "stats:*";
-      const statsKeys = await this.redisClient.keys(statsPattern);
-      if (statsKeys.length > 0) {
-        await this.redisClient.del(statsKeys);
-      }
-      console.log("Cleared all caches");
-    }
+    await this.redis.clearCache(collectionName);
   }
 
   async getCacheStats(collectionName = null) {
-    await this.ensureRedisConnection();
     if (collectionName) {
-      const size = await this.getCacheSize(collectionName);
-      const hits = await this.getStat(collectionName, "hits");
-      const misses = await this.getStat(collectionName, "misses");
-      return {
-        collection: collectionName,
-        size: size,
-        max: null, // Redis doesn't have a max like LRU cache
-        ttl: this.cacheTTL,
-        hits: hits,
-        misses: misses,
-      };
+      return await this.redis.getCacheStats(collectionName);
     } else {
-      // Return stats for all collections
-      const stats = {};
       await this.ensureConnection();
       const collections = await this.db.listCollections().toArray();
-
-      for (const collection of collections) {
-        const collectionName = collection.name;
-        const size = await this.getCacheSize(collectionName);
-        const hits = await this.getStat(collectionName, "hits");
-        const misses = await this.getStat(collectionName, "misses");
-        stats[collectionName] = {
-          size: size,
-          max: null,
-          ttl: this.cacheTTL,
-          hits: hits,
-          misses: misses,
-        };
-      }
-      return stats;
+      return await this.redis.getCacheStats(null, collections);
     }
   }
 
   // Method to check if a document is cached
   async isCached(collectionName, documentId) {
-    await this.ensureRedisConnection();
-    const key = this.getCacheKey(collectionName, documentId);
-    const exists = await this.redisClient.exists(key);
-    return exists === 1;
+    return await this.redis.isCached(collectionName, documentId);
   }
 
   // Method to get cache hit ratio
   async getCacheHitRatio(collectionName = null) {
     if (collectionName) {
-      const hits = await this.getStat(collectionName, "hits");
-      const misses = await this.getStat(collectionName, "misses");
-      const total = hits + misses;
-      return total > 0 ? ((hits / total) * 100).toFixed(2) + "%" : "0%";
+      return await this.redis.getCacheHitRatio(collectionName);
     } else {
-      // Calculate overall hit ratio
-      let totalHits = 0;
-      let totalMisses = 0;
-
       await this.ensureConnection();
       const collections = await this.db.listCollections().toArray();
-
-      for (const collection of collections) {
-        const collectionName = collection.name;
-        totalHits += await this.getStat(collectionName, "hits");
-        totalMisses += await this.getStat(collectionName, "misses");
-      }
-
-      const total = totalHits + totalMisses;
-      return total > 0 ? ((totalHits / total) * 100).toFixed(2) + "%" : "0%";
+      return await this.redis.getCacheHitRatio(null, collections);
     }
   }
 }
