@@ -101,13 +101,6 @@ function formatLetterList(arr) {
   return arr.length ? arr.sort((a, b) => a.localeCompare(b)).join(", ") : "-";
 }
 
-function formatUsedLetters(usedLettersSet) {
-  // Sort and format as string
-  const arr = Array.from(usedLettersSet);
-  arr.sort((a, b) => a.localeCompare(b));
-  return arr.join(", ");
-}
-
 // Helper: format ms as "Xm Ys" or "Ys"
 function formatTimeLeft(ms) {
   if (ms <= 0 || isNaN(ms)) return "";
@@ -218,7 +211,6 @@ const termoCommand = async (message) => {
       break;
     }
   }
-  const usedLettersFinal = formatUsedLetters(gameState.usedLetters);
 
   // Calculate time for next game as humanized string using formatTimeLeft helper
   const now = new Date();
@@ -249,13 +241,7 @@ const termoCommand = async (message) => {
     ":("
   );
   return {
-    reply: `Tentativas esgotadas ${emote} A palavra era: ${
-      gameState.randomWord
-    } ${
-      gameState.usedLetters.size !== 0
-        ? `• Letras usadas: ${usedLettersFinal}`
-        : ""
-    } ${timeForNextGame}`,
+    reply: `Tentativas esgotadas ${emote} A palavra era: ${gameState.randomWord} ${timeForNextGame}`,
   };
 };
 
