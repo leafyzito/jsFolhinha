@@ -33,11 +33,14 @@ rustlogRemoveCommand.aliases = [
   "rldelete",
   "rldel",
 ];
-rustlogRemoveCommand.shortDescription = "Remove a channel from rustlog";
+rustlogRemoveCommand.shortDescription = "[DEV] Remove um canal do rustlog";
 rustlogRemoveCommand.cooldown = 5_000;
 rustlogRemoveCommand.cooldownType = "user";
 rustlogRemoveCommand.permissions = ["admin"];
 rustlogRemoveCommand.whisperable = false;
 rustlogRemoveCommand.flags = ["dev"];
+rustlogRemoveCommand.description = `Remove um canal da lista do rustlog.
+
+• Exemplo: !rustlogremove usuario123 - Remove o canal do usuário "usuario123" do rustlog`;
 
 module.exports = { rustlogRemoveCommand };

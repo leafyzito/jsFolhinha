@@ -81,11 +81,14 @@ const reloadCommand = async () => {
 // Command metadata
 reloadCommand.commandName = "reload";
 reloadCommand.aliases = ["reload"];
-reloadCommand.shortDescription = "Reload bot commands";
+reloadCommand.shortDescription = "[DEV] Recarrega os comandos do bot";
 reloadCommand.cooldown = 5_000;
 reloadCommand.cooldownType = "user";
 reloadCommand.permissions = ["admin"];
 reloadCommand.whisperable = false;
 reloadCommand.flags = ["dev"];
+reloadCommand.description = `Atualiza os arquivos do bot a partir do GitHub e recarrega todos os comandos carregados em tempo real, sem precisar reiniciar o bot
+
+• Exemplo: !reload - Atualiza os comandos do bot com as últimas alterações`;
 
 module.exports = { reloadCommand };

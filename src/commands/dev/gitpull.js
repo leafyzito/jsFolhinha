@@ -21,11 +21,13 @@ const gitPullCommand = async () => {
 // Command metadata
 gitPullCommand.commandName = "gitpull";
 gitPullCommand.aliases = ["gitpull", "gpull"];
-gitPullCommand.shortDescription = "Pull latest changes from git";
+gitPullCommand.shortDescription =
+  "[DEV] Atualiza o bot com as últimas mudanças";
 gitPullCommand.cooldown = 5_000;
 gitPullCommand.cooldownType = "user";
 gitPullCommand.permissions = ["admin"];
 gitPullCommand.whisperable = false;
 gitPullCommand.flags = ["dev"];
+gitPullCommand.description = `Busca as atualizações mais recentes do bot, mas não as aplica`;
 
 module.exports = { gitPullCommand };

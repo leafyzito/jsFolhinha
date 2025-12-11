@@ -27,11 +27,16 @@ const botSayCommand = async (message) => {
 // Command metadata
 botSayCommand.commandName = "botsay";
 botSayCommand.aliases = ["botsay", "bsay"];
-botSayCommand.shortDescription = "Make the bot say something in a channel";
+botSayCommand.shortDescription =
+  "[DEV] Faz o bot enviar uma mensagem em um canal";
 botSayCommand.cooldown = 5_000;
 botSayCommand.cooldownType = "user";
 botSayCommand.permissions = ["admin"];
 botSayCommand.whisperable = false;
 botSayCommand.flags = ["dev"];
+botSayCommand.description = `Envie uma mensagem personalizada como o bot em um canal específico ou em todos os canais onde o bot está presente
+
+• Exemplo: !botsay canalexemplo Olá - O bot envia "Olá" no canal "canalexemplo"
+• Exemplo: !botsay all Mensagem global - O bot envia "Mensagem global" em todos os canais onde está presente`;
 
 module.exports = { botSayCommand };

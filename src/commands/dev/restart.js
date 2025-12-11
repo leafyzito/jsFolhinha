@@ -19,11 +19,12 @@ const restartCommand = async (message) => {
 // Command metadata
 restartCommand.commandName = "restart";
 restartCommand.aliases = ["restart"];
-restartCommand.shortDescription = "Restart the bot";
+restartCommand.shortDescription = "[DEV] Reinicia o bot";
 restartCommand.cooldown = 5_000;
 restartCommand.cooldownType = "user";
 restartCommand.permissions = ["admin"];
 restartCommand.whisperable = false;
 restartCommand.flags = ["dev"];
+restartCommand.description = `Reinicia o Docker container do bot`;
 
 module.exports = { restartCommand };

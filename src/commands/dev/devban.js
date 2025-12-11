@@ -66,11 +66,16 @@ const devBanCommand = async (message) => {
 // Command metadata
 devBanCommand.commandName = "devban";
 devBanCommand.aliases = ["devban", "dban"];
-devBanCommand.shortDescription = "Ban a user from using commands";
+devBanCommand.shortDescription = "[DEV] Banir usuário de usar comandos";
 devBanCommand.cooldown = 5_000;
 devBanCommand.cooldownType = "user";
 devBanCommand.permissions = ["admin"];
 devBanCommand.whisperable = false;
 devBanCommand.flags = ["dev"];
+devBanCommand.description = `Bane um usuário específico de usar um comando específico, ou todos os comandos, no bot
+ Para banir o uso de todos os comandos, utilize "all" no lugar do nome do comando
+
+• Exemplo: !devban usuario123 piada - Impede o usuário "usuario123" de usar o comando "piada"
+• Exemplo: !devban usuario123 all - Impede o usuário "usuario123" de usar todos os comandos do bot`;
 
 module.exports = { devBanCommand };

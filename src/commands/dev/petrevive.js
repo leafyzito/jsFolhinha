@@ -39,11 +39,14 @@ const revivePetCommand = async (message) => {
 // Command metadata
 revivePetCommand.commandName = "petrevive";
 revivePetCommand.aliases = ["petrevive", "revivepet"];
-revivePetCommand.shortDescription = "Revive pet";
+revivePetCommand.shortDescription = "[DEV] Revive o pet de um canal";
 revivePetCommand.cooldown = 5_000;
 revivePetCommand.cooldownType = "user";
 revivePetCommand.permissions = ["admin"];
 revivePetCommand.whisperable = false;
 revivePetCommand.flags = ["dev"];
+revivePetCommand.description = `Revive o pet de um canal específico
+
+• Exemplo: !petrevive canal123 - Revive o pet do canal "canal123"`;
 
 module.exports = { revivePetCommand };

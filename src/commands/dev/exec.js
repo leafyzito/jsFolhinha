@@ -30,11 +30,12 @@ const execCommand = async (message) => {
 // Command metadata
 execCommand.commandName = "exec";
 execCommand.aliases = ["exec", "eval"];
-execCommand.shortDescription = "Execute a shell command";
+execCommand.shortDescription = "[DEV] Executa um comando no shell do servidor";
 execCommand.cooldown = 5_000;
 execCommand.cooldownType = "user";
 execCommand.permissions = ["admin"];
 execCommand.whisperable = false;
 execCommand.flags = ["dev"];
+execCommand.description = `Executa um comando diretamente no shell do servidor`;
 
 module.exports = { execCommand };

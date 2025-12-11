@@ -29,11 +29,15 @@ const getUserIdCommand = async (message) => {
 // Command metadata
 getUserIdCommand.commandName = "getuserid";
 getUserIdCommand.aliases = ["getuserid", "uid"];
-getUserIdCommand.shortDescription = "Get user ID for a username";
+getUserIdCommand.shortDescription = "[DEV] Obtém o ID de um usuário";
 getUserIdCommand.cooldown = 5000;
 getUserIdCommand.cooldownType = "user";
 getUserIdCommand.permissions = ["admin"];
 getUserIdCommand.flags = ["dev"];
 getUserIdCommand.whisperable = false;
+getUserIdCommand.description = `Permite descobrir o ID de um usuário a partir do nome de usuário, ou obter o nome de usuário a partir do ID
+
+• Exemplo: !getuserid fulano - Mostra o ID do usuário "fulano"
+• Exemplo: !getuserid id 123456789 - Mostra o nome de usuário associado ao ID 123456789`;
 
 module.exports = { getUserIdCommand };
