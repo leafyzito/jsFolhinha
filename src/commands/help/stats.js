@@ -5,7 +5,7 @@ const statsCommand = async () => {
   const usedRam = process.memoryUsage().heapUsed / 1024 / 1024;
 
   return {
-    reply: `Uptime: ${uptime} • Canais: ${channelsCount} • RAM: ${
+    reply: `Uptime: ${uptime} ● Canais: ${channelsCount} ● RAM: ${
       Math.round(usedRam * 100) / 100
     }mb`,
   };
@@ -19,6 +19,8 @@ statsCommand.cooldownType = "channel";
 statsCommand.whisperable = true;
 statsCommand.description =
   "Exibe algumas informações sobre o bot, como uptime, quantidade de canais ativos e RAM utilizada";
-statsCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
+statsCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
+  .split(path.sep)
+  .pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = { statsCommand };

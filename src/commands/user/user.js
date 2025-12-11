@@ -12,16 +12,16 @@ const userCommand = async (message) => {
 
   return {
     reply: `${
-      userInfo.isBanned ? `🚫 Banido: ${userInfo.banReason} • ` : ""
-    }  @${userInfo.displayName} • ID: ${userInfo.userId} • Cor: ${
+      userInfo.isBanned ? `🚫 Banido: ${userInfo.banReason} ● ` : ""
+    }  @${userInfo.displayName} ● ID: ${userInfo.userId} ● Cor: ${
       userInfo.chatColor
-    } • Badge: ${userInfo.badge} • Chatters: ${
+    } ● Badge: ${userInfo.badge} ● Chatters: ${
       userInfo.chatterCount
-    } • Seguidores: ${userInfo.followers} • Criado há ${
+    } ● Seguidores: ${userInfo.followers} ● Criado há ${
       userInfo.createdHowLongAgo
-    } (${userInfo.createdAt}) ${userInfo.isLive ? "• 🔴 Em live agora" : ""} ${
+    } (${userInfo.createdAt}) ${userInfo.isLive ? "● 🔴 Em live agora" : ""} ${
       userInfo.lastStream && !userInfo.isLive
-        ? `• Última live: há ${userInfo.lastStream}`
+        ? `● Última live: há ${userInfo.lastStream}`
         : ""
     }`,
   };
@@ -36,7 +36,9 @@ userCommand.whisperable = true;
 userCommand.description = `Exibe várias informações sobre quem executou o comando ou sobre o usuário fornecido
 
 Informações a serem exibidas: Nick, ID, Cor, Badge, Chatters no canal, Seguidores e Tempo de criação da conta`;
-userCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
+userCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
+  .split(path.sep)
+  .pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   userCommand,

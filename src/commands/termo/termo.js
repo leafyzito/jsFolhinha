@@ -196,9 +196,9 @@ const termoCommand = async (message) => {
             gameState.lastCheckRes,
             `Tentativa ${i + 1} de 6: ${
               wordleRes.feedback
-            } • ✅ Letras certas: ${formatLetterList(
+            } ● ✅ Letras certas: ${formatLetterList(
               Array.from(gameState.globalCorrectLetters)
-            )} • ❌ Letras erradas: ${formatLetterList(
+            )} ● ❌ Letras erradas: ${formatLetterList(
               Array.from(gameState.globalWrongLetters)
             )}`
           );
@@ -218,7 +218,7 @@ const termoCommand = async (message) => {
   let timeForNextGame = "";
   const timeFormatted = formatTimeLeft(msToNextGame);
   if (timeFormatted) {
-    timeForNextGame = ` • Próximo Termo disponível em ${timeFormatted}`;
+    timeForNextGame = ` ● Próximo Termo disponível em ${timeFormatted}`;
   }
 
   // Finish and cleanup the game state

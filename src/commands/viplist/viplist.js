@@ -38,9 +38,9 @@ const vipListCommand = async (message) => {
   }
 
   return {
-    reply: `${targetUser} é VIP em ${userVipList.totalVips} canais • ${
+    reply: `${targetUser} é VIP em ${userVipList.totalVips} canais ● ${
       userVipList.totalPartners
-    } Parceiros • ${userVipList.totalAffiliates} Afiliados • ${
+    } Parceiros ● ${userVipList.totalAffiliates} Afiliados ● ${
       userVipList.totalFollowers
     } Seguidores no total - https://roles.tv/u/${targetUser.toLowerCase()}`,
   };
@@ -59,7 +59,9 @@ vipListCommand.description = `Exibe uma lista de canais onde o usuário fornecid
 • Exemplo: !viplist {usuário} - Exibe a lista de canais que o usuário fornecido é moderador
 
 Nota: De momento o site está a exibir informação não atualizada`;
-vipListCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
+vipListCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
+  .split(path.sep)
+  .pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   vipListCommand,

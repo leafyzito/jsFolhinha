@@ -33,7 +33,7 @@ const liveCommand = async (message) => {
   if (live.isLive) {
     const liveUrl =
       liveTarget !== message.channelName
-        ? ` • https://twitch.tv/${liveTarget}`
+        ? ` ● https://twitch.tv/${liveTarget}`
         : "";
     return {
       reply: `${liveTarget} está agora fazendo live de ${live.game} para ${live.viewers} viewers - ${live.title}${liveUrl}`,
@@ -50,7 +50,9 @@ liveCommand.whisperable = true;
 liveCommand.description = `Saiba há quanto tempo foi a última live do canal fornecido, ou no canal o qual o comando foi executado caso nenhum tenha sido fornecido
 
 Se o canal estiver ao vivo, mostrará a categoria, a quantidade de viewers, o título e o link para a live`;
-liveCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
+liveCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
+  .split(path.sep)
+  .pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   liveCommand,

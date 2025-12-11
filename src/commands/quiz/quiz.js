@@ -36,9 +36,9 @@ const quizCommand = async (message) => {
 
   await fb.log.reply(
     message,
-    `📚 Hora de quiz! • Categoria: ${
+    `📚 Hora de quiz! ● Categoria: ${
       quiz.categoria
-    } • Dificuldade: ${fb.utils.capitalize(quiz.dificuldade)} • ${
+    } ● Dificuldade: ${fb.utils.capitalize(quiz.dificuldade)} ● ${
       quiz.pergunta
     }`
   );
