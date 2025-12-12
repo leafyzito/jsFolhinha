@@ -7,7 +7,7 @@ const shortenCommand = async (message) => {
   }
 
   try {
-    const shortenedUrl = await fb.utils.shortenUrl(url);
+    const shortenedUrl = await fb.utils.chuw.shortenUrl(url);
     return {
       reply: `🔗 ${shortenedUrl}`,
     };
