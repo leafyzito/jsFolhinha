@@ -45,11 +45,17 @@ const devJoinChannelCommand = async (message) => {
 // Command metadata
 devJoinChannelCommand.commandName = "devjoin";
 devJoinChannelCommand.aliases = ["devjoin", "djoin"];
-devJoinChannelCommand.shortDescription = "Join a channel";
+devJoinChannelCommand.shortDescription =
+  "[DEV] Faz o bot entrar em um canal específico";
 devJoinChannelCommand.cooldown = 5_000;
 devJoinChannelCommand.cooldownType = "user";
 devJoinChannelCommand.permissions = ["admin"];
 devJoinChannelCommand.whisperable = false;
 devJoinChannelCommand.flags = ["dev"];
+devJoinChannelCommand.description = `Faz o bot entrar em um canal específico e crie a configuração inicial para aquele canal
+ Opcionalmente, é possível anunciar a entrada do bot ao canal.
+
+• Exemplo: !devjoin canalexemplo - O bot entra no canal "canalexemplo" e cria a configuração dele
+• Exemplo: !devjoin canalexemplo true - O bot entra no canal "canalexemplo", cria a configuração e anuncia sua entrada no chat`;
 
 module.exports = { devJoinChannelCommand };

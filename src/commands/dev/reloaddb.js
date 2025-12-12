@@ -15,11 +15,12 @@ const reloadDbCommand = async () => {
 // Command metadata
 reloadDbCommand.commandName = "reloaddb";
 reloadDbCommand.aliases = ["reloaddb", "reloadbd"];
-reloadDbCommand.shortDescription = "Reload database";
+reloadDbCommand.shortDescription = "[DEV] Recarrega a cache da base de dados";
 reloadDbCommand.cooldown = 5_000;
 reloadDbCommand.cooldownType = "user";
 reloadDbCommand.permissions = ["admin"];
 reloadDbCommand.whisperable = false;
 reloadDbCommand.flags = ["dev"];
+reloadDbCommand.description = `Limpa o cache local do banco de dados`;
 
 module.exports = { reloadDbCommand };

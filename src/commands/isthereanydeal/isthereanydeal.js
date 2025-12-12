@@ -98,9 +98,9 @@ const isThereAnyDealCommand = async (message) => {
   return {
     reply: `Menor preço atual de "${itad.gameTitle}": ${
       itad.prices.currentPrice + " " + itad.prices.currency
-    } na loja ${itad.prices.shopName} • Menor preço de sempre: ${
+    } na loja ${itad.prices.shopName} ● Menor preço de sempre: ${
       itad.prices.lowestPrice + " " + itad.prices.currency
-    } • ${itad.itadLink}`,
+    } ● ${itad.itadLink}`,
   };
 };
 

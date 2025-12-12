@@ -101,13 +101,6 @@ function formatLetterList(arr) {
   return arr.length ? arr.sort((a, b) => a.localeCompare(b)).join(", ") : "-";
 }
 
-function formatUsedLetters(usedLettersSet) {
-  // Sort and format as string
-  const arr = Array.from(usedLettersSet);
-  arr.sort((a, b) => a.localeCompare(b));
-  return arr.join(", ");
-}
-
 // Helper: format ms as "Xm Ys" or "Ys"
 function formatTimeLeft(ms) {
   if (ms <= 0 || isNaN(ms)) return "";
@@ -126,12 +119,15 @@ const termoGamesByChannel = new Map();
 const termoCommand = async (message) => {
   // Only allow one game per channel at a time
   if (termoGamesByChannel.has(message.channelName)) {
-    return;
+    return {
+      reply:
+        "Já existe um jogo a decorrer neste chat, ajude a adivinhar a palavra!",
+    };
   }
 
   // Setup the game state for this channel
   const gameState = {
-    startTime: new Date(Date.now() + 2 * 60 * 1000), // 2 min from now
+    startTime: new Date(Date.now() + 5 * 60 * 1000), // 5 min from now
     randomWord: fb.utils.randomChoice(palavras),
     usedLetters: new Set(),
     globalCorrectLetters: new Set(),
@@ -144,7 +140,7 @@ const termoCommand = async (message) => {
 
   fb.log.send(
     message.channelName,
-    `🎲 ${message.displayName} começou um jogo de Termo! Quem será o primeiro a acertar a palavra de 5 letras? `
+    `🎲 ${message.displayName} começou um jogo de Termo! Tem 6 tentativas para adivinhar a palavra de 5 letras`
   );
   console.log(
     `[TERMO][${message.channelName}] Palavra: ${gameState.randomWord}`
@@ -156,7 +152,7 @@ const termoCommand = async (message) => {
   };
 
   for (let i = 0; i < 6; i++) {
-    gameState.lastCheckRes = await fb.utils.waitForMessage(check);
+    gameState.lastCheckRes = await fb.utils.waitForMessage(check, 120_000);
     if (gameState.lastCheckRes) {
       const guess = gameState.lastCheckRes.messageText.toLowerCase();
       updateUsedLetters(gameState.usedLetters, guess);
@@ -171,8 +167,9 @@ const termoCommand = async (message) => {
         gameState.acertou = true;
         break;
       } else {
-        const wordleRes = getWordleResponse(gameState.randomWord, guess);
+        if (i == 5) break;
 
+        const wordleRes = getWordleResponse(gameState.randomWord, guess);
         if (
           typeof wordleRes === "string" ||
           wordleRes.feedback.startsWith("A palavra tem")
@@ -195,14 +192,13 @@ const termoCommand = async (message) => {
             gameState.globalWrongLetters.delete(ch)
           );
 
-          if (i == 5) break;
           fb.log.reply(
             gameState.lastCheckRes,
             `Tentativa ${i + 1} de 6: ${
               wordleRes.feedback
-            } • ✅ Letras certas: ${formatLetterList(
+            } ● ✅ Letras certas: ${formatLetterList(
               Array.from(gameState.globalCorrectLetters)
-            )} • ❌ Letras erradas: ${formatLetterList(
+            )} ● ❌ Letras erradas: ${formatLetterList(
               Array.from(gameState.globalWrongLetters)
             )}`
           );
@@ -215,7 +211,6 @@ const termoCommand = async (message) => {
       break;
     }
   }
-  const usedLettersFinal = formatUsedLetters(gameState.usedLetters);
 
   // Calculate time for next game as humanized string using formatTimeLeft helper
   const now = new Date();
@@ -223,7 +218,7 @@ const termoCommand = async (message) => {
   let timeForNextGame = "";
   const timeFormatted = formatTimeLeft(msToNextGame);
   if (timeFormatted) {
-    timeForNextGame = ` • Próximo Termo disponível em ${timeFormatted}`;
+    timeForNextGame = ` ● Próximo Termo disponível em ${timeFormatted}`;
   }
 
   // Finish and cleanup the game state
@@ -246,20 +241,14 @@ const termoCommand = async (message) => {
     ":("
   );
   return {
-    reply: `Tentativas esgotadas ${emote} A palavra era: ${
-      gameState.randomWord
-    } ${
-      gameState.usedLetters.size !== 0
-        ? `• Letras usadas: ${usedLettersFinal}`
-        : ""
-    } ${timeForNextGame}`,
+    reply: `Tentativas esgotadas ${emote} A palavra era: ${gameState.randomWord} ${timeForNextGame}`,
   };
 };
 
 termoCommand.commandName = "termo";
 termoCommand.aliases = ["termo", "wordle", "raiosfunde"];
 termoCommand.shortDescription = "Jogo do Termo no chat";
-termoCommand.cooldown = 120_000;
+termoCommand.cooldown = 300_000;
 termoCommand.cooldownType = "channel";
 termoCommand.whisperable = false;
 termoCommand.description = `Comece um jogo do Termo no chat! Tente adivinhar a palavra secreta de 5 letras em até 6 tentativas consecutivas. O bot responde após cada tentativa com 🟩 (letra correta no lugar correto), 🟨 (letra correta no lugar errado) ou ⬛ (letra ausente). Seu progresso de letras certas e erradas é exibido a cada rodada 

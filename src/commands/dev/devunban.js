@@ -77,11 +77,17 @@ const unbanDevCommand = async (message) => {
 // Command metadata
 unbanDevCommand.commandName = "devunban";
 unbanDevCommand.aliases = ["devunban", "dunban"];
-unbanDevCommand.shortDescription = "Unban a user from using commands";
+unbanDevCommand.shortDescription =
+  "[DEV] Remove o banimento de um usuário em comandos específicos do bot";
 unbanDevCommand.cooldown = 5_000;
 unbanDevCommand.cooldownType = "user";
 unbanDevCommand.permissions = ["admin"];
 unbanDevCommand.whisperable = false;
 unbanDevCommand.flags = ["dev"];
+unbanDevCommand.description = `Remove o banimento de um usuário do uso de um comando específico, ou de todos os comandos, no bot.
+Para remover o banimento de todos os comandos, utilize "all" no lugar do nome do comando.
+
+• Exemplo: !devunban usuario123 piada - Permite que o usuário "usuario123" volte a usar o comando "piada"
+• Exemplo: !devunban usuario123 all - Permite que o usuário "usuario123" volte a usar todos os comandos do bot`;
 
 module.exports = { unbanDevCommand };

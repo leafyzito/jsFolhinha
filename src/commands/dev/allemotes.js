@@ -21,11 +21,15 @@ const allEmotesCommand = async (message) => {
 // Command metadata
 allEmotesCommand.commandName = "allemotes";
 allEmotesCommand.aliases = ["allemotes"];
-allEmotesCommand.shortDescription = "List all emotes for a channel";
+allEmotesCommand.shortDescription = "[DEV] Lista todos os emotes de um canal";
 allEmotesCommand.cooldown = 5_000;
 allEmotesCommand.cooldownType = "user";
 allEmotesCommand.permissions = ["admin"];
 allEmotesCommand.whisperable = false;
 allEmotesCommand.flags = ["dev"];
+allEmotesCommand.description = `Mostra todos os emotes (BTTV, FFZ, 7TV) do canal especificado. O comando envia a lista de emotes em partes, respeitando o limite de caracteres do chat.
+  
+• Exemplo: !allemotes - Lista todos os emotes do canal atual
+• Exemplo: !allemotes canalexemplo - Lista todos os emotes do canal "canalexemplo"`;
 
 module.exports = { allEmotesCommand };

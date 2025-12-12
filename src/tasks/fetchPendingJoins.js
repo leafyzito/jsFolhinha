@@ -41,18 +41,18 @@ async function fetchPendingJoins() {
       if (userInfo) {
         fb.discord.importantLog(
           `* Joining to ${channelName} from website (inviter: ${inviterName}) \n${
-            userInfo.isBanned ? `🚫 Banido: ${userInfo.banReason} • ` : ""
-          }  @${userInfo.displayName} • ID: ${userInfo.userId} • Badge: ${
+            userInfo.isBanned ? `🚫 Banido: ${userInfo.banReason} ● ` : ""
+          }  @${userInfo.displayName} ● ID: ${userInfo.userId} ● Badge: ${
             userInfo.badge
-          } • Chatters: ${userInfo.chatterCount} • Seguidores: ${
+          } ● Chatters: ${userInfo.chatterCount} ● Seguidores: ${
             userInfo.followers
-          } • Criado há ${userInfo.createdHowLongAgo} (${userInfo.createdAt}) ${
-            userInfo.isLive ? "• 🔴 Em live agora" : ""
+          } ● Criado há ${userInfo.createdHowLongAgo} (${userInfo.createdAt}) ${
+            userInfo.isLive ? "● 🔴 Em live agora" : ""
           } ${
             userInfo.lastStream && !userInfo.isLive
-              ? `• Última live: há ${userInfo.lastStream}`
+              ? `● Última live: há ${userInfo.lastStream}`
               : ""
-          } • Logs: https://tv.supa.sh/logs?c=${channelName}`
+          } ● Logs: https://tv.supa.sh/logs?c=${channelName}`
         );
       } else {
         fb.discord.importantLog(

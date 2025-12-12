@@ -25,11 +25,15 @@ const devPartChannelCommand = async (message) => {
 // Command metadata
 devPartChannelCommand.commandName = "devpart";
 devPartChannelCommand.aliases = ["devpart", "dpart"];
-devPartChannelCommand.shortDescription = "Part a channel";
+devPartChannelCommand.shortDescription =
+  "[DEV] Faz o bot sair de um canal e apagar a configuração";
 devPartChannelCommand.cooldown = 5_000;
 devPartChannelCommand.cooldownType = "user";
 devPartChannelCommand.permissions = ["admin"];
 devPartChannelCommand.whisperable = false;
 devPartChannelCommand.flags = ["dev"];
+devPartChannelCommand.description = `Remove o bot de um canal específico e apaga a configuração
+
+• Exemplo: !devpart canalexemplo - O bot sai do canal "canalexemplo" e remove a configuração`;
 
 module.exports = { devPartChannelCommand };

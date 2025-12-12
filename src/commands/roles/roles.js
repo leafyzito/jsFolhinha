@@ -50,15 +50,15 @@ const rolesCommand = async (message) => {
   )} cargos na Twitch`;
 
   if (userRoles.mods > 0)
-    response += ` • 🛡️ Mod em ${formatNumber(userRoles.mods)}`;
+    response += ` ● 🛡️ Mod em ${formatNumber(userRoles.mods)}`;
   if (userRoles.vips > 0)
-    response += ` • 🌟 VIP em ${formatNumber(userRoles.vips)}`;
+    response += ` ● 🌟 VIP em ${formatNumber(userRoles.vips)}`;
   if (userRoles.founders > 0)
-    response += ` • 👑 Founder em ${formatNumber(userRoles.founders)}`;
+    response += ` ● 👑 Founder em ${formatNumber(userRoles.founders)}`;
   if (userRoles.artists > 0)
-    response += ` • 🎨 Artist em ${formatNumber(userRoles.artists)}`;
+    response += ` ● 🎨 Artist em ${formatNumber(userRoles.artists)}`;
   if (userRoles.subscribers > 0)
-    response += ` • 🎤 Sub em ${formatNumber(userRoles.subscribers)}`;
+    response += ` ● 🎤 Sub em ${formatNumber(userRoles.subscribers)}`;
 
   response += ` - https://roles.tv/u/${targetUser.toLowerCase()}`;
 
@@ -80,7 +80,9 @@ rolesCommand.description = `Exibe uma lista de cargos que o usuário fornecido t
     • Exemplo: !roles {usuário} - Exibe a lista de cargos que o usuário fornecido tem por toda a Twitch
     
     Nota: De momento o site está a exibir informação não atualizada`;
-rolesCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
+rolesCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
+  .split(path.sep)
+  .pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   rolesCommand,

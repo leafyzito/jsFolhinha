@@ -20,7 +20,7 @@ const cacheStatsCommand = async () => {
 
     const cacheUsage = ((totalCached / totalMax) * 100).toFixed(1);
 
-    let reply = `📊 Cache: ${totalCached} size (${cacheUsage}%) • Hits/Misses: ${totalHits}/${totalMisses} • Hit Ratio: ${hitRatio} • Collections: ${collectionCount}`;
+    let reply = `📊 Cache: ${totalCached} size (${cacheUsage}%) ● Hits/Misses: ${totalHits}/${totalMisses} ● Hit Ratio: ${hitRatio} ● Collections: ${collectionCount}`;
 
     // Truncate if over 500 characters
     if (reply.length > 500) {
@@ -40,11 +40,14 @@ const cacheStatsCommand = async () => {
 // Command metadata
 cacheStatsCommand.commandName = "cachestats";
 cacheStatsCommand.aliases = ["cachestats", "cstats"];
-cacheStatsCommand.shortDescription = "Display cache statistics and hit ratio";
+cacheStatsCommand.shortDescription =
+  "[DEV] Mostra estatísticas do cache do bot";
 cacheStatsCommand.cooldown = 5_000;
 cacheStatsCommand.cooldownType = "user";
 cacheStatsCommand.permissions = ["admin"];
 cacheStatsCommand.whisperable = false;
 cacheStatsCommand.flags = ["dev"];
+cacheStatsCommand.description = `Exibe informações detalhadas sobre o uso do cache do bot
+Útil apenas para administradores e para diagnóstico de performance`;
 
 module.exports = { cacheStatsCommand };

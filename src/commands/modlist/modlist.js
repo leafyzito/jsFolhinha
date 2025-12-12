@@ -38,9 +38,9 @@ const modListCommand = async (message) => {
   }
 
   return {
-    reply: `${targetUser} é moderador em ${userModList.totalMods} canais • ${
+    reply: `${targetUser} é moderador em ${userModList.totalMods} canais ● ${
       userModList.totalPartners
-    } Parceiros • ${userModList.totalAffiliates} Afiliados • ${
+    } Parceiros ● ${userModList.totalAffiliates} Afiliados ● ${
       userModList.totalFollowers
     } Seguidores no total - https://roles.tv/u/${targetUser.toLowerCase()}`,
   };
@@ -59,7 +59,9 @@ modListCommand.description = `Exibe uma lista de canais onde o usuário fornecid
 • Exemplo: !modlist {usuário} - Exibe a lista de canais que o usuário fornecido é moderador
 
 Nota: De momento o site está a exibir informação não atualizada`;
-modListCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
+modListCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
+  .split(path.sep)
+  .pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   modListCommand,

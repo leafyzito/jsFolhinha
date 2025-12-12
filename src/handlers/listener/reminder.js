@@ -257,7 +257,7 @@ const handleReminderResponse = async (message, reminders) => {
     if (replyMsg.length > 480) {
       fb.log.send(
         message.channelName,
-        `${message.senderUsername}, você tem ${reminders.length} lembretes. Acesse https://folhinhabot.com/reminders para ver os seus lembretes pendentes`
+        `${message.senderUsername}, você tem ${reminders.length} lembretes. Acesse https://folhinhabot.com/lembretes para ver os seus lembretes pendentes`
       );
       return;
     }
@@ -282,7 +282,7 @@ const handleReminderResponse = async (message, reminders) => {
   // Handle large number of reminders (>3)
   fb.log.send(
     message.channelName,
-    `${message.senderUsername}, você tem ${reminders.length} lembretes. Acesse https://folhinhabot.com/reminders para ver os seus lembretes pendentes`
+    `${message.senderUsername}, você tem ${reminders.length} lembretes. Acesse https://folhinhabot.com/lembretes para ver os seus lembretes pendentes`
   );
 };
 

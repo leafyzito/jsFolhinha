@@ -91,8 +91,8 @@ class DiscordClient {
       .setFooter({
         text: `${this.formatResponseTime(
           message.responseTime
-        )} • ${this.getFormattedDateTime()}${
-          sentVia !== null ? ` • ${sentVia}` : ""
+        )} ● ${this.getFormattedDateTime()}${
+          sentVia !== null ? ` ● ${sentVia}` : ""
         }`,
       });
 
@@ -124,7 +124,7 @@ class DiscordClient {
       .setColor("#008000")
       .setFooter({
         text: `${this.getFormattedDateTime()}${
-          sentVia !== null ? ` • ${sentVia}` : ""
+          sentVia !== null ? ` ● ${sentVia}` : ""
         }`,
       });
 
