@@ -5,10 +5,10 @@ const execAsync = promisify(exec);
 
 const restartCommand = async (message) => {
   try {
-    fb.twitch.client.say(message.channelName, "Reiniciando...");
+    fb.log.send(message.channelName, "Reiniciando...");
 
     // give time for the message to be sent
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     // Execute docker compose restart for all bot-related services
     await execAsync("docker compose -p folhinha restart");
   } catch (error) {
