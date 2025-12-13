@@ -26,7 +26,7 @@ restartCommand.shortDescription = "[DEV] Reinicia o bot";
 restartCommand.cooldown = 5_000;
 restartCommand.cooldownType = "user";
 restartCommand.permissions = ["admin"];
-restartCommand.whisperable = false;
+restartCommand.whisperable = true;
 restartCommand.flags = ["dev"];
 restartCommand.description = `Reinicia o Docker container do bot`;
 
