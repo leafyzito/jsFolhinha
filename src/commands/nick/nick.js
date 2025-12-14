@@ -77,7 +77,8 @@ nicksCommand.cooldownType = "channel";
 nicksCommand.whisperable = true;
 nicksCommand.description = `Exibe o histórico de nicks de um usuário ou de quem executou o comando caso nenhum usuário seja fornecido
 
-• Exemplo: !nicks @leafyzito - O bot irá responder com o histórico de nicks de leafyzito`;
+• Exemplo: !nicks @leafyzito - O bot irá responder com o histórico de nicks de leafyzito
+• Exemplo: !nicks id:12345 - O bot irá responder com o histórico de nicks do usuário de id 12345`;
 nicksCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
   .split(path.sep)
   .pop()}/${__filename.split(path.sep).pop()}`;
