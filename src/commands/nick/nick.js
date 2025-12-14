@@ -19,15 +19,26 @@ async function getAllNicks(userId) {
 const nicksCommand = async (message) => {
   const nicksTarget =
     message.args[1]?.replace(/^@/, "").toLowerCase() || message.senderUsername;
-
   let targetId = null;
+  if (nicksTarget.toLowerCase().startsWith("id:")) {
+    targetId = nicksTarget.slice(3).trim();
+    // Remove possible trailing or leading spaces
+    if (!targetId) {
+      return {
+        reply: `Use o formato: ${message.prefix}nick id:12345`,
+      };
+    }
+  }
 
-  // to allow searching for old nicks
-  const userDbInfo = await fb.db.get("users", { aliases: nicksTarget });
-  if (userDbInfo && userDbInfo.length === 1) {
-    targetId = userDbInfo.userid;
-  } else {
-    targetId = (await fb.api.helix.getUserByUsername(nicksTarget))?.id;
+  // skip lookup if specified id
+  if (!targetId) {
+    // to allow searching for old nicks
+    const userDbInfo = await fb.db.get("users", { aliases: nicksTarget });
+    if (userDbInfo && userDbInfo.length === 1) {
+      targetId = userDbInfo.userid;
+    } else {
+      targetId = (await fb.api.helix.getUserByUsername(nicksTarget))?.id;
+    }
   }
 
   if (!targetId) {
@@ -46,7 +57,7 @@ const nicksCommand = async (message) => {
   let response = `${
     nicksTarget === message.senderUsername
       ? `O seu histórico de nicks é:`
-      : `O histórico de nicks de ${nicksTarget} (id: ${targetId}) é:`
+      : `O histórico de nicks de ${nicksTarget} é:`
   } ${aliases.join(" → ")}`;
 
   if (response.length > 490) {
@@ -67,7 +78,9 @@ nicksCommand.whisperable = true;
 nicksCommand.description = `Exibe o histórico de nicks de um usuário ou de quem executou o comando caso nenhum usuário seja fornecido
 
 • Exemplo: !nicks @leafyzito - O bot irá responder com o histórico de nicks de leafyzito`;
-nicksCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
+nicksCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
+  .split(path.sep)
+  .pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   nicksCommand,
