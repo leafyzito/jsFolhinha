@@ -35,9 +35,6 @@ const updateUserListener = async (message) => {
     fb.discord.log(
       `* Updating user aliases: #${message.channelName}/${knownUser.currAlias} -> ${message.senderUsername}`
     );
-    console.log(
-      `User found in DB. updating aliases: #${message.channelName}/${knownUser.currAlias} -> ${message.senderUsername}`
-    );
 
     await fb.db.update(
       "users",
@@ -90,7 +87,7 @@ const updateUserListener = async (message) => {
   fb.discord.log(
     `* NEW USER: #${message.channelName}/${message.senderUsername}`
   );
-  console.log(`NEW USER: #${message.channelName}/${message.senderUsername}`);
+  // console.log(`NEW USER: #${message.channelName}/${message.senderUsername}`);
 
   await fb.db.insert("users", {
     userid: message.senderUserID,

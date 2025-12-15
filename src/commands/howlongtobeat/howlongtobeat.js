@@ -24,7 +24,7 @@ async function fetchToken() {
 
 async function hltbSearch(query) {
   const token = await fetchToken();
-  console.log(token);
+  // console.log(token);
   if (!token) {
     throw new Error("Token not fetched");
   }

@@ -42,7 +42,7 @@ const isDownCommand = async (message) => {
     true,
     true
   );
-  console.log(scan.last_scan, lastScan, timeSinceLastScan);
+  // console.log(scan.last_scan, lastScan, timeSinceLastScan);
 
   if (Array.isArray(warnings?.scan_failed)) {
     const error = warnings.scan_failed[0].msg;
@@ -71,7 +71,9 @@ isDownCommand.cooldown = 5000;
 isDownCommand.cooldownType = "channel";
 isDownCommand.whisperable = true;
 isDownCommand.description = `Verifica se um site está fora do ar ou se é só você que não consegue ver o site, de acordo com a API do Sucuri`;
-isDownCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
+isDownCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
+  .split(path.sep)
+  .pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   isDownCommand: isDownCommand,

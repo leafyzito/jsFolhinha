@@ -28,12 +28,12 @@ const getRandomCharada = (channelName) => {
 
   usedCharadas[channelName].push(selectedKey);
 
+  console.log(`[Charada #${channelName}] Resposta: ${charada.resposta}`);
   return charada;
 };
 
 const charadaCommand = async (message) => {
   const charada = getRandomCharada(message.channelName);
-  console.log(charada);
 
   await fb.log.reply(
     message,
@@ -79,7 +79,9 @@ charadaCommand.cooldownType = "channel";
 charadaCommand.whisperable = false;
 charadaCommand.description = `Inicie uma charada que todos do chat (no qual o comando foi executado) podem participar
 Se ninguém do chat responder a charada a tempo dentro de 30 segundos, a resposta será revelada`;
-charadaCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
+charadaCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
+  .split(path.sep)
+  .pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   charadaCommand,

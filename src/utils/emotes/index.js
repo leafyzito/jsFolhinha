@@ -109,7 +109,6 @@ class Emotes {
 
   async getChannelEmotes(channelName) {
     if (!this.cachedEmotes[channelName]) {
-      console.log(`* Fetching emotes for ${channelName}`);
       fb.discord.log(`* Fetching emotes for ${channelName}`);
       const channelId = (await fb.api.helix.getUserByUsername(channelName))?.id;
       if (!channelId) {

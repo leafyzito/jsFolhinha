@@ -143,7 +143,7 @@ const termoCommand = async (message) => {
     `🎲 ${message.displayName} começou um jogo de Termo! Tem 6 tentativas para adivinhar a palavra de 5 letras`
   );
   console.log(
-    `[TERMO][${message.channelName}] Palavra: ${gameState.randomWord}`
+    `[Termo #${message.channelName}] Palavra: ${gameState.randomWord}`
   );
 
   const check = {
@@ -206,7 +206,7 @@ const termoCommand = async (message) => {
       }
     } else {
       console.log(
-        `[TERMO][${message.channelName}] Timeout or no message received.`
+        `[Termo][${message.channelName}] Timeout or no message received.`
       );
       break;
     }

@@ -27,12 +27,13 @@ function getRandomQuiz(channelName) {
 
   usedQuizes[channelName].push(quiz.id);
 
+  console.log(`[Quiz #${channelName}] Resposta: ${quiz.resposta}`);
   return quiz;
 }
 
 const quizCommand = async (message) => {
   const quiz = getRandomQuiz(message.channelName);
-  console.log(quiz);
+  // console.log(quiz);
 
   await fb.log.reply(
     message,

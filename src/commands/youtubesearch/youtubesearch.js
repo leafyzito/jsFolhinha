@@ -28,7 +28,7 @@ function parseVideoDuration(string) {
 }
 
 async function searchYtVideos(query, maxResults = 5) {
-  console.log(process.env.GOOGLE_YOUTUBE_SEARCH_API_KEY);
+  // console.log(process.env.GOOGLE_YOUTUBE_SEARCH_API_KEY);
   try {
     const searchParams = new URLSearchParams({
       key: process.env.GOOGLE_YOUTUBE_SEARCH_API_KEY,
@@ -133,7 +133,9 @@ youtubeSearchCommand.cooldown = 5000;
 youtubeSearchCommand.cooldownType = "channel";
 youtubeSearchCommand.whisperable = true;
 youtubeSearchCommand.description = `Pesquise vídeos no YouTube e veja detalhes sobre eles, como título, autor, views, data de publicação e duração`;
-youtubeSearchCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
+youtubeSearchCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
+  .split(path.sep)
+  .pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   youtubeSearchCommand,
