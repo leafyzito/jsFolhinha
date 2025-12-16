@@ -7,7 +7,8 @@ async function askGptSerio(message, prompt) {
     messages: [
       {
         role: "system",
-        content: "Mantenha a sua resposta séria e faça o que for pedido.",
+        content:
+          "Sem personalidade. Apenas factos, dados, insights e críticas construtivas. Respostas curtas, concisas e densas. Se uma pergunta for contra os Termos de Serviço do Twitch, recuse-se a responder.",
       },
       { role: "user", content: prompt },
     ],
@@ -58,7 +59,9 @@ gptSerioCommand.cooldown = 15000;
 gptSerioCommand.cooldownType = "channel";
 gptSerioCommand.whisperable = true;
 gptSerioCommand.description = `Envie uma mensagem para o GPT com uma personalidade mais séria e sem teor humorístico`;
-gptSerioCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
+gptSerioCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
+  .split(path.sep)
+  .pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   gptSerioCommand,
