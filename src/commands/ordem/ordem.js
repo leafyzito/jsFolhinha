@@ -39,22 +39,16 @@ const ordemCommand = async (message) => {
     };
   }
 
-  try {
-    const wikiLink = await searchFandomPage(query);
-    if (wikiLink === null) {
-      return {
-        reply: `Não encontrei nenhuma página sobre "${query}" na wiki de Ordem Paranormal`,
-      };
-    }
-
+  const wikiLink = await searchFandomPage(query);
+  if (wikiLink === null) {
     return {
-      reply: `🔗 ${wikiLink}`,
-    };
-  } catch (error) {
-    return {
-      reply: `Erro ao buscar no wiki: ${error.message}`,
+      reply: `Não encontrei nenhuma página sobre isso na wiki de Ordem Paranormal`,
     };
   }
+
+  return {
+    reply: `🔗 ${wikiLink}`,
+  };
 };
 
 ordemCommand.commandName = "ordem";
