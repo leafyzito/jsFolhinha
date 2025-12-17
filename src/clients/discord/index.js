@@ -113,7 +113,7 @@ class DiscordClient {
   }
 
   async logSend(channel, content, sentVia = null) {
-    console.log(`[Send] #${channel}: ${content}`);
+    console.log(`[SEND] #${channel}: ${content}`);
     const embed = new this.client.EmbedBuilder()
       .setTitle(`Enviado para #${channel}`)
       .setURL(`${this.getLogsUrl(channel)}`)
@@ -162,7 +162,7 @@ class DiscordClient {
   }
 
   async importantLog(content) {
-    console.log("[Important Log]" + content);
+    console.log(`[IMPORTANT LOG] ${content}`);
     try {
       const logChannel = await this.client.channels.fetch(
         process.env.DISCORD_IMPORTANT_LOGS_CHANNEL
@@ -186,7 +186,7 @@ class DiscordClient {
   }
 
   async logWhisper(recipient, content) {
-    console.log(`[Whisper] to #${recipient}: ${content}`);
+    console.log(`[WHISPER] to #${recipient}: ${content}`);
     const embed = new this.client.EmbedBuilder()
       .setTitle(`📨 Whisper para #${recipient}`)
       .addFields({
@@ -209,7 +209,7 @@ class DiscordClient {
 
   async logWhisperFrom(message) {
     console.log(
-      `[Whisper] from #${message.senderUsername}: ${message.messageText}`
+      `[WHISPER] from #${message.senderUsername}: ${message.messageText}`
     );
 
     const embed = new this.client.EmbedBuilder()
@@ -263,7 +263,7 @@ class DiscordClient {
   }
 
   async notifyDevMention(message) {
-    console.log(`[Dev Mention] #${message.channelName}/${message.displayName}`);
+    console.log(`[DEV MENTION] #${message.channelName}/${message.displayName}`);
     const embed = new this.client.EmbedBuilder()
       .setTitle(`#${message.channelName}/${message.displayName}`)
       .setURL(`${this.getLogsUrl(message.channelName, message.id)}`)

@@ -28,7 +28,7 @@ const getRandomCharada = (channelName) => {
 
   usedCharadas[channelName].push(selectedKey);
 
-  console.log(`[Charada #${channelName}] Resposta: ${charada.resposta}`);
+  console.log(`[CHARADA #${channelName}] Resposta: ${charada.resposta}`);
   return charada;
 };
 

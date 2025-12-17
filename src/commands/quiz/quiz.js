@@ -27,7 +27,7 @@ function getRandomQuiz(channelName) {
 
   usedQuizes[channelName].push(quiz.id);
 
-  console.log(`[Quiz #${channelName}] Resposta: ${quiz.resposta}`);
+  console.log(`[QUIZ #${channelName}] Resposta: ${quiz.resposta}`);
   return quiz;
 }
 
