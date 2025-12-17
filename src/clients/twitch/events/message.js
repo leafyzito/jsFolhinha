@@ -36,7 +36,7 @@ module.exports = async function onMessage(channel, username, text, message) {
   // Handle reply messages and sanitize text
   message.isReply = false;
   message.originalMessageText = message.messageText;
-  
+
   if (message.parentMessageText) {
     message.isReply = true;
     message.messageText = message.messageText + " " + message.parentMessageText;
@@ -55,8 +55,9 @@ module.exports = async function onMessage(channel, username, text, message) {
   message.serverTimestamp = new Date();
   message.serverTimestampRaw = new Date().getTime();
   message.isMod = message.userInfo.isMod;
+  message.isLeadMod = message.userInfo.badges.has("lead_moderator");
   message.isStreamer = message.userInfo.isBroadcaster;
-  if (message.isStreamer) message.isMod = true;
+  if (message.isStreamer || message.isLeadMod) message.isMod = true;
   message.isVip = message.userInfo.isVip;
   message.isFirstMsg = message.isFirst;
   message.isSub = message.userInfo.isSubscriber;
