@@ -305,16 +305,15 @@ class Utils {
 
   async manageLongResponse(content, sendOnlyLink = false) {
     const gist = await fb.api.github.createGist(content);
-    const gist_url = gist.gist_url;
     // const raw_url = gist.raw_url;
-    const gistLen = gist_url.length;
+    const gistLen = gist.length;
     const maxContentLength = 480 - gistLen - 10;
     // limit the response to 500 characters, including the gist, add gist link to end of it
     const truncatedContent = content.substring(0, maxContentLength);
-    const response = `${truncatedContent}... ${gist_url}`;
+    const response = `${truncatedContent}... ${gist}`;
     console.log(response);
 
-    return sendOnlyLink ? gist_url : response;
+    return sendOnlyLink ? gist : response;
   }
 
   checkRegex(content, channelName, message = null) {
