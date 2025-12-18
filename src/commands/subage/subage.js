@@ -21,7 +21,10 @@ async function getSubAge(user, channel) {
       subType = "Prime";
     } else if (data.subscriptionType === "gift") {
       const subTier = data.subscriptionTier;
-      subType = `de Presente Tier ${subTier}`;
+      const subGifterPart = data.subscriptionGifter
+        ? `oferecido por ${data.subscriptionGifter}`
+        : "";
+      subType = `de Presente Tier ${subTier} ${subGifterPart}`;
     }
 
     // if has streak, add it to the output
@@ -97,7 +100,9 @@ Apenas !subage: O bot vai responder com a quantidade de tempo que o usuário que
 !subage @usuário: O bot vai responder com a quantidade de tempo que o usuário que executou o comando é sub do canal que foi fornecido
 
 !subage @usuário1 @usuário2: O bot vai responder com a quantidade de tempo que o @usuário1 é sub do @usuário2`;
-subAgeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
+subAgeCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
+  .split(path.sep)
+  .pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   subAgeCommand,

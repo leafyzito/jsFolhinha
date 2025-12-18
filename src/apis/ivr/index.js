@@ -92,6 +92,7 @@ class IvrApi {
     const endsAt = data.meta?.endsAt ?? null;
     const subscriptionType = data.meta?.type ?? null;
     const subscriptionTier = data.meta?.tier ?? null;
+    const subscriptionGifter = data.meta?.giftMeta?.gifter?.displayName;
 
     return {
       isActiveSub,
@@ -101,6 +102,7 @@ class IvrApi {
       endsAt,
       subscriptionType,
       subscriptionTier,
+      subscriptionGifter,
       user: data.user,
       channel: data.channel,
       followedAt: data.followedAt ?? null,
