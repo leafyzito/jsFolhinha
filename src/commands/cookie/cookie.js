@@ -534,6 +534,12 @@ const cookieCommand = async (message) => {
       };
     }
 
+    if (stealTarget.toLowerCase() === process.env.BOT_USERNAME.toLowerCase()) {
+      return {
+        reply: `Para ow Stare`,
+      };
+    }
+
     if (stealTarget.toLowerCase() == "random") {
       // Get all users except yourself and Folhinhabot (BOT_USERID)
       const allCookies = await fb.db.get(
