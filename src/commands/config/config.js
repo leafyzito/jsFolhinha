@@ -129,6 +129,30 @@ const configCommand = async (message) => {
       };
     }
   }
+
+  // MARKER: emote streak
+  if (["emotestreak", "emote"].includes(configTarget)) {
+    const currState = (
+      await fb.db.get("config", {
+        channelId: message.channelID,
+      })
+    ).emoteStreak;
+    await fb.db.update(
+      "config",
+      { channelId: message.channelID },
+      { $set: { emoteStreak: !currState } }
+    );
+
+    if (!currState) {
+      return {
+        reply: `Eu agora vou anunciar quando uma streak de emotes acontecer ✅`,
+      };
+    } else {
+      return {
+        reply: `Eu agora NÃO vou anunciar quando uma streak de emotes acontecer ❌`,
+      };
+    }
+  }
 };
 
 configCommand.commandName = "config";
@@ -152,7 +176,9 @@ Caso queira que o bot apenas funcione quando o canal estiver offline, pode usar 
 Usar o comando !config offline alterna entre o estado ativado e desativado. Por padrão, esta função está desativada
 
 Este comandos podem ser executados apenas pelo streamer ou os moderadores do canal`;
-configCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
+configCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
+  .split(path.sep)
+  .pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   configCommand,

@@ -355,6 +355,7 @@ class Utils {
       channelId: channelId,
       prefix: "!",
       offlineOnly: false,
+      emoteStreak: false,
       isPaused: false,
       disabledCommands: [],
       devBanCommands: [],

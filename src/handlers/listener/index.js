@@ -5,10 +5,9 @@ const {
 const { afkUserListener } = require("./afk.js");
 const { reminderListener } = require("./reminder.js");
 const { updateUserListener } = require("./update-user.js");
+const { emoteStreakListener } = require("./emote-streak.js");
 
 function listenerHandler(message) {
-  // Database caching is handled automatically, no need to wait for local cache loading
-
   notifyDevMentionListener(message).catch((err) => {
     console.log(`Error in notify dev mention listener: ${err}`);
     fb.discord.log(`* Error in notify dev mention listener: ${err}`);
@@ -26,6 +25,11 @@ function listenerHandler(message) {
   // if (process.env.NODE_ENV !== "prod") {
   //   return;
   // }
+
+  emoteStreakListener(message).catch((err) => {
+    console.log(`Error in emote streak listener: ${err}`);
+    fb.discord.log(`* Error in emote streak listener: ${err}`);
+  });
 
   afkUserListener(message).catch((err) => {
     console.log(`Error in afk listener: ${err}`);
