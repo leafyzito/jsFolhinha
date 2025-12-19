@@ -62,6 +62,7 @@ module.exports = async function onMessage(channel, username, text, message) {
   message.isFirstMsg = message.isFirst;
   message.isSub = message.userInfo.isSubscriber;
   message.isAdmin = process.env.ADMIN_USERIDS.includes(message.senderUserID);
+  message.originalArgs = message.originalMessageText.split(" ");
   message.args = message.messageText.split(" ");
 
   // check message waiters

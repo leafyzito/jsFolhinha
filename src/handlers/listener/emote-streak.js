@@ -13,6 +13,7 @@ async function getEmoteInMsg(channelName, args) {
 }
 
 const emoteStreakListener = async (message) => {
+  console.log(message.originalArgs);
   if (await shouldSkipMessage(message.channelName)) {
     return;
   }
@@ -35,7 +36,10 @@ const emoteStreakListener = async (message) => {
   }
 
   const streakData = emoteStreaks[message.channelName];
-  const emoteUsed = await getEmoteInMsg(message.channelName, message.args);
+  const emoteUsed = await getEmoteInMsg(
+    message.channelName,
+    message.originalArgs
+  );
 
   if (emoteUsed) {
     if (streakData.lastWasEmoteMsg && streakData.emote === emoteUsed) {
