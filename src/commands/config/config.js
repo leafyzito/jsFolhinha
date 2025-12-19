@@ -12,7 +12,7 @@ function getCommandObjectByAlias(alias) {
 const configCommand = async (message) => {
   if (message.args.length === 1) {
     return {
-      reply: `Se estiver com dúvidas sobre o comando config, acesse https://folhinhabot.com/comandos/config 😁`,
+      reply: `Acesse https://folhinhabot.com/dashboard para uma forma mais fácil e intuitiva de mudar as configurações do bot`,
     };
   }
 
@@ -163,7 +163,9 @@ configCommand.cooldownType = "channel";
 configCommand.permissions = ["mod", "admin"];
 configCommand.flags = ["always"];
 configCommand.whisperable = false;
-configCommand.description = `Mude algumas confugurações do bot para o chat atual
+configCommand.description = `Mude algumas configurações do bot para o chat atual
+Para uma forma mais intuitiva de mudar as configurações do bot, veja o Dashboard no site
+
 Caso queira trocar o prefixo do bot, pode usar o comando !config prefixo {prefixo}, sendo a lista de prefixos válidos:
 ?&%+*-=|@#$~\\_,;<>
 • Exemplo: !config prefixo ? - Muda o prefixo do bot para "?"
@@ -174,6 +176,9 @@ Caso deseje desativar algum comando no chat, pode usar !config ban {comando} ou 
 
 Caso queira que o bot apenas funcione quando o canal estiver offline, pode usar o comando !config offline
 Usar o comando !config offline alterna entre o estado ativado e desativado. Por padrão, esta função está desativada
+
+Se quiser que o bot anuncie quando houver um streak de emotes, use o comando !config emotestreak
+Usar o comando !config emotestreak alterna entre o estado ativado e desativado. Por padrão, esta função está desativada
 
 Este comandos podem ser executados apenas pelo streamer ou os moderadores do canal`;
 configCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
