@@ -147,30 +147,73 @@ const cookieCommand = async (message) => {
       };
     }
 
-    const targetUser = message.args[2]?.replace(/^@/, "");
-    if (!targetUser) {
+    let giftTarget = message.args[2]?.replace(/^@/, "");
+    let targetUserID;
+
+    if (!giftTarget) {
       return {
         reply: `Use o formato: ${message.prefix}cookie gift <usuário>`,
       };
     }
 
-    if (targetUser.toLowerCase() === message.senderUsername.toLowerCase()) {
+    if (giftTarget.toLowerCase() === message.senderUsername.toLowerCase()) {
       return {
         reply: `Você não pode oferecer cookies para si mesmo Stare`,
       };
     }
 
-    const targetUserID = (await fb.api.helix.getUserByUsername(targetUser))?.id;
+    // Apply "random" selection logic, like in steal
+    if (giftTarget.toLowerCase() == "random") {
+      // Get all users except yourself and Folhinhabot (BOT_USERID)
+      // Filter out sender and bot directly in the query
+      const allCookies = await fb.db.get(
+        "cookie",
+        {
+          userId: {
+            $nin: [message.senderUserID, process.env.BOT_USERID],
+          },
+        },
+        true
+      );
+      if (!allCookies || allCookies.length == 0) {
+        return {
+          reply: `Não existe ninguém para oferecer? @${process.env.DEV_USERNAME}`,
+        };
+      }
+      // Pick one at random
+      const randomUser = fb.utils.randomChoice(allCookies);
+      if (!randomUser) {
+        return {
+          reply: `Erro ao escolher um usuário aleatório para presentear. @${process.env.DEV_USERNAME}`,
+        };
+      }
+
+      const giftTargetUserInfo = await fb.api.helix.getUserByID(
+        randomUser.userId
+      );
+      if (!giftTargetUserInfo) {
+        return {
+          reply: `Erro ao escolher um usuário aleatório para presentear. Tente novamente. (@${process.env.DEV_USERNAME})`,
+        };
+      }
+
+      targetUserID = giftTargetUserInfo.id;
+      giftTarget = giftTargetUserInfo.displayName;
+    }
+
     if (!targetUserID) {
-      return {
-        reply: `Esse usuário não existe`,
-      };
+      targetUserID = (await fb.api.helix.getUserByUsername(giftTarget))?.id;
+      if (!targetUserID) {
+        return {
+          reply: `Esse usuário não existe`,
+        };
+      }
     }
 
     const targetUserCookieStats = await loadUserCookieStats(targetUserID);
     if (!targetUserCookieStats) {
       return {
-        reply: `${targetUser} ainda não foi registrado (nunca usou ${message.prefix}cd)`,
+        reply: `${giftTarget} ainda não foi registrado (nunca usou ${message.prefix}cd)`,
       };
     }
 
@@ -201,7 +244,7 @@ const cookieCommand = async (message) => {
       "🎁🍪"
     );
     return {
-      reply: `Você ofereceu um cookie para ${targetUser} ${emote}`,
+      reply: `Você ofereceu um cookie para ${giftTarget} ${emote}`,
     };
   }
 
@@ -321,6 +364,7 @@ const cookieCommand = async (message) => {
       };
     }
 
+    // MARKER: top cookies
     const topUsers = await fb.db.get("cookie", {
       userId: { $ne: "925782584" },
     });
@@ -411,6 +455,8 @@ const cookieCommand = async (message) => {
         "PogChamp"
       );
       reply += `você apostou 1 cookie e ganhou 10 cookies! ${emote}`;
+      reply += ` [+9 ⇒ ${userCookieStats.total + 9}]`;
+
       await fb.db.update(
         "cookie",
         { userId: message.senderUserID },
@@ -428,6 +474,8 @@ const cookieCommand = async (message) => {
       slotResults[1] === slotResults[2]
     ) {
       reply += `você apostou 1 cookie e ganhou 3 cookies!`;
+      reply += ` [+2 ⇒ ${userCookieStats.total + 2}]`;
+
       await fb.db.update(
         "cookie",
         { userId: message.senderUserID },
@@ -447,6 +495,8 @@ const cookieCommand = async (message) => {
       );
       // reply += `você apostou 1 cookie e ficou sem ele... (adicionado ao jackpot ⇒ ${currentJackpot[0].total + 1}) ${emote}`;
       reply += `você apostou 1 cookie e ficou sem ele... ${emote}`;
+      reply += ` [-1 ⇒ ${userCookieStats.total - 1}]`;
+
       await fb.db.update(
         "cookie",
         { userId: message.senderUserID },
@@ -470,7 +520,8 @@ const cookieCommand = async (message) => {
 
   // MARKER: steal
   if (["roubar", "steal"].includes(targetCommand)) {
-    const stealTarget = message.args[2]?.replace(/^@/, "") || null;
+    let stealTarget = message.args[2]?.replace(/^@/, "") || null;
+    let stealTargetUserID;
     if (!stealTarget) {
       return {
         reply: `Use o formato ${message.prefix}cookie roubar <usuário>`,
@@ -483,36 +534,69 @@ const cookieCommand = async (message) => {
       };
     }
 
-    const targetUserID = (await fb.api.helix.getUserByUsername(stealTarget))
-      ?.id;
-    if (!targetUserID) {
-      return {
-        reply: `Esse usuário não existe`,
-      };
+    if (stealTarget.toLowerCase() == "random") {
+      // Get all users except yourself and Folhinhabot (BOT_USERID)
+      const allCookies = await fb.db.get(
+        "cookie",
+        {
+          userId: {
+            $nin: [message.senderUserID, process.env.BOT_USERID],
+          },
+        },
+        true
+      );
+      if (!allCookies || allCookies.length == 0) {
+        return {
+          reply: `Não existe ninguém com cookies? @${process.env.DEV_USERNAME}`,
+        };
+      }
+      // Pick one at random
+      const randomUser = fb.utils.randomChoice(allCookies);
+      if (!randomUser) {
+        return {
+          reply: `Erro ao escolher um usuário aleatório para roubar. @${process.env.DEV_USERNAME}`,
+        };
+      }
+
+      const stealTargetUserInfo = await fb.api.helix.getUserByID(
+        randomUser.userId
+      );
+      if (!stealTargetUserInfo) {
+        return {
+          reply: `Erro ao escolher um usuário aleatório para roubar. Tente novamente. (@${process.env.DEV_USERNAME}`,
+        };
+      }
+
+      stealTargetUserID = stealTargetUserInfo.id;
+      stealTarget = stealTargetUserInfo.displayName;
+    }
+
+    if (!stealTargetUserID) {
+      stealTargetUserID = (await fb.api.helix.getUserByUsername(stealTarget))
+        ?.id;
+      if (!stealTargetUserID) {
+        return {
+          reply: `Esse usuário não existe`,
+        };
+      }
     }
 
     const userCookieStats = await loadUserCookieStats(message.senderUserID);
-    if (!userCookieStats || userCookieStats.total < 1) {
-      return {
-        reply: `Você não tem cookies suficientes para tentar um roubo.`,
-      };
-    }
-
     if (userCookieStats.stolenToday) {
       return {
         reply: `Você já roubou alguém hoje. Espere ${getTimeUntilNext9AM()} para poder roubar alguém novamente ⌛`,
       };
     }
 
-    const targetCookieStats = await loadUserCookieStats(targetUserID);
-    if (!targetCookieStats || targetCookieStats.total < 1) {
+    const targetCookieStats = await loadUserCookieStats(stealTargetUserID);
+    if (!targetCookieStats) {
       const emote = await fb.emotes.getEmoteFromList(
         message.channelName,
         fb.emotes.sadEmotes,
         ":("
       );
       return {
-        reply: `${stealTarget} não tem cookies para roubar ${emote}`,
+        reply: `${stealTarget} nunca começou uma coleção de cookies ${emote}`,
       };
     }
 
@@ -523,7 +607,7 @@ const cookieCommand = async (message) => {
         ":("
       );
       return {
-        reply: `${stealTarget} já foi roubado hoje, então não tem mais o que roubar ${emote}`,
+        reply: `${stealTarget} já foi roubado hoje, então não tem mais o que roubar por hoje ${emote}`,
       };
     }
 
@@ -571,19 +655,19 @@ const cookieCommand = async (message) => {
         `Você quase roubou um cookie de ${stealTarget} mas se assustou com um ${fb.utils.randomChoice(
           spookyAnimals
         )} e perdeu 2 cookies [-2 ⇒ ${(
-          userCookieStats.total - Math.min(2, userCookieStats.total)
+          userCookieStats.total - userCookieStats.total
         ).toLocaleString("fr-FR")}] 🍪`,
       ],
       bothLose: [
         `Você ia roubar um cookie de ${stealTarget} mas acabou chocando contra ele e os cookies dos dois se quebraram [-1 pra ambos ⇒ ${(
-          userCookieStats.total - Math.min(1, userCookieStats.total)
+          userCookieStats.total - userCookieStats.total
         ).toLocaleString("fr-FR")} | ${(
-          targetCookieStats.total - Math.min(1, targetCookieStats.total)
+          targetCookieStats.total - targetCookieStats.total
         ).toLocaleString("fr-FR")}] 🍪`,
       ],
       ambush: [
         `Você ia roubar um cookie de ${stealTarget} mas ele estava preparado para emboscar você e lhe roubou 1 cookie [-1, +1 para o alvo ⇒ ${(
-          userCookieStats.total - Math.min(1, userCookieStats.total)
+          userCookieStats.total - userCookieStats.total
         ).toLocaleString("fr-FR")} | ${(
           targetCookieStats.total + 1
         ).toLocaleString("fr-FR")}] 🍪`,
@@ -600,7 +684,7 @@ const cookieCommand = async (message) => {
 
     if (resultType === "criticalSuccess") {
       // Rouba 2 do target
-      cookiesStolen = Math.min(2, targetCookieStats.total);
+      cookiesStolen = targetCookieStats.total;
       await fb.db.update(
         "cookie",
         { userId: message.senderUserID },
@@ -613,7 +697,7 @@ const cookieCommand = async (message) => {
       );
       await fb.db.update(
         "cookie",
-        { userId: targetUserID },
+        { userId: stealTargetUserID },
         {
           $set: {
             total: targetCookieStats.total - cookiesStolen,
@@ -637,7 +721,7 @@ const cookieCommand = async (message) => {
       );
       await fb.db.update(
         "cookie",
-        { userId: targetUserID },
+        { userId: stealTargetUserID },
         {
           $set: {
             total: targetCookieStats.total - 1,
@@ -659,7 +743,7 @@ const cookieCommand = async (message) => {
       );
       await fb.db.update(
         "cookie",
-        { userId: targetUserID },
+        { userId: stealTargetUserID },
         {
           $set: {
             gotStolen: 0,
@@ -669,7 +753,7 @@ const cookieCommand = async (message) => {
       );
     } else if (resultType === "criticalFailure") {
       // Perde 2 cookies, se tiver
-      cookiesLost = Math.min(2, userCookieStats.total);
+      cookiesLost = userCookieStats.total;
       await fb.db.update(
         "cookie",
         { userId: message.senderUserID },
@@ -682,8 +766,8 @@ const cookieCommand = async (message) => {
       );
     } else if (resultType === "bothLose") {
       // Ambos perdem 1
-      userLost = Math.min(1, userCookieStats.total);
-      targetLost = Math.min(1, targetCookieStats.total);
+      userLost = userCookieStats.total;
+      targetLost = targetCookieStats.total;
       await fb.db.update(
         "cookie",
         { userId: message.senderUserID },
@@ -696,7 +780,7 @@ const cookieCommand = async (message) => {
       );
       await fb.db.update(
         "cookie",
-        { userId: targetUserID },
+        { userId: stealTargetUserID },
         {
           $set: {
             total: targetCookieStats.total - targetLost,
@@ -707,7 +791,7 @@ const cookieCommand = async (message) => {
       );
     } else if (resultType === "ambush") {
       // Emboscado pelo target: perde 1, target ganha 1
-      userLost = Math.min(1, userCookieStats.total);
+      userLost = userCookieStats.total;
       await fb.db.update(
         "cookie",
         { userId: message.senderUserID },
@@ -720,7 +804,7 @@ const cookieCommand = async (message) => {
       );
       await fb.db.update(
         "cookie",
-        { userId: targetUserID },
+        { userId: stealTargetUserID },
         {
           $set: {
             total: targetCookieStats.total + userLost,
@@ -752,11 +836,11 @@ cookieCommand.description = `!Cookie diario/daily: Receba um cookie. O comando p
 
 !Cookie open: Abra um dos seus cookies para receber uma poderosa mensagem de reflexão
 
-!Cookie gift/give: Ofereça um dos seus cookies a outro usuário. Uma vez presenteado, poderá presentear novamente no próximo ciclo do cookie diário
+!Cookie gift/give: Ofereça um dos seus cookies a outro usuário (ou "random"). Uma vez presenteado, poderá presentear novamente no próximo ciclo do cookie diário
 
 !Cookie slot: Aposte um dos seus cookies e tenha a chance de ganhar 3 ou 10 cookies. Poderá apostar novamente no próximo ciclo do cookie diário
 
-!Cookie roubar: Roube cookies de um usuário. Pode apenas roubar e ser roubado 1 vez por ciclo de cookie diário
+!Cookie roubar: Roube cookies de um usuário (ou "random"). Pode apenas roubar e ser roubado 1 vez por ciclo de cookie diário
 
 !Cookie show: Exibe estatísticas de cookies. Quando não mencionado um usuário, exibirá as estatísticas de quem realizou o comando.
 

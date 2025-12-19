@@ -1,9 +1,7 @@
+const dailyCookieResetTask = require("../../tasks/dailyCookieReset");
+
 const resetCdCommand = async () => {
-  await fb.db.updateMany(
-    "cookie",
-    {},
-    { $set: { claimedToday: false, giftedToday: false, usedSlot: false } }
-  );
+  await dailyCookieResetTask();
 
   return {
     reply: `Cookies resetados 👍`,

@@ -44,9 +44,9 @@ const cookieDiarioCommand = async (message) => {
     }
   );
   return {
-    reply: `Você resgatou seu cookie diário e agora tem ${
+    reply: `Você resgatou seu cookie diário e agora tem ${(
       userCookieStats.total + 1
-    } cookies! 🍪 ${stolenExtraString}`,
+    ).toLocaleString("fr-FR")} cookies! 🍪 ${stolenExtraString}`,
   };
 };
 
