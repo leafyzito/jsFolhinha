@@ -1,12 +1,15 @@
 const { shouldSkipMessage } = require("./middleware");
 
-const emoteStreaks = {}; // tracks consecutive emote messages per channel
+const emoteStreaks = {};
 
-// Helper: checks if a string is only emotes (Twitch/BTTV/FFZ/7TV sets + Unicode emotes)
-async function checkEmoteMsg(channelName, args) {
+async function getEmoteInMsg(channelName, args) {
   const allEmotes = (await fb.emotes.getChannelEmotes(channelName)) || [];
-  const emoteWord = args[0];
-  return allEmotes.includes(emoteWord);
+  for (const word of args) {
+    if (allEmotes.includes(word)) {
+      return word;
+    }
+  }
+  return null;
 }
 
 const emoteStreakListener = async (message) => {
@@ -32,10 +35,9 @@ const emoteStreakListener = async (message) => {
   }
 
   const streakData = emoteStreaks[message.channelName];
-  const isEmoteMsg = await checkEmoteMsg(message.channelName, message.args);
-  const emoteUsed = isEmoteMsg ? message.args[0] : null;
+  const emoteUsed = await getEmoteInMsg(message.channelName, message.args);
 
-  if (isEmoteMsg) {
+  if (emoteUsed) {
     if (streakData.lastWasEmoteMsg && streakData.emote === emoteUsed) {
       streakData.count += 1;
     } else {
