@@ -15,11 +15,22 @@ const cookieDiarioCommand = async (message) => {
   }
 
   if (userCookieStats.claimedToday) {
-    const timeLeftString = getTimeUntilNext9AM();
-
     return {
-      reply: `Você já resgatou o seu cookie diário hoje. Volte em ${timeLeftString} para resgatar o seu cookie diário novamente ⌛`,
+      reply: `Você já resgatou o seu cookie diário hoje. Volte em ${getTimeUntilNext9AM()} para resgatar o seu cookie diário novamente ⌛`,
     };
+  }
+
+  // check if got stolen
+  let stolenExtraString = "";
+  if (userCookieStats.gotStolenBy != null) {
+    const stealerUsername = (
+      await fb.api.helix.getUserByID(userCookieStats.gotStolenBy)
+    )?.displayName;
+    if (userCookieStats.gotStolen == 0) {
+      stolenExtraString += ` ${stealerUsername} tentou roubar você mas não sucedeu ⚠️`;
+    } else {
+      stolenExtraString += ` Durante a noite, ${stealerUsername} roubou ${userCookieStats.gotStolen} cookies seus! ⚠️`;
+    }
   }
 
   await fb.db.update(
@@ -35,7 +46,7 @@ const cookieDiarioCommand = async (message) => {
   return {
     reply: `Você resgatou seu cookie diário e agora tem ${
       userCookieStats.total + 1
-    } cookies! 🍪`,
+    } cookies! 🍪 ${stolenExtraString}`,
   };
 };
 
@@ -47,7 +58,9 @@ cookieDiarioCommand.cooldownType = "user";
 cookieDiarioCommand.whisperable = true;
 cookieDiarioCommand.description =
   "Uso: !cd; Resposta esperada: Você resgatou seu cookie diário e agora tem {cookies}";
-cookieDiarioCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
+cookieDiarioCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
+  .split(path.sep)
+  .pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   cookieDiarioCommand,

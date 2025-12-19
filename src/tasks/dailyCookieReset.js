@@ -10,6 +10,9 @@ async function dailyCookieResetTask() {
         claimedToday: false,
         giftedToday: false,
         usedSlot: false,
+        stolenToday: false,
+        gotStolen: 0,
+        gotStolenBy: null,
       },
     }
   );
