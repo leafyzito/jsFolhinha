@@ -3,7 +3,7 @@
  * Simple factory for creating rate limiters
  */
 
-const RateLimiter = require("./RateLimiter");
+const RateLimiter = require("./rate-limiter");
 const config = require("./config");
 
 /**

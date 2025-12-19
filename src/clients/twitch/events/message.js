@@ -1,5 +1,5 @@
 const { commandHandler, listenerHandler } = require("../../../handlers");
-const { sanitizeText } = require("../../../utils/sanitizeText");
+const { sanitizeText } = require("../../../utils/sanitize-text");
 
 // const duplicateMessages = [];
 // function handleDuplicateMessages(message) {

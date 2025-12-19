@@ -1,4 +1,4 @@
-const dailyCookieResetTask = require("../../tasks/dailyCookieReset");
+const dailyCookieResetTask = require("../../tasks/daily-cookie-reset");
 
 const resetCdCommand = async () => {
   await dailyCookieResetTask();

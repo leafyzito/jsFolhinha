@@ -15,7 +15,7 @@ async function initializeUtilities() {
   return { utils, emotes, db, log };
 }
 async function initializeAuthProvider() {
-  const AuthProvider = require("../clients/twitch/authProvider");
+  const AuthProvider = require("../clients/twitch/auth-provider");
   const authProvider = new AuthProvider();
   await authProvider.init();
   return authProvider;

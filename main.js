@@ -2,7 +2,7 @@
 require("dotenv").config();
 
 // IMPORTS
-const { fetchData } = require("./src/utils/gotWrapper");
+const { fetchData } = require("./src/utils/got-wrapper");
 const { loadCommands } = require("./src/commands/commandsList");
 const { loadReminders } = require("./src/handlers/listener/reminder");
 
@@ -98,7 +98,7 @@ async function initializeApp() {
     startAllTasks();
 
     // Start api server
-    const apiServer = require("./src/utils/apiServer");
+    const apiServer = require("./src/utils/api-server");
     fb.apiServer = new apiServer();
     fb.apiServer.start();
 

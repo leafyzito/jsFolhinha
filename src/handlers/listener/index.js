@@ -4,7 +4,7 @@ const {
 } = require("./mention.js");
 const { afkUserListener } = require("./afk.js");
 const { reminderListener } = require("./reminder.js");
-const { updateUserListener } = require("./updateUser.js");
+const { updateUserListener } = require("./update-user.js");
 
 function listenerHandler(message) {
   // Database caching is handled automatically, no need to wait for local cache loading

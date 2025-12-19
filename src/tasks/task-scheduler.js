@@ -1,7 +1,7 @@
-const petAttentionTask = require("./petAttention");
-const fetchPendingJoins = require("./fetchPendingJoins");
+const petAttentionTask = require("./pet-attention-warn");
+const fetchPendingJoins = require("./fetch-pending-joins");
 // const rejoinDisconnectedChannels = require("./rejoinDisconnectedChannels");
-const updateDiscordPresence = require("./updateDiscordPresence");
+const updateDiscordPresence = require("./update-discord-presence");
 
 function startPetTask() {
   setInterval(() => petAttentionTask(), 60_000);

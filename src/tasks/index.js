@@ -1,5 +1,5 @@
 // scheduled in main.js
-const dailyCookieResetTask = require("./dailyCookieReset");
+const dailyCookieResetTask = require("./daily-cookie-reset");
 
 // recurring tasks
 const {
@@ -7,7 +7,7 @@ const {
   startFetchPendingJoinsTask,
   // startRejoinDisconnectedChannelsTask,
   startDiscordPresenceTask,
-} = require("./taskScheduler");
+} = require("./task-scheduler");
 
 // Function to start all recurring tasks
 const startAllTasks = () => {
