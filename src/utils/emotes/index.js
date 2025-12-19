@@ -26,7 +26,7 @@ class Emotes {
     try {
       const sevenTvEmotes = [];
       const url = `https://7tv.io/v3/users/twitch/${channelId}`;
-      const response = await fb.got(url);
+      const response = await fb.got(url, { timeout: 5000 });
 
       if (!response) {
         return sevenTvEmotes;
@@ -54,7 +54,7 @@ class Emotes {
     try {
       const bttvEmotes = [];
       const url = `https://api.betterttv.net/3/cached/users/twitch/${channelId}`;
-      const response = await fb.got(url);
+      const response = await fb.got(url, { timeout: 5000 });
 
       if (!response) {
         return bttvEmotes;
@@ -78,7 +78,7 @@ class Emotes {
     try {
       const ffzEmotes = [];
       const url = `https://api.frankerfacez.com/v1/room/id/${channelId}`;
-      const response = await fb.got(url);
+      const response = await fb.got(url, { timeout: 5000 });
 
       if (!response) {
         return ffzEmotes;
