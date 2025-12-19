@@ -13,7 +13,6 @@ async function getEmoteInMsg(channelName, args) {
 }
 
 const emoteStreakListener = async (message) => {
-  console.log(message.originalArgs);
   if (await shouldSkipMessage(message.channelName)) {
     return;
   }
