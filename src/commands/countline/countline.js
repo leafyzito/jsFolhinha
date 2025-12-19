@@ -46,7 +46,7 @@ const countlineCommand = async (message) => {
         // Find user info from the batch result
         const userInfo = userInfos.find((user) => user.id === chatter.user_id);
         const username = userInfo
-          ? userInfo.display_name || userInfo.login
+          ? userInfo.displayName || userInfo.login
           : `User${chatter.user_id}`;
 
         reply += `${i + 1}º ${username}: (${parseInt(
