@@ -1,9 +1,8 @@
 const { shouldSkipMessage } = require("./middleware");
 
 const emoteStreaks = {};
+const lastAnnouncementTime = {};
 
-// Helper to format streak duration (compact, just elapsed time)
-// If only seconds, show up to 3 decimal places for milliseconds (e.g., 1.123s)
 function formatStreakDuration(startedAt, endedAt) {
   if (!startedAt || !endedAt) return "";
   const ms = Math.abs(endedAt - startedAt);
@@ -18,7 +17,6 @@ function formatStreakDuration(startedAt, endedAt) {
   if (hours > 0) units.push(`${hours}h`);
   if (minutes > 0) units.push(`${minutes}m`);
   if (units.length === 0) {
-    // Only seconds: show decimals if ms > 0
     units.push(`${secondsTotal.toFixed(3).replace(/\.?0+$/, "")}s`);
   } else if (seconds > 0) {
     units.push(`${seconds}s`);
@@ -39,6 +37,14 @@ function announceStreak(channelName, streakData) {
     streakData.startedAt &&
     streakData.endedAt
   ) {
+    const now = Date.now();
+    const lastAnnounce = lastAnnouncementTime[channelName] || 0;
+    const cooldownMs = 5000;
+
+    if (now - lastAnnounce < cooldownMs) {
+      return;
+    }
+
     const durationStr = formatStreakDuration(
       streakData.startedAt,
       streakData.endedAt
@@ -47,6 +53,7 @@ function announceStreak(channelName, streakData) {
       channelName,
       `${streakData.count}x ${streakData.emote} streak! (Durou: ${durationStr})`
     );
+    lastAnnouncementTime[channelName] = now;
   }
 }
 
