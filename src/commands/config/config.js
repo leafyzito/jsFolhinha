@@ -153,6 +153,10 @@ const configCommand = async (message) => {
       };
     }
   }
+
+  return {
+    reply: `Acesse https://folhinhabot.com/dashboard para uma forma mais fácil e intuitiva de mudar as configurações do bot`,
+  };
 };
 
 configCommand.commandName = "config";
