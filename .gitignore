@@ -4,6 +4,7 @@ channels.txt
 node_modules
 commands.json
 .vscode
+db-backups
 
 apps/twitchClipper/clips/*
 apps/twitchClipper/previews/*
