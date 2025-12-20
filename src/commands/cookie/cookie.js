@@ -661,19 +661,19 @@ const cookieCommand = async (message) => {
         `Você quase roubou um cookie de ${stealTarget} mas se assustou com um ${fb.utils.randomChoice(
           spookyAnimals
         )} e perdeu 2 cookies [-2 ⇒ ${(
-          userCookieStats.total - userCookieStats.total
+          userCookieStats.total - 2
         ).toLocaleString("fr-FR")}] 🍪`,
       ],
       bothLose: [
         `Você ia roubar um cookie de ${stealTarget} mas acabou chocando contra ele e os cookies dos dois se quebraram [-1 pra ambos ⇒ ${(
-          userCookieStats.total - userCookieStats.total
+          userCookieStats.total - 1
         ).toLocaleString("fr-FR")} | ${(
-          targetCookieStats.total - targetCookieStats.total
+          targetCookieStats.total - 1
         ).toLocaleString("fr-FR")}] 🍪`,
       ],
       ambush: [
         `Você ia roubar um cookie de ${stealTarget} mas ele estava preparado para emboscar você e lhe roubou 1 cookie [-1, +1 para o alvo ⇒ ${(
-          userCookieStats.total - userCookieStats.total
+          userCookieStats.total - 1
         ).toLocaleString("fr-FR")} | ${(
           targetCookieStats.total + 1
         ).toLocaleString("fr-FR")}] 🍪`,
@@ -685,12 +685,10 @@ const cookieCommand = async (message) => {
     // Track amounts stolen and per outcome for updating db fields
     let cookiesStolen = 0;
     let cookiesLost = 0;
-    let userLost = 0;
-    let targetLost = 0;
 
     if (resultType === "criticalSuccess") {
       // Rouba 2 do target
-      cookiesStolen = targetCookieStats.total;
+      cookiesStolen = 2;
       await fb.db.update(
         "cookie",
         { userId: message.senderUserID },
@@ -720,7 +718,7 @@ const cookieCommand = async (message) => {
         { userId: message.senderUserID },
         {
           $set: {
-            total: userCookieStats.total + 1,
+            total: userCookieStats.total + cookiesStolen,
             stolenToday: true,
           },
         }
@@ -730,8 +728,8 @@ const cookieCommand = async (message) => {
         { userId: stealTargetUserID },
         {
           $set: {
-            total: targetCookieStats.total - 1,
-            gotStolen: 1,
+            total: targetCookieStats.total - cookiesStolen,
+            gotStolen: cookiesStolen,
             gotStolenBy: message.senderUserID,
           },
         }
@@ -758,8 +756,8 @@ const cookieCommand = async (message) => {
         }
       );
     } else if (resultType === "criticalFailure") {
-      // Perde 2 cookies, se tiver
-      cookiesLost = userCookieStats.total;
+      // Perde 2 cookies
+      cookiesLost = 2;
       await fb.db.update(
         "cookie",
         { userId: message.senderUserID },
@@ -772,14 +770,13 @@ const cookieCommand = async (message) => {
       );
     } else if (resultType === "bothLose") {
       // Ambos perdem 1
-      userLost = userCookieStats.total;
-      targetLost = targetCookieStats.total;
+      cookiesLost = 1;
       await fb.db.update(
         "cookie",
         { userId: message.senderUserID },
         {
           $set: {
-            total: userCookieStats.total - userLost,
+            total: userCookieStats.total - cookiesLost,
             stolenToday: true,
           },
         }
@@ -789,21 +786,21 @@ const cookieCommand = async (message) => {
         { userId: stealTargetUserID },
         {
           $set: {
-            total: targetCookieStats.total - targetLost,
-            gotStolen: targetLost,
+            total: targetCookieStats.total - cookiesLost,
+            gotStolen: cookiesLost,
             gotStolenBy: message.senderUserID,
           },
         }
       );
     } else if (resultType === "ambush") {
       // Emboscado pelo target: perde 1, target ganha 1
-      userLost = userCookieStats.total;
+      cookiesStolen = 1;
       await fb.db.update(
         "cookie",
         { userId: message.senderUserID },
         {
           $set: {
-            total: userCookieStats.total - userLost,
+            total: userCookieStats.total - cookiesStolen,
             stolenToday: true,
           },
         }
@@ -813,7 +810,7 @@ const cookieCommand = async (message) => {
         { userId: stealTargetUserID },
         {
           $set: {
-            total: targetCookieStats.total + userLost,
+            total: targetCookieStats.total + cookiesStolen,
             gotStolen: 0,
             gotStolenBy: message.senderUserID,
           },
