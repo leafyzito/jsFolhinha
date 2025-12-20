@@ -2,35 +2,70 @@ const { shouldSkipMessage } = require("./middleware");
 
 const emoteStreaks = {};
 
+// Helper to format streak duration (compact, just elapsed time)
+// If only seconds, show up to 3 decimal places for milliseconds (e.g., 1.123s)
+function formatStreakDuration(startedAt, endedAt) {
+  if (!startedAt || !endedAt) return "";
+  const ms = Math.abs(endedAt - startedAt);
+
+  const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((ms / (1000 * 60)) % 60);
+  const secondsTotal = ms / 1000;
+  const seconds = Math.floor(secondsTotal) % 60;
+  const units = [];
+  if (days > 0) units.push(`${days}d`);
+  if (hours > 0) units.push(`${hours}h`);
+  if (minutes > 0) units.push(`${minutes}m`);
+  if (units.length === 0) {
+    // Only seconds: show decimals if ms > 0
+    units.push(`${secondsTotal.toFixed(3).replace(/\.?0+$/, "")}s`);
+  } else if (seconds > 0) {
+    units.push(`${seconds}s`);
+  }
+  return units.join(" ");
+}
+
 async function getEmoteInMsg(channelName, args) {
   const allEmotes = (await fb.emotes.getChannelEmotes(channelName)) || [];
-  for (const word of args) {
-    if (allEmotes.includes(word)) {
-      return word;
-    }
+  return args.find((word) => allEmotes.includes(word)) || null;
+}
+
+function announceStreak(channelName, streakData) {
+  if (
+    streakData.lastWasEmoteMsg &&
+    streakData.count >= 3 &&
+    streakData.emote &&
+    streakData.startedAt &&
+    streakData.endedAt
+  ) {
+    const durationStr = formatStreakDuration(
+      streakData.startedAt,
+      streakData.endedAt
+    );
+    fb.log.send(
+      channelName,
+      `${streakData.count}x ${streakData.emote} streak! (Durou: ${durationStr})`
+    );
   }
-  return null;
 }
 
 const emoteStreakListener = async (message) => {
-  if (await shouldSkipMessage(message.channelName)) {
-    return;
-  }
+  if (await shouldSkipMessage(message.channelName)) return;
 
   const channelData = await fb.db.get("config", {
     channelId: message.channelID,
   });
 
-  if (!channelData.emoteStreak) {
-    return;
-  }
+  if (!channelData.emoteStreak) return;
 
-  // Initialize streak data for the channel if not present
   if (!emoteStreaks[message.channelName]) {
     emoteStreaks[message.channelName] = {
       count: 0,
       lastWasEmoteMsg: false,
       emote: null,
+      startedAt: null,
+      endedAt: null,
     };
   }
 
@@ -39,44 +74,38 @@ const emoteStreakListener = async (message) => {
     message.channelName,
     message.originalArgs
   );
+  const msgTimestamp = message.serverTimestamp || Date.now();
 
   if (emoteUsed) {
-    if (streakData.lastWasEmoteMsg && streakData.emote === emoteUsed) {
+    const continuingStreak =
+      streakData.lastWasEmoteMsg && streakData.emote === emoteUsed;
+
+    if (continuingStreak) {
       streakData.count += 1;
+      streakData.endedAt = msgTimestamp;
     } else {
-      // Streak is broken by a different emote
-      // If previous streak is valid, announce before resetting
       if (
         streakData.lastWasEmoteMsg &&
-        streakData.count >= 3 &&
-        streakData.emote &&
-        streakData.emote !== emoteUsed
+        streakData.emote !== emoteUsed &&
+        streakData.count >= 3
       ) {
-        fb.log.send(
-          message.channelName,
-          `${streakData.count}x ${streakData.emote} streak! `
-        );
+        announceStreak(message.channelName, streakData);
       }
       streakData.count = 1;
       streakData.emote = emoteUsed;
+      streakData.startedAt = msgTimestamp;
+      streakData.endedAt = msgTimestamp;
     }
     streakData.lastWasEmoteMsg = true;
   } else {
-    // Non-emote message breaks the streak
-    if (
-      streakData.lastWasEmoteMsg &&
-      streakData.count >= 3 &&
-      streakData.emote
-    ) {
-      fb.log.send(
-        message.channelName,
-        `${streakData.count}x ${streakData.emote} streak! `
-      );
+    if (streakData.count >= 3) {
+      announceStreak(message.channelName, streakData);
     }
-    // Reset streak tracking
     streakData.count = 0;
     streakData.lastWasEmoteMsg = false;
     streakData.emote = null;
+    streakData.startedAt = null;
+    streakData.endedAt = null;
   }
 };
 
