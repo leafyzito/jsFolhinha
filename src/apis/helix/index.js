@@ -393,7 +393,7 @@ class HelixApi {
       Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
     };
     const response = await fb.got(
-      `${this.baseUrl}/clips?broadcaster_id=${channelId}&has_delay=true`,
+      `${this.baseUrl}/clips?broadcaster_id=${channelId}`,
       { method: "POST", headers }
     );
 
