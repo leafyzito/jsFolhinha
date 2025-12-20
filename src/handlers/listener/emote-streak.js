@@ -82,23 +82,24 @@ const emoteStreakListener = async (message) => {
 
     if (continuingStreak) {
       streakData.count += 1;
-      streakData.endedAt = msgTimestamp;
     } else {
       if (
         streakData.lastWasEmoteMsg &&
         streakData.emote !== emoteUsed &&
         streakData.count >= 3
       ) {
+        streakData.endedAt = msgTimestamp;
         announceStreak(message.channelName, streakData);
       }
       streakData.count = 1;
       streakData.emote = emoteUsed;
       streakData.startedAt = msgTimestamp;
-      streakData.endedAt = msgTimestamp;
+      streakData.endedAt = null;
     }
     streakData.lastWasEmoteMsg = true;
   } else {
-    if (streakData.count >= 3) {
+    if (streakData.count >= 3 && streakData.lastWasEmoteMsg) {
+      streakData.endedAt = msgTimestamp;
       announceStreak(message.channelName, streakData);
     }
     streakData.count = 0;
