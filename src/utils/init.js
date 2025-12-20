@@ -1,5 +1,8 @@
 // Initialization utilities for the application
 const { ApiClient } = require("@twurple/api");
+const { exec } = require("child_process");
+const { promisify } = require("util");
+const execAsync = promisify(exec);
 
 async function initializeUtilities() {
   const Utils = require("./utils/index");
@@ -56,6 +59,24 @@ async function initializeClickHouse() {
   return clickhouse;
 }
 
+async function restartProcess(reason) {
+  try {
+    if (fb && fb.discord) {
+      fb.discord.importantLog &&
+        fb.discord.importantLog(
+          `* Reiniciando devido a: ${
+            reason || "motivo desconhecido (check logs)"
+          }`
+        );
+    }
+    // give time for any log to be sent
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await execAsync("docker compose -p folhinha restart");
+  } catch (error) {
+    console.error("Error restarting container from init.js:", error);
+  }
+}
+
 async function getChannelsToJoin() {
   // Ensure fb object is available
   if (!fb || !fb.api || !fb.api.helix || !fb.db) {
@@ -85,9 +106,16 @@ async function getChannelsToJoin() {
   }
 
   try {
-    // Get channel IDs from database (use cache for initialization)
     const configs = await fb.db.get("config", {});
-    const channelIdsToJoin = configs.map((channel) => channel.channelId);
+    const channelIdsToJoin = Array.isArray(configs)
+      ? configs.map((channel) => channel.channelId)
+      : [];
+
+    if (!channelIdsToJoin || channelIdsToJoin.length === 0) {
+      await restartProcess("Failed to get channelIdsToJoin");
+      // returning empty array just in case
+      return [];
+    }
 
     // Get channel names from user IDs using the helix API
     const channelsToJoin = await fb.api.helix.getManyUsersByUserIDs(
@@ -109,7 +137,14 @@ async function getTokenData() {
     }
 
     // Get all auth tokens from the database
-    const authTokens = await fb.db.get("auth", {});
+    const authTokensRaw = await fb.db.get("auth", {});
+    const authTokens = Array.isArray(authTokensRaw) ? authTokensRaw : [];
+
+    if (!authTokens || authTokens.length === 0) {
+      await restartProcess("Failed to get authTokens");
+      // In case restart fails, return empty array
+      return [];
+    }
 
     // Map database fields to the format expected by addUsers method
     return authTokens.map((token) => ({
