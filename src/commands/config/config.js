@@ -154,6 +154,54 @@ const configCommand = async (message) => {
     }
   }
 
+  // MARKER: thank follows
+  if (["thankfollows", "thankfollow"].includes(configTarget)) {
+    const currState = (
+      await fb.db.get("config", {
+        channelId: message.channelID,
+      })
+    ).thankFollows;
+    await fb.db.update(
+      "config",
+      { channelId: message.channelID },
+      { $set: { thankFollows: !currState } }
+    );
+
+    if (!currState) {
+      return {
+        reply: `Eu agora vou agradecer quando alguém seguir o canal ✅`,
+      };
+    } else {
+      return {
+        reply: `Eu agora NÃO vou agradecer quando alguém seguir o canal ❌`,
+      };
+    }
+  }
+
+  // MARKER: thank subs
+  if (["thanksubs", "thanksub"].includes(configTarget)) {
+    const currState = (
+      await fb.db.get("config", {
+        channelId: message.channelID,
+      })
+    ).thankSubs;
+    await fb.db.update(
+      "config",
+      { channelId: message.channelID },
+      { $set: { thankSubs: !currState } }
+    );
+
+    if (!currState) {
+      return {
+        reply: `Eu agora vou agradecer quando alguém se inscrever no canal ✅`,
+      };
+    } else {
+      return {
+        reply: `Eu agora NÃO vou agradecer quando alguém se inscrever no canal ❌`,
+      };
+    }
+  }
+
   return {
     reply: `Acesse https://folhinhabot.com/dashboard para uma forma mais fácil e intuitiva de mudar as configurações do bot`,
   };
@@ -183,6 +231,12 @@ Usar o comando !config offline alterna entre o estado ativado e desativado. Por 
 
 Se quiser que o bot anuncie quando houver um streak de emotes, use o comando !config emotestreak
 Usar o comando !config emotestreak alterna entre o estado ativado e desativado. Por padrão, esta função está desativada
+
+Se quiser que o bot agradeça quando alguém seguir o canal, use o comando !config thankfollows
+Usar o comando !config thankfollows alterna entre o estado ativado e desativado. Por padrão, esta função está desativada
+
+Se quiser que o bot agradeça quando alguém se inscrever no canal, use o comando !config thanksubs
+Usar o comando !config thanksubs alterna entre o estado ativado e desativado. Por padrão, esta função está desativada
 
 Este comandos podem ser executados apenas pelo streamer ou os moderadores do canal`;
 configCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname

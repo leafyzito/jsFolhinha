@@ -81,6 +81,23 @@ async function initializeEventSubListener() {
     }
   }
 
+  // Populate liveChannels with current stream status on startup
+  try {
+    const userIds = channelsToJoin.map((channel) => channel.id);
+    if (userIds.length > 0) {
+      const liveStreams = await fb.api.helix.getStreamsByUserIds(userIds);
+      for (const stream of liveStreams) {
+        eventSub.liveChannels.set(stream.channelId, stream);
+      }
+      console.log(
+        `* Populated liveChannels with ${liveStreams.length} currently live streams`
+      );
+    }
+  } catch (error) {
+    console.error(`Error populating liveChannels on startup: ${error.message}`);
+    // Don't fail initialization - EventSub will catch up with real-time events
+  }
+
   return eventSub;
 }
 

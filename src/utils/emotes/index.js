@@ -1,13 +1,14 @@
 class Emotes {
   constructor() {
     this.cachedEmotes = {};
-    this.sadEmotes = ["sadge", "sadgecry", "sadcat", "sadchamp"];
+    this.sadEmotes = ["sadge", "sadgecry", "sadcat", "sadchamp", "saj"];
     this.happyEmotes = [
       "peepoglad",
       "gladge",
       "peepohappy",
       "peepohappyu",
       "happycat",
+      "smile",
     ];
     this.pogEmotes = [
       "pog",
@@ -20,6 +21,7 @@ class Emotes {
       "nowaycat",
       "eba",
     ];
+    this.loveEmotes = ["peepolove", "xqcl", "love", "lovecat", "catlove"];
   }
 
   async get7tv(channelId) {

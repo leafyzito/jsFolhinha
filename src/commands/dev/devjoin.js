@@ -33,7 +33,7 @@ const devJoinChannelCommand = async (message) => {
     );
     fb.log.send(
       targetChannel,
-      `${emote} Oioi! Fui convidado para me juntar aqui! Para saber mais sobre mim, pode usar !ajuda ou !comandos`
+      `${emote} Oioi! Fui convidado para me juntar aqui! Para saber mais sobre mim, pode usar !ajuda ou !comandos. Para os moderadores, acessem https://folhinhabot.com/dashboard para explorar as configurações do bot`
     );
   }
 

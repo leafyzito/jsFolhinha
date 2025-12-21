@@ -2,6 +2,17 @@ require("dotenv").config();
 const { EventSubWsListener } = require("@twurple/eventsub-ws");
 const { ApiClient } = require("@twurple/api");
 
+// Import event handlers
+const handleStreamOnline = require("./eventsub-events/stream-online");
+const handleStreamOffline = require("./eventsub-events/stream-offline");
+const handleModeratorAdd = require("./eventsub-events/moderator-add");
+const handleModeratorRemove = require("./eventsub-events/moderator-remove");
+const handleVipAdd = require("./eventsub-events/vip-add");
+const handleVipRemove = require("./eventsub-events/vip-remove");
+const handleChannelFollow = require("./eventsub-events/channel-follow");
+const handleChannelSubscription = require("./eventsub-events/channel-subscription");
+const handleChannelSubscriptionGift = require("./eventsub-events/channel-subscription-gift");
+
 class EventSubListener {
   constructor() {
     // Initialize EventSubWsListener with the apiClient
@@ -49,36 +60,136 @@ class EventSubListener {
     try {
       // Subscribe to stream online event (no scopes required)
       this.listener.onStreamOnline(broadcasterId, (event) => {
-        this._handleStreamOnline(event);
+        handleStreamOnline(event, this.liveChannels);
       });
 
       // Subscribe to stream offline event (no scopes required)
       this.listener.onStreamOffline(broadcasterId, (event) => {
-        this._handleStreamOffline(event);
+        handleStreamOffline(event, this.liveChannels);
       });
 
       // Check if broadcaster token is available for mod/VIP events
       const broadcasterToken = await this._getBroadcasterToken(broadcasterId);
+
       if (broadcasterToken) {
-        // Subscribe to moderator add event (requires moderation:read scope)
-        this.listener.onChannelModeratorAdd(broadcasterId, (event) => {
-          this._handleModeratorAdd(event);
-        });
+        // Subscribe to moderator events (requires moderation:read scope)
+        const hasModScope = await this._hasScope(
+          broadcasterId,
+          "moderation:read"
+        );
+        if (hasModScope) {
+          try {
+            this.listener.onChannelModeratorAdd(broadcasterId, (event) => {
+              handleModeratorAdd(event);
+            });
 
-        // Subscribe to moderator remove event (requires moderation:read scope)
-        this.listener.onChannelModeratorRemove(broadcasterId, (event) => {
-          this._handleModeratorRemove(event);
-        });
+            this.listener.onChannelModeratorRemove(broadcasterId, (event) => {
+              handleModeratorRemove(event);
+            });
+          } catch (error) {
+            console.error(
+              `Error subscribing to moderator events for ${broadcasterId}:`,
+              error
+            );
+          }
+        }
 
-        // Subscribe to VIP add event (requires channel:manage:vips scope)
-        this.listener.onChannelVipAdd(broadcasterId, (event) => {
-          this._handleVipAdd(event);
-        });
+        // Subscribe to VIP events (requires channel:manage:vips scope)
+        const hasVipManageScope = await this._hasScope(
+          broadcasterId,
+          "channel:manage:vips"
+        );
+        if (hasVipManageScope) {
+          try {
+            this.listener.onChannelVipAdd(broadcasterId, (event) => {
+              handleVipAdd(event);
+            });
 
-        // Subscribe to VIP remove event (requires channel:manage:vips scope)
-        this.listener.onChannelVipRemove(broadcasterId, (event) => {
-          this._handleVipRemove(event);
-        });
+            this.listener.onChannelVipRemove(broadcasterId, (event) => {
+              handleVipRemove(event);
+            });
+          } catch (error) {
+            console.error(
+              `Error subscribing to VIP events for ${broadcasterId}:`,
+              error
+            );
+          }
+        }
+
+        // Subscribe to follower events (requires moderator:read:followers scope)
+        try {
+          const hasFollowerScope = await this._hasScope(
+            broadcasterId,
+            "moderator:read:followers"
+          );
+
+          if (hasFollowerScope) {
+            // If broadcaster authorized the app, use broadcaster's ID for both fields
+            // (streamers are moderators of their own channel)
+            this.listener.onChannelFollow(
+              broadcasterId,
+              broadcasterId,
+              (event) => {
+                handleChannelFollow(event);
+              }
+            );
+          } else {
+            // Otherwise, check if bot is a moderator and use bot's user ID
+            const channelConfig = await fb.db.get("config", {
+              channelId: broadcasterId,
+            });
+            const botIsMod = channelConfig?.botIsMod === true;
+            const botUserId = process.env.BOT_USERID;
+
+            if (botIsMod && botUserId) {
+              this.listener.onChannelFollow(
+                broadcasterId,
+                botUserId,
+                (event) => {
+                  handleChannelFollow(event);
+                }
+              );
+            }
+          }
+        } catch (error) {
+          console.error(
+            `Error subscribing to follower events for ${broadcasterId}:`,
+            error
+          );
+        }
+
+        // Subscribe to subscription events (requires channel:read:subscriptions scope)
+        try {
+          const hasSubscriptionScope = await this._hasScope(
+            broadcasterId,
+            "channel:read:subscriptions"
+          );
+
+          if (hasSubscriptionScope) {
+            // Subscribe to new subscriptions
+            this.listener.onChannelSubscription(broadcasterId, (event) => {
+              handleChannelSubscription(event);
+            });
+
+            // Subscribe to resubscriptions (with messages)
+            this.listener.onChannelSubscriptionMessage(
+              broadcasterId,
+              (event) => {
+                handleChannelSubscription(event);
+              }
+            );
+
+            // Subscribe to gifted subscriptions
+            this.listener.onChannelSubscriptionGift(broadcasterId, (event) => {
+              handleChannelSubscriptionGift(event);
+            });
+          }
+        } catch (error) {
+          console.error(
+            `Error subscribing to subscription events for ${broadcasterId}:`,
+            error
+          );
+        }
       } else {
         console.log(
           `* Subscribed to stream events for ${broadcasterId}, but skipping mod/VIP events (broadcaster token not available)`
@@ -126,84 +237,178 @@ class EventSubListener {
     try {
       // Check if broadcaster token is available
       const broadcasterToken = await this._getBroadcasterToken(broadcasterId);
+
       if (!broadcasterToken) {
         console.log(
           `* Skipping initial status check for ${broadcasterId}: broadcaster token not available`
+        );
+        // Set botIsMod and botIsVip to false as default when token is not available
+        await fb.db.update(
+          "config",
+          { channelId: broadcasterId },
+          {
+            $set: {
+              botIsMod: false,
+              botIsVip: false,
+            },
+          }
         );
         return;
       }
 
       // Check if bot is a moderator
       let botIsMod = false;
-      try {
-        // Create broadcaster-specific ApiClient to use broadcaster's token
-        const broadcasterApiClient = new ApiClient({
-          authProvider: fb.authProvider.provider,
-          userId: broadcasterId,
-        });
-        const botUserId = process.env.BOT_USERID;
+      const hasModScope = await this._hasScope(
+        broadcasterId,
+        "moderation:read"
+      );
 
-        // Handle paginated results
-        let cursor = null;
-        do {
-          const result = await broadcasterApiClient.moderation.getModerators(
-            broadcasterId,
-            { after: cursor }
-          );
-          if (result && result.data) {
-            for (const mod of result.data) {
-              if (mod.userId === botUserId) {
-                botIsMod = true;
-                break;
+      if (hasModScope) {
+        try {
+          // Create broadcaster-specific ApiClient to use broadcaster's token
+          const broadcasterApiClient = new ApiClient({
+            authProvider: fb.authProvider.provider,
+            userId: broadcasterId,
+          });
+          const botUserId = process.env.BOT_USERID;
+
+          // Handle paginated results
+          let cursor = null;
+          do {
+            const result = await broadcasterApiClient.moderation.getModerators(
+              broadcasterId,
+              { after: cursor }
+            );
+
+            if (result && result.data) {
+              for (const mod of result.data) {
+                if (mod.userId === botUserId) {
+                  botIsMod = true;
+                  break;
+                }
               }
             }
+            if (botIsMod) break;
+            cursor = result?.pagination?.cursor || null;
+          } while (cursor);
+
+          // Fallback: If bot not found in moderator list, check using bot's own token
+          // This uses the user:read:moderated_channels scope to check from bot's perspective
+          if (!botIsMod && hasModScope) {
+            try {
+              const botHasModeratedChannelsScope = await this._hasScope(
+                botUserId,
+                "user:read:moderated_channels"
+              );
+
+              if (botHasModeratedChannelsScope) {
+                // Create bot-specific ApiClient to use bot's token
+                const botApiClient = new ApiClient({
+                  authProvider: fb.authProvider.provider,
+                  userId: botUserId,
+                });
+
+                // Check if broadcaster's channel is in bot's moderated channels
+                let cursor = null;
+                do {
+                  const result =
+                    await botApiClient.moderation.getModeratedChannels(
+                      botUserId,
+                      {
+                        after: cursor,
+                      }
+                    );
+
+                  if (result && result.data) {
+                    for (const channel of result.data) {
+                      // Check multiple possible property names for broadcaster ID
+                      const channelBroadcasterId =
+                        channel.broadcasterId ||
+                        channel.broadcaster_id ||
+                        channel.id ||
+                        channel.userId ||
+                        channel.user_id;
+
+                      if (
+                        channelBroadcasterId === broadcasterId ||
+                        String(channelBroadcasterId) === String(broadcasterId)
+                      ) {
+                        botIsMod = true;
+                        break;
+                      }
+                    }
+                  }
+                  if (botIsMod) break;
+                  cursor = result?.pagination?.cursor || null;
+                } while (cursor);
+              }
+
+              // Final fallback: If broadcaster has moderation:read scope and bot still not found,
+              // assume bot is mod (broadcaster authorized bot with mod permissions)
+              if (!botIsMod && hasModScope) {
+                botIsMod = true;
+              }
+            } catch (error) {
+              console.error(
+                `Error in fallback moderator check for ${broadcasterId}:`,
+                error
+              );
+            }
           }
-          if (botIsMod) break;
-          cursor = result?.pagination?.cursor || null;
-        } while (cursor);
-      } catch (error) {
-        console.error(
-          `Error checking moderator status for ${broadcasterId}:`,
-          error
-        );
+        } catch (error) {
+          console.error(
+            `Error checking moderator status for ${broadcasterId}:`,
+            error
+          );
+        }
       }
 
       // Check if bot is a VIP
       let botIsVip = false;
-      try {
-        // Create broadcaster-specific ApiClient to use broadcaster's token
-        const broadcasterApiClient = new ApiClient({
-          authProvider: fb.authProvider.provider,
-          userId: broadcasterId,
-        });
-        const botUserId = process.env.BOT_USERID;
+      const hasVipReadScope = await this._hasScope(
+        broadcasterId,
+        "channel:read:vips"
+      );
 
-        // Handle paginated results - ensure we check all pages
-        let cursor = null;
-        let hasMorePages = true;
-        do {
-          const result = await broadcasterApiClient.channels.getVips(
-            broadcasterId,
-            cursor ? { after: cursor } : {}
-          );
-          if (result && result.data) {
-            for (const vip of result.data) {
-              // Check multiple possible property names for user ID
-              // VIP objects might have userId, user.id, or id property
-              const vipUserId = vip.userId || vip.user?.id || vip.id;
-              if (vipUserId === botUserId) {
-                botIsVip = true;
-                break;
+      if (hasVipReadScope) {
+        try {
+          // Create broadcaster-specific ApiClient to use broadcaster's token
+          const broadcasterApiClient = new ApiClient({
+            authProvider: fb.authProvider.provider,
+            userId: broadcasterId,
+          });
+          const botUserId = process.env.BOT_USERID;
+
+          // Handle paginated results - ensure we check all pages
+          let cursor = null;
+          let hasMorePages = true;
+          do {
+            const result = await broadcasterApiClient.channels.getVips(
+              broadcasterId,
+              cursor ? { after: cursor } : {}
+            );
+            if (result && result.data) {
+              for (const vip of result.data) {
+                // Check multiple possible property names for user ID
+                // VIP objects might have userId, user.id, or id property
+                const vipUserId = vip.userId || vip.user?.id || vip.id;
+                if (vipUserId === botUserId) {
+                  botIsVip = true;
+                  break;
+                }
               }
             }
-          }
-          if (botIsVip) break;
-          // Get cursor for next page
-          cursor = result?.pagination?.cursor || null;
-          hasMorePages = !!cursor;
-        } while (hasMorePages);
-      } catch (error) {
-        console.error(`Error checking VIP status for ${broadcasterId}:`, error);
+            if (botIsVip) break;
+            // Get cursor for next page
+            cursor = result?.pagination?.cursor || null;
+            hasMorePages = !!cursor;
+          } while (hasMorePages);
+        } catch (error) {
+          console.error(
+            `Error checking VIP status for ${broadcasterId}:`,
+            error
+          );
+        }
       }
 
       // Update config collection
@@ -245,52 +450,13 @@ class EventSubListener {
     }
   }
 
-  async _handleStreamOnline(event) {
+  async _hasScope(broadcasterId, requiredScope) {
     try {
-      const broadcasterId = event.broadcasterId;
-      const broadcasterName = event.broadcasterDisplayName;
-      const broadcasterLogin =
-        event.broadcasterUserLogin || broadcasterName.toLowerCase();
-      const startedAt = event.startedAt
-        ? new Date(event.startedAt)
-        : new Date();
-
-      // Store live status
-      this.liveChannels.set(broadcasterId, {
-        channelId: broadcasterId,
-        channelName: broadcasterLogin,
-        displayName: broadcasterName,
-        isLive: true,
-        startedAt: startedAt,
-      });
-
-      console.log(`* ${broadcasterName} (${broadcasterId}) went live`);
-
-      // Log to Discord if available
-      if (fb.discord && fb.discord.log) {
-        fb.discord.log(`* ${broadcasterName} went live`);
-      }
-    } catch (error) {
-      console.error("Error handling stream online event:", error);
-    }
-  }
-
-  async _handleStreamOffline(event) {
-    try {
-      const broadcasterId = event.broadcasterId;
-      const broadcasterName = event.broadcasterDisplayName;
-
-      // Remove live status
-      this.liveChannels.delete(broadcasterId);
-
-      console.log(`* ${broadcasterName} (${broadcasterId}) went offline`);
-
-      // Log to Discord if available
-      if (fb.discord && fb.discord.log) {
-        fb.discord.log(`* ${broadcasterName} went offline`);
-      }
-    } catch (error) {
-      console.error("Error handling stream offline event:", error);
+      const scopes =
+        fb.authProvider.provider.getCurrentScopesForUser(broadcasterId);
+      return scopes && scopes.includes(requiredScope);
+    } catch {
+      return false;
     }
   }
 
@@ -317,106 +483,6 @@ class EventSubListener {
   // Get all live channels
   getAllLiveChannels() {
     return Array.from(this.liveChannels.values());
-  }
-
-  async _handleModeratorAdd(event) {
-    try {
-      const broadcasterId = event.broadcasterId;
-      const userId = event.userId;
-      const botUserId = process.env.BOT_USERID;
-
-      // Only update if the bot was added as moderator
-      if (userId === botUserId) {
-        await fb.db.update(
-          "config",
-          { channelId: broadcasterId },
-          { $set: { botIsMod: true } }
-        );
-
-        if (fb.discord && fb.discord.log) {
-          fb.discord.log(
-            `* Bot was added as moderator in channel ${broadcasterId}`
-          );
-        }
-      }
-    } catch (error) {
-      console.error("Error handling moderator add event:", error);
-    }
-  }
-
-  async _handleModeratorRemove(event) {
-    try {
-      const broadcasterId = event.broadcasterId;
-      const userId = event.userId;
-      const botUserId = process.env.BOT_USERID;
-
-      // Only update if the bot was removed as moderator
-      if (userId === botUserId) {
-        await fb.db.update(
-          "config",
-          { channelId: broadcasterId },
-          { $set: { botIsMod: false } }
-        );
-
-        if (fb.discord && fb.discord.log) {
-          fb.discord.log(
-            `* Bot was removed as moderator in channel ${broadcasterId}`
-          );
-        }
-      }
-    } catch (error) {
-      console.error("Error handling moderator remove event:", error);
-    }
-  }
-
-  async _handleVipAdd(event) {
-    try {
-      const broadcasterId = event.broadcasterId;
-      const userId = event.userId;
-      const botUserId = process.env.BOT_USERID;
-
-      // Only update if the bot was added as VIP
-      if (userId === botUserId) {
-        await fb.db.update(
-          "config",
-          { channelId: broadcasterId },
-          { $set: { botIsVip: true } }
-        );
-
-        console.log(`* Bot was added as VIP in channel ${broadcasterId}`);
-
-        if (fb.discord && fb.discord.log) {
-          fb.discord.log(`* Bot was added as VIP in channel ${broadcasterId}`);
-        }
-      }
-    } catch (error) {
-      console.error("Error handling VIP add event:", error);
-    }
-  }
-
-  async _handleVipRemove(event) {
-    try {
-      const broadcasterId = event.broadcasterId;
-      const userId = event.userId;
-      const botUserId = process.env.BOT_USERID;
-
-      // Only update if the bot was removed as VIP
-      if (userId === botUserId) {
-        await fb.db.update(
-          "config",
-          { channelId: broadcasterId },
-          { $set: { botIsVip: false } }
-        );
-
-        if (fb.discord && fb.discord.log) {
-          fb.discord.log(
-            `* Bot was removed as VIP in channel ${broadcasterId}`
-          );
-        }
-      }
-    } catch (err) {
-      console.error("Error handling VIP remove event:", err);
-    }
   }
 }
 

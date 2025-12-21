@@ -207,6 +207,78 @@ class HelixApi {
     };
   }
 
+  async getStreamsByUserIds(userIds) {
+    if (!Array.isArray(userIds) || userIds.length === 0) {
+      return [];
+    }
+
+    const headers = {
+      "Client-ID": process.env.BOT_CLIENT_ID,
+      Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
+    };
+
+    // Split userIds into chunks of 100 (Twitch API limit)
+    const chunkSize = 100;
+    const chunks = [];
+    for (let i = 0; i < userIds.length; i += chunkSize) {
+      chunks.push(userIds.slice(i, i + chunkSize));
+    }
+
+    const allStreams = [];
+
+    // Process each chunk
+    for (const chunk of chunks) {
+      try {
+        // Build query string with multiple user_id parameters
+        const userParams = chunk.map((id) => `user_id=${id}`).join("&");
+        let url = `${this.baseUrl}/streams?${userParams}&first=100`;
+
+        // Handle pagination for this chunk
+        let hasMorePages = true;
+        while (hasMorePages) {
+          const response = await fb.got(url, { headers });
+
+          if (!response) {
+            console.error(
+              `Helix API (getStreamsByUserIds): Request failed for chunk`
+            );
+            break;
+          }
+
+          const data = response.data || [];
+          const pagination = response.pagination || {};
+
+          // Process streams from this page
+          for (const stream of data) {
+            if (stream.type === "live") {
+              allStreams.push({
+                channelId: stream.user_id,
+                channelName: stream.user_login,
+                displayName: stream.user_name,
+                isLive: true,
+                startedAt: stream.started_at
+                  ? new Date(stream.started_at)
+                  : new Date(),
+              });
+            }
+          }
+
+          // Check if there are more pages
+          if (pagination.cursor) {
+            url = `${this.baseUrl}/streams?${userParams}&first=100&after=${pagination.cursor}`;
+          } else {
+            hasMorePages = false;
+          }
+        }
+      } catch (error) {
+        console.error(`Error fetching streams for chunk: ${error.message}`);
+        // Continue with other chunks even if one fails
+      }
+    }
+
+    return allStreams;
+  }
+
   // Stream status cache to avoid excessive API calls
   async isStreamOnline(channelName, cacheTimeout = 60) {
     const currentTime = Math.floor(Date.now() / 1000);
