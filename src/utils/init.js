@@ -59,6 +59,31 @@ async function initializeClickHouse() {
   return clickhouse;
 }
 
+async function initializeEventSubListener() {
+  const EventSubListener = require("../clients/twitch/eventsub-listener");
+  const eventSub = new EventSubListener();
+  await eventSub.init();
+
+  // Check initial status and subscribe to events for all connected channels
+  const channelsToJoin = await getChannelsToJoin();
+  for (const channel of channelsToJoin) {
+    const broadcasterId = channel.id;
+    try {
+      // Check initial mod/VIP status
+      await eventSub.checkInitialStatus(broadcasterId);
+      // Subscribe to events
+      await eventSub.subscribeToChannel(broadcasterId);
+    } catch (error) {
+      console.error(
+        `Error setting up EventSub for channel ${channel.login} (${broadcasterId}):`,
+        error
+      );
+    }
+  }
+
+  return eventSub;
+}
+
 async function restartProcess(reason) {
   try {
     if (fb && fb.discord) {
@@ -174,6 +199,7 @@ module.exports = {
   initializeAuthProvider,
   initializeTwitch,
   initializeClickHouse,
+  initializeEventSubListener,
   getChannelsToJoin,
   getTokenData,
 };

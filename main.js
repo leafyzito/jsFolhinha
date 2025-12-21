@@ -78,6 +78,10 @@ async function initializeApp() {
     fb.twitch = await require("./src/utils/init").initializeTwitch();
     console.log("* Twitch client initialized");
 
+    fb.twitch.eventSub =
+      await require("./src/utils/init").initializeEventSubListener();
+    console.log("* EventSub listener initialized");
+
     fb.clickhouse = await require("./src/utils/init").initializeClickHouse();
     console.log("* ClickHouse client initialized");
 

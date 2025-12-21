@@ -147,6 +147,26 @@ class TwitchClient {
     this.anonClient.channelsToJoin.push(...channels);
     await this.joinMultiple(channels);
 
+    // Subscribe to EventSub events for new channels
+    if (fb.twitch && fb.twitch.eventSub) {
+      for (const channelLogin of channels) {
+        try {
+          const channelInfo = await fb.api.helix.getUserByUsername(
+            channelLogin
+          );
+          if (channelInfo && channelInfo.id) {
+            await fb.twitch.eventSub.subscribeToChannel(channelInfo.id);
+            await fb.twitch.eventSub.checkInitialStatus(channelInfo.id);
+          }
+        } catch (error) {
+          console.error(
+            `Error subscribing to EventSub for channel ${channelLogin}:`,
+            error
+          );
+        }
+      }
+    }
+
     return;
   }
 
@@ -169,6 +189,21 @@ class TwitchClient {
     this.anonClient.channelsToJoin = this.anonClient.channelsToJoin.filter(
       (c) => c.toLowerCase() !== channel.toLowerCase()
     );
+
+    // Unsubscribe from EventSub events for this channel
+    if (fb.twitch && fb.twitch.eventSub) {
+      try {
+        const channelInfo = await fb.api.helix.getUserByUsername(channel);
+        if (channelInfo && channelInfo.id) {
+          await fb.twitch.eventSub.unsubscribeFromChannel(channelInfo.id);
+        }
+      } catch (error) {
+        console.error(
+          `Error unsubscribing from EventSub for channel ${channel}:`,
+          error
+        );
+      }
+    }
 
     // part
     await this.anonClient.part(channel);

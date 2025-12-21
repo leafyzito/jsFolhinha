@@ -542,6 +542,32 @@ class Utils {
     }
     return false;
   }
+
+  async isBotMod(channelId) {
+    try {
+      const config = await fb.db.get("config", { channelId: channelId });
+      if (!config) {
+        return false;
+      }
+      return config.botIsMod === true;
+    } catch (error) {
+      console.error(`Error checking bot mod status for ${channelId}:`, error);
+      return false;
+    }
+  }
+
+  async isBotVip(channelId) {
+    try {
+      const config = await fb.db.get("config", { channelId: channelId });
+      if (!config) {
+        return false;
+      }
+      return config.botIsVip === true;
+    } catch (error) {
+      console.error(`Error checking bot VIP status for ${channelId}:`, error);
+      return false;
+    }
+  }
 }
 
 module.exports = Utils;
