@@ -58,6 +58,16 @@ class EventSubListener {
     }
 
     try {
+      // Check if auth row exists in database before attempting subscriptions
+      const authRow = await fb.db.get("auth", { user_id: broadcasterId });
+      if (!authRow) {
+        console.log(
+          `* Skipping EventSub subscriptions for ${broadcasterId}: no auth row in database`
+        );
+        this.subscribedChannels.add(broadcasterId);
+        return; // Skip all subscriptions if no auth row exists
+      }
+
       // Check if broadcaster token is available before subscribing to events
       const broadcasterToken = await this._getBroadcasterToken(broadcasterId);
 
