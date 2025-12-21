@@ -1,4 +1,5 @@
 moderator:manage:banned_users
+moderation:read
 user:manage:whispers
 user:read:whispers
 channel:manage:broadcast

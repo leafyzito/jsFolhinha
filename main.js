@@ -33,6 +33,7 @@ fb.api = {};
 fb.twitch = null;
 fb.discord = null;
 fb.clickhouse = null;
+fb.eventSub = null;
 fb.notifiedUsers = new Set(); // Cache to track users who have been notified about reminders
 fb.commandsList = null;
 
@@ -74,6 +75,10 @@ async function initializeApp() {
     // Initialize clients
     fb.discord = await require("./src/utils/init").initializeDiscord();
     console.log("* Discord client initialized");
+
+    // Initialize EventSub (Twurple WebSocket listener)
+    fb.eventSub = await require("./src/utils/init").initializeEventSub();
+    console.log("* Twurple EventSub WS listener initialized");
 
     fb.twitch = await require("./src/utils/init").initializeTwitch();
     console.log("* Twitch client initialized");

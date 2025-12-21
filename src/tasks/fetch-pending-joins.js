@@ -77,6 +77,13 @@ async function fetchPendingJoins() {
         continue;
       }
 
+      // Try to set up EventSub listeners for this channel (when possible).
+      try {
+        await fb.eventSub?.subscribeForChannel(channelId, channelName);
+      } catch (err) {
+        console.error(`EventSub subscribe failed for ${channelName}:`, err);
+      }
+
       const emote = await fb.emotes.getEmoteFromList(
         channelName,
         ["peepohey", "heyge"],

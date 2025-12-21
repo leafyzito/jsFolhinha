@@ -146,13 +146,26 @@ async function getTokenData() {
       return [];
     }
 
+    const normalizeScopes = (scope) => {
+      if (!scope) return [];
+      if (Array.isArray(scope)) return scope;
+      if (typeof scope === "string") {
+        // allow both space-delimited (oauth standard) and comma-delimited (common in env vars)
+        return scope
+          .split(/[ ,]+/g)
+          .map((s) => s.trim())
+          .filter(Boolean);
+      }
+      return [];
+    };
+
     // Map database fields to the format expected by addUsers method
     return authTokens.map((token) => ({
       userId: token.user_id,
       username: token.username,
       accessToken: token.access_token,
       refreshToken: token.refresh_token,
-      scope: token.scope,
+      scope: normalizeScopes(token.scope),
       expiresIn: token.expires_at
         ? Math.floor((new Date(token.expires_at) - new Date()) / 1000)
         : null,
@@ -166,12 +179,20 @@ async function getTokenData() {
   }
 }
 
+async function initializeEventSub() {
+  const TwitchEventSub = require("../clients/twitch/eventsub");
+  const eventSub = new TwitchEventSub();
+  await eventSub.init();
+  return eventSub;
+}
+
 module.exports = {
   initializeUtilities,
   initializeAPIs,
   initializeApiClient,
   initializeDiscord,
   initializeAuthProvider,
+  initializeEventSub,
   initializeTwitch,
   initializeClickHouse,
   getChannelsToJoin,
