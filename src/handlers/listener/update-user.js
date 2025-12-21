@@ -15,6 +15,42 @@ async function updateLastSeen(message) {
   return;
 }
 
+async function handleExistingConfigUsernameChange(userId, newUsername) {
+  // Get channel config from database and update if applicable
+  const channelConfig = await fb.db.get("config", {
+    channelId: userId,
+  });
+
+  if (channelConfig) {
+    const oldUsername = channelConfig.channel;
+
+    fb.discord.log(
+      `* Updating channel config for ${oldUsername} -> ${newUsername}`
+    );
+    console.log(`Updating channel config for ${oldUsername} -> ${newUsername}`);
+
+    await fb.db.update(
+      "config",
+      { channelId: userId },
+      { $set: { channel: newUsername } }
+    );
+
+    // Handle Twitch client operations for channel changes
+    fb.twitch.part(oldUsername);
+    const joinResult = fb.twitch.join([newUsername]);
+    if (!joinResult) {
+      fb.discord.importantLog(
+        `Error joining ${newUsername} after username change`
+      );
+    }
+
+    fb.log.send(
+      newUsername,
+      `Troca de nick detetada: ${oldUsername} -> ${newUsername}`
+    );
+  }
+}
+
 const updateUserListener = async (message) => {
   if (message.senderUsername === process.env.BOT_USERNAME) {
     return;
@@ -45,39 +81,11 @@ const updateUserListener = async (message) => {
       }
     );
 
-    // Get channel config from database and update if applicable
-    const channelConfig = await fb.db.get("config", {
-      channelId: message.senderUserID,
-    });
-
-    if (channelConfig) {
-      fb.discord.log(
-        `* Updating channel config for ${knownUser.currAlias} -> ${message.senderUsername}`
-      );
-      console.log(
-        `Updating channel config for ${knownUser.currAlias} -> ${message.senderUsername}`
-      );
-
-      await fb.db.update(
-        "config",
-        { channelId: message.senderUserID },
-        { $set: { channel: message.senderUsername } }
-      );
-
-      // Handle Twitch client operations for channel changes
-      fb.twitch.part(knownUser.currAlias);
-      const joinResult = fb.twitch.join([message.senderUsername]);
-      if (!joinResult) {
-        fb.discord.importantLog(
-          `Error joining ${message.senderUsername} after username change`
-        );
-      }
-
-      fb.log.send(
-        message.senderUsername,
-        `Troca de nick detetada: ${knownUser.currAlias} -> ${message.senderUsername}`
-      );
-    }
+    // Handle broadcaster username change if applicable
+    await handleExistingConfigUsernameChange(
+      message.senderUserID,
+      message.senderUsername
+    );
 
     await updateLastSeen(message);
     return;
@@ -108,4 +116,5 @@ const updateUserListener = async (message) => {
 
 module.exports = {
   updateUserListener,
+  handleExistingConfigUsernameChange,
 };

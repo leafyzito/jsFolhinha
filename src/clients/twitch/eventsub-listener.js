@@ -12,6 +12,7 @@ const handleVipRemove = require("./eventsub-events/vip-remove");
 const handleChannelFollow = require("./eventsub-events/channel-follow");
 const handleChannelSubscription = require("./eventsub-events/channel-subscription");
 const handleChannelSubscriptionGift = require("./eventsub-events/channel-subscription-gift");
+const handleUserUpdate = require("./eventsub-events/user-update");
 
 class EventSubListener {
   constructor() {
@@ -81,6 +82,12 @@ class EventSubListener {
         this.listener.onStreamOffline(broadcasterId, (event) => {
           handleStreamOffline(event, this.liveChannels);
         });
+
+        // Subscribe to user update event (requires broadcaster token)
+        this.listener.onUserUpdate(broadcasterId, (event) => {
+          handleUserUpdate(event);
+        });
+
         // Subscribe to moderator events (requires moderation:read scope)
         const hasModScope = await this._hasScope(
           broadcasterId,
