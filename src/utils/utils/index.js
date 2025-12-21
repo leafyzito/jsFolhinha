@@ -545,27 +545,73 @@ class Utils {
 
   async isBotMod(channelId) {
     try {
+      // Check if broadcaster has authenticated
+      const scopes =
+        fb.authProvider.provider.getCurrentScopesForUser(channelId);
+      const hasAuthenticated = scopes && scopes.length > 0;
+
+      if (!hasAuthenticated) {
+        // Broadcaster hasn't authenticated, can't check status
+        return null;
+      }
+
       const config = await fb.db.get("config", { channelId: channelId });
       if (!config) {
+        // Config doesn't exist, status never checked
+        return null;
+      }
+
+      // If value is explicitly false, bot is confirmed not mod
+      if (config.botIsMod === false) {
         return false;
       }
-      return config.botIsMod === true;
+
+      // If value is true, bot is confirmed mod
+      if (config.botIsMod === true) {
+        return true;
+      }
+
+      // Value is undefined or doesn't exist, status never checked
+      return null;
     } catch (error) {
       console.error(`Error checking bot mod status for ${channelId}:`, error);
-      return false;
+      return null;
     }
   }
 
   async isBotVip(channelId) {
     try {
+      // Check if broadcaster has authenticated
+      const scopes =
+        fb.authProvider.provider.getCurrentScopesForUser(channelId);
+      const hasAuthenticated = scopes && scopes.length > 0;
+
+      if (!hasAuthenticated) {
+        // Broadcaster hasn't authenticated, can't check status
+        return null;
+      }
+
       const config = await fb.db.get("config", { channelId: channelId });
       if (!config) {
+        // Config doesn't exist, status never checked
+        return null;
+      }
+
+      // If value is explicitly false, bot is confirmed not VIP
+      if (config.botIsVip === false) {
         return false;
       }
-      return config.botIsVip === true;
+
+      // If value is true, bot is confirmed VIP
+      if (config.botIsVip === true) {
+        return true;
+      }
+
+      // Value is undefined or doesn't exist, status never checked
+      return null;
     } catch (error) {
       console.error(`Error checking bot VIP status for ${channelId}:`, error);
-      return false;
+      return null;
     }
   }
 }
