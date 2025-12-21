@@ -15,8 +15,6 @@ module.exports = async function handleUserUpdate(event) {
       userid: userId,
     });
 
-    console.log(knownUser);
-
     if (knownUser) {
       // Only update if their currAlias is not up to date
       if (knownUser.currAlias !== userLogin) {
