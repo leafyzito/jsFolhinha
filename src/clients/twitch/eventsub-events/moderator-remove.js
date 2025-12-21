@@ -1,6 +1,7 @@
 module.exports = async function handleModeratorRemove(event) {
   try {
     const broadcasterId = event.broadcasterId;
+    const broadcasterName = event.broadcasterDisplayName;
     const userId = event.userId;
     const botUserId = process.env.BOT_USERID;
 
@@ -13,7 +14,7 @@ module.exports = async function handleModeratorRemove(event) {
       );
 
       fb.discord.importantLog(
-        `* Bot was removed as moderator in channel ${broadcasterId}`
+        `* Bot was removed as moderator in channel ${broadcasterName} (${broadcasterId})`
       );
     }
   } catch (error) {

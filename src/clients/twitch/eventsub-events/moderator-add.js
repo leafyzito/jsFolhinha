@@ -1,6 +1,7 @@
 module.exports = async function handleModeratorAdd(event) {
   try {
     const broadcasterId = event.broadcasterId;
+    const broadcasterName = event.broadcasterDisplayName;
     const userId = event.userId;
     const botUserId = process.env.BOT_USERID;
 
@@ -13,7 +14,7 @@ module.exports = async function handleModeratorAdd(event) {
       );
 
       fb.discord.importantLog(
-        `* Bot was added as moderator in channel ${broadcasterId}`
+        `* Bot was added as moderator in channel ${broadcasterName} (${broadcasterId})`
       );
     }
   } catch (error) {
