@@ -1,0 +1,81 @@
+async function checkNewAuthUsers() {
+  try {
+    // Fetch all auth entries from database (force database fetch to bypass cache)
+    const authTokensRaw = await fb.db.get("auth", {}, true);
+
+    if (!authTokensRaw) {
+      return;
+    }
+
+    // Ensure we always work with an array
+    const authTokens = Array.isArray(authTokensRaw)
+      ? authTokensRaw
+      : [authTokensRaw];
+
+    if (authTokens.length === 0) {
+      return;
+    }
+
+    // Get list of users currently in auth provider
+    const usersInProvider = new Set();
+    for (const token of authTokens) {
+      try {
+        const scopes = fb.authProvider.provider.getCurrentScopesForUser(
+          token.user_id
+        );
+        if (scopes && scopes.length > 0) {
+          usersInProvider.add(token.user_id);
+        }
+      } catch {
+        // User not in provider yet, which is fine - we'll add them
+      }
+    }
+
+    // Compare database entries against users already in auth provider
+    let addedCount = 0;
+    let errorCount = 0;
+
+    for (const token of authTokens) {
+      const userId = token.user_id;
+
+      // Skip if user is already in provider
+      if (usersInProvider.has(userId)) {
+        continue;
+      }
+
+      // User is in DB but not in provider - add them
+      try {
+        const result = await fb.authProvider.addUserFromDb(userId);
+        if (result.success) {
+          console.log(`User ${userId} added to auth provider dynamically`);
+          addedCount++;
+        } else {
+          console.error(
+            `Failed to add user ${userId} to auth provider: ${
+              result.error || "Unknown error"
+            }`
+          );
+          errorCount++;
+        }
+      } catch (error) {
+        console.error(`Error processing user ${userId}:`, error);
+        errorCount++;
+        // Continue with other users even if one fails
+      }
+    }
+
+    // Log summary if there was activity
+    if (addedCount > 0 || errorCount > 0) {
+      console.log(
+        `Auth polling complete: ${addedCount} users added, ${errorCount} errors, ${authTokens.length} total checked`
+      );
+    }
+  } catch (error) {
+    console.error("Error in checkNewAuthUsers task:", error);
+    if (fb.discord && fb.discord.logError) {
+      fb.discord.logError(`Error in checkNewAuthUsers task: ${error.message}`);
+    }
+  }
+}
+
+module.exports = checkNewAuthUsers;

@@ -26,6 +26,12 @@ class AuthProvider {
     const tokenDataList = await getTokenData();
 
     for (const tokenData of tokenDataList) {
+      await this.addSingleUser(tokenData);
+    }
+  }
+
+  async addSingleUser(tokenData) {
+    try {
       const {
         userId, // not required, but if not present twurple will get from api later internally
         username, // not required, but useful for intents naming (dealing with users manually later or grouping)
@@ -35,6 +41,17 @@ class AuthProvider {
         expiresIn,
         obtainmentTimestamp,
       } = tokenData;
+
+      // Check if user is already added
+      try {
+        const existingScopes = this.provider.getCurrentScopesForUser(userId);
+        if (existingScopes && existingScopes.length > 0) {
+          // User already exists, Twurple's addUser will update if needed
+          // But we'll still proceed as addUser handles updates gracefully
+        }
+      } catch {
+        // User doesn't exist yet, which is fine - we'll add them
+      }
 
       const newTokenData = {
         accessToken: accessToken,
@@ -46,6 +63,56 @@ class AuthProvider {
       const intents = [`${username}User`]; // [`${username}User`] // if username is available
       userId == process.env.BOT_USERID ? intents.push("chat") : null;
       this.provider.addUser(userId, newTokenData, intents); // no userId: await this.provider.addUserForToken(tokenData);
+
+      return { success: true, userId };
+    } catch (error) {
+      console.error(`Error adding user to auth provider:`, error);
+      if (fb.discord && fb.discord.logError) {
+        fb.discord.logError(
+          `Error adding user to auth provider: ${error.message}`
+        );
+      }
+      return { success: false, userId: tokenData.userId, error: error.message };
+    }
+  }
+
+  async addUserFromDb(userId) {
+    try {
+      // Fetch token data for specific user from database
+      const authToken = await fb.db.get("auth", { user_id: userId }, true);
+
+      if (!authToken) {
+        return {
+          success: false,
+          userId,
+          error: "Auth token not found in database",
+        };
+      }
+
+      // Map database fields to the format expected by addSingleUser
+      const tokenData = {
+        userId: authToken.user_id,
+        username: authToken.username,
+        accessToken: authToken.access_token,
+        refreshToken: authToken.refresh_token,
+        scope: authToken.scope,
+        expiresIn: authToken.expires_at
+          ? Math.floor((new Date(authToken.expires_at) - new Date()) / 1000)
+          : null,
+        obtainmentTimestamp: authToken.created_at
+          ? Math.floor(new Date(authToken.created_at).getTime() / 1000)
+          : null,
+      };
+
+      return await this.addSingleUser(tokenData);
+    } catch (error) {
+      console.error(`Error adding user ${userId} from database:`, error);
+      if (fb.discord && fb.discord.logError) {
+        fb.discord.logError(
+          `Error adding user ${userId} from database: ${error.message}`
+        );
+      }
+      return { success: false, userId, error: error.message };
     }
   }
 

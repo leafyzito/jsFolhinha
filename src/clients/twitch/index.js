@@ -159,6 +159,12 @@ class TwitchClient {
             await fb.twitch.eventSub.checkInitialStatus(channelInfo.id);
           }
         } catch (error) {
+          // Suppress expected "no token found" errors for channels without auth
+          if (error.message && error.message.includes("no token was found")) {
+            // Expected error for channels without broadcaster authentication
+            continue;
+          }
+          // Log other errors
           console.error(
             `Error subscribing to EventSub for channel ${channelLogin}:`,
             error

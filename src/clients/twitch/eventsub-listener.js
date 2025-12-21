@@ -58,20 +58,19 @@ class EventSubListener {
     }
 
     try {
-      // Subscribe to stream online event (no scopes required)
-      this.listener.onStreamOnline(broadcasterId, (event) => {
-        handleStreamOnline(event, this.liveChannels);
-      });
-
-      // Subscribe to stream offline event (no scopes required)
-      this.listener.onStreamOffline(broadcasterId, (event) => {
-        handleStreamOffline(event, this.liveChannels);
-      });
-
-      // Check if broadcaster token is available for mod/VIP events
+      // Check if broadcaster token is available before subscribing to events
       const broadcasterToken = await this._getBroadcasterToken(broadcasterId);
 
       if (broadcasterToken) {
+        // Subscribe to stream online event (requires broadcaster token)
+        this.listener.onStreamOnline(broadcasterId, (event) => {
+          handleStreamOnline(event, this.liveChannels);
+        });
+
+        // Subscribe to stream offline event (requires broadcaster token)
+        this.listener.onStreamOffline(broadcasterId, (event) => {
+          handleStreamOffline(event, this.liveChannels);
+        });
         // Subscribe to moderator events (requires moderation:read scope)
         const hasModScope = await this._hasScope(
           broadcasterId,
@@ -192,7 +191,7 @@ class EventSubListener {
         }
       } else {
         console.log(
-          `* Subscribed to stream events for ${broadcasterId}, but skipping mod/VIP events (broadcaster token not available)`
+          `* Skipping EventSub subscriptions for ${broadcasterId}: broadcaster token not available`
         );
       }
 
