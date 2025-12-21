@@ -1,10 +1,7 @@
 - se mais pessoas contribuirem para o bot e quiserem se tornar um "admin", criar niveis de perms para os dev commands
-- pegar oauth token com scopes corretos on startup, para nao ter que estar a trocar o token every X time
-- pegar events da twitch tipo mudança de nick para fazer o bot reconectar no canal com novo nick na hora da troca de forma correta
-- arranjar forma de saber se o bot é ou não mod do canal onde vai falar, e deixar sempre atualizado, para ter comandos por exemplo !piramide que requer o bot spamar (https://dev.twitch.tv/docs/api/reference/#get-moderators)
 - criar uma db local e parar de usar mongo; o atual sistema de cache de db é estupidamente confuso apesar de funcional, tudo para evitar a lentidão do mongo. would enable que o site pudesse puxar/update info da base de dados sem conflitar com a cache do bot
 
 seria legal mas pode esperar:
 - comandos costumizados, tipo o $alias do supibot, onde o user pode criar um comando tipo: !alias create {nome do comando} {coisas que o comando vai fazer}
 ex: !alias create horapt query time in portugal - a resposta do bot seria o mesmo que executar !query time in portugal. aí o user poderia apenas usar !horapt
-para isso tem que se trocar um pouco a forma como os comandos funcionam, e fazer o comando returnar as respostas mesmo ao invés de chamar a funcao de falar no canal dentro do código do comando
+[pipe-command branch] para isso tem que se trocar um pouco a forma como os comandos funcionam, e fazer o comando returnar as respostas mesmo ao invés de chamar a funcao de falar no canal dentro do código do comando

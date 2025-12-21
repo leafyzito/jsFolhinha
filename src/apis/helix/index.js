@@ -6,6 +6,42 @@ class HelixApi {
     this.userCacheTimeout = 24 * 60 * 60 * 1000; // 24 hour cache timeout
   }
 
+  async _getBotAccessToken() {
+    try {
+      // Check if auth provider is available
+      if (
+        !fb ||
+        !fb.authProvider ||
+        !fb.authProvider.provider ||
+        !process.env.BOT_USERID
+      ) {
+        console.warn(
+          "HelixApi: Auth provider not available, falling back to env variable"
+        );
+        return process.env.BOT_OAUTH_TOKEN || null;
+      }
+
+      // Get token from RefreshingAuthProvider (automatically handles refresh)
+      const tokenData = await fb.authProvider.provider.getAccessTokenForUser(
+        process.env.BOT_USERID
+      );
+
+      if (!tokenData || !tokenData.accessToken) {
+        console.error(
+          "HelixApi: Failed to get bot access token from auth provider, falling back to env variable"
+        );
+        return process.env.BOT_OAUTH_TOKEN || null;
+      }
+
+      return tokenData.accessToken;
+    } catch (error) {
+      console.error(
+        `HelixApi: Error getting bot access token: ${error.message}, falling back to env variable`
+      );
+      return process.env.BOT_OAUTH_TOKEN || null;
+    }
+  }
+
   async getUserByUsername(username) {
     username = username.toLowerCase();
 
@@ -20,9 +56,10 @@ class HelixApi {
     }
 
     // Not in cache, make API request
+    const token = await this._getBotAccessToken();
     const headers = {
       "Client-ID": process.env.BOT_CLIENT_ID,
-      Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
+      Authorization: `Bearer ${token}`,
     };
     const response = await fb.got(`${this.baseUrl}/users?login=${username}`, {
       headers,
@@ -64,9 +101,10 @@ class HelixApi {
   }
 
   async getUserByID(userId) {
+    const token = await this._getBotAccessToken();
     const headers = {
       "Client-ID": process.env.BOT_CLIENT_ID,
-      Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
+      Authorization: `Bearer ${token}`,
     };
     const response = await fb.got(`${this.baseUrl}/users?id=${userId}`, {
       headers,
@@ -110,9 +148,10 @@ class HelixApi {
   }
 
   async getColor(userId) {
+    const token = await this._getBotAccessToken();
     const headers = {
       "Client-ID": process.env.BOT_CLIENT_ID,
-      Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
+      Authorization: `Bearer ${token}`,
     };
     const response = await fb.got(
       `${this.baseUrl}/chat/color?user_id=${userId}`,
@@ -149,9 +188,10 @@ class HelixApi {
   }
 
   async getStream(username) {
+    const token = await this._getBotAccessToken();
     const headers = {
       "Client-ID": process.env.BOT_CLIENT_ID,
-      Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
+      Authorization: `Bearer ${token}`,
     };
     const response = await fb.got(
       `${this.baseUrl}/streams?user_login=${username}`,
@@ -212,9 +252,10 @@ class HelixApi {
       return [];
     }
 
+    const token = await this._getBotAccessToken();
     const headers = {
       "Client-ID": process.env.BOT_CLIENT_ID,
-      Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
+      Authorization: `Bearer ${token}`,
     };
 
     // Split userIds into chunks of 100 (Twitch API limit)
@@ -292,9 +333,10 @@ class HelixApi {
       return this.streamerStatusCache[channelName].status === "live";
     }
 
+    const token = await this._getBotAccessToken();
     const headers = {
       "Client-ID": process.env.BOT_CLIENT_ID,
-      Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
+      Authorization: `Bearer ${token}`,
     };
 
     try {
@@ -337,9 +379,10 @@ class HelixApi {
   }
 
   async timeoutUser(channelId, userId, duration, reason) {
+    const token = await this._getBotAccessToken();
     const headers = {
       "Client-ID": process.env.BOT_CLIENT_ID,
-      Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     };
     const response = await fb.got(
@@ -365,9 +408,10 @@ class HelixApi {
   }
 
   async whisper(whisperTargetId, content) {
+    const token = await this._getBotAccessToken();
     const headers = {
       "Client-ID": process.env.BOT_CLIENT_ID,
-      Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
+      Authorization: `Bearer ${token}`,
     };
     const response = await fb.got(
       `${this.baseUrl}/whispers?from_user_id=${process.env.BOT_USERID}&to_user_id=${whisperTargetId}`,
@@ -398,6 +442,8 @@ class HelixApi {
       return [];
     }
 
+    const token = await this._getBotAccessToken();
+
     // Split userIds into chunks of 100 (Twitch API limit)
     const chunkSize = 100;
     const chunks = [];
@@ -412,7 +458,7 @@ class HelixApi {
       const userIdsToUrl = chunk.join("&id=");
       const headers = {
         "Client-ID": process.env.BOT_CLIENT_ID,
-        Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
+        Authorization: `Bearer ${token}`,
       };
 
       try {
@@ -460,9 +506,10 @@ class HelixApi {
   }
 
   async createClip(channelId) {
+    const token = await this._getBotAccessToken();
     const headers = {
       "Client-ID": process.env.BOT_CLIENT_ID,
-      Authorization: `Bearer ${process.env.BOT_OAUTH_TOKEN}`,
+      Authorization: `Bearer ${token}`,
     };
     const response = await fb.got(
       `${this.baseUrl}/clips?broadcaster_id=${channelId}`,
