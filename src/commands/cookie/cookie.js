@@ -170,7 +170,7 @@ const cookieCommand = async (message) => {
     const randomFlavor = fb.utils.randomChoice(cookieFlavors);
     const emote = await fb.emotes.getEmoteFromList(
       message.channelName,
-      ["tasty, bussing"],
+      ["tasty, bussing", "bussin"],
       "🍪"
     );
 
