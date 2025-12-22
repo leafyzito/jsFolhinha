@@ -115,7 +115,7 @@ async function validateCommandExecution(cooldownDuration, type, message) {
     if (isBotMod === null) {
       fb.log.logAndReply(
         message,
-        `⚠️ Para executar este comando, logue no site https://folhinhabot.com`
+        `⚠️ Este comando requer que o streamer logue no site https://folhinhabot.com`
       );
       return false;
     }
@@ -134,7 +134,7 @@ async function validateCommandExecution(cooldownDuration, type, message) {
     if (isBotVip === null) {
       fb.log.logAndReply(
         message,
-        `⚠️ Para executar este comando, logue no site https://folhinhabot.com`
+        `⚠️ Este comando requer que o streamer logue no site https://folhinhabot.com`
       );
       return false;
     }
