@@ -1,3 +1,5 @@
+const { replaceMessagePlaceholders } = require("./message-helpers");
+
 module.exports = async function handleChannelSubscription(event) {
   try {
     const broadcasterId = event.broadcasterId;
@@ -20,31 +22,62 @@ module.exports = async function handleChannelSubscription(event) {
     });
 
     if (channelConfig && channelConfig.thankSubs && !channelConfig.isPaused) {
+      let message;
+
       if (isGift && gifterDisplayName) {
-        // For gifted subs, thank the gifter
-        fb.log.send(
-          broadcasterLogin,
-          `Obrigado pelo gift sub, ${gifterDisplayName}! 💚`
-        );
+        // For gifted subs, thank the gifter (individual gift, amount is 1)
+        if (
+          channelConfig.customMessages &&
+          channelConfig.customMessages.giftSub
+        ) {
+          message = await replaceMessagePlaceholders(
+            channelConfig.customMessages.giftSub,
+            { gifter: gifterDisplayName, amount: 1 },
+            broadcasterLogin
+          );
+        } else {
+          // Default message
+          message = `Obrigado pelo gift sub, ${gifterDisplayName}! 💚`;
+        }
       } else if (isResubscription) {
         // For resubs, thank the user
         const months = cumulativeMonths || durationMonths || 1;
-        fb.log.send(
-          broadcasterLogin,
-          `Obrigado pelos ${months} mês(es) de sub, ${userDisplayName}! 💚`
-        );
+        if (
+          channelConfig.customMessages &&
+          channelConfig.customMessages.resub
+        ) {
+          message = await replaceMessagePlaceholders(
+            channelConfig.customMessages.resub,
+            { user: userDisplayName, months },
+            broadcasterLogin
+          );
+        } else {
+          // Default message
+          message = `Obrigado pelos ${months} mês(es) de sub, ${userDisplayName}! 💚`;
+        }
       } else {
         // For new subs, thank the user
-        const emote = await fb.emotes.getEmoteFromList(
-          broadcasterLogin,
-          fb.emotes.loveEmotes,
-          "💚"
-        );
-        fb.log.send(
-          broadcasterLogin,
-          `Obrigado pelo sub, ${userDisplayName}! ${emote}`
-        );
+        if (
+          channelConfig.customMessages &&
+          channelConfig.customMessages.newSub
+        ) {
+          message = await replaceMessagePlaceholders(
+            channelConfig.customMessages.newSub,
+            { user: userDisplayName },
+            broadcasterLogin
+          );
+        } else {
+          // Default message
+          const emote = await fb.emotes.getEmoteFromList(
+            broadcasterLogin,
+            fb.emotes.loveEmotes,
+            "💚"
+          );
+          message = `Obrigado pelo sub, ${userDisplayName}! ${emote}`;
+        }
       }
+
+      fb.log.send(broadcasterLogin, message);
     }
   } catch (error) {
     console.log(error);

@@ -1,3 +1,5 @@
+const { replaceMessagePlaceholders } = require("./message-helpers");
+
 module.exports = async function handleChannelFollow(event) {
   try {
     const broadcasterId = event.broadcasterId;
@@ -16,15 +18,27 @@ module.exports = async function handleChannelFollow(event) {
       channelConfig.thankFollows &&
       !channelConfig.isPaused
     ) {
-      const emote = await fb.emotes.getEmoteFromList(
-        broadcasterLogin,
-        fb.emotes.loveEmotes,
-        "💚"
-      );
-      fb.log.send(
-        broadcasterLogin,
-        `Obrigado pelo follow, ${userDisplayName}! ${emote}`
-      );
+      // Use custom message if available, otherwise use default
+      let message;
+      if (
+        channelConfig.customMessages &&
+        channelConfig.customMessages.follow
+      ) {
+        message = await replaceMessagePlaceholders(
+          channelConfig.customMessages.follow,
+          { user: userDisplayName },
+          broadcasterLogin
+        );
+      } else {
+        // Default message
+        const emote = await fb.emotes.getEmoteFromList(
+          broadcasterLogin,
+          fb.emotes.loveEmotes,
+          "💚"
+        );
+        message = `Obrigado pelo follow, ${userDisplayName}! ${emote}`;
+      }
+      fb.log.send(broadcasterLogin, message);
     }
   } catch (error) {
     console.log(error);

@@ -156,49 +156,87 @@ const configCommand = async (message) => {
 
   // MARKER: thank follows
   if (["thankfollows", "thankfollow"].includes(configTarget)) {
-    const currState = (
-      await fb.db.get("config", {
-        channelId: message.channelID,
-      })
-    ).thankFollows;
-    await fb.db.update(
-      "config",
-      { channelId: message.channelID },
-      { $set: { thankFollows: !currState } }
-    );
-
-    if (!currState) {
+    // Check if a custom message was provided
+    if (message.args.length >= 3) {
+      const customMessage = message.args.slice(2).join(" ").trim();
+      await fb.db.update(
+        "config",
+        { channelId: message.channelID },
+        {
+          $set: {
+            "customMessages.follow": customMessage,
+          },
+        }
+      );
       return {
-        reply: `Eu agora vou agradecer quando alguém seguir o canal ✅`,
+        reply: `Mensagem customizada para follows atualizada: "${customMessage}" ✅`,
       };
     } else {
-      return {
-        reply: `Eu agora NÃO vou agradecer quando alguém seguir o canal ❌`,
-      };
+      // Toggle the boolean
+      const currState = (
+        await fb.db.get("config", {
+          channelId: message.channelID,
+        })
+      ).thankFollows;
+      await fb.db.update(
+        "config",
+        { channelId: message.channelID },
+        { $set: { thankFollows: !currState } }
+      );
+
+      if (!currState) {
+        return {
+          reply: `Eu agora vou agradecer quando alguém seguir o canal ✅`,
+        };
+      } else {
+        return {
+          reply: `Eu agora NÃO vou agradecer quando alguém seguir o canal ❌`,
+        };
+      }
     }
   }
 
   // MARKER: thank subs
   if (["thanksubs", "thanksub"].includes(configTarget)) {
-    const currState = (
-      await fb.db.get("config", {
-        channelId: message.channelID,
-      })
-    ).thankSubs;
-    await fb.db.update(
-      "config",
-      { channelId: message.channelID },
-      { $set: { thankSubs: !currState } }
-    );
-
-    if (!currState) {
+    // Check if a custom message was provided
+    if (message.args.length >= 3) {
+      const customMessage = message.args.slice(2).join(" ").trim();
+      await fb.db.update(
+        "config",
+        { channelId: message.channelID },
+        {
+          $set: {
+            "customMessages.newSub": customMessage,
+            "customMessages.resub": customMessage,
+            "customMessages.giftSub": customMessage,
+          },
+        }
+      );
       return {
-        reply: `Eu agora vou agradecer quando alguém se inscrever no canal ✅`,
+        reply: `Mensagem customizada para subs atualizada: "${customMessage}" ✅`,
       };
     } else {
-      return {
-        reply: `Eu agora NÃO vou agradecer quando alguém se inscrever no canal ❌`,
-      };
+      // Toggle the boolean
+      const currState = (
+        await fb.db.get("config", {
+          channelId: message.channelID,
+        })
+      ).thankSubs;
+      await fb.db.update(
+        "config",
+        { channelId: message.channelID },
+        { $set: { thankSubs: !currState } }
+      );
+
+      if (!currState) {
+        return {
+          reply: `Eu agora vou agradecer quando alguém se inscrever no canal ✅`,
+        };
+      } else {
+        return {
+          reply: `Eu agora NÃO vou agradecer quando alguém se inscrever no canal ❌`,
+        };
+      }
     }
   }
 
@@ -234,9 +272,13 @@ Usar o comando !config emotestreak alterna entre o estado ativado e desativado. 
 
 Se quiser que o bot agradeça quando alguém seguir o canal, use o comando !config thankfollows
 Usar o comando !config thankfollows alterna entre o estado ativado e desativado. Por padrão, esta função está desativada
+Você pode definir uma mensagem customizada usando: !config thankfollows mensagem_personalizada_aqui
+Placeholders disponíveis: {user}, {emote}
 
 Se quiser que o bot agradeça quando alguém se inscrever no canal, use o comando !config thanksubs
 Usar o comando !config thanksubs alterna entre o estado ativado e desativado. Por padrão, esta função está desativada
+Você pode definir uma mensagem customizada usando: !config thanksubs mensagem_personalizada_aqui
+Placeholders disponíveis: {user}, {gifter}, {months}, {amount}, {emote}
 
 Este comandos podem ser executados apenas pelo streamer ou os moderadores do canal`;
 configCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname

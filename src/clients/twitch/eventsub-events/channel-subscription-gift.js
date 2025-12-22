@@ -1,3 +1,5 @@
+const { replaceMessagePlaceholders } = require("./message-helpers");
+
 module.exports = async function handleChannelSubscriptionGift(event) {
   try {
     const broadcasterId = event.broadcasterId;
@@ -13,15 +15,28 @@ module.exports = async function handleChannelSubscriptionGift(event) {
     });
 
     if (channelConfig && channelConfig.thankSubs && !channelConfig.isPaused) {
-      const emote = await fb.emotes.getEmoteFromList(
-        broadcasterLogin,
-        fb.emotes.loveEmotes,
-        "💚"
-      );
-      fb.log.send(
-        broadcasterLogin,
-        `Obrigado pelos ${amount} sub gift(s), ${gifterDisplayName}! ${emote}`
-      );
+      // Use custom message if available, otherwise use default
+      // Both individual and bulk gift subs use the same giftSub message field
+      let message;
+      if (
+        channelConfig.customMessages &&
+        channelConfig.customMessages.giftSub
+      ) {
+        message = await replaceMessagePlaceholders(
+          channelConfig.customMessages.giftSub,
+          { gifter: gifterDisplayName, amount },
+          broadcasterLogin
+        );
+      } else {
+        // Default message
+        const emote = await fb.emotes.getEmoteFromList(
+          broadcasterLogin,
+          fb.emotes.loveEmotes,
+          "💚"
+        );
+        message = `Obrigado pelos ${amount} sub gift(s), ${gifterDisplayName}! ${emote}`;
+      }
+      fb.log.send(broadcasterLogin, message);
     }
   } catch (error) {
     console.log(error);
