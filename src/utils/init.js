@@ -66,20 +66,22 @@ async function initializeEventSubListener() {
 
   // Check initial status and subscribe to events for all connected channels
   const channelsToJoin = await getChannelsToJoin();
-  for (const channel of channelsToJoin) {
-    const broadcasterId = channel.id;
-    try {
-      // Check initial mod/VIP status
-      await eventSub.checkInitialStatus(broadcasterId);
-      // Subscribe to events
-      await eventSub.subscribeToChannel(broadcasterId);
-    } catch (error) {
-      console.error(
-        `Error setting up EventSub for channel ${channel.login} (${broadcasterId}):`,
-        error
-      );
-    }
-  }
+  await Promise.all(
+    channelsToJoin.map(async (channel) => {
+      const broadcasterId = channel.id;
+      try {
+        // Check initial mod/VIP status
+        await eventSub.checkInitialStatus(broadcasterId);
+        // Subscribe to events
+        await eventSub.subscribeToChannel(broadcasterId);
+      } catch (error) {
+        console.error(
+          `Error setting up EventSub for channel ${channel.login} (${broadcasterId}):`,
+          error
+        );
+      }
+    })
+  );
 
   // Populate liveChannels with current stream status on startup
   try {
