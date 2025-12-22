@@ -5,10 +5,6 @@ async function updateLastSeen(message) {
       lsChannel: message.channelName,
       lsMessage: message.messageText,
     },
-    $inc: {
-      "msgCount.total": 1,
-      [`msgCount.${message.channelName}`]: 1,
-    },
   };
 
   await fb.db.update("users", { userid: message.senderUserID }, update_doc);
@@ -110,7 +106,6 @@ const updateUserListener = async (message) => {
     optoutRemind: false,
     optoutOwnChannel: false,
     blocks: {},
-    msgCount: { total: 1, [message.channelName]: 1 },
   });
 };
 

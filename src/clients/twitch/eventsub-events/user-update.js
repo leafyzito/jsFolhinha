@@ -51,7 +51,6 @@ module.exports = async function handleUserUpdate(event) {
         optoutRemind: false,
         optoutOwnChannel: false,
         blocks: {},
-        msgCount: { total: 0 },
       });
       // Handle broadcaster config possibility too
       await handleExistingConfigUsernameChange(userId, userLogin);
