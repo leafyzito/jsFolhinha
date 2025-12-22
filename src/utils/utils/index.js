@@ -359,6 +359,9 @@ class Utils {
       isPaused: false,
       disabledCommands: [],
       devBanCommands: [],
+      thankFollows: false,
+      thankSubs: false,
+      // customMessages is optional and will be undefined by default
     };
 
     await fb.db.insert("config", newConfig);
