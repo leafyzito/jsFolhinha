@@ -110,6 +110,44 @@ async function validateCommandExecution(cooldownDuration, type, message) {
     return true;
   }
 
+  if (command.flags && command.flags.includes("modBot")) {
+    const isBotMod = await fb.utils.isBotMod(message.channelID);
+    if (isBotMod === null) {
+      fb.log.logAndReply(
+        message,
+        `⚠️ Para executar este comando, logue no site https://folhinhabot.com`
+      );
+      return false;
+    }
+    if (isBotMod === false) {
+      fb.log.logAndReply(
+        message,
+        `⚠️ Eu preciso ter cargo de moderador para executar este comando`
+      );
+      return false;
+    }
+    return true;
+  }
+
+  if (command.flags && command.flags.includes("vipBot")) {
+    const isBotVip = await fb.utils.isBotVip(message.channelID);
+    if (isBotVip === null) {
+      fb.log.logAndReply(
+        message,
+        `⚠️ Para executar este comando, logue no site https://folhinhabot.com`
+      );
+      return false;
+    }
+    if (isBotVip === false) {
+      fb.log.logAndReply(
+        message,
+        `⚠️ Eu preciso ter cargo de VIP para executar este comando`
+      );
+      return false;
+    }
+    return true;
+  }
+
   // check perms to execute from
   const currChannelConfigs = await fb.db.get("config", {
     channelId: message.channelID,
