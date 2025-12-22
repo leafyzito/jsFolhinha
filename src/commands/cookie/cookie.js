@@ -35,6 +35,7 @@ async function createUserCookieBase(message) {
     beenGifted: 0,
     opened: 0,
     sloted: 0,
+    eaten: 0,
     claimedToday: true,
     giftedToday: false,
     usedSlot: false,
@@ -123,6 +124,58 @@ const cookieCommand = async (message) => {
       .replace(/[\n\r]/g, " ");
     return {
       reply: `${randomFrase} 🥠`,
+    };
+  }
+
+  // MARKER: comer
+  if (["comer", "eat"].includes(targetCommand)) {
+    const userCookieStats = await loadUserCookieStats(message.senderUserID);
+
+    if (!userCookieStats || userCookieStats.total <= 0) {
+      return {
+        reply: `Você não tem cookies para comer. Use ${message.prefix}cd para resgatar o cookie diário`,
+      };
+    }
+
+    await fb.db.update(
+      "cookie",
+      { userId: message.senderUserID },
+      {
+        $set: {
+          total: userCookieStats.total - 1,
+          eaten: userCookieStats.eaten + 1,
+        },
+      }
+    );
+
+    const cookieFlavors = [
+      "cera de ouvido",
+      "milkshake de pizza",
+      "madeira",
+      "grama",
+      "preço do medo abundante de todas as verdades",
+      "labubu",
+      "chocolate",
+      "pistache",
+      "morango",
+      "uva",
+      "leite condensado",
+      "calzone",
+      "strogonoff",
+      "limão",
+      "cebola",
+      "pasta do núcleo de estrela de neutron",
+      "urânio",
+    ];
+    const randomFlavor = fb.utils.randomChoice(cookieFlavors);
+    const emote = await fb.emotes.getEmoteFromList(
+      message.channelName,
+      ["tasty, bussing"],
+      "🍪"
+    );
+
+    return {
+      reply: `Você comeu um cookie e ele tinha sabor de ${randomFlavor} ${emote}`,
     };
   }
 
@@ -837,7 +890,9 @@ cookieCommand.cooldownType = "user";
 cookieCommand.whisperable = true;
 cookieCommand.description = `!Cookie diario/daily: Receba um cookie. O comando poderá ser reutilizado todo dia a partir das cinco horas da manhã (horário de Brasília). Há de aliase o comando "cd" de mesma funcionalidade
 
-!Cookie open: Abra um dos seus cookies para receber uma poderosa mensagem de reflexão
+!Cookie abrir: Abra um dos seus cookies para receber uma poderosa mensagem de reflexão
+
+!Cookie comer: Coma um dos seus cookies deliciosos
 
 !Cookie gift/give: Ofereça um dos seus cookies a outro usuário (ou "random"). Uma vez presenteado, poderá presentear novamente no próximo ciclo do cookie diário
 
