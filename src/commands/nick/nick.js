@@ -34,8 +34,13 @@ const nicksCommand = async (message) => {
   if (!targetId) {
     // to allow searching for old nicks
     const userDbInfo = await fb.db.get("users", { aliases: nicksTarget });
-    if (userDbInfo && userDbInfo.length === 1) {
-      targetId = userDbInfo.userid;
+    const userDbArr = Array.isArray(userDbInfo) ? userDbInfo : [userDbInfo];
+    if (userDbArr.length === 1) {
+      targetId = userDbArr[0].userid;
+    } else if (userDbArr.length > 1) {
+      fb.discord.importantLog(
+        `* userDb match info returned multiple results for ${nicksTarget}, look into it` // TODO: handle this
+      );
     } else {
       targetId = (await fb.api.helix.getUserByUsername(nicksTarget))?.id;
     }
