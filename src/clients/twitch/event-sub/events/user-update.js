@@ -4,6 +4,7 @@ const {
 
 module.exports = async function handleUserUpdate(event) {
   try {
+    console.log("* EventSub: User update event received:", event);
     // These are the only properties allowed per your schema
     const userId = event.userId;
     const userLogin =
@@ -60,4 +61,3 @@ module.exports = async function handleUserUpdate(event) {
     fb.discord.logError(`Error handling user update event: ${error.message}`);
   }
 };
-

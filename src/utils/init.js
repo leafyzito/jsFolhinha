@@ -1,5 +1,6 @@
 // Initialization utilities for the application
 const { ApiClient } = require("@twurple/api");
+const { AppTokenAuthProvider } = require("@twurple/auth");
 const { exec } = require("child_process");
 const { promisify } = require("util");
 const execAsync = promisify(exec);
@@ -36,6 +37,35 @@ async function initializeAPIs() {
 async function initializeApiClient() {
   const apiClient = new ApiClient({ authProvider: fb.authProvider.provider });
   return apiClient;
+}
+
+async function initializeEventSubApiClient() {
+  // Create ApiClient specifically for EventSub that uses the bot's token
+  // This allows subscribing to stream.online, stream.offline, and user.update
+  // for any broadcaster without requiring their specific token
+  const apiClient = new ApiClient({
+    authProvider: fb.authProvider.provider,
+    userId: process.env.BOT_USERID, // Always use bot's token
+  });
+  return apiClient;
+}
+
+async function initializeAppTokenAuthProvider() {
+  // Create app token auth provider for EventSub subscriptions that don't require user auth
+  const appTokenAuthProvider = new AppTokenAuthProvider(
+    process.env.BOT_CLIENT_ID,
+    process.env.BOT_CLIENT_SECRET
+  );
+  return appTokenAuthProvider;
+}
+
+async function initializeAppTokenApiClient() {
+  // Create ApiClient with app token for EventSub
+  const appTokenAuthProvider = await initializeAppTokenAuthProvider();
+  const appTokenApiClient = new ApiClient({
+    authProvider: appTokenAuthProvider,
+  });
+  return appTokenApiClient;
 }
 
 async function initializeDiscord() {
@@ -214,6 +244,9 @@ module.exports = {
   initializeUtilities,
   initializeAPIs,
   initializeApiClient,
+  initializeEventSubApiClient,
+  initializeAppTokenAuthProvider,
+  initializeAppTokenApiClient,
   initializeDiscord,
   initializeAuthProvider,
   initializeTwitch,

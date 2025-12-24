@@ -30,35 +30,28 @@ async function subscribeToChannel(
   }
 
   try {
-    // Check if auth row exists in database before attempting subscriptions
-    const authRow = await fb.db.get("auth", { user_id: broadcasterId });
-    if (!authRow) {
-      console.log(
-        `* Skipping EventSub subscriptions for ${broadcasterId}: no auth row in database`
-      );
-      subscribedChannels.add(broadcasterId);
-      return; // Skip all subscriptions if no auth row exists
-    }
+    // Subscribe to stream online event (no broadcaster token required)
+    // These events can be subscribed to for any broadcaster using the bot's token
+    listener.onStreamOnline(broadcasterId, (event) => {
+      handleStreamOnline(event, liveChannels);
+    });
 
-    // Check if broadcaster token is available before subscribing to events
+    // Subscribe to stream offline event (no broadcaster token required)
+    // These events can be subscribed to for any broadcaster using the bot's token
+    listener.onStreamOffline(broadcasterId, (event) => {
+      handleStreamOffline(event, liveChannels);
+    });
+
+    // Subscribe to user update event (no broadcaster token required)
+    // These events can be subscribed to for any broadcaster using the bot's token
+    listener.onUserUpdate(broadcasterId, (event) => {
+      handleUserUpdate(event);
+    });
+
+    // Check if broadcaster token is available for events that require user authentication
     const broadcasterToken = await getBroadcasterToken(broadcasterId);
 
     if (broadcasterToken) {
-      // Subscribe to stream online event (requires broadcaster token)
-      listener.onStreamOnline(broadcasterId, (event) => {
-        handleStreamOnline(event, liveChannels);
-      });
-
-      // Subscribe to stream offline event (requires broadcaster token)
-      listener.onStreamOffline(broadcasterId, (event) => {
-        handleStreamOffline(event, liveChannels);
-      });
-
-      // Subscribe to user update event (requires broadcaster token)
-      listener.onUserUpdate(broadcasterId, (event) => {
-        handleUserUpdate(event);
-      });
-
       // Subscribe to moderator events (requires moderation:read scope)
       const hasModScope = await hasScope(broadcasterId, "moderation:read");
       if (hasModScope) {
@@ -165,7 +158,7 @@ async function subscribeToChannel(
       }
     } else {
       console.log(
-        `* Skipping EventSub subscriptions for ${broadcasterId}: broadcaster token not available`
+        `* Subscribed to stream/user events for ${broadcasterId}. Skipping events requiring broadcaster token.`
       );
     }
 
@@ -213,4 +206,3 @@ module.exports = {
   subscribeToChannel,
   unsubscribeFromChannel,
 };
-

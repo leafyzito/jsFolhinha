@@ -16,10 +16,13 @@ const {
 
 class EventSubListener {
   constructor() {
-    // Initialize EventSubWsListener with the apiClient
-    // The apiClient will use tokens from fb.authProvider.provider
+    // Initialize EventSubWsListener with the bot's user token apiClient
+    // WebSocket transport requires a user token, but we can still subscribe to
+    // stream.online, stream.offline, and user.update for any broadcaster without
+    // requiring their specific authentication
+    // The EventSubApiClient is configured to always use the bot's token
     this.listener = new EventSubWsListener({
-      apiClient: fb.api.twurple,
+      apiClient: fb.api.twurpleEventSub,
     });
 
     // Track subscribed channels

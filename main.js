@@ -71,6 +71,11 @@ async function initializeApp() {
     fb.api.twurple = await require("./src/utils/init").initializeApiClient();
     console.log("* Twurple API client initialized");
 
+    // Initialize EventSub API Client (uses bot's token)
+    fb.api.twurpleEventSub =
+      await require("./src/utils/init").initializeEventSubApiClient();
+    console.log("* Twurple EventSub API client initialized");
+
     // Initialize clients
     fb.discord = await require("./src/utils/init").initializeDiscord();
     console.log("* Discord client initialized");
