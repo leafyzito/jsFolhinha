@@ -1,19 +1,12 @@
-module.exports = async function handleStreamOnline(event, liveChannels) {
+module.exports = async function handleStreamOffline(event, liveChannels) {
   try {
     const broadcasterId = event.broadcasterId;
     const broadcasterName = event.broadcasterDisplayName;
     const broadcasterLogin =
       event.broadcasterUserLogin || broadcasterName.toLowerCase();
-    const startedAt = event.startedAt ? new Date(event.startedAt) : new Date();
 
-    // Store live status
-    liveChannels.set(broadcasterId, {
-      channelId: broadcasterId,
-      channelName: broadcasterLogin,
-      displayName: broadcasterName,
-      isLive: true,
-      startedAt: startedAt,
-    });
+    // Remove live status
+    liveChannels.delete(broadcasterId);
 
     // Check if offlineOnly is enabled and bot is not paused
     const channelConfig = await fb.db.get("config", {
@@ -28,13 +21,16 @@ module.exports = async function handleStreamOnline(event, liveChannels) {
       );
       fb.log.send(
         broadcasterLogin,
-        `🔴 Live começando! Bot pausado para não interferir. Boa live! ${happyEmote}`
+        `Live terminou! Bot reativado e funcionando normalmente ${happyEmote}`
       );
     }
 
-    fb.discord.importantLog(`* ${broadcasterName} went live`);
+    fb.discord.importantLog(`* ${broadcasterName} went offline`);
   } catch (error) {
     console.log(error);
-    fb.discord.logError(`Error handling stream online event: ${error.message}`);
+    fb.discord.logError(
+      `Error handling stream offline event: ${error.message}`
+    );
   }
 };
+

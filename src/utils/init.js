@@ -60,7 +60,7 @@ async function initializeClickHouse() {
 }
 
 async function initializeEventSubListener() {
-  const EventSubListener = require("../clients/twitch/eventsub-listener");
+  const EventSubListener = require("../clients/twitch/event-sub/listener");
   const eventSub = new EventSubListener();
   await eventSub.init();
 

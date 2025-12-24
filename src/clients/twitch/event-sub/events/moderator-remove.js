@@ -1,24 +1,27 @@
-module.exports = async function handleVipAdd(event) {
+module.exports = async function handleModeratorRemove(event) {
   try {
     const broadcasterId = event.broadcasterId;
     const broadcasterName = event.broadcasterDisplayName;
     const userId = event.userId;
     const botUserId = process.env.BOT_USERID;
 
-    // Only update if the bot was added as VIP
+    // Only update if the bot was removed as moderator
     if (userId === botUserId) {
       await fb.db.update(
         "config",
         { channelId: broadcasterId },
-        { $set: { botIsVip: true } }
+        { $set: { botIsMod: false } }
       );
 
       fb.discord.importantLog(
-        `* Bot was added as VIP in channel ${broadcasterName} (${broadcasterId})`
+        `* Bot was removed as moderator in channel ${broadcasterName} (${broadcasterId})`
       );
     }
   } catch (error) {
     console.log(error);
-    fb.discord.logError(`Error handling VIP add event: ${error.message}`);
+    fb.discord.logError(
+      `Error handling moderator remove event: ${error.message}`
+    );
   }
 };
+

@@ -1,6 +1,6 @@
 const {
   handleExistingConfigUsernameChange,
-} = require("../../../handlers/listener/update-user");
+} = require("../../../../handlers/listener/update-user");
 
 module.exports = async function handleUserUpdate(event) {
   try {
@@ -60,3 +60,4 @@ module.exports = async function handleUserUpdate(event) {
     fb.discord.logError(`Error handling user update event: ${error.message}`);
   }
 };
+

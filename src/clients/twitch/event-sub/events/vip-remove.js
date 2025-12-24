@@ -22,3 +22,4 @@ module.exports = async function handleVipRemove(event) {
     fb.discord.logError(`Error handling VIP remove event: ${err.message}`);
   }
 };
+

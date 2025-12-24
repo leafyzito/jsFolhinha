@@ -1,4 +1,4 @@
-const { replaceMessagePlaceholders } = require("./message-helpers");
+const { replaceMessagePlaceholders } = require("../utils");
 
 module.exports = async function handleChannelSubscription(event) {
   try {
@@ -86,3 +86,4 @@ module.exports = async function handleChannelSubscription(event) {
     );
   }
 };
+
