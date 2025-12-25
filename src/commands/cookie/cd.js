@@ -38,14 +38,14 @@ const cookieDiarioCommand = async (message) => {
     { userId: message.senderUserID },
     {
       $set: {
-        total: userCookieStats.total + 1,
+        total: userCookieStats.total + 2,
         claimedToday: true,
       },
     }
   );
   return {
     reply: `Você resgatou seu cookie diário e agora tem ${(
-      userCookieStats.total + 1
+      userCookieStats.total + 2
     ).toLocaleString(
       "fr-FR"
     )} cookies! (+1 oferecido por mim 🎁 HolidayTree ) 🍪 ${stolenExtraString}`,
