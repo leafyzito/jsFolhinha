@@ -491,11 +491,11 @@ const cookieCommand = async (message) => {
     //   userId: process.env.BOT_USERID,
     // });
 
-    const slotResults = [
-      fb.utils.randomChoice(["🍒", "🍊", "🍋", "🍇", "🍉", "🍓"]),
-      fb.utils.randomChoice(["🍒", "🍊", "🍋", "🍇", "🍉", "🍓"]),
-      fb.utils.randomChoice(["🍒", "🍊", "🍋", "🍇", "🍉", "🍓"]),
-    ];
+    // Christmas gift: guaranteed win - at least 2 matches
+    const emoji1 = fb.utils.randomChoice(["🍒", "🍊", "🍋", "🍇", "🍉", "🍓"]);
+    const emoji2 = fb.utils.randomChoice(["🍒", "🍊", "🍋", "🍇", "🍉", "🍓"]);
+    const emoji3 = fb.utils.randomChoice([emoji1, emoji2]);
+    const slotResults = [emoji1, emoji2, emoji3];
     let reply = `[${slotResults[0]}${slotResults[1]}${slotResults[2]}] `;
 
     if (
