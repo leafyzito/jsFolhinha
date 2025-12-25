@@ -72,7 +72,7 @@ const cookieCommand = async (message) => {
     if (!userCookieStats) {
       await createUserCookieBase(message);
       return {
-        reply: `Você resgatou seu cookie diário e agora tem 1 cookie! 🍪`,
+        reply: `Você resgatou seu cookie diário e agora tem 1 cookie! (+1 oferecido por mim 🎁 HolidayTree ) 🍪`,
       };
     }
 
@@ -94,8 +94,8 @@ const cookieCommand = async (message) => {
     );
     return {
       reply: `Você resgatou seu cookie diário e agora tem ${
-        userCookieStats.total + 1
-      } cookies! 🍪`,
+        userCookieStats.total + 2
+      } cookies! (+1 oferecido por mim 🎁 HolidayTree ) 🍪`,
     };
   }
 
@@ -287,7 +287,7 @@ const cookieCommand = async (message) => {
       {
         $set: {
           beenGifted: targetUserCookieStats.beenGifted + 1,
-          total: targetUserCookieStats.total + 1,
+          total: targetUserCookieStats.total + 2,
         },
       }
     );
@@ -297,7 +297,7 @@ const cookieCommand = async (message) => {
       "🎁🍪"
     );
     return {
-      reply: `Você ofereceu um cookie para ${giftTarget} ${emote}`,
+      reply: `Você ofereceu um cookie para ${giftTarget} (+1 oferecido por mim 🎁 HolidayTree ) ${emote}`,
     };
   }
 
