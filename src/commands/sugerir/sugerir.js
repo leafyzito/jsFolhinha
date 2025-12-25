@@ -63,7 +63,7 @@ const sugerirCommand = async (message) => {
     "FeelsOkayMan 👍"
   );
 
-  const reply = `Obrigado pela sugestão. Assim que possível, o @${process.env.DEV_NICK} dará uma olhada ${emote}`;
+  const reply = `Obrigado pela sugestão ${emote} (ID ${newSuggId})`;
 
   const result = {
     reply,
