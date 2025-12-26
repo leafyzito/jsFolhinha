@@ -166,6 +166,7 @@ const cookieCommand = async (message) => {
       "cebola",
       "pasta do núcleo de estrela de neutron",
       "urânio",
+      "azeitona",
     ];
     const randomFlavor = fb.utils.randomChoice(cookieFlavors);
     const emote = await fb.emotes.getEmoteFromList(
