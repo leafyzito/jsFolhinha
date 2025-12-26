@@ -38,7 +38,7 @@ function formatWindDirection(windDirection) {
 async function getWeather(location) {
   const api_url = `https://nominatim.openstreetmap.org/search?q=${location}&format=json&limit=1&addressdetails=1&accept-language=pt-PT`;
 
-  const data = await fb.got(api_url);
+  const data = await fb.got(api_url, { retry: { limit: 3 } });
   if (!data || data.length === 0) {
     return null;
   }
@@ -58,7 +58,7 @@ async function getWeather(location) {
 async function getWeatherInfo(displayName, lat, lon) {
   const api_url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,weather_code,wind_speed_10m,wind_direction_10m`;
 
-  const res = await fb.got(api_url);
+  const res = await fb.got(api_url, { retry: { limit: 3 } });
   if (!res) {
     return null;
   }
@@ -215,7 +215,9 @@ weatherCommand.description = `Comando para verificar o clima de uma localizaçã
 !weather set secret - Alterna o estado da localização entre público e secreto, para que não seja exibida para outros usuários
 
 !weather - Caso tenha configurado uma localização, verifica o clima da sua localização configurada`;
-weatherCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
+weatherCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
+  .split(path.sep)
+  .pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   weatherCommand,
