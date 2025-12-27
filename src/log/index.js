@@ -10,6 +10,10 @@ class Logger {
       return;
     }
 
+    if (await fb.utils.isBotVip(channel)) {
+      return;
+    }
+
     const now = Date.now();
     const lastMessageTime = this.channelMsgCooldowns.get(channel) || 0;
     const timeSinceLastMessage = now - lastMessageTime;
