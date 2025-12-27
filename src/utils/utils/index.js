@@ -576,8 +576,8 @@ class Utils {
 
       // Value is undefined or doesn't exist, status never checked
       return null;
-    } catch (error) {
-      console.error(`Error checking bot mod status for ${channelId}:`, error);
+    } catch {
+      // console.error(`Error checking bot mod status for ${channelId}:`, error);
       return null;
     }
   }
@@ -612,8 +612,8 @@ class Utils {
 
       // Value is undefined or doesn't exist, status never checked
       return null;
-    } catch (error) {
-      console.error(`Error checking bot VIP status for ${channelId}:`, error);
+    } catch {
+      // console.error(`Error checking bot VIP status for ${channelId}:`, error);
       return null;
     }
   }

@@ -5,6 +5,11 @@ class Logger {
 
   async manageChannelMsgCooldown(channel) {
     // universal cooldown for all channels to avoid timeouts
+
+    if (await fb.utils.isBotMod(channel)) {
+      return;
+    }
+
     const now = Date.now();
     const lastMessageTime = this.channelMsgCooldowns.get(channel) || 0;
     const timeSinceLastMessage = now - lastMessageTime;
@@ -102,7 +107,7 @@ class Logger {
     if (message.isWhisper || message.channelName == "whisper") {
       fb.api.helix.whisper(message.senderUserID, response);
     } else {
-      await this.manageChannelMsgCooldown(message.channelName);
+      await this.manageChannelMsgCooldown(message.channelID);
       res = await fb.twitch.client
         .say(message.channelName, message.channelID, response, message.id)
         .catch((err) =>
@@ -124,7 +129,7 @@ class Logger {
     message.notes = notes;
     response = fb.utils.checkRegex(response, message.channelName, message);
 
-    await this.manageChannelMsgCooldown(message.channelName);
+    await this.manageChannelMsgCooldown(message.channelID);
     const res = await fb.twitch.client
       .say(message.channelName, message.channelID, response, null)
       .catch((err) =>
@@ -145,7 +150,7 @@ class Logger {
   async logAndMeAction(message, response, retryCount = 0) {
     response = fb.utils.checkRegex(response, message.channelName, message);
 
-    await this.manageChannelMsgCooldown(message.channelName);
+    await this.manageChannelMsgCooldown(message.channelID);
     const res = await fb.twitch.client
       .say(message.channelName, message.channelID, "/me " + response, null)
       .catch((err) =>
@@ -195,7 +200,7 @@ class Logger {
   async reply(message, response, retryCount = 0) {
     response = fb.utils.checkRegex(response, message.channelName, message);
 
-    await this.manageChannelMsgCooldown(message.channelName);
+    await this.manageChannelMsgCooldown(message.channelID);
     const res = await fb.twitch.client
       .say(message.channelName, message.channelID, response, message.id)
       .catch((err) =>
