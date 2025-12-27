@@ -10,7 +10,7 @@ const cookieDiarioCommand = async (message) => {
   if (!userCookieStats) {
     await createUserCookieBase(message);
     return {
-      reply: `Você resgatou seu cookie diário e agora tem 1 cookie! (+1 oferecido por mim 🎁 HolidayTree ) 🍪`,
+      reply: `Você resgatou seu cookie diário e agora tem 1 cookie! 🍪`,
     };
   }
 
@@ -38,17 +38,15 @@ const cookieDiarioCommand = async (message) => {
     { userId: message.senderUserID },
     {
       $set: {
-        total: userCookieStats.total + 2,
+        total: userCookieStats.total + 1,
         claimedToday: true,
       },
     }
   );
   return {
     reply: `Você resgatou seu cookie diário e agora tem ${(
-      userCookieStats.total + 2
-    ).toLocaleString(
-      "fr-FR"
-    )} cookies! (+1 oferecido por mim 🎁 HolidayTree ) 🍪 ${stolenExtraString}`,
+      userCookieStats.total + 1
+    ).toLocaleString("fr-FR")} cookies! 🍪 ${stolenExtraString}`,
   };
 };
 
