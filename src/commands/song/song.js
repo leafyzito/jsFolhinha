@@ -204,10 +204,10 @@ const songCommand = async (message) => {
     return {
       reply: `🎵 Estatísticas de músicas ouvidas por ${statsTarget}:
        ${statsInfo.streams.toLocaleString("fr-FR")} streams 
-       • ${statsInfo.durationMinutes.toLocaleString("fr-FR")} minutos 
-       • ${statsInfo.uniqueTracks.toLocaleString("fr-FR")} músicas únicas 
-       • ${statsInfo.uniqueArtists.toLocaleString("fr-FR")} artistas únicos 
-      • ${statsInfo.uniqueAlbums.toLocaleString("fr-FR")} álbums únicos`,
+       ● ${statsInfo.durationMinutes.toLocaleString("fr-FR")} minutos 
+       ● ${statsInfo.uniqueTracks.toLocaleString("fr-FR")} músicas únicas 
+       ● ${statsInfo.uniqueArtists.toLocaleString("fr-FR")} artistas únicos 
+      ● ${statsInfo.uniqueAlbums.toLocaleString("fr-FR")} álbums únicos`,
     };
   }
 
