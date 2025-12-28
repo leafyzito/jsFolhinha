@@ -310,12 +310,12 @@
     "categoria": "Entretenimento: Televisão",
     "tipo": "multiple",
     "dificuldade": "fácil",
-    "resposta": ["Ricdifícil 'Dick' Whitman", "Dick", "Ricdifícil Whitman"],
+    "resposta": ["Richard 'Dick' Whitman", "Dick", "Richard Whitman"],
     "dicas": [
       "Donald Draper",
       "John Ashbury",
       "Michael 'Mikey' Wilhelm",
-      "Ricdifícil 'Dick' Whitman"
+      "Richard 'Dick' Whitman"
     ]
   },
   {
@@ -1312,7 +1312,7 @@
   },
   {
     "id": 131,
-    "pergunta": "No Overwatch, quantos anos tem Reindifícilt Wilhelm?",
+    "pergunta": "No Overwatch, quantos anos tem Reinhardt Wilhelm?",
     "categoria": "Entretenimento: Video Games",
     "tipo": "multiple",
     "dificuldade": "médio",
@@ -3058,7 +3058,7 @@
     "categoria": "Esporte",
     "tipo": "multiple",
     "dificuldade": "médio",
-    "resposta": ["Grêmio, Gremio"]
+    "resposta": ["Grêmio", "Gremio"]
   },
   {
     "id": 308,
