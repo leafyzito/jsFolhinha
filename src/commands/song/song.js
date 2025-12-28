@@ -303,7 +303,7 @@ Caso prefira usar uma conta Stats.fm, use !song set statsfm:{nome_da_sua_conta_d
 
 Pode também ver qual música outra pessoa está ouvindo usando !song {nome_da_pessoa}
 
-Se você está usando Stats.fm, você pode ver as estatísticas de músicas ouvidas por alguém usando !song stats {nome_da_pessoa}`;
+Se você estiver usando Stats.fm, você pode ver as suas estatísticas de músicas ouvidas usando !song stats`;
 songCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
   .split(path.sep)
   .pop()}/${__filename.split(path.sep).pop()}`;
