@@ -1,3 +1,6 @@
+const { Api } = require("@statsfm/statsfm.js");
+const statsfm = new Api();
+
 const path = require("path");
 async function getLastfmTop5(lastfmUser) {
   const api_url = `https://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&user=${lastfmUser}&limit=5&api_key=${process.env.LASTFM_API_KEY}&format=json`;
@@ -30,19 +33,16 @@ async function getLastfmTop5(lastfmUser) {
 }
 
 async function getStatsfmTop5(statsfmUser) {
-  const api_url = `https://api.stats.fm/api/v1/users/${statsfmUser}/top/tracks?limit=5`;
+  const res = await statsfm.users.topTracks(statsfmUser, { limit: 5 });
 
-  const res = await fb.got(api_url, {
-    retry: { limit: 3 },
-  });
   if (!res) {
     return null;
   }
 
-  const top5Songs = res.items.map((track) => ({
-    songArtist: track.track.artists[0].name,
-    songName: track.track.name,
-    playCount: track.streams,
+  const top5Songs = res.map((t) => ({
+    songArtist: t.track.artists[0].name,
+    songName: t.track.name,
+    playCount: t.streams,
   }));
 
   return top5Songs;

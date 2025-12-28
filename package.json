@@ -15,6 +15,7 @@
   "dependencies": {
     "@clickhouse/client": "^1.12.1",
     "@mastondzn/dank-twitch-irc": "^7.2.1",
+    "@statsfm/statsfm.js": "^2.3.3",
     "@twurple/api": "^7.4.0",
     "@twurple/auth": "^7.4.0",
     "@twurple/chat": "^7.4.0",
