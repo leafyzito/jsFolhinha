@@ -256,11 +256,11 @@
   },
   {
     "id": 26,
-    "pergunta": "Em 'Hunter x Hunter', qual das opções a seguir não é um tipo de aura Nen?",
+    "pergunta": "Em 'Hunter x Hunter', qual das opções a seguir não é um tipo de aura Nen? Transmutação, Emissão, Restauração, Especialização, Fortificação",
     "categoria": "Entretenimento: Anime",
     "tipo": "multiple",
     "dificuldade": "difícil",
-    "resposta": ["Restauração"],
+    "resposta": ["Restauração", "Restauracão", "Restauraçao", "Restauracao"],
     "dicas": ["Emissão", "Transmutação", "Especialização", "Restauração"]
   },
   {
