@@ -92,7 +92,7 @@
     "categoria": "Conhecimento geral",
     "tipo": "multiple",
     "dificuldade": "difícil",
-    "resposta": ["India"],
+    "resposta": ["Índia", "India"],
     "dicas": ["Papua New Guinea", "Ethiopia", "China", "India"]
   },
   {
@@ -461,7 +461,7 @@
     "categoria": "Conhecimento geral",
     "tipo": "multiple",
     "dificuldade": "médio",
-    "resposta": ["India"],
+    "resposta": ["Índia", "India"],
     "dicas": ["India", "USA", "Rússia", "Polônia"]
   },
   {
