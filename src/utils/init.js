@@ -89,10 +89,15 @@ async function initializeEventSubListener() {
     if (userIds.length > 0) {
       const liveStreams = await fb.api.helix.getStreamsByUserIds(userIds);
       for (const stream of liveStreams) {
-        eventSub.liveChannels.set(stream.channelId, stream);
+        const channelAuth = await fb.db.get("auth", {
+          user_id: stream.channelId,
+        });
+        if (channelAuth) {
+          eventSub.liveChannels.set(stream.channelId, stream);
+        }
       }
       console.log(
-        `* Populated liveChannels with ${liveStreams.length} currently live streams`
+        `* Populated liveChannels with ${eventSub.liveChannels.size} currently live streams`
       );
     }
   } catch (error) {
