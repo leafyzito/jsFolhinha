@@ -127,12 +127,31 @@ const handleMissedReminder = async (reminder) => {
     "Usuário deletado 2";
   const reminderHowLongAgo = fb.utils.relativeTime(reminder.remindTime, true);
 
-  let finalRes = formatReminderMessage(
-    reminderSender,
-    receiverName,
-    reminderHowLongAgo,
-    reminder.remindMessage
+  // Check for banned content in reminder message
+  const channelData = await fb.db.get("config", {
+    channelId: reminder.fromChannelId,
+  });
+  const channelName = channelData?.channel || null;
+  const checkedMessage = fb.utils.checkRegex(
+    reminder.remindMessage,
+    channelName
   );
+  const isBannedContent = checkedMessage.includes(
+    "⚠️ Mensagem retida por conter conteúdo banido"
+  );
+
+  let finalRes;
+  if (isBannedContent) {
+    // Replace with banned content message format
+    finalRes = `${receiverName}, você tem um remind de ${reminderSender} que contém conteúdo banido. Veja o remind em https://folhinhabot.com/lembretes (ID ${reminder._id})`;
+  } else {
+    finalRes = formatReminderMessage(
+      reminderSender,
+      receiverName,
+      reminderHowLongAgo,
+      reminder.remindMessage
+    );
+  }
 
   if (finalRes.length > 480) {
     finalRes = await fb.utils.manageLongResponse(finalRes);
@@ -168,12 +187,31 @@ const scheduleFutureReminder = async (reminder) => {
         "Usuário deletado 2";
       const howLongAgo = fb.utils.relativeTime(reminder.remindTime, true);
 
-      let finalRes = formatReminderMessage(
-        reminderSender,
-        receiverName,
-        howLongAgo,
-        reminder.remindMessage
+      // Check for banned content in reminder message
+      const channelData = await fb.db.get("config", {
+        channelId: reminder.fromChannelId,
+      });
+      const channelName = channelData?.channel || null;
+      const checkedMessage = fb.utils.checkRegex(
+        reminder.remindMessage,
+        channelName
       );
+      const isBannedContent = checkedMessage.includes(
+        "⚠️ Mensagem retida por conter conteúdo banido"
+      );
+
+      let finalRes;
+      if (isBannedContent) {
+        // Replace with banned content message format
+        finalRes = `${receiverName}, você tem um remind de ${reminderSender} que contém conteúdo banido. Veja o remind em https://folhinhabot.com/lembretes (ID ${reminder._id})`;
+      } else {
+        finalRes = formatReminderMessage(
+          reminderSender,
+          receiverName,
+          howLongAgo,
+          reminder.remindMessage
+        );
+      }
 
       if (finalRes.length > 480) {
         finalRes = await fb.utils.manageLongResponse(finalRes);
