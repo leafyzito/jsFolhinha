@@ -1,28 +1,28 @@
 const path = require("path");
-const createLinearIssue = async (
-  sugestao,
-  channelName,
-  senderUsername,
-  formattedDate,
-  suggestionId
-) => {
-  try {
-    const issueTitle = `Suggestion #${suggestionId}`;
-    const issueDescription = `Channel: ${channelName}\nUser: ${senderUsername}\nDate: ${formattedDate}\n\n${sugestao}`;
+// const createLinearIssue = async (
+//   sugestao,
+//   channelName,
+//   senderUsername,
+//   formattedDate,
+//   suggestionId
+// ) => {
+//   try {
+//     const issueTitle = `Suggestion #${suggestionId}`;
+//     const issueDescription = `Channel: ${channelName}\nUser: ${senderUsername}\nDate: ${formattedDate}\n\n${sugestao}`;
 
-    const linearIssue = await fb.api.linear.createIssue(
-      issueTitle,
-      issueDescription
-    );
+//     const linearIssue = await fb.api.linear.createIssue(
+//       issueTitle,
+//       issueDescription
+//     );
 
-    return linearIssue;
-  } catch (error) {
-    fb.discord.logError(
-      `Failed to create Linear issue for suggestion: ${error.message}`
-    );
-    return null;
-  }
-};
+//     return linearIssue;
+//   } catch (error) {
+//     fb.discord.logError(
+//       `Failed to create Linear issue for suggestion: ${error.message}`
+//     );
+//     return null;
+//   }
+// };
 
 const sugerirCommand = async (message) => {
   if (message.args.length === 1) {
@@ -49,13 +49,13 @@ const sugerirCommand = async (message) => {
   });
 
   // Create Linear issue for the suggestion
-  const linearIssue = await createLinearIssue(
-    sugestao,
-    message.channelName,
-    message.senderUsername,
-    formattedDate,
-    newSuggId
-  );
+  // const linearIssue = await createLinearIssue(
+  //   sugestao,
+  //   message.channelName,
+  //   message.senderUsername,
+  //   formattedDate,
+  //   newSuggId
+  // );
 
   const emote = await fb.emotes.getEmoteFromList(
     message.channelName,
@@ -69,9 +69,9 @@ const sugerirCommand = async (message) => {
     reply,
   };
 
-  if (linearIssue && linearIssue.url) {
-    result.notes = `Issue criado: ${linearIssue.url}`;
-  }
+  // if (linearIssue && linearIssue.url) {
+  //   result.notes = `Issue criado: ${linearIssue.url}`;
+  // }
 
   return result;
 };
