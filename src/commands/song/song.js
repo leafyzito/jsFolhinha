@@ -43,7 +43,7 @@ async function getStatsfmRecentStream(statsfmUser) {
   const songArtist = res[0].track.artists[0].name;
   const songName = res[0].track.name;
   const albumName = res[0].track.albums[0].name;
-  const timestamp = res[0].timestamp;
+  const timestamp = res[0].endTime;
 
   return { isNowPlaying: null, songArtist, songName, albumName, timestamp };
 }
