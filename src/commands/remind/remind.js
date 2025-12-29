@@ -80,7 +80,9 @@ const createScheduledReminderJob = (
     });
     const channelName = channelData?.channel || message.channelName;
     const checkedMessage = fb.utils.checkRegex(remindMessage, channelName);
-    const isBannedContent = checkedMessage.includes("⚠️ Mensagem retida por conter conteúdo banido");
+    const isBannedContent = checkedMessage.includes(
+      "⚠️ Mensagem retida por conter conteúdo banido"
+    );
 
     let finalRes;
     if (isBannedContent) {
@@ -102,7 +104,6 @@ const createScheduledReminderJob = (
 
     // Check channel configuration and send appropriately
     if (channelData) {
-
       const shouldSendViaWhisper =
         channelData.isPaused ||
         (channelData.disabledCommands &&
