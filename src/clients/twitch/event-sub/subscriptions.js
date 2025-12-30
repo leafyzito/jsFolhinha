@@ -31,10 +31,13 @@ async function subscribeToChannel(
 
   try {
     // Check if auth row exists in database before attempting subscriptions
-    const authRow = await fb.db.get("auth", { user_id: broadcasterId });
+    const authRow = await fb.db.get("auth", {
+      user_id: broadcasterId,
+      is_valid: true,
+    });
     if (!authRow) {
       console.log(
-        `* Skipping EventSub subscriptions for ${broadcasterId}: no auth row in database`
+        `* Skipping EventSub subscriptions for ${broadcasterId}: no valid auth row in database`
       );
       subscribedChannels.add(broadcasterId);
       return; // Skip all subscriptions if no auth row exists
@@ -213,4 +216,3 @@ module.exports = {
   subscribeToChannel,
   unsubscribeFromChannel,
 };
-
