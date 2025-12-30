@@ -149,13 +149,14 @@ const songCommand = async (message) => {
       await fb.db.update(
         "lastfm",
         { twitch_uid: message.senderUserID },
-        { $set: { lastfm_user: userToSet } }
+        { $set: { lastfm_user: userToSet, use_statsfm: false } }
       );
     } else {
       // if not set, insert
       await fb.db.insert("lastfm", {
         twitch_uid: message.senderUserID,
         lastfm_user: userToSet,
+        use_statsfm: false,
       });
     }
 
