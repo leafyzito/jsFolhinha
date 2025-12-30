@@ -170,9 +170,12 @@ class AuthProvider {
         // Log to discord if available
         if (fb.discord && fb.discord.logError) {
           fb.discord.logError(
-            `Token refresh failed for userId: ${userId} - ${error.message}`
+            `Token refresh failed for userId: ${userId} - check logs`
           );
         }
+        console.error(
+          `Token refresh failed for userId for userId: ${userId} - ${error.message}`
+        );
       } catch (dbError) {
         console.error(
           `Error updating failed refresh attempt for userId: ${userId}:`,
