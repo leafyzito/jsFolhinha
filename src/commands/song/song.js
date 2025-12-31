@@ -300,11 +300,11 @@ Conecte a plataforma que usa para ouvir música ao Last.fm: https://www.last.fm/
 Por fim, use o comando !song set {nome_da_sua_conta_do_lastfm} para configurar a sua conta no bot
 
 Caso já tenha a sua conta configurada, use !song set {nome_da_sua_conta_do_lastfm}
-Caso prefira usar uma conta Stats.fm, use !song set statsfm:{nome_da_sua_conta_do_statsfm}
+Caso prefira usar uma conta Stats.fm, use !song set statsfm:{nome_da_sua_conta_do_statsfm} (requer uma conta Plus no Stats.fm)
 
 Pode também ver qual música outra pessoa está ouvindo usando !song {nome_da_pessoa}
 
-Se você estiver usando Stats.fm, você pode ver as suas estatísticas de músicas ouvidas usando !song stats`;
+Se você estiver usando Stats.fm, você pode ver as suas estatísticas de músicas ouvidas usando !song stats (requer uma conta Plus no Stats.fm)`;
 songCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
   .split(path.sep)
   .pop()}/${__filename.split(path.sep).pop()}`;
