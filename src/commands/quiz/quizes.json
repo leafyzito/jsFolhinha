@@ -1066,12 +1066,11 @@
   },
   {
     "id": 107,
-    "pergunta": "Quem é o deus egípcio da Mitologia?",
+    "pergunta": "Na mitologia egípcia, como se chama o Deus do sol?",
     "categoria": "Mitologia",
     "tipo": "multiple",
-    "dificuldade": "difícil",
-    "resposta": ["Min"],
-    "dicas": ["Min", "Menu", "Mut", "Meret"]
+    "dificuldade": "fácil",
+    "resposta": ["Ra"]
   },
   {
     "id": 108,
