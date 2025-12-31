@@ -642,6 +642,12 @@ const cookieCommand = async (message) => {
     }
 
     const userCookieStats = await loadUserCookieStats(message.senderUserID);
+    if (!userCookieStats) {
+      return {
+        reply: `Você ainda não iniciou a sua coleção de cookies. Use ${message.prefix}cd para resgatar o seu cookie diário`,
+      };
+    }
+
     if (userCookieStats.stolenToday) {
       return {
         reply: `Você já roubou alguém hoje. Espere ${getTimeUntilNext9AM()} para poder roubar alguém novamente ⌛`,
