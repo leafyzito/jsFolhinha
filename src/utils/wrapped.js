@@ -1,6 +1,7 @@
 const { getBanStats, humanizedTime } = require("../commands/banstats/banstats");
 
 const START_DATE = new Date("2025-01-01");
+const END_DATE = new Date("2026-01-01");
 
 const CACHE_DURATION_MS = 30 * 60 * 1000; // 30 minutes
 const wrappedCache = new Map();
@@ -27,7 +28,7 @@ async function getWrapped(username) {
     "commandlog",
     {
       userId: userInfo.id,
-      sentDate: { $gte: START_DATE },
+      sentDate: { $gte: START_DATE, $lte: END_DATE },
     },
     true
   );
@@ -37,7 +38,7 @@ async function getWrapped(username) {
     {
       $match: {
         userId: userInfo.id,
-        sentDate: { $gte: START_DATE },
+        sentDate: { $gte: START_DATE, $lte: END_DATE },
       },
     },
     {
@@ -59,7 +60,7 @@ async function getWrapped(username) {
     {
       $match: {
         userId: userInfo.id,
-        sentDate: { $gte: START_DATE },
+        sentDate: { $gte: START_DATE, $lte: END_DATE },
       },
     },
     {
@@ -80,7 +81,10 @@ async function getWrapped(username) {
     "remind",
     {
       senderId: userInfo.id,
-      remindTime: { $lte: fb.utils.unix(START_DATE) },
+      remindTime: {
+        $gte: fb.utils.unix(START_DATE),
+        $lte: fb.utils.unix(END_DATE),
+      },
     },
     true
   );
@@ -89,7 +93,10 @@ async function getWrapped(username) {
     "remind",
     {
       receiverId: userInfo.id,
-      remindTime: { $lte: fb.utils.unix(START_DATE) },
+      remindTime: {
+        $gte: fb.utils.unix(START_DATE),
+        $lte: fb.utils.unix(END_DATE),
+      },
     },
     true
   );
@@ -99,7 +106,7 @@ async function getWrapped(username) {
     "commandlog",
     {
       userId: userInfo.id,
-      sentDate: { $gte: START_DATE },
+      sentDate: { $gte: START_DATE, $lte: END_DATE },
       command: "carinho",
     },
     true
@@ -109,7 +116,7 @@ async function getWrapped(username) {
     "commandlog",
     {
       userId: userInfo.id,
-      sentDate: { $gte: START_DATE },
+      sentDate: { $gte: START_DATE, $lte: END_DATE },
       command: "brincar",
     },
     true
@@ -124,6 +131,9 @@ async function getWrapped(username) {
   let top5ChannelsData = [];
 
   if (fb.clickhouse && fb.clickhouse.isConnected == true) {
+    const startTimestamp = Math.floor(START_DATE.getTime() / 1000);
+    const endTimestamp = Math.floor(END_DATE.getTime() / 1000);
+
     const msgCount = await fb.clickhouse.query(
       `
         SELECT
@@ -133,10 +143,11 @@ async function getWrapped(username) {
         WHERE
           user_id = {userId:String}
           AND message_type = 1
-          AND timestamp >= toStartOfYear(now())
+          AND timestamp >= {startTimestamp:UInt32}
+          AND timestamp <= {endTimestamp:UInt32}
         GROUP BY user_id
      `,
-      { userId: userInfo.id }
+      { userId: userInfo.id, startTimestamp, endTimestamp }
     );
 
     const top5Channels = await fb.clickhouse.query(
@@ -148,12 +159,13 @@ async function getWrapped(username) {
         WHERE
           user_id = {userId:String}
           AND message_type = 1
-          AND timestamp >= toStartOfYear(now())
+          AND timestamp >= {startTimestamp:UInt32}
+          AND timestamp <= {endTimestamp:UInt32}
         GROUP BY channel_login
         ORDER BY message_count DESC
         LIMIT 5
      `,
-      { userId: userInfo.id }
+      { userId: userInfo.id, startTimestamp, endTimestamp }
     );
 
     msgCountData = msgCount.data || msgCount;
