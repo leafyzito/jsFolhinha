@@ -289,7 +289,7 @@ const handleReminderResponse = async (message, reminders) => {
         (reminder._id ===
         firstThreeReminders[firstThreeReminders.length - 1]._id
           ? ""
-          : ";");
+          : " ●");
     }
 
     if (replyMsg.length > 480) {
