@@ -59,6 +59,55 @@ async function initializeClickHouse() {
   return clickhouse;
 }
 
+async function initializeEventSubListener() {
+  const EventSubListener = require("../clients/twitch/event-sub/listener");
+  const eventSub = new EventSubListener();
+  await eventSub.init();
+
+  // Check initial status and subscribe to events for all connected channels
+  const channelsToJoin = await getChannelsToJoin();
+  await Promise.all(
+    channelsToJoin.map(async (channel) => {
+      const broadcasterId = channel.id;
+      try {
+        // Check initial mod/VIP status
+        await eventSub.checkInitialStatus(broadcasterId);
+        // Subscribe to events
+        await eventSub.subscribeToChannel(broadcasterId);
+      } catch (error) {
+        console.error(
+          `Error setting up EventSub for channel ${channel.login} (${broadcasterId}):`,
+          error
+        );
+      }
+    })
+  );
+
+  // Populate liveChannels with current stream status on startup
+  try {
+    const userIds = channelsToJoin.map((channel) => channel.id);
+    if (userIds.length > 0) {
+      const liveStreams = await fb.api.helix.getStreamsByUserIds(userIds);
+      for (const stream of liveStreams) {
+        const channelAuth = await fb.db.get("auth", {
+          user_id: stream.channelId,
+        });
+        if (channelAuth) {
+          eventSub.liveChannels.set(stream.channelId, stream);
+        }
+      }
+      console.log(
+        `* Populated liveChannels with ${eventSub.liveChannels.size} currently live streams`
+      );
+    }
+  } catch (error) {
+    console.error(`Error populating liveChannels on startup: ${error.message}`);
+    // Don't fail initialization - EventSub will catch up with real-time events
+  }
+
+  return eventSub;
+}
+
 async function restartProcess(reason) {
   try {
     if (fb && fb.discord) {
@@ -174,6 +223,7 @@ module.exports = {
   initializeAuthProvider,
   initializeTwitch,
   initializeClickHouse,
+  initializeEventSubListener,
   getChannelsToJoin,
   getTokenData,
 };

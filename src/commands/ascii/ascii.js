@@ -29,7 +29,7 @@ async function getAscii(channel, input) {
   }
 
   const api_url = `https://fun.joet.me/ascii?q=${input}`;
-  const response = await fb.got(api_url);
+  const response = await fb.got(api_url, { timeout: 10000 });
 
   if (!response) {
     return null;
@@ -91,7 +91,9 @@ invert:true(default)|false
 removeTransparency:false(default)|true
 threshold:0-254(default: 127)
 mode:simple(default)|ec|hc|nd`;
-asciiCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
+asciiCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
+  .split(path.sep)
+  .pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   asciiCommand,

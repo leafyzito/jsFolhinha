@@ -110,6 +110,44 @@ async function validateCommandExecution(cooldownDuration, type, message) {
     return true;
   }
 
+  if (command.flags && command.flags.includes("modBot")) {
+    const isBotMod = await fb.utils.isBotMod(message.channelID);
+    if (isBotMod === null) {
+      fb.log.logAndReply(
+        message,
+        `⚠️ Este comando requer que o streamer logue no site https://folhinhabot.com`
+      );
+      return false;
+    }
+    if (isBotMod === false) {
+      fb.log.logAndReply(
+        message,
+        `⚠️ Eu preciso ter cargo de moderador para executar este comando`
+      );
+      return false;
+    }
+    return true;
+  }
+
+  if (command.flags && command.flags.includes("vipBot")) {
+    const isBotVip = await fb.utils.isBotVip(message.channelID);
+    if (isBotVip === null) {
+      fb.log.logAndReply(
+        message,
+        `⚠️ Este comando requer que o streamer logue no site https://folhinhabot.com`
+      );
+      return false;
+    }
+    if (isBotVip === false) {
+      fb.log.logAndReply(
+        message,
+        `⚠️ Eu preciso ter cargo de VIP para executar este comando`
+      );
+      return false;
+    }
+    return true;
+  }
+
   // check perms to execute from
   const currChannelConfigs = await fb.db.get("config", {
     channelId: message.channelID,
@@ -137,12 +175,25 @@ async function validateCommandExecution(cooldownDuration, type, message) {
   if (currChannelConfigs && currChannelConfigs.isPaused) {
     return false;
   }
-  if (
-    currChannelConfigs &&
-    currChannelConfigs.offlineOnly &&
-    (await fb.api.helix.isStreamOnline(message.channelName))
-  ) {
-    return false;
+  if (currChannelConfigs && currChannelConfigs.offlineOnly) {
+    // Try EventSub first, fallback to Helix API if EventSub is unavailable or returns null
+    let isLive = false;
+    if (fb.twitch.eventSub) {
+      const liveData = fb.twitch.eventSub.isChannelLive(message.channelName);
+      if (liveData) {
+        isLive = true;
+      } else {
+        // EventSub returned null (channel not tracked or not live), fallback to Helix API
+        isLive = await fb.api.helix.isStreamOnline(message.channelName);
+      }
+    } else {
+      // EventSub not available, use Helix API
+      isLive = await fb.api.helix.isStreamOnline(message.channelName);
+    }
+
+    if (isLive) {
+      return false;
+    }
   }
   if (
     currChannelConfigs &&

@@ -37,9 +37,9 @@ const rolarCommand = async (message) => {
   }
 
   // Check limits
-  if (numDice > 10 || numSides > 100) {
+  if (numDice > 20 || numSides > 100) {
     return {
-      reply: `O máximo de dados é 10 e o máximo de lados é 100`,
+      reply: `O máximo de dados é 20 e o máximo de lados é 100`,
     };
   }
 
@@ -78,7 +78,9 @@ rolarCommand.whisperable = true;
 rolarCommand.description = `Lance até 10 dados com quantos lados você quiser, com limite de 100 lados
 • Exemplo: !rolar 2 10 - O bot irá lançar 2 dados de 10 lados
 • Exemplo: !rolar 6d10 - O bot irá lançar 6 dados de 10 lados`;
-rolarCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
+rolarCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
+  .split(path.sep)
+  .pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   rolarCommand,

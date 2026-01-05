@@ -11,7 +11,7 @@ const countlineCommand = async (message) => {
       };
     }
 
-    if (clTarget.toLowerCase() === "top") {
+    if (["top", "rank", "ranking"].includes(clTarget.toLowerCase())) {
       // Get top 5 chatters from ClickHouse
       const topChatters = await fb.clickhouse.query(
         `

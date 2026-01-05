@@ -1,18 +1,32 @@
 const { createClient } = require("redis");
 
 class RedisClient {
-  constructor(host, port) {
+  constructor(host, port, shouldUseRedis = true) {
     this.host = host;
     this.port = port;
     this.redisConnecting = false;
     this.cacheTTL = 24 * 60 * 60; // 24 hours in seconds
-    this.useLocalCache = false;
 
     // Initialize local cache as fallback
     this.localCache = new Map(); // key -> { value, expiresAt }
     this.localStats = new Map(); // key -> number
 
-    // Initialize Redis client with fallback to localhost
+    // If Redis env vars are missing/empty, skip Redis and use local cache directly
+    if (!shouldUseRedis) {
+      this.useLocalCache = true;
+      this.redisClient = null;
+
+      // Only log to Discord if it's available (it might not be initialized yet)
+      if (global.fb?.discord?.importantLog) {
+        global.fb.discord.importantLog(
+          "* Redis environment variables not configured, using local in-memory cache"
+        );
+      }
+      return;
+    }
+
+    // Otherwise, try to connect to Redis
+    this.useLocalCache = false;
     this.redisClient = this.createRedisClient(host, parseInt(port, 10));
 
     // Check connection after a short delay and fallback to local cache if needed
@@ -32,9 +46,11 @@ class RedisClient {
       console.log(
         "* Redis connection unavailable, using local in-memory cache"
       );
-      fb.discord.importantLog(
-        "* Redis connection unavailable, using local in-memory cache"
-      );
+      if (global.fb?.discord?.importantLog) {
+        global.fb.discord.importantLog(
+          "* Redis connection unavailable, using local in-memory cache"
+        );
+      }
       this.useLocalCache = true;
     }
   }
@@ -130,8 +146,8 @@ class RedisClient {
   }
 
   async ensureRedisConnection() {
-    if (this.useLocalCache) {
-      return; // Skip Redis if using local cache
+    if (this.useLocalCache || !this.redisClient) {
+      return; // Skip Redis if using local cache or Redis client not initialized
     }
 
     try {
@@ -531,9 +547,11 @@ class RedisClient {
         console.log(
           "* Redis unavailable during initialization, using local cache"
         );
-        fb.discord.importantLog(
-          "* Redis connection unavailable, using local in-memory cache"
-        );
+        if (global.fb?.discord?.importantLog) {
+          global.fb.discord.importantLog(
+            "* Redis connection unavailable, using local in-memory cache"
+          );
+        }
         this.useLocalCache = true;
         await this.initializeCacheContainers(collections); // Recursive call
       }

@@ -470,7 +470,7 @@ class CreateRegex {
             { name: 'racism3', check: () => this.racism3.test(testString), match: () => testString.match(this.racism3)?.[0] },
             { name: 'racism5', check: () => this.racism5.test(testString), match: () => testString.match(this.racism5)?.[0] },
             { name: 'slurs', check: () => this.slurs.test(testString), match: () => testString.match(this.slurs)?.[0] },
-            { name: 'slurs2', check: () => this.slurs2.test(testString), match: () => testString.match(this.slurs2)?.[0] },
+            // { name: 'slurs2', check: () => this.slurs2.test(testString), match: () => testString.match(this.slurs2)?.[0] },
             { name: 'slurs3', check: () => this.slurs3.test(testString), match: () => testString.match(this.slurs3)?.[0] },
             { name: 'slurs4', check: () => this.slurs4.test(testString), match: () => testString.match(this.slurs4)?.[0] },
             { name: 'slurs5', check: () => this.slurs5.test(testString), match: () => testString.match(this.slurs5)?.[0] },

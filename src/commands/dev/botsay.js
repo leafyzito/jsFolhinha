@@ -4,23 +4,24 @@ const botSayCommand = async (message) => {
   const msgContent = args.slice(2).join(" ");
 
   if (targetChannel == "all") {
-    for (let i = 0; i < [...fb.joinedChannels].length; i++) {
-      const channel = [...fb.joinedChannels][i];
-      await new Promise((resolve) => setTimeout(resolve, 2_500)); // 2.5 second interval between each message
+    const joinedChannels = fb.twitch.anonClient.currentChannels.map((c) =>
+      c.replace("#", "")
+    );
+    for (let i = 0; i < joinedChannels.length; i++) {
+      const channel = joinedChannels[i];
+      await new Promise((resolve) => setTimeout(resolve, 5_000)); // 5 second interval between each message
 
       // console.log(`sending to ${channel}`);
       fb.log.send(channel, msgContent);
     }
     return {
       reply: `foi`,
-      notes: `Sent message to all channels`,
     };
   }
 
   fb.log.send(targetChannel, msgContent);
   return {
     reply: `foi`,
-    notes: `Sent message to ${targetChannel}`,
   };
 };
 

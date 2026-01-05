@@ -74,24 +74,36 @@ const createScheduledReminderJob = (
     const reminderSender = await fb.api.helix.getUserByID(message.senderUserID);
     const reminderTime = fb.utils.relativeTime(remindCheck.remindTime, true);
 
-    let finalRes =
-      reminderSender?.login === targetUser
-        ? `@${targetUser}, lembrete de você mesmo há ${reminderTime}: ${remindMessage}`
-        : `@${targetUser}, lembrete de @${
-            reminderSender?.login || "Usuário deletado"
-          } há ${reminderTime}: ${remindMessage}`;
+    // Check for banned content in reminder message
+    const channelData = await fb.db.get("config", {
+      channelId: message.channelID,
+    });
+    const channelName = channelData?.channel || message.channelName;
+    const checkedMessage = fb.utils.checkRegex(remindMessage, channelName);
+    const isBannedContent = checkedMessage.includes(
+      "⚠️ Mensagem retida por conter conteúdo banido"
+    );
+
+    let finalRes;
+    if (isBannedContent) {
+      // Replace with banned content message format
+      const senderName = reminderSender?.login || "Usuário deletado";
+      finalRes = `${targetUser}, você tem um remind de ${senderName} que contém conteúdo banido. Veja o remind em https://folhinhabot.com/lembretes (ID ${newRemindId})`;
+    } else {
+      finalRes =
+        reminderSender?.login === targetUser
+          ? `@${targetUser}, lembrete de você mesmo há ${reminderTime}: ${remindMessage}`
+          : `@${targetUser}, lembrete de @${
+              reminderSender?.login || "Usuário deletado"
+            } há ${reminderTime}: ${remindMessage}`;
+    }
 
     if (finalRes.length > 480) {
       finalRes = await fb.utils.manageLongResponse(finalRes);
     }
 
     // Check channel configuration and send appropriately
-    const channelData = await fb.db.get("config", {
-      channelId: message.channelID,
-    });
     if (channelData) {
-      const channelName = channelData.channel;
-
       const shouldSendViaWhisper =
         channelData.isPaused ||
         (channelData.disabledCommands &&

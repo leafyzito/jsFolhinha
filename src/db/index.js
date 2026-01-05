@@ -5,8 +5,29 @@ const mongoUri = process.env.MONGO_URI;
 const clientMongo = new MongoClient(mongoUri);
 const db = clientMongo.db("folhinha");
 
-const redisHost = process.env.REDIS_HOST || "localhost";
-const redisPort = process.env.REDIS_PORT || "6379";
+// Check if Redis environment variables are provided
+// Only use Redis if both REDIS_HOST and REDIS_PORT are set and non-empty
+const redisHostRaw = process.env.REDIS_HOST;
+const redisPortRaw = process.env.REDIS_PORT;
+const redisHost = redisHostRaw?.trim();
+const redisPort = redisPortRaw?.trim();
+const shouldUseRedis = !!(
+  redisHost &&
+  redisPort &&
+  redisHost.length > 0 &&
+  redisPort.length > 0
+);
+
+// Debug: Log Redis configuration status
+if (!shouldUseRedis) {
+  console.log(
+    `* Redis disabled: REDIS_HOST=${
+      redisHostRaw === undefined ? "undefined" : `"${redisHostRaw}"`
+    }, REDIS_PORT=${
+      redisPortRaw === undefined ? "undefined" : `"${redisPortRaw}"`
+    }`
+  );
+}
 
 class MongoUtils {
   constructor() {
@@ -14,8 +35,12 @@ class MongoUtils {
     this.db = db;
     this.isConnected = false;
 
-    // Initialize Redis client
-    this.redis = new RedisClient(redisHost, redisPort);
+    // Initialize Redis client (or local cache if env vars are missing)
+    this.redis = new RedisClient(
+      redisHost || "localhost",
+      redisPort || "6379",
+      shouldUseRedis
+    );
 
     // Initialize cache containers
     this.initializeCacheContainers();

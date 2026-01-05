@@ -86,7 +86,7 @@ async function fetchPendingJoins() {
         inviterName != channelName ? ` por @${inviterName}` : "";
       fb.log.send(
         channelName,
-        `${emote} Oioi! Fui convidado para me juntar aqui${inviterPart}! Para saber mais sobre mim, pode usar !ajuda ou !comandos`
+        `${emote} Oioi! Fui convidado para me juntar aqui${inviterPart}! Para saber mais sobre mim, pode usar !ajuda ou !comandos. Para os moderadores, acessem https://folhinhabot.com/dashboard para explorar as configurações do bot`
       );
       fb.log.whisper(
         inviterId,

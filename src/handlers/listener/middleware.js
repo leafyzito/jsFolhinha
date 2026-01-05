@@ -15,11 +15,25 @@ const shouldSkipMessage = async (channelName, commandName = null) => {
     return true;
   }
 
-  if (
-    channelData.offlineOnly &&
-    (await fb.api.helix.isStreamOnline(channelName))
-  ) {
-    return true;
+  if (channelData.offlineOnly) {
+    // Try EventSub first, fallback to Helix API if EventSub is unavailable or returns null
+    let isLive = false;
+    if (fb.twitch.eventSub) {
+      const liveData = fb.twitch.eventSub.isChannelLive(channelName);
+      if (liveData) {
+        isLive = true;
+      } else {
+        // EventSub returned null (channel not tracked or not live), fallback to Helix API
+        isLive = await fb.api.helix.isStreamOnline(channelName);
+      }
+    } else {
+      // EventSub not available, use Helix API
+      isLive = await fb.api.helix.isStreamOnline(channelName);
+    }
+
+    if (isLive) {
+      return true;
+    }
   }
 
   return false;

@@ -9,7 +9,7 @@ async function fetchData(url, options = {}) {
       ...options,
     });
 
-    if (statusCode < 200 || statusCode > 299) {
+    if (!options.returnErrorBody && (statusCode < 200 || statusCode > 299)) {
       return null;
     }
 

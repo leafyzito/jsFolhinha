@@ -7,6 +7,7 @@ const {
   startFetchPendingJoinsTask,
   // startRejoinDisconnectedChannelsTask,
   startDiscordPresenceTask,
+  startCheckNewAuthUsersTask,
 } = require("./task-scheduler");
 
 // Function to start all recurring tasks
@@ -23,6 +24,7 @@ const startAllTasks = () => {
   }
   // startRejoinDisconnectedChannelsTask();
   startDiscordPresenceTask();
+  startCheckNewAuthUsersTask();
 };
 
 module.exports = {
@@ -31,5 +33,6 @@ module.exports = {
   startFetchPendingJoinsTask,
   // startRejoinDisconnectedChannelsTask,
   startDiscordPresenceTask,
+  startCheckNewAuthUsersTask,
   startAllTasks,
 };

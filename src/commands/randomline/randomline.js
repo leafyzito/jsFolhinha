@@ -35,16 +35,9 @@ const randomLineCommand = async (message) => {
       : null;
 
   const randomLine = await getRandomLine(targetId, message.channelID);
-  if (!targetId && !randomLine) {
-    return {
-      reply: `Nunca loguei uma mensagem desse usuário neste chat (contando desde 06/03/2025)`,
-    };
-  }
-
   if (!randomLine) {
-    // this should never happen
     return {
-      reply: `Nunca loguei uma mensagem desse usuário neste chat (contando desde 06/03/2025). Se não for o caso, por favor contacte o @${process.env.DEV_NICK}`,
+      reply: `Nunca loguei uma mensagem desse usuário neste chat (contando desde 06/03/2025).`,
     };
   }
 
