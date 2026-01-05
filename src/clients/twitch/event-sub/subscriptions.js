@@ -39,7 +39,6 @@ async function subscribeToChannel(
       console.log(
         `* Skipping EventSub subscriptions for ${broadcasterId}: no valid auth row in database`
       );
-      subscribedChannels.add(broadcasterId);
       return; // Skip all subscriptions if no auth row exists
     }
 

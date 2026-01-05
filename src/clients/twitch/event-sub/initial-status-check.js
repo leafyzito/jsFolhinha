@@ -111,12 +111,7 @@ async function checkInitialStatus(broadcasterId) {
                 cursor = result?.pagination?.cursor || null;
               } while (cursor);
             }
-
-            // Final fallback: If broadcaster has moderation:read scope and bot still not found,
-            // assume bot is mod (broadcaster authorized bot with mod permissions)
-            if (!botIsMod && hasModScope) {
-              botIsMod = true;
-            }
+            // If bot not found in moderated channels list, botIsMod remains false
           } catch (error) {
             console.error(
               `Error in fallback moderator check for ${broadcasterId}:`,
@@ -202,4 +197,3 @@ async function checkInitialStatus(broadcasterId) {
 module.exports = {
   checkInitialStatus,
 };
-
