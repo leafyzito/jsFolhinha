@@ -5,7 +5,10 @@ const path = require("path");
 async function getLastfmRecentStream(lastfmUser) {
   const api_url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${lastfmUser}&limit=1&api_key=${process.env.LASTFM_API_KEY}&format=json`;
 
-  const data = await fb.got(api_url, { retry: { limit: 3 } });
+  const data = await fb.got(api_url, {
+    retry: { limit: 3 },
+    returnErrorBody: true,
+  });
   if (!data) {
     return null;
   }
