@@ -4852,27 +4852,9 @@
         ]
     }
 ]
-[
-  {
-    "id": 300,
-    "pergunta": "Em Dungeons & Dragons, qual dado é mais usado para testes de habilidade?",
-    "categoria": "RPG de Mesa",
-    "dificuldade": "fácil",
-    "resposta": [
-      "d20"
-    ]
-  },
-  {
-    "id": 301,
-    "pergunta": "Em Ordem Paranormal, o Outro Lado está mais ligado a qual conceito?",
-    "categoria": "RPG de Mesa",
-    "dificuldade": "médio",
-    "resposta": [
-      "Sobrenatural"
-    ]
-  },
-  {
-    "id": 302,
+},
+ {
+    "id": 380,
     "pergunta": "Qual civilização construiu as pirâmides de Gizé?",
     "categoria": "História",
     "dificuldade": "fácil",
@@ -4881,7 +4863,7 @@
     ]
   },
   {
-    "id": 303,
+    "id": 381,
     "pergunta": "Em que ano terminou a Segunda Guerra Mundial?",
     "categoria": "História",
     "dificuldade": "médio",
@@ -4890,7 +4872,7 @@
     ]
   },
   {
-    "id": 304,
+    "id": 382,
     "pergunta": "Qual é o maior órgão do corpo humano?",
     "categoria": "Corpo Humano",
     "dificuldade": "fácil",
@@ -4899,7 +4881,7 @@
     ]
   },
   {
-    "id": 305,
+    "id": 383,
     "pergunta": "Qual sistema do corpo humano é responsável pela respiração?",
     "categoria": "Corpo Humano",
     "dificuldade": "fácil",
@@ -4908,7 +4890,7 @@
     ]
   },
   {
-    "id": 306,
+    "id": 384,
     "pergunta": "Qual empresa desenvolveu o jogo Terraria?",
     "categoria": "Jogos",
     "dificuldade": "fácil",
@@ -4917,7 +4899,7 @@
     ]
   },
   {
-    "id": 307,
+    "id": 385,
     "pergunta": "Em Minecraft, qual material é necessário para criar um portal para o Nether?",
     "categoria": "Jogos",
     "dificuldade": "fácil",
@@ -4926,7 +4908,7 @@
     ]
   },
   {
-    "id": 308,
+    "id": 384,
     "pergunta": "Quem é o protagonista do anime One Piece?",
     "categoria": "Animes",
     "dificuldade": "fácil",
@@ -4935,7 +4917,7 @@
     ]
   },
   {
-    "id": 309,
+    "id": 386,
     "pergunta": "Em Dragon Ball Z, quem derrota Freeza em Namekusei?",
     "categoria": "Animes",
     "dificuldade": "médio",
@@ -4944,7 +4926,7 @@
     ]
   },
   {
-    "id": 310,
+    "id": 387,
     "pergunta": "Qual série se passa majoritariamente no continente de Westeros?",
     "categoria": "Televisão",
     "dificuldade": "fácil",
@@ -4953,7 +4935,7 @@
     ]
   },
   {
-    "id": 311,
+    "id": 388,
     "pergunta": "Qual personagem diz a frase 'Eu sou o perigo' em Breaking Bad?",
     "categoria": "Televisão",
     "dificuldade": "médio",
@@ -4962,10 +4944,42 @@
     ]
   },
   {
-    "id": 13,
+    "id": 389,
     "pergunta": "Qual é o maior oceano do planeta Terra?",
     "categoria": "Conhecimentos Gerais",
     "dificuldade": "fácil",
     "resposta": [
       "Oceano Pacífico"
     ]
+    {
+        "id": 390,
+        "pergunta": "Qual o nome da fusão entre Goku e Vegeta utilizando brincos no Anime Dragon Ball Z?",
+        "categoria": "Anime",
+        "dificuldade": "fácil",
+        "resposta": [
+            "Vegetto"
+        ],
+        ]
+    },
+
+{
+        "id": 391,
+        "pergunta": "Qual o nome da fusão entre Goku e Vegeta utilizando uma dança no Anime Dragon Ball Z?",
+        "categoria": "Anime",
+        "dificuldade": "fácil",
+        "resposta": [
+            "Gogeta"
+        ],
+        ]
+    },
+
+{
+        "id": 392,
+        "pergunta": "Qual o nome do campeão da Liga Pokémon que aparece em Pokémon Emerald?",
+        "categoria": "Videogames",
+        "dificuldade": "fácil",
+        "resposta": [
+            "Red"
+        ],
+        ]
+    },
