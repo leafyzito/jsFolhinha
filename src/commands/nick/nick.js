@@ -35,7 +35,7 @@ const nicksCommand = async (message) => {
     // to allow searching for old nicks
     const userDbInfo = await fb.db.get("users", { aliases: nicksTarget });
     const userDbArr = Array.isArray(userDbInfo) ? userDbInfo : [userDbInfo];
-    if (userDbArr.length === 1) {
+    if (userDbInfo && userDbArr.length === 1) {
       targetId = userDbArr[0].userid;
     } else if (userDbArr.length > 1) {
       fb.discord.importantLog(
