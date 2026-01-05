@@ -3065,7 +3065,13 @@
     "categoria": "Conhecimento geral",
     "tipo": "multiple",
     "dificuldade": "fácil",
-    "resposta": ["Ohayou gozaimasu", "Ohayou", "Konnichiwa", "Konnichiwa"]
+    "resposta": [
+      "Ohayou gozaimasu",
+      "Ohayo gozaimasu",
+      "Ohayou",
+      "Ohayo",
+      "Konnichiwa"
+    ]
   },
   {
     "id": 309,
