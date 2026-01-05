@@ -3655,3 +3655,134 @@
     "resposta": ["Sol"]
   }
 ]
+},
+ {
+    "id": 380,
+    "pergunta": "Qual civilização construiu as pirâmides de Gizé?",
+    "categoria": "História",
+    "dificuldade": "fácil",
+    "resposta": [
+      "Egípcia"
+    ]
+  },
+  {
+    "id": 381,
+    "pergunta": "Em que ano terminou a Segunda Guerra Mundial?",
+    "categoria": "História",
+    "dificuldade": "médio",
+    "resposta": [
+      "1945"
+    ]
+  },
+  {
+    "id": 382,
+    "pergunta": "Qual é o maior órgão do corpo humano?",
+    "categoria": "Corpo Humano",
+    "dificuldade": "fácil",
+    "resposta": [
+      "Pele"
+    ]
+  },
+  {
+    "id": 383,
+    "pergunta": "Qual sistema do corpo humano é responsável pela respiração?",
+    "categoria": "Corpo Humano",
+    "dificuldade": "fácil",
+    "resposta": [
+      "Sistema respiratório"
+    ]
+  },
+  {
+    "id": 384,
+    "pergunta": "Qual empresa desenvolveu o jogo Terraria?",
+    "categoria": "Jogos",
+    "dificuldade": "fácil",
+    "resposta": [
+      "Re-Logic"
+    ]
+  },
+  {
+    "id": 385,
+    "pergunta": "Em Minecraft, qual material é necessário para criar um portal para o Nether?",
+    "categoria": "Jogos",
+    "dificuldade": "fácil",
+    "resposta": [
+      "Obsidian"
+    ]
+  },
+  {
+    "id": 384,
+    "pergunta": "Quem é o protagonista do anime One Piece?",
+    "categoria": "Animes",
+    "dificuldade": "fácil",
+    "resposta": [
+      "Luffy"
+    ]
+  },
+  {
+    "id": 386,
+    "pergunta": "Em Dragon Ball Z, quem derrota Freeza em Namekusei?",
+    "categoria": "Animes",
+    "dificuldade": "médio",
+    "resposta": [
+      "Goku"
+    ]
+  },
+  {
+    "id": 387,
+    "pergunta": "Qual série se passa majoritariamente no continente de Westeros?",
+    "categoria": "Televisão",
+    "dificuldade": "fácil",
+    "resposta": [
+      "Game of Thrones"
+    ]
+  },
+  {
+    "id": 388,
+    "pergunta": "Qual personagem diz a frase 'Eu sou o perigo' em Breaking Bad?",
+    "categoria": "Televisão",
+    "dificuldade": "médio",
+    "resposta": [
+      "Walter White"
+    ]
+  },
+  {
+    "id": 389,
+    "pergunta": "Qual é o maior oceano do planeta Terra?",
+    "categoria": "Conhecimentos Gerais",
+    "dificuldade": "fácil",
+    "resposta": [
+      "Oceano Pacífico"
+    ]
+    {
+        "id": 390,
+        "pergunta": "Qual o nome da fusão entre Goku e Vegeta utilizando brincos no Anime Dragon Ball Z?",
+        "categoria": "Anime",
+        "dificuldade": "fácil",
+        "resposta": [
+            "Vegetto"
+        ],
+        ]
+    },
+
+{
+        "id": 391,
+        "pergunta": "Qual o nome da fusão entre Goku e Vegeta utilizando uma dança no Anime Dragon Ball Z?",
+        "categoria": "Anime",
+        "dificuldade": "fácil",
+        "resposta": [
+            "Gogeta"
+        ],
+        ]
+    },
+
+{
+        "id": 392,
+        "pergunta": "Qual o nome do campeão da Liga Pokémon que aparece em Pokémon Emerald?",
+        "categoria": "Videogames",
+        "dificuldade": "fácil",
+        "resposta": [
+            "Red"
+        ],
+        ]
+    },
