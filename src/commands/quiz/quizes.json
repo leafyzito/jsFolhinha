@@ -105,20 +105,6 @@
     "dicas": ["X", "III", "IV", "V"]
   },
   {
-    "id": 11,
-    "pergunta": "Qual dos vasos sanguíneos a seguir carrega sangue venoso",
-    "categoria": "Ciência e Natureza",
-    "tipo": "multiple",
-    "dificuldade": "fácil",
-    "resposta": ["Artéria pulmonar", "Arteria pulmonar"],
-    "dicas": [
-      "Arteéria pulmonar",
-      "Veia pulmonar",
-      "Arteéria Aorta",
-      "Arteéria coronária"
-    ]
-  },
-  {
     "id": 12,
     "pergunta": "Quando foi lançado o último episódio de 'Futurama'?",
     "categoria": "Entretenimento: Televisão",
