@@ -64,13 +64,16 @@ async function initializeEventSubListener() {
   const eventSub = new EventSubListener();
   await eventSub.init();
 
+  // Fetch moderated channels cache once before checking initial status for all channels
+  await eventSub.fetchModeratedChannels();
+
   // Check initial status and subscribe to events for all connected channels
   const channelsToJoin = await getChannelsToJoin();
   await Promise.all(
     channelsToJoin.map(async (channel) => {
       const broadcasterId = channel.id;
       try {
-        // Check initial mod/VIP status
+        // Check initial mod/VIP status (will use cached moderated channels if available)
         await eventSub.checkInitialStatus(broadcasterId);
         // Subscribe to events
         await eventSub.subscribeToChannel(broadcasterId);

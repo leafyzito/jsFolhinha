@@ -4,8 +4,12 @@ const { getBroadcasterToken, hasScope } = require("./utils");
 /**
  * Check initial bot status (mod/VIP) for a broadcaster
  * @param {string} broadcasterId - The broadcaster's user ID
+ * @param {Set<string>|null} [moderatedChannelsCache] - Optional cached Set of broadcaster IDs where bot is a mod
  */
-async function checkInitialStatus(broadcasterId) {
+async function checkInitialStatus(
+  broadcasterId,
+  moderatedChannelsCache = null
+) {
   try {
     // Check if broadcaster token is available
     const broadcasterToken = await getBroadcasterToken(broadcasterId);
@@ -28,96 +32,64 @@ async function checkInitialStatus(broadcasterId) {
       return;
     }
 
-    // Check if bot is a moderator
+    // Check if bot is a moderator using Get Moderated Channels endpoint
+    // This endpoint returns all channels where the bot has moderator privileges
     let botIsMod = false;
-    const hasModScope = await hasScope(broadcasterId, "moderation:read");
+    const botUserId = process.env.BOT_USERID;
 
-    if (hasModScope) {
+    // Use cached list if provided, otherwise fetch from API
+    if (moderatedChannelsCache && moderatedChannelsCache instanceof Set) {
+      // Use cached list for fast lookup
+      botIsMod = moderatedChannelsCache.has(String(broadcasterId));
+    } else {
+      // Fall back to API call if cache is not provided (backward compatibility)
       try {
-        // Create broadcaster-specific ApiClient to use broadcaster's token
-        const broadcasterApiClient = new ApiClient({
-          authProvider: fb.authProvider.provider,
-          userId: broadcasterId,
-        });
-        const botUserId = process.env.BOT_USERID;
+        const botHasModeratedChannelsScope = await hasScope(
+          botUserId,
+          "user:read:moderated_channels"
+        );
 
-        // Handle paginated results
-        let cursor = null;
-        do {
-          const result = await broadcasterApiClient.moderation.getModerators(
-            broadcasterId,
-            { after: cursor }
-          );
+        if (botHasModeratedChannelsScope) {
+          // Create bot-specific ApiClient to use bot's token
+          const botApiClient = new ApiClient({
+            authProvider: fb.authProvider.provider,
+            userId: botUserId,
+          });
 
-          if (result && result.data) {
-            for (const mod of result.data) {
-              if (mod.userId === botUserId) {
-                botIsMod = true;
-                break;
+          // Get all channels where the bot has moderator privileges
+          let cursor = null;
+          do {
+            const result = await botApiClient.moderation.getModeratedChannels(
+              botUserId,
+              {
+                after: cursor,
+              }
+            );
+
+            if (result && result.data) {
+              for (const channel of result.data) {
+                // Extract broadcaster_id from channel object (API returns broadcaster_id)
+                // Check both snake_case (official API) and camelCase (library normalization)
+                const channelBroadcasterId =
+                  channel.id || channel.broadcaster_id || channel.broadcasterId;
+
+                if (
+                  channelBroadcasterId === broadcasterId ||
+                  String(channelBroadcasterId) === String(broadcasterId)
+                ) {
+                  botIsMod = true;
+                  break;
+                }
               }
             }
-          }
-          if (botIsMod) break;
-          cursor = result?.pagination?.cursor || null;
-        } while (cursor);
-
-        // Fallback: If bot not found in moderator list, check using bot's own token
-        // This uses the user:read:moderated_channels scope to check from bot's perspective
-        if (!botIsMod && hasModScope) {
-          try {
-            const botHasModeratedChannelsScope = await hasScope(
-              botUserId,
-              "user:read:moderated_channels"
-            );
-
-            if (botHasModeratedChannelsScope) {
-              // Create bot-specific ApiClient to use bot's token
-              const botApiClient = new ApiClient({
-                authProvider: fb.authProvider.provider,
-                userId: botUserId,
-              });
-
-              // Check if broadcaster's channel is in bot's moderated channels
-              let cursor = null;
-              do {
-                const result =
-                  await botApiClient.moderation.getModeratedChannels(
-                    botUserId,
-                    {
-                      after: cursor,
-                    }
-                  );
-
-                if (result && result.data) {
-                  for (const channel of result.data) {
-                    // Check multiple possible property names for broadcaster ID
-                    const channelBroadcasterId =
-                      channel.broadcasterId ||
-                      channel.broadcaster_id ||
-                      channel.id ||
-                      channel.userId ||
-                      channel.user_id;
-
-                    if (
-                      channelBroadcasterId === broadcasterId ||
-                      String(channelBroadcasterId) === String(broadcasterId)
-                    ) {
-                      botIsMod = true;
-                      break;
-                    }
-                  }
-                }
-                if (botIsMod) break;
-                cursor = result?.pagination?.cursor || null;
-              } while (cursor);
-            }
-            // If bot not found in moderated channels list, botIsMod remains false
-          } catch (error) {
-            console.error(
-              `Error in fallback moderator check for ${broadcasterId}:`,
-              error
-            );
-          }
+            if (botIsMod) break;
+            cursor = result?.pagination?.cursor || null;
+          } while (cursor);
+        } else {
+          // Bot doesn't have required scope, botIsMod remains false
+          console.log(
+            `* Bot does not have user:read:moderated_channels scope for ${broadcasterId}`
+          );
         }
       } catch (error) {
         console.error(

@@ -1,5 +1,6 @@
 require("dotenv").config();
 const { EventSubWsListener } = require("@twurple/eventsub-ws");
+const { ApiClient } = require("@twurple/api");
 
 // Import EventSub modules
 const {
@@ -12,6 +13,7 @@ const {
 const {
   isChannelLive: isChannelLiveUtil,
   getAllLiveChannels: getAllLiveChannelsUtil,
+  hasScope,
 } = require("./utils");
 
 class EventSubListener {
@@ -27,6 +29,9 @@ class EventSubListener {
 
     // Track live channels: Map<channelId, { channelName, isLive, startedAt }>
     this.liveChannels = new Map();
+
+    // Cache for moderated channels (Set of broadcaster IDs where bot is a mod)
+    this.moderatedChannels = null;
   }
 
   async init() {
@@ -66,8 +71,81 @@ class EventSubListener {
     await unsubscribeFromChannelHandler(this.subscribedChannels, broadcasterId);
   }
 
+  /**
+   * Fetch and cache all channels where the bot has moderator privileges
+   * @returns {Promise<Set<string>|null>} Set of broadcaster IDs or null if scope is missing/error occurs
+   */
+  async fetchModeratedChannels() {
+    const botUserId = process.env.BOT_USERID;
+    if (!botUserId) {
+      console.log("* Bot user ID not found, skipping moderated channels fetch");
+      return null;
+    }
+
+    try {
+      const botHasModeratedChannelsScope = await hasScope(
+        botUserId,
+        "user:read:moderated_channels"
+      );
+
+      if (!botHasModeratedChannelsScope) {
+        console.log(
+          "* Bot does not have user:read:moderated_channels scope, skipping moderated channels fetch"
+        );
+        this.moderatedChannels = null;
+        return null;
+      }
+
+      // Create bot-specific ApiClient to use bot's token
+      const botApiClient = new ApiClient({
+        authProvider: fb.authProvider.provider,
+        userId: botUserId,
+      });
+
+      // Get all channels where the bot has moderator privileges
+      const moderatedChannelsSet = new Set();
+      let cursor = null;
+
+      do {
+        const result = await botApiClient.moderation.getModeratedChannels(
+          botUserId,
+          {
+            after: cursor,
+          }
+        );
+
+        if (result && result.data) {
+          for (const channel of result.data) {
+            // Extract broadcaster_id from channel object (API returns broadcaster_id)
+            // Check both snake_case (official API) and camelCase (library normalization)
+            const channelBroadcasterId =
+              channel.id || channel.broadcaster_id || channel.broadcasterId;
+
+            if (channelBroadcasterId) {
+              moderatedChannelsSet.add(String(channelBroadcasterId));
+            }
+          }
+        }
+
+        cursor = result?.cursor || null;
+      } while (cursor);
+
+      // Cache the result
+      this.moderatedChannels = moderatedChannelsSet;
+      console.log(
+        `* Fetched and cached ${moderatedChannelsSet.size} moderated channels`
+      );
+
+      return moderatedChannelsSet;
+    } catch (error) {
+      console.error("Error fetching moderated channels:", error);
+      this.moderatedChannels = null;
+      return null;
+    }
+  }
+
   async checkInitialStatus(broadcasterId) {
-    await checkInitialStatusHandler(broadcasterId);
+    await checkInitialStatusHandler(broadcasterId, this.moderatedChannels);
   }
 
   // Utility method to check if a channel is live
