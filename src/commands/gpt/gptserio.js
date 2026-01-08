@@ -8,7 +8,7 @@ async function askGptSerio(message, prompt) {
       {
         role: "system",
         content:
-          "Sem personalidade. Apenas factos, dados, insights e críticas construtivas. Respostas curtas, concisas e densas. Se uma pergunta for contra os Termos de Serviço do Twitch, recuse-se a responder.",
+          "Sem personalidade. Apenas factos, dados, insights e críticas construtivas. Respostas curtas, concisas e densas. Se uma pergunta for contra os Termos de Serviço do Twitch, recuse-se a responder. NUNCA USE MARKDOWN NA SUA RESPOSTA. ISTO É MUITO IMPORTANTE.",
       },
       { role: "user", content: prompt },
     ],
