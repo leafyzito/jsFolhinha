@@ -31,11 +31,13 @@ const talkieCommand = async (message) => {
       targetChannel !== message.channelName &&
       targetChannel !== "folhinha" &&
       targetChannel !== "folhinhabot" &&
-      targetConfigs.disabledCommands &&
-      !targetConfigs.disabledCommands.includes(message.command) &&
-      targetConfigs.devBanCommands &&
-      !targetConfigs.devBanCommands.includes(message.command) &&
-      !targetConfigs.isPaused &&
+      !targetConfigs?.disabledCommands?.includes(
+        message.command?.commandName || "talkie"
+      ) &&
+      !targetConfigs?.devBanCommands?.includes(
+        message.command?.commandName || "talkie"
+      ) &&
+      !targetConfigs?.isPaused &&
       !(await fb.api.helix.isStreamOnline(targetChannel))
     ) {
       found = true;
@@ -84,7 +86,9 @@ talkieCommand.description = `Envie uma mensagem misteriosa para um canal aleató
 • Exemplo: !talkie Olá mundo - O bot irá enviar a mensagem "Olá mundo" para um canal aleatório
 
 Se quiser desabilitar a possibilidade do seu chat ser um dos canais onde o bot irá enviar mensagens misteriosas, use o comando !config ban talkie`;
-talkieCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname.split(path.sep).pop()}/${__filename.split(path.sep).pop()}`;
+talkieCommand.code = `https://github.com/leafyzito/jsFolhinha/blob/main/src/commands/${__dirname
+  .split(path.sep)
+  .pop()}/${__filename.split(path.sep).pop()}`;
 
 module.exports = {
   talkieCommand,
