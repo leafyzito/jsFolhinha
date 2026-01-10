@@ -76,9 +76,13 @@ const cookieCommand = async (message) => {
     if (!userCookieStats) {
       await createUserCookieBase(message, isUserPlus);
       return {
-        reply: `Você resgatou seu cookie diário e agora tem ${
-          isUserPlus ? 2 : 1
-        } cookies! ${isUserPlus ? "(Plus ⭐)" : ""} 🍪`,
+        reply: `Você ${
+          isUserPlus
+            ? "resgatou seus 2 cookies diários"
+            : "resgatou seu 1 cookie diário"
+        } e agora tem ${isUserPlus ? 2 : 1} cookies! ${
+          isUserPlus ? "(Plus ⭐)" : ""
+        } 🍪`,
       };
     }
 
@@ -99,9 +103,13 @@ const cookieCommand = async (message) => {
       }
     );
     return {
-      reply: `Você resgatou seu cookie diário e agora tem ${
-        userCookieStats.total + (isUserPlus ? 2 : 1)
-      } cookies! ${isUserPlus ? "(Plus ⭐)" : ""} 🍪`,
+      reply: `Você ${
+        isUserPlus
+          ? "resgatou seus 2 cookies diários"
+          : "resgatou seu 1 cookie diário"
+      } e agora tem ${userCookieStats.total + (isUserPlus ? 2 : 1)} cookies! ${
+        isUserPlus ? "(Plus ⭐)" : ""
+      } 🍪`,
     };
   }
 
