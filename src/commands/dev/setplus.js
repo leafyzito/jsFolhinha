@@ -26,7 +26,7 @@ const setPlusCommand = async (message) => {
   );
 
   return {
-    reply: `${userToSet} agora é Plus!`,
+    reply: `${userToSet} agora é Plus! ⭐`,
   };
 };
 
