@@ -25,12 +25,12 @@ const cookieFrases = fs.readFileSync(
   "utf8"
 );
 
-async function createUserCookieBase(message) {
+async function createUserCookieBase(message, isUserPlus = false) {
   // isto é só para o cd, acho eu
   const insert_doc = {
     userId: message.senderUserID,
     user: message.senderUsername,
-    total: 1,
+    total: isUserPlus ? 2 : 1,
     gifted: 0,
     beenGifted: 0,
     opened: 0,
@@ -63,6 +63,10 @@ const cookieCommand = async (message) => {
     };
   }
 
+  const isUserPlus =
+    (await fb.db.get("users", { userid: message.senderUserID }))?.isPlus ==
+    true;
+
   const targetCommand = message.args[1].toLowerCase();
 
   // MARKER: cd
@@ -70,9 +74,11 @@ const cookieCommand = async (message) => {
     const userCookieStats = await loadUserCookieStats(message.senderUserID);
 
     if (!userCookieStats) {
-      await createUserCookieBase(message);
+      await createUserCookieBase(message, isUserPlus);
       return {
-        reply: `Você resgatou seu cookie diário e agora tem 1 cookie! 🍪`,
+        reply: `Você resgatou seu cookie diário e agora tem ${
+          isUserPlus ? 2 : 1
+        } cookies! ${isUserPlus ? "(Plus ⭐)" : ""} 🍪`,
       };
     }
 
@@ -87,15 +93,15 @@ const cookieCommand = async (message) => {
       { userId: message.senderUserID },
       {
         $set: {
-          total: userCookieStats.total + 1,
+          total: userCookieStats.total + (isUserPlus ? 2 : 1),
           claimedToday: true,
         },
       }
     );
     return {
       reply: `Você resgatou seu cookie diário e agora tem ${
-        userCookieStats.total + 1
-      } cookies! 🍪`,
+        userCookieStats.total + (isUserPlus ? 2 : 1)
+      } cookies! ${isUserPlus ? "(Plus ⭐)" : ""} 🍪`,
     };
   }
 

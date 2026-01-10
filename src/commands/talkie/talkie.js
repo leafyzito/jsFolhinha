@@ -6,6 +6,10 @@ const talkieCommand = async (message) => {
     };
   }
 
+  const isUserPlus =
+    (await fb.db.get("users", { userid: message.senderUserID }))?.isPlus ==
+    true;
+
   let msgContent = message.args.slice(1).join(" ").trim();
 
   msgContent = fb.utils.sanitizeOtherPrefixes(msgContent);
@@ -68,8 +72,10 @@ const talkieCommand = async (message) => {
     "🤭"
   );
 
+  const sentToPlusString = ` para o chat #${targetChannel} (Plus ⭐)`;
+
   return {
-    reply: `Mensagem enviada ${emote}`,
+    reply: `Mensagem enviada ${isUserPlus ? sentToPlusString : ""} ${emote}`,
     notes: `${message.channelName} > ${targetChannel}`,
   };
 };

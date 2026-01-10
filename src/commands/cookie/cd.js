@@ -6,11 +6,16 @@ const {
 } = require("./cookie");
 
 const cookieDiarioCommand = async (message) => {
+  const isUserPlus =
+    (await fb.db.get("users", { userid: message.senderUserID }))?.isPlus ==
+    true;
   const userCookieStats = await loadUserCookieStats(message.senderUserID);
   if (!userCookieStats) {
-    await createUserCookieBase(message);
+    await createUserCookieBase(message, isUserPlus);
     return {
-      reply: `Você resgatou seu cookie diário e agora tem 1 cookie! 🍪`,
+      reply: `Você resgatou seu cookie diário e agora tem ${
+        isUserPlus ? 2 : 1
+      } cookies! ${isUserPlus ? "(Plus ⭐)" : ""} 🍪`,
     };
   }
 
@@ -38,15 +43,17 @@ const cookieDiarioCommand = async (message) => {
     { userId: message.senderUserID },
     {
       $set: {
-        total: userCookieStats.total + 1,
+        total: userCookieStats.total + (isUserPlus ? 2 : 1),
         claimedToday: true,
       },
     }
   );
   return {
     reply: `Você resgatou seu cookie diário e agora tem ${(
-      userCookieStats.total + 1
-    ).toLocaleString("fr-FR")} cookies! 🍪 ${stolenExtraString}`,
+      userCookieStats.total + (isUserPlus ? 2 : 1)
+    ).toLocaleString("fr-FR")} cookies! ${
+      isUserPlus ? "(Plus ⭐)" : ""
+    } 🍪 ${stolenExtraString}`,
   };
 };
 
