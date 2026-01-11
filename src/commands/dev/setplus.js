@@ -1,8 +1,11 @@
 const setPlusCommand = async (message) => {
   const userToSet = message.args[1]?.replace(/^@/, "").toLowerCase() || null;
-  if (!userToSet) {
+  const amount = parseInt(
+    message.args[2]?.replace(/^@/, "").toLowerCase() || null
+  );
+  if (!userToSet || !amount) {
     return {
-      reply: `Use o formato ${message.prefix}setplus <usuário>`,
+      reply: `Use o formato ${message.prefix}setplus <usuário> <amount>`,
     };
   }
 
@@ -21,6 +24,7 @@ const setPlusCommand = async (message) => {
         isSupporter: true,
         isPlus: true,
         lastSupportDate: Math.floor(Date.now() / 1000),
+        totalDonated: amount,
       },
     }
   );
