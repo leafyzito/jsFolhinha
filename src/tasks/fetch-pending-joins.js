@@ -23,7 +23,12 @@ async function fetchPendingJoins() {
     const inviterName = (await fb.api.helix.getUserByID(inviterId))?.login;
 
     if (channelName) {
-      const alreadyJoinedChannels = [...fb.twitch.anonClient.channelsToJoin];
+      const alreadyJoinedChannels = [
+        ...new Set([
+          ...fb.twitch.anonClient.currentChannels,
+          ...fb.twitch.anonClient.channelsToJoin,
+        ]),
+      ];
       if (alreadyJoinedChannels.includes(channelName)) {
         console.log(`* ${channelName} is already joined`);
         await fb.db.update(

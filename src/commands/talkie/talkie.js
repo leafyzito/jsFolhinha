@@ -20,7 +20,7 @@ const talkieCommand = async (message) => {
     };
   }
 
-  let joinedChannels = [...fb.twitch.anonClient.channelsToJoin];
+  let joinedChannels = [...fb.twitch.anonClient.currentChannels];
   let targetChannel;
   let i = 0;
   let found = false;

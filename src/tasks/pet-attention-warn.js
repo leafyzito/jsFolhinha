@@ -5,7 +5,14 @@ async function petAttentionTask() {
     const channelConfig = await fb.db.get("config", {
       channelId: pet.channelId,
     });
-    if (![...fb.twitch.anonClient.channelsToJoin].includes(channelName)) {
+    if (
+      ![
+        ...new Set([
+          ...fb.twitch.anonClient.currentChannels,
+          ...fb.twitch.anonClient.channelsToJoin,
+        ]),
+      ].includes(channelName)
+    ) {
       continue;
     }
 
