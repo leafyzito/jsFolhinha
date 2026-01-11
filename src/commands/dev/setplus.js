@@ -43,6 +43,6 @@ setPlusCommand.cooldownType = "user";
 setPlusCommand.permissions = ["admin"];
 setPlusCommand.whisperable = true;
 setPlusCommand.flags = ["dev"];
-setPlusCommand.description = `Coloca o status Plus em um usuário (que apoiou o projeto com mais de R$10)`;
+setPlusCommand.description = `Coloca o status Plus em um usuário (que apoiou o projeto com mais de R$10) e define o valor do apoio`;
 
 module.exports = { setPlusCommand };
