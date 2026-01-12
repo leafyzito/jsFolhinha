@@ -28,7 +28,8 @@ const talkieCommand = async (message) => {
   while (!found && i < 100) {
     i++;
     targetChannel =
-      fb.utils.randomChoice(joinedChannels) || message.channelName;
+      fb.utils.randomChoice(joinedChannels).replace("#", "") ||
+      message.channelName;
     const targetConfigs = await fb.db.get("config", { channel: targetChannel });
 
     if (
