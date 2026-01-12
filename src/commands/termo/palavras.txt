@@ -118,7 +118,6 @@ puder
 fluir
 lugar
 temer
-platô
 garbo
 abrir
 praxe
@@ -352,7 +351,6 @@ traga
 prazo
 turba
 prova
-bônus
 norma
 exame
 voraz
@@ -944,7 +942,6 @@ vagem
 menor
 sacro
 prelo
-tônus
 ninho
 fecho
 fibra
@@ -969,7 +966,6 @@ fases
 delta
 boate
 fedor
-côrte
 doida
 nimbo
 batel
