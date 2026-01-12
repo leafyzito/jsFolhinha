@@ -42,6 +42,8 @@ async function createUserCookieBase(message, isUserPlus = false) {
     stolenToday: false,
     gotStolen: 0,
     gotStolenBy: null,
+    totalStolen: 0,
+    totalGotStolen: 0,
   };
   await fb.db.insert("cookie", insert_doc);
   return insert_doc;
@@ -343,8 +345,10 @@ const cookieCommand = async (message) => {
     const gifted = userCookieStats.gifted;
     const beenGifted = userCookieStats.beenGifted;
     const sloted = userCookieStats.sloted;
+    const totalStolen = userCookieStats.totalStolen;
+    const totalGotStolen = userCookieStats.totalGotStolen;
     return {
-      reply: `${targetUser} tem ${total} cookies, 🥠 abriu ${opened}, 🎁 ofereceu ${gifted}, 🎁 foi presenteado com ${beenGifted} e 🎰 apostou ${sloted}`,
+      reply: `${targetUser} tem ${total} cookies, 🥠 abriu ${opened}, 🎁 ofereceu ${gifted}, 🎁 foi presenteado com ${beenGifted}, 🎰 apostou ${sloted}, 💰 roubou ${totalStolen} e 🏚️ foi roubado ${totalGotStolen} vezes`,
     };
   }
 
@@ -771,6 +775,9 @@ const cookieCommand = async (message) => {
             total: userCookieStats.total + cookiesStolen,
             stolenToday: true,
           },
+          $inc: {
+            totalStolen: cookiesStolen,
+          },
         }
       );
       await fb.db.update(
@@ -781,6 +788,9 @@ const cookieCommand = async (message) => {
             total: targetCookieStats.total - cookiesStolen,
             gotStolen: cookiesStolen,
             gotStolenBy: message.senderUserID,
+          },
+          $inc: {
+            totalGotStolen: cookiesStolen,
           },
         }
       );
@@ -795,6 +805,9 @@ const cookieCommand = async (message) => {
             total: userCookieStats.total + cookiesStolen,
             stolenToday: true,
           },
+          $inc: {
+            totalStolen: cookiesStolen,
+          },
         }
       );
       await fb.db.update(
@@ -805,6 +818,9 @@ const cookieCommand = async (message) => {
             total: targetCookieStats.total - cookiesStolen,
             gotStolen: cookiesStolen,
             gotStolenBy: message.senderUserID,
+          },
+          $inc: {
+            totalGotStolen: cookiesStolen,
           },
         }
       );
@@ -864,6 +880,9 @@ const cookieCommand = async (message) => {
             gotStolen: cookiesLost,
             gotStolenBy: message.senderUserID,
           },
+          $inc: {
+            totalGotStolen: cookiesLost,
+          },
         }
       );
     } else if (resultType === "ambush") {
@@ -903,7 +922,7 @@ const cookieCommand = async (message) => {
 };
 
 cookieCommand.commandName = "cookie";
-cookieCommand.aliases = ["cookie", "cookies"];
+cookieCommand.aliases = ["cookie", "cookies", "c"];
 cookieCommand.shortDescription =
   "Faça várias coisas relacionadas com os cookies";
 cookieCommand.cooldown = 5000;
