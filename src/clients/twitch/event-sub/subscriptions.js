@@ -144,15 +144,15 @@ async function subscribeToChannel(
         );
 
         if (hasSubscriptionScope) {
-          // Subscribe to new subscriptions
-          listener.onChannelSubscription(broadcasterId, (event) => {
-            handleChannelSubscription(event);
-          });
-
-          // // Subscribe to subscription shares (when users share their subscriptions)
-          // listener.onChannelSubscriptionMessage(broadcasterId, (event) => {
+          // // Subscribe to new subscriptions
+          // listener.onChannelSubscription(broadcasterId, (event) => {
           //   handleChannelSubscription(event);
           // });
+
+          // Subscribe to subscription shares (when users share their subscriptions)
+          listener.onChannelSubscriptionMessage(broadcasterId, (event) => {
+            handleChannelSubscription(event);
+          });
 
           // Subscribe to gifted subscriptions
           listener.onChannelSubscriptionGift(broadcasterId, (event) => {
