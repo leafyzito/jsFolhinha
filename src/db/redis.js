@@ -187,8 +187,22 @@ class RedisClient {
     return `cache:${collectionName}:${JSON.stringify(documentId)}`;
   }
 
+  getIndexKey(collectionName, fieldName, fieldValue) {
+    return `index:${collectionName}:${fieldName}:${JSON.stringify(fieldValue)}`;
+  }
+
   getStatsKey(collectionName, statType) {
     return `stats:${collectionName}:${statType}`;
+  }
+
+  // Define indexed fields for common query patterns
+  getIndexedFields(collectionName) {
+    const indexedFieldsMap = {
+      config: ["channelId", "channel"],
+      users: ["userid"],
+      bans: ["userId"],
+    };
+    return indexedFieldsMap[collectionName] || [];
   }
 
   async incrementStat(collectionName, statType) {
@@ -236,10 +250,57 @@ class RedisClient {
   }
 
   async setCache(collectionName, documentId, document) {
+    // Build secondary indexes for common query fields
+    const indexedFields = this.getIndexedFields(collectionName);
+    const indexUpdates = [];
+
+    // Check if document already exists to clean up old indexes
+    const oldDoc = await this.getCache(collectionName, documentId);
+    const oldIndexKeys = [];
+
+    if (oldDoc) {
+      for (const fieldName of indexedFields) {
+        const oldValue = oldDoc[fieldName];
+        if (oldValue !== undefined && oldValue !== null) {
+          const newValue = document[fieldName];
+          // If field value changed, mark old index for cleanup
+          if (oldValue !== newValue) {
+            oldIndexKeys.push(
+              this.getIndexKey(collectionName, fieldName, oldValue)
+            );
+          }
+        }
+      }
+    }
+
+    for (const fieldName of indexedFields) {
+      const fieldValue = document[fieldName];
+      if (fieldValue !== undefined && fieldValue !== null) {
+        indexUpdates.push({ fieldName, fieldValue });
+      }
+    }
+
     if (this.useLocalCache) {
       const key = this.getLocalCacheKey(collectionName, documentId);
       const expiresAt = Date.now() + this.cacheTTL * 1000;
+
+      // Clean up old indexes
+      for (const oldIndexKey of oldIndexKeys) {
+        this.localCache.delete(oldIndexKey);
+      }
+
       this.localCache.set(key, { value: document, expiresAt });
+
+      // Update local cache indexes (store with same TTL as document)
+      for (const { fieldName, fieldValue } of indexUpdates) {
+        const indexKey = this.getIndexKey(
+          collectionName,
+          fieldName,
+          fieldValue
+        );
+        this.localCache.set(indexKey, { value: documentId, expiresAt });
+      }
+
       this.cleanupExpiredLocalCache();
       return;
     }
@@ -247,11 +308,32 @@ class RedisClient {
     try {
       await this.ensureRedisConnection();
       const key = this.getCacheKey(collectionName, documentId);
+
+      // Clean up old indexes if values changed
+      if (oldIndexKeys.length > 0) {
+        await this.redisClient.del(oldIndexKeys);
+      }
+
+      // Set main cache document
       await this.redisClient.setEx(
         key,
         this.cacheTTL,
         JSON.stringify(document)
       );
+
+      // Update secondary indexes
+      for (const { fieldName, fieldValue } of indexUpdates) {
+        const indexKey = this.getIndexKey(
+          collectionName,
+          fieldName,
+          fieldValue
+        );
+        await this.redisClient.setEx(
+          indexKey,
+          this.cacheTTL,
+          JSON.stringify(documentId)
+        );
+      }
     } catch {
       // Fallback to local cache on error
       if (!this.useLocalCache) {
@@ -259,7 +341,24 @@ class RedisClient {
       }
       const key = this.getLocalCacheKey(collectionName, documentId);
       const expiresAt = Date.now() + this.cacheTTL * 1000;
+
+      // Clean up old indexes
+      for (const oldIndexKey of oldIndexKeys) {
+        this.localCache.delete(oldIndexKey);
+      }
+
       this.localCache.set(key, { value: document, expiresAt });
+
+      // Update local cache indexes (store with same TTL as document)
+      for (const { fieldName, fieldValue } of indexUpdates) {
+        const indexKey = this.getIndexKey(
+          collectionName,
+          fieldName,
+          fieldValue
+        );
+        this.localCache.set(indexKey, { value: documentId, expiresAt });
+      }
+
       this.cleanupExpiredLocalCache();
     }
   }
@@ -362,105 +461,189 @@ class RedisClient {
   }
 
   async searchCache(collectionName, query) {
-    if (this.useLocalCache) {
-      this.cleanupExpiredLocalCache();
-      const queryKeys = Object.keys(query);
-      const matches = [];
-      const prefix = `cache:${collectionName}:`;
+    const queryKeys = Object.keys(query);
+    const indexedFields = this.getIndexedFields(collectionName);
 
-      // For single field queries, try direct cache lookup first
-      if (queryKeys.length === 1) {
-        const key = queryKeys[0];
-        const value = query[key];
+    // Try to use secondary index for fast O(1) lookup
+    if (queryKeys.length === 1) {
+      const key = queryKeys[0];
+      const value = query[key];
 
-        // If querying by _id, use direct cache lookup
-        if (key === "_id") {
-          const doc = await this.getCache(collectionName, value);
-          if (doc) {
-            return [doc];
+      // If querying by _id, use direct cache lookup (already fast)
+      if (key === "_id") {
+        const doc = await this.getCache(collectionName, value);
+        if (doc) {
+          return [doc];
+        }
+        return [];
+      }
+
+      // If this is an indexed field, use secondary index for O(1) lookup
+      if (indexedFields.includes(key)) {
+        return await this.searchCacheByIndex(collectionName, key, value, query);
+      }
+    } else if (queryKeys.length > 1) {
+      // For multi-field queries, try to use first indexed field
+      for (const key of queryKeys) {
+        if (indexedFields.includes(key)) {
+          const value = query[key];
+          const indexedMatches = await this.searchCacheByIndex(
+            collectionName,
+            key,
+            value,
+            query
+          );
+          if (indexedMatches.length > 0) {
+            return indexedMatches;
           }
+          // If indexed lookup found nothing, no need to scan
           return [];
         }
-
-        // For other single field queries, search all cached documents
-        for (const [cacheKey, entry] of this.localCache.entries()) {
-          if (cacheKey.startsWith(prefix)) {
-            const doc = entry.value;
-            if (doc[key] === value) {
-              matches.push(doc);
-            }
-          }
-        }
-        return matches;
-      } else {
-        // For multi-field queries, search all cached documents
-        for (const [cacheKey, entry] of this.localCache.entries()) {
-          if (cacheKey.startsWith(prefix)) {
-            const doc = entry.value;
-            let isMatch = true;
-            for (const [key, value] of Object.entries(query)) {
-              if (doc[key] !== value) {
-                isMatch = false;
-                break;
-              }
-            }
-            if (isMatch) {
-              matches.push(doc);
-            }
-          }
-        }
-        return matches;
       }
+    }
+
+    // Fallback to scanning if no index available (for less common query patterns)
+    return await this.searchCacheByScan(collectionName, query);
+  }
+
+  // Fast O(1) lookup using secondary index
+  async searchCacheByIndex(collectionName, fieldName, fieldValue, fullQuery) {
+    if (this.useLocalCache) {
+      const indexKey = this.getIndexKey(collectionName, fieldName, fieldValue);
+      const documentIdEntry = this.localCache.get(indexKey);
+
+      if (!documentIdEntry) {
+        return [];
+      }
+
+      // Check if index entry is expired
+      if (documentIdEntry.expiresAt && documentIdEntry.expiresAt < Date.now()) {
+        this.localCache.delete(indexKey);
+        return [];
+      }
+
+      // Handle both wrapped ({value, expiresAt}) and plain documentId formats
+      const documentId =
+        documentIdEntry.value !== undefined
+          ? documentIdEntry.value
+          : documentIdEntry;
+      const doc = await this.getCache(collectionName, documentId);
+
+      if (!doc) {
+        return [];
+      }
+
+      // For single-field queries, we're done. For multi-field, verify all fields match
+      const queryKeys = Object.keys(fullQuery);
+      if (queryKeys.length === 1) {
+        return [doc];
+      }
+
+      // Verify all query fields match
+      let isMatch = true;
+      for (const [key, value] of Object.entries(fullQuery)) {
+        if (doc[key] !== value) {
+          isMatch = false;
+          break;
+        }
+      }
+      return isMatch ? [doc] : [];
     }
 
     try {
       await this.ensureRedisConnection();
-      const queryKeys = Object.keys(query);
-      const matches = [];
+      const indexKey = this.getIndexKey(collectionName, fieldName, fieldValue);
+      const documentIdStr = await this.redisClient.get(indexKey);
 
-      // For single field queries, try direct cache lookup first
+      if (!documentIdStr) {
+        return [];
+      }
+
+      const documentId = JSON.parse(documentIdStr);
+      const doc = await this.getCache(collectionName, documentId);
+
+      if (!doc) {
+        return [];
+      }
+
+      // For single-field queries, we're done. For multi-field, verify all fields match
+      const queryKeys = Object.keys(fullQuery);
       if (queryKeys.length === 1) {
-        const key = queryKeys[0];
-        const value = query[key];
+        return [doc];
+      }
 
-        // If querying by _id, use direct cache lookup
-        if (key === "_id") {
-          const doc = await this.getCache(collectionName, value);
-          if (doc) {
-            return [doc];
-          }
-          return [];
+      // Verify all query fields match
+      let isMatch = true;
+      for (const [key, value] of Object.entries(fullQuery)) {
+        if (doc[key] !== value) {
+          isMatch = false;
+          break;
         }
+      }
+      return isMatch ? [doc] : [];
+    } catch {
+      // Fallback to local cache on error
+      if (!this.useLocalCache) {
+        this.useLocalCache = true;
+      }
+      return await this.searchCacheByIndex(
+        collectionName,
+        fieldName,
+        fieldValue,
+        fullQuery
+      );
+    }
+  }
 
-        // For other single field queries, search all cached documents
-        const pattern = `cache:${collectionName}:*`;
-        const keys = await this.redisClient.keys(pattern);
+  // Fallback: slow scan for non-indexed queries (kept for backwards compatibility)
+  async searchCacheByScan(collectionName, query) {
+    if (this.useLocalCache) {
+      this.cleanupExpiredLocalCache();
+      const matches = [];
+      const prefix = `cache:${collectionName}:`;
 
-        for (const cacheKey of keys) {
-          const docStr = await this.redisClient.get(cacheKey);
-          if (docStr) {
-            try {
-              const doc = JSON.parse(docStr);
-              if (doc[key] === value) {
-                matches.push(doc);
-              }
-            } catch {
-              // Skip invalid JSON
-              continue;
+      for (const [cacheKey, entry] of this.localCache.entries()) {
+        if (cacheKey.startsWith(prefix)) {
+          const doc = entry.value;
+          let isMatch = true;
+          for (const [key, value] of Object.entries(query)) {
+            if (doc[key] !== value) {
+              isMatch = false;
+              break;
             }
           }
+          if (isMatch) {
+            matches.push(doc);
+          }
         }
-        return matches;
-      } else {
-        // For multi-field queries, search all cached documents
-        const pattern = `cache:${collectionName}:*`;
-        const keys = await this.redisClient.keys(pattern);
+      }
+      return matches;
+    }
 
-        for (const cacheKey of keys) {
-          const docStr = await this.redisClient.get(cacheKey);
-          if (docStr) {
+    try {
+      await this.ensureRedisConnection();
+      const matches = [];
+      // Use SCAN instead of KEYS for better performance (non-blocking)
+      let cursor = 0;
+      const pattern = `cache:${collectionName}:*`;
+
+      do {
+        const result = await this.redisClient.scan(cursor, {
+          MATCH: pattern,
+          COUNT: 100,
+        });
+        cursor = result.cursor;
+        const keys = result.keys;
+
+        if (keys.length > 0) {
+          // Use MGET for bulk retrieval instead of individual GETs
+          const values = await this.redisClient.mGet(keys);
+
+          for (let i = 0; i < values.length; i++) {
+            if (!values[i]) continue;
+
             try {
-              const doc = JSON.parse(docStr);
+              const doc = JSON.parse(values[i]);
               let isMatch = true;
               for (const [key, value] of Object.entries(query)) {
                 if (doc[key] !== value) {
@@ -477,14 +660,15 @@ class RedisClient {
             }
           }
         }
-        return matches;
-      }
+      } while (cursor !== 0);
+
+      return matches;
     } catch {
       // Fallback to local cache on error
       if (!this.useLocalCache) {
         this.useLocalCache = true;
       }
-      return await this.searchCache(collectionName, query); // Recursive call with local cache
+      return await this.searchCacheByScan(collectionName, query);
     }
   }
 
