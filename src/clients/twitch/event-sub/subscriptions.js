@@ -149,10 +149,10 @@ async function subscribeToChannel(
             handleChannelSubscription(event);
           });
 
-          // Subscribe to resubscriptions (with messages)
-          listener.onChannelSubscriptionMessage(broadcasterId, (event) => {
-            handleChannelSubscription(event);
-          });
+          // // Subscribe to subscription shares (when users share their subscriptions)
+          // listener.onChannelSubscriptionMessage(broadcasterId, (event) => {
+          //   handleChannelSubscription(event);
+          // });
 
           // Subscribe to gifted subscriptions
           listener.onChannelSubscriptionGift(broadcasterId, (event) => {
