@@ -1568,12 +1568,11 @@
   },
   {
     "id": 160,
-    "pergunta": "What was the main currency in Club Penguin?",
+    "pergunta": "Qual era a moeda principal no Club Penguin?",
     "categoria": "Entretenimento: Video Games",
     "tipo": "multiple",
     "dificuldade": "médio",
-    "resposta": ["Coins"],
-    "dicas": ["Stamps", "Tickets", "Gems"]
+    "resposta": ["Moedas"]
   },
   {
     "id": 161,
