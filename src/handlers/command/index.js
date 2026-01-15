@@ -90,7 +90,12 @@ async function commandHandler(message) {
   }
 
   // update 7tv presence
-  await fb.api.stv.updatePresence(process.env.BOT_7TV_UID, message.channelID);
+  fb.api.stv
+    .updatePresence(process.env.BOT_7TV_UID, message.channelID)
+    .catch((err) => {
+      // Silently fail - this is non-critical
+      console.error("7TV presence update failed:", err);
+    });
 }
 
 module.exports = {

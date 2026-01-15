@@ -546,7 +546,7 @@ class Utils {
     return false;
   }
 
-  async isBotMod(channelId) {
+  async isBotMod(channelId, channelConfig = null) {
     try {
       // Check if broadcaster has authenticated
       const scopes =
@@ -558,7 +558,9 @@ class Utils {
         return null;
       }
 
-      const config = await fb.db.get("config", { channelId: channelId });
+      // Use provided config or fetch it if not available
+      const config =
+        channelConfig || (await fb.db.get("config", { channelId: channelId }));
       if (!config) {
         // Config doesn't exist, status never checked
         return null;
@@ -582,7 +584,7 @@ class Utils {
     }
   }
 
-  async isBotVip(channelId) {
+  async isBotVip(channelId, channelConfig = null) {
     try {
       // Check if broadcaster has authenticated
       const scopes =
@@ -594,7 +596,9 @@ class Utils {
         return null;
       }
 
-      const config = await fb.db.get("config", { channelId: channelId });
+      // Use provided config or fetch it if not available
+      const config =
+        channelConfig || (await fb.db.get("config", { channelId: channelId }));
       if (!config) {
         // Config doesn't exist, status never checked
         return null;

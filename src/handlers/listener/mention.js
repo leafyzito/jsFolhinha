@@ -21,7 +21,7 @@ const updateLastReplyTime = (channelName, currentTime) => {
 };
 
 const replyMentionListener = async (message) => {
-  if (await shouldSkipMessage(message.channelName)) {
+  if (await shouldSkipMessage(message)) {
     return;
   }
 

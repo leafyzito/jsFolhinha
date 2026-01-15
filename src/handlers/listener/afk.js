@@ -12,7 +12,7 @@ const afkUserListener = async (message) => {
   }
 
   // check if channel is paused or has reminders banned
-  if (await shouldSkipMessage(message.channelName, "afk")) {
+  if (await shouldSkipMessage(message, "afk")) {
     return;
   }
 

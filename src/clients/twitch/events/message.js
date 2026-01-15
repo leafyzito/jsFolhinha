@@ -72,6 +72,17 @@ module.exports = async function onMessage(channel, username, text, message) {
     channelId: message.channelID,
   });
 
+  // Attach channelConfig to message for use throughout the codebase
+  // Note: Will be null for non-command messages, listeners will fetch if needed
+  Object.defineProperty(message, "channelConfig", {
+    value: channelData,
+    writable: true,
+    configurable: true,
+    enumerable: true,
+  });
+
+  // Set prefix based on config or defaults
+  // For non-command messages, use default prefix
   Object.defineProperty(message, "prefix", {
     value: process.env.ENV === "prod" ? channelData?.prefix || "!" : "!!",
     writable: true,

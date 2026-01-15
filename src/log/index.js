@@ -6,11 +6,13 @@ class Logger {
   async manageChannelMsgCooldown(channel) {
     // universal cooldown for all channels to avoid timeouts
 
-    if (await fb.utils.isBotMod(channel)) {
-      return;
-    }
+    // Parallelize bot status checks for better performance
+    const [isBotMod, isBotVip] = await Promise.all([
+      fb.utils.isBotMod(channel),
+      fb.utils.isBotVip(channel),
+    ]);
 
-    if (await fb.utils.isBotVip(channel)) {
+    if (isBotMod || isBotVip) {
       return;
     }
 
@@ -126,7 +128,10 @@ class Logger {
           )
         );
     }
-    await this.createCommandLog(message, response, res?.sentVia);
+    // Log asynchronously (non-blocking) after sending response
+    this.createCommandLog(message, response, res?.sentVia).catch((err) => {
+      console.error("Failed to create command log:", err);
+    });
   }
 
   async logAndSay(message, response, notes = null, retryCount = 0) {
@@ -148,7 +153,10 @@ class Logger {
         )
       );
 
-    await this.createCommandLog(message, response, res.sentVia);
+    // Log asynchronously (non-blocking) after sending response
+    this.createCommandLog(message, response, res.sentVia).catch((err) => {
+      console.error("Failed to create command log:", err);
+    });
   }
 
   async logAndMeAction(message, response, retryCount = 0) {
@@ -169,7 +177,12 @@ class Logger {
         )
       );
 
-    await this.createCommandLog(message, "/me " + response, res.sentVia);
+    // Log asynchronously (non-blocking) after sending response
+    this.createCommandLog(message, "/me " + response, res.sentVia).catch(
+      (err) => {
+        console.error("Failed to create command log:", err);
+      }
+    );
   }
 
   async logAndWhisper(message, response, notes = null) {

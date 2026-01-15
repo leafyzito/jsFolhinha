@@ -328,7 +328,7 @@ const handleReminderResponse = async (message, reminders) => {
 // Main reminder listener function
 const reminderListener = async (message) => {
   // Check if channel is paused or has reminders banned
-  if (await shouldSkipMessage(message.channelName, "remind")) {
+  if (await shouldSkipMessage(message, "remind")) {
     return;
   }
 

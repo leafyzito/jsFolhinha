@@ -1,8 +1,21 @@
 // check if channel is paused, offline only, or has a disabled command
-const shouldSkipMessage = async (channelName, commandName = null) => {
-  const channelData = await fb.db.get("config", {
-    channel: channelName.toLowerCase(),
-  });
+const shouldSkipMessage = async (message, commandName = null) => {
+  const channelName = message.channelName;
+
+  // Use message.channelConfig if available and channel name matches, otherwise fetch
+  let channelData = null;
+  if (
+    message.channelConfig &&
+    message.channelConfig.channel &&
+    message.channelConfig.channel.toLowerCase() === channelName.toLowerCase()
+  ) {
+    channelData = message.channelConfig;
+  } else {
+    channelData = await fb.db.get("config", {
+      channel: channelName.toLowerCase(),
+    });
+  }
+
   if (!channelData) {
     return false;
   }

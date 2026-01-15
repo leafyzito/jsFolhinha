@@ -111,7 +111,10 @@ async function validateCommandExecution(cooldownDuration, type, message) {
   }
 
   if (command.flags && command.flags.includes("modBot")) {
-    const isBotMod = await fb.utils.isBotMod(message.channelID);
+    const isBotMod = await fb.utils.isBotMod(
+      message.channelID,
+      message.channelConfig
+    );
     if (isBotMod === null) {
       fb.log.logAndReply(
         message,
@@ -130,7 +133,10 @@ async function validateCommandExecution(cooldownDuration, type, message) {
   }
 
   if (command.flags && command.flags.includes("vipBot")) {
-    const isBotVip = await fb.utils.isBotVip(message.channelID);
+    const isBotVip = await fb.utils.isBotVip(
+      message.channelID,
+      message.channelConfig
+    );
     if (isBotVip === null) {
       fb.log.logAndReply(
         message,
@@ -149,12 +155,28 @@ async function validateCommandExecution(cooldownDuration, type, message) {
   }
 
   // check perms to execute from
-  const currChannelConfigs = await fb.db.get("config", {
-    channelId: message.channelID,
-  });
-  let currUserBans = await fb.db.get("bans", {
-    userId: message.senderUserID,
-  });
+  // Use message.channelConfig (always available for commands) or fetch if somehow missing
+  let currChannelConfigs = message.channelConfig;
+  let currUserBans;
+
+  if (!currChannelConfigs) {
+    // Parallelize config and bans fetches when both are needed (fallback case)
+    const [configResult, bansResult] = await Promise.all([
+      fb.db.get("config", {
+        channelId: message.channelID,
+      }),
+      fb.db.get("bans", {
+        userId: message.senderUserID,
+      }),
+    ]);
+    currChannelConfigs = configResult;
+    currUserBans = bansResult;
+  } else {
+    // Only fetch bans if config was already available
+    currUserBans = await fb.db.get("bans", {
+      userId: message.senderUserID,
+    });
+  }
 
   if (currUserBans && !Array.isArray(currUserBans)) {
     currUserBans = [currUserBans];
