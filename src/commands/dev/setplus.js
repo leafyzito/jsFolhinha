@@ -1,8 +1,6 @@
 const setPlusCommand = async (message) => {
   const userToSet = message.args[1]?.replace(/^@/, "").toLowerCase() || null;
-  const amount = parseInt(
-    message.args[2]?.replace(/^@/, "").toLowerCase() || null
-  );
+  const amount = message.args[2]?.replace(/^@/, "").toLowerCase() || null;
   if (!userToSet || !amount) {
     return {
       reply: `Use o formato ${message.prefix}setplus <usuário> <amount>`,
