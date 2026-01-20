@@ -60,6 +60,35 @@ class ApiServer {
       res.status(200).json({ commands: commandsDetailed });
     });
 
+    this.app.get("/plus", async (req, res) => {
+      let plus = await fb.db.get("users", { isPlus: true });
+      if (plus && !Array.isArray(plus)) {
+        plus = [plus];
+      }
+      let plusUsers = [];
+      if (plus) {
+        plusUsers = plus.map((user) => ({
+          userid: user.userid,
+          currAlias: user.currAlias,
+          isFounder: !!user.plusFounder,
+        }));
+      }
+
+      let supporters = await fb.db.get("users", { isSupporter: true, isPlus: false });
+      if (supporters && !Array.isArray(supporters)) {
+        supporters = [supporters];
+      }
+      let supporterUsers = [];
+      if (supporters) {
+        supporterUsers = supporters.map((user) => ({
+          userid: user.userid,
+          currAlias: user.currAlias,
+        }));
+      }
+
+      res.status(200).json({ plus: plusUsers, supporters: supporterUsers });
+    });
+
     this.app.get("/wrapped/:username", async (req, res) => {
       try {
         if (!req.params.username) {
