@@ -61,7 +61,34 @@ class ApiServer {
     });
 
     this.app.get("/plus", async (req, res) => {
-      let plus = await fb.db.get("users", { isPlus: true });
+      let dev = await fb.db.get("users", { userid: process.env.DEV_USERID }, true);
+      if (dev && !Array.isArray(dev)) {
+        dev = [dev];
+      }
+      let devUsers = [];
+      if (dev) {
+        devUsers = dev.map((user) => ({
+          userid: user.userid,
+          currAlias: user.currAlias,
+        }));
+      }
+
+      const adminUserIds = process.env.ADMIN_USERIDS && process.env.ADMIN_USERIDS.startsWith("[")
+        ? JSON.parse(process.env.ADMIN_USERIDS)
+        : process.env.ADMIN_USERIDS.split(",");
+      let admins = await fb.db.get("users", { userid: { $in: adminUserIds } }, true);
+      if (admins && !Array.isArray(admins)) {
+        admins = [admins];
+      }
+      let adminUsers = [];
+      if (admins) {
+        adminUsers = admins.map((user) => ({
+          userid: user.userid,
+          currAlias: user.currAlias,
+        }));
+      }
+
+      let plus = await fb.db.get("users", { isPlus: true }, true);
       if (plus && !Array.isArray(plus)) {
         plus = [plus];
       }
@@ -74,7 +101,7 @@ class ApiServer {
         }));
       }
 
-      let supporters = await fb.db.get("users", { isSupporter: true, isPlus: false });
+      let supporters = await fb.db.get("users", { isSupporter: true, isPlus: false }, true);
       if (supporters && !Array.isArray(supporters)) {
         supporters = [supporters];
       }
@@ -86,7 +113,7 @@ class ApiServer {
         }));
       }
 
-      res.status(200).json({ plus: plusUsers, supporters: supporterUsers });
+      res.status(200).json({ dev: devUsers, admins: adminUsers, plus: plusUsers, supporters: supporterUsers });
     });
 
     this.app.get("/wrapped/:username", async (req, res) => {
