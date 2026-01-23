@@ -731,7 +731,7 @@ const cookieCommand = async (message) => {
         ).toLocaleString("fr-FR")}] 🍪`,
       ],
       fail: [
-        `Você ia roubar um cookie de ${stealTarget} mas acabou perdendo 1 pelo caminho [+0 ⇒ ${userCookieStats.total.toLocaleString(
+        `Você roubou um cookie de ${stealTarget} mas acabou perdendo ele pelo caminho [+0 ⇒ ${userCookieStats.total.toLocaleString(
           "fr-FR"
         )}] 🍪`,
       ],
