@@ -136,7 +136,7 @@ const dungeonCommand = async (message) => {
         rankOption = "xp";
       }
 
-      let ranking = await fb.db.get("dungeon", {});
+      let ranking = await fb.db.get("dungeon", {}, true);
       if (!Array.isArray(ranking)) {
         ranking = [ranking];
       }

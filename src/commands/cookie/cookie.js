@@ -358,7 +358,7 @@ const cookieCommand = async (message) => {
     if (["gift", "gifts", "oferta", "gifted"].includes(message.args[2])) {
       const topUsers = await fb.db.get("cookie", {
         userId: { $ne: "925782584" },
-      });
+      }, true);
       topUsers.sort((a, b) => b.gifted - a.gifted);
 
       // only top 5
@@ -399,7 +399,7 @@ const cookieCommand = async (message) => {
     if (["aposta", "apostas", "slot", "slots"].includes(message.args[2])) {
       const topUsers = await fb.db.get("cookie", {
         userId: { $ne: "925782584" },
-      });
+      }, true);
       topUsers.sort((a, b) => b.sloted - a.sloted);
 
       // only top 5
@@ -439,7 +439,7 @@ const cookieCommand = async (message) => {
     // MARKER: top cookies
     const topUsers = await fb.db.get("cookie", {
       userId: { $ne: "925782584" },
-    });
+    }, true);
     topUsers.sort((a, b) => b.total - a.total);
 
     // only top 5
