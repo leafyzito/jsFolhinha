@@ -1,7 +1,7 @@
 const path = require("path");
 const leafyrinoCommand = async () => {
   return {
-    reply: "🔗 https://leafyrino.leafyzito.dev/",
+    reply: "🔗 https://leafyrino.leafyzito.dev",
   };
 };
 
