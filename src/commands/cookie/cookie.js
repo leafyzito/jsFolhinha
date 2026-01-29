@@ -234,27 +234,20 @@ const cookieCommand = async (message) => {
 
     // Apply "random" selection logic, like in steal
     if (giftTarget.toLowerCase() == "random") {
-      // Get all users except yourself and Folhinhabot (BOT_USERID)
-      // Filter out sender and bot directly in the query
-      const allCookies = await fb.db.get(
-        "cookie",
+      const [randomUser] = await fb.db.aggregate("cookie", [
         {
-          userId: {
-            $nin: [message.senderUserID, process.env.BOT_USERID],
+          $match: {
+            userId: {
+              $nin: [message.senderUserID, process.env.BOT_USERID],
+            },
           },
         },
-        true
-      );
-      if (!allCookies || allCookies.length == 0) {
-        return {
-          reply: `Não existe ninguém para oferecer? @${process.env.DEV_USERNAME}`,
-        };
-      }
-      // Pick one at random
-      const randomUser = fb.utils.randomChoice(allCookies);
+        { $sample: { size: 1 } },
+      ]);
+
       if (!randomUser) {
         return {
-          reply: `Erro ao escolher um usuário aleatório para presentear. @${process.env.DEV_USERNAME}`,
+          reply: `Não existe ninguém para oferecer? @${process.env.DEV_USERNAME}`,
         };
       }
 
@@ -611,26 +604,20 @@ const cookieCommand = async (message) => {
     }
 
     if (stealTarget.toLowerCase() == "random") {
-      // Get all users except yourself and Folhinhabot (BOT_USERID)
-      const allCookies = await fb.db.get(
-        "cookie",
+      const [randomUser] = await fb.db.aggregate("cookie", [
         {
-          userId: {
-            $nin: [message.senderUserID, process.env.BOT_USERID],
+          $match: {
+            userId: {
+              $nin: [message.senderUserID, process.env.BOT_USERID],
+            },
           },
         },
-        true
-      );
-      if (!allCookies || allCookies.length == 0) {
-        return {
-          reply: `Não existe ninguém com cookies? @${process.env.DEV_USERNAME}`,
-        };
-      }
-      // Pick one at random
-      const randomUser = fb.utils.randomChoice(allCookies);
+        { $sample: { size: 1 } },
+      ]);
+
       if (!randomUser) {
         return {
-          reply: `Erro ao escolher um usuário aleatório para roubar. @${process.env.DEV_USERNAME}`,
+          reply: `Não existe ninguém com cookies? @${process.env.DEV_USERNAME}`,
         };
       }
 
