@@ -595,9 +595,7 @@ const cookieCommand = async (message) => {
     let stealTarget = message.args[2]?.replace(/^@/, "") || null;
     let stealTargetUserID;
     if (!stealTarget) {
-      return {
-        reply: `Use o formato ${message.prefix}cookie roubar <usuário>`,
-      };
+      stealTarget = "random";
     }
 
     if (stealTarget.toLowerCase() === message.senderUsername.toLowerCase()) {
