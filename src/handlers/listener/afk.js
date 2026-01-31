@@ -37,7 +37,7 @@ const afkUserListener = async (message) => {
   const afkData = Array.isArray(afkStats) ? afkStats[0] : afkStats;
 
   const afkInfoObject = afkInfoObjects.find((afk) =>
-    afk.alias.includes(afkData.afk_type)
+    afk.alias.includes(afkData.afk_type),
   );
   const afkReturned = afkInfoObject.returned;
   const afkEmoji = afkInfoObject.emoji;
@@ -46,19 +46,19 @@ const afkUserListener = async (message) => {
 
   fb.log.send(
     message.channelName,
-    `${message.senderUsername} ${afkReturned} ${afkEmoji} ${
+    `${message.displayName} ${afkReturned} ${afkEmoji} ${
       afkMessage ? `: ${afkMessage}` : ""
-    } (afk por ${afkSince})`
+    } (afk por ${afkSince})`,
   );
 
   await fb.db.update(
     "afk",
     { channel: message.channelName, user: message.senderUsername },
-    { $set: { is_afk: false, afk_return: Math.floor(Date.now() / 1000) } }
+    { $set: { is_afk: false, afk_return: Math.floor(Date.now() / 1000) } },
   );
 
   processingAfk = processingAfk.filter(
-    (user) => user !== message.senderUsername
+    (user) => user !== message.senderUsername,
   );
   return;
 };

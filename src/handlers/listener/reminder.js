@@ -10,7 +10,7 @@ const formatReminderMessage = (
   reminderSender,
   receiverName,
   howLongAgo,
-  reminderMessage
+  reminderMessage,
 ) => {
   return reminderSender === receiverName
     ? `@${receiverName}, lembrete de você mesmo há ${howLongAgo}: ${reminderMessage}`
@@ -40,7 +40,7 @@ const checkAndClearCacheIfNoReminders = async (userId) => {
     const pendingReminders = await fb.db.get(
       "remind",
       { receiverId: userId, beenRead: false, remindAt: null },
-      true
+      true,
     );
 
     // If no pending reminders, clear the user from cache
@@ -53,7 +53,7 @@ const checkAndClearCacheIfNoReminders = async (userId) => {
   } catch (error) {
     console.error(
       "Error checking pending reminders for cache clearing:",
-      error
+      error,
     );
   }
 };
@@ -99,7 +99,7 @@ const sendReminderAndUpdate = async (reminder, finalRes) => {
   await fb.db.update(
     "remind",
     { _id: reminder._id },
-    { $set: { beenRead: true } }
+    { $set: { beenRead: true } },
   );
 };
 
@@ -111,12 +111,12 @@ const handleMissedReminder = async (reminder) => {
   fb.discord.log(
     `* Sending missed reminder to ${
       reminder.fromChannelId
-    } (${reminderDate.toLocaleString()})`
+    } (${reminderDate.toLocaleString()})`,
   );
   console.log(
     `* Sending missed reminder to ${
       reminder.fromChannelId
-    } (${reminderDate.toLocaleString()})`
+    } (${reminderDate.toLocaleString()})`,
   );
 
   const reminderSender =
@@ -134,10 +134,10 @@ const handleMissedReminder = async (reminder) => {
   const channelName = channelData?.channel || null;
   const checkedMessage = fb.utils.checkRegex(
     reminder.remindMessage,
-    channelName
+    channelName,
   );
   const isBannedContent = checkedMessage.includes(
-    "⚠️ Mensagem retida por conter conteúdo banido"
+    "⚠️ Mensagem retida por conter conteúdo banido",
   );
 
   let finalRes;
@@ -149,7 +149,7 @@ const handleMissedReminder = async (reminder) => {
       reminderSender,
       receiverName,
       reminderHowLongAgo,
-      reminder.remindMessage
+      reminder.remindMessage,
     );
   }
 
@@ -173,7 +173,7 @@ const scheduleFutureReminder = async (reminder) => {
       const remindDeletionCheck = await fb.db.get(
         "remind",
         { _id: reminder._id },
-        true
+        true,
       );
       if (!remindDeletionCheck || remindDeletionCheck.beenRead) {
         return;
@@ -194,10 +194,10 @@ const scheduleFutureReminder = async (reminder) => {
       const channelName = channelData?.channel || null;
       const checkedMessage = fb.utils.checkRegex(
         reminder.remindMessage,
-        channelName
+        channelName,
       );
       const isBannedContent = checkedMessage.includes(
-        "⚠️ Mensagem retida por conter conteúdo banido"
+        "⚠️ Mensagem retida por conter conteúdo banido",
       );
 
       let finalRes;
@@ -209,7 +209,7 @@ const scheduleFutureReminder = async (reminder) => {
           reminderSender,
           receiverName,
           howLongAgo,
-          reminder.remindMessage
+          reminder.remindMessage,
         );
       }
 
@@ -218,7 +218,7 @@ const scheduleFutureReminder = async (reminder) => {
       }
 
       await sendReminderAndUpdate(reminder, finalRes);
-    }
+    },
   );
 
   // Store the job in a global object to associate it with the reminderId
@@ -274,7 +274,7 @@ const handleReminderResponse = async (message, reminders) => {
 
   if (reminders.length <= 3) {
     // Handle small number of reminders (≤3)
-    let replyMsg = `${message.senderUsername}, você tem ${
+    let replyMsg = `${message.displayName}, você tem ${
       reminders.length
     } lembrete${reminders.length > 1 ? "s" : ""}: `;
 
@@ -295,7 +295,7 @@ const handleReminderResponse = async (message, reminders) => {
     if (replyMsg.length > 480) {
       fb.log.send(
         message.channelName,
-        `${message.senderUsername}, você tem ${reminders.length} lembretes. Acesse https://folhinhabot.com/lembretes para ver os seus lembretes pendentes`
+        `${message.displayName}, você tem ${reminders.length} lembretes. Acesse https://folhinhabot.com/lembretes para ver os seus lembretes pendentes`,
       );
       return;
     }
@@ -307,7 +307,7 @@ const handleReminderResponse = async (message, reminders) => {
       await fb.db.update(
         "remind",
         { _id: reminder._id },
-        { $set: { beenRead: true } }
+        { $set: { beenRead: true } },
       );
     }
 
@@ -320,7 +320,7 @@ const handleReminderResponse = async (message, reminders) => {
   // Handle large number of reminders (>3)
   fb.log.send(
     message.channelName,
-    `${message.senderUsername}, você tem ${reminders.length} lembretes. Acesse https://folhinhabot.com/lembretes para ver os seus lembretes pendentes`
+    `${message.displayName}, você tem ${reminders.length} lembretes. Acesse https://folhinhabot.com/lembretes para ver os seus lembretes pendentes`,
   );
 };
 
@@ -349,12 +349,12 @@ const reminderListener = async (message) => {
     const reminders = await fb.db.get(
       "remind",
       { receiverId: message.senderUserID, beenRead: false, remindAt: null },
-      true
+      true,
     );
 
     if (!reminders) {
       processingReminder = processingReminder.filter(
-        (user) => user !== message.senderUsername
+        (user) => user !== message.senderUsername,
       );
       return;
     }
@@ -373,7 +373,7 @@ const reminderListener = async (message) => {
 
     if (filteredReminders.length === 0) {
       processingReminder = processingReminder.filter(
-        (user) => user !== message.senderUsername
+        (user) => user !== message.senderUsername,
       );
       return;
     }
@@ -387,7 +387,7 @@ const reminderListener = async (message) => {
   } finally {
     // Clean up processing state
     processingReminder = processingReminder.filter(
-      (user) => user !== message.senderUsername
+      (user) => user !== message.senderUsername,
     );
   }
 };

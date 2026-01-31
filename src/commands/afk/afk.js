@@ -29,7 +29,7 @@ const afkCommand = async (message) => {
     .trim()
     .toLowerCase();
   const afkInfoObject = afkInfoObjects.find((afk) =>
-    afk.alias.includes(commandInvoker)
+    afk.alias.includes(commandInvoker),
   );
 
   const afkStats = await fb.db.get("afk", {
@@ -61,12 +61,12 @@ const afkCommand = async (message) => {
         afk_type: afkType,
         rafk_counter: 0,
       },
-    }
+    },
   );
 
   return {
     replyType: "reply",
-    reply: `${message.senderUsername} ${afkAction} ${afkEmoji} ${
+    reply: `${message.displayName} ${afkAction} ${afkEmoji} ${
       afkMessage ? `: ${afkMessage}` : ""
     }`,
   };

@@ -26,7 +26,7 @@ const carinhoCommand = async (message) => {
   await fb.db.update("pet", { channelId: message.channelID }, update_doc);
 
   return {
-    reply: `${petStats.pet_emoji} PETPET ${message.senderUsername} fez carinho em ${petStats.pet_emoji} ${petStats.pet_name}`,
+    reply: `${petStats.pet_emoji} PETPET ${message.displayName} fez carinho em ${petStats.pet_emoji} ${petStats.pet_name}`,
   };
 };
 

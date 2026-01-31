@@ -18,7 +18,7 @@ const tuckCommand = async (message) => {
     const emote = await fb.emotes.getEmoteFromList(
       message.channelName,
       ["wokege"],
-      "😮‍💨"
+      "😮‍💨",
     );
     return {
       reply: `Valeu por me colocar pra dormir, mas preciso me manter acordado ${emote}`,
@@ -28,15 +28,15 @@ const tuckCommand = async (message) => {
   const emote = await fb.emotes.getEmoteFromList(
     message.channelName,
     ["tuckk", "tuckahomie", "tuck", "banoit"],
-    "💤"
+    "💤",
   );
 
   const tucks = [
-    `${message.senderUsername} colocou ${tuckTarget} pra dormir ${emote}`,
-    `${message.senderUsername} colocou ${tuckTarget} pra dormir com um cobertor bem quentinho ${emote}`,
-    `${message.senderUsername} colocou ${tuckTarget} pra dormir e deu um beijinho na testa ${emote}`,
-    `${message.senderUsername} colocou ${tuckTarget} pra dormir e cantou uma canção de ninar ${emote}`,
-    `${message.senderUsername} colocou ${tuckTarget} pra dormir e contou uma história de ninar ${emote}`,
+    `${message.displayName} colocou ${tuckTarget} pra dormir ${emote}`,
+    `${message.displayName} colocou ${tuckTarget} pra dormir com um cobertor bem quentinho ${emote}`,
+    `${message.displayName} colocou ${tuckTarget} pra dormir e deu um beijinho na testa ${emote}`,
+    `${message.displayName} colocou ${tuckTarget} pra dormir e cantou uma canção de ninar ${emote}`,
+    `${message.displayName} colocou ${tuckTarget} pra dormir e contou uma história de ninar ${emote}`,
   ];
 
   return {

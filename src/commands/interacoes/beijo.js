@@ -23,12 +23,12 @@ const beijoCommand = async (message) => {
   const emote = await fb.emotes.getEmoteFromList(
     message.channelName,
     ["kiss", "kissahomie", "catkiss", "beijao"],
-    "😘"
+    "😘",
   );
 
   const kisses = [
-    `${message.senderUsername} deu um beijo em ${kissTarget} ${emote}`,
-    `${message.senderUsername} deu um beijo bem molhado em ${kissTarget} ${emote}`,
+    `${message.displayName} deu um beijo em ${kissTarget} ${emote}`,
+    `${message.displayName} deu um beijo bem molhado em ${kissTarget} ${emote}`,
   ];
 
   return {

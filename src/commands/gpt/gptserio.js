@@ -42,7 +42,7 @@ const gptSerioCommand = async (message) => {
   } catch (error) {
     console.error("GPT Serio command error:", error);
     return {
-      reply: `Desculpe ${message.senderUsername}, ocorreu um erro ao processar sua pergunta. Tente novamente em alguns instantes.`,
+      reply: `Desculpe ${message.displayName}, ocorreu um erro ao processar sua pergunta. Tente novamente em alguns instantes.`,
     };
   }
 };

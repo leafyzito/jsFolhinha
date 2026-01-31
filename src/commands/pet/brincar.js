@@ -37,33 +37,33 @@ const brincarCommand = async (message) => {
   ];
 
   const brincadeiras = [
-    `${message.senderUsername} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de apanhar a bola ⚽ mas o pet ficou só olhando`,
-    `${message.senderUsername} brincou com ${petStats.pet_emoji} ${
+    `${message.displayName} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de apanhar a bola ⚽ mas o pet ficou só olhando`,
+    `${message.displayName} brincou com ${petStats.pet_emoji} ${
       petStats.pet_name
     } de esconde-esconde 🙈 e você conseguiu encontrar o pet em ${fb.utils.randomInt(
       3,
-      15
+      15,
     )} minutos! 🏆`,
-    `${message.senderUsername} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de esconde-esconde 🙈 mas não conseguiu encontrar o pet, ele é muito bom! 🏆`,
-    `${message.senderUsername} brincou com ${petStats.pet_emoji} ${
+    `${message.displayName} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de esconde-esconde 🙈 mas não conseguiu encontrar o pet, ele é muito bom! 🏆`,
+    `${message.displayName} brincou com ${petStats.pet_emoji} ${
       petStats.pet_name
     } de pega-pega 🏃‍♂️ e você conseguiu pegar o pet em ${fb.utils.randomInt(
       3,
-      15
+      15,
     )} minutos! 🏆`,
-    `${message.senderUsername} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de pega-pega 🏃‍♂️ mas o pet é muito rápido e você não conseguiu pegar ele! 🏆`,
-    `${message.senderUsername} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de luta de travesseiro e você conseguiu vencer ao pet! 🏆`,
-    `${message.senderUsername} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de luta de travesseiro mas o pet é muito forte e destruiu você! 🏆`,
-    `${message.senderUsername} brincou com ${petStats.pet_emoji} ${
+    `${message.displayName} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de pega-pega 🏃‍♂️ mas o pet é muito rápido e você não conseguiu pegar ele! 🏆`,
+    `${message.displayName} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de luta de travesseiro e você conseguiu vencer ao pet! 🏆`,
+    `${message.displayName} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de luta de travesseiro mas o pet é muito forte e destruiu você! 🏆`,
+    `${message.displayName} brincou com ${petStats.pet_emoji} ${
       petStats.pet_name
     } de pular corda e vocês conseguiram pular ${fb.utils.randomInt(
       10,
-      100
+      100,
     )} vezes seguidas! 🏆`,
-    `${message.senderUsername} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de pular corda mas você tropeçou e caiu! 🏆`,
-    `${message.senderUsername} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de olhar seriamente 👀 e você ganhou! 🏆`,
-    `${message.senderUsername} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de olhar seriamente 👀 mas o pet é muito sério e ganhou! 🏆`,
-    `${message.senderUsername} brincou com ${petStats.pet_emoji} ${
+    `${message.displayName} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de pular corda mas você tropeçou e caiu! 🏆`,
+    `${message.displayName} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de olhar seriamente 👀 e você ganhou! 🏆`,
+    `${message.displayName} brincou com ${petStats.pet_emoji} ${petStats.pet_name} de olhar seriamente 👀 mas o pet é muito sério e ganhou! 🏆`,
+    `${message.displayName} brincou com ${petStats.pet_emoji} ${
       petStats.pet_name
     } de caça ao tesouro 🗺 e acharam ${fb.utils.randomChoice(tesouros)}`,
   ];

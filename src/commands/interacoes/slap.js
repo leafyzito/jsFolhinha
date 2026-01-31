@@ -12,7 +12,7 @@ const slapCommand = async (message) => {
     const emote = await fb.emotes.getEmoteFromList(
       message.channelName,
       ["leledacuca", "biruta", "eeeh", "peepopiolho"],
-      "🤨"
+      "🤨",
     );
     return {
       reply: `Você deu um tapa em si mesmo ${emote}`,
@@ -28,13 +28,13 @@ const slapCommand = async (message) => {
   const emote = await fb.emotes.getEmoteFromList(
     message.channelName,
     ["catslap", "elisslap"],
-    "💢😡"
+    "💢😡",
   );
 
   const slaps = [
-    `${message.senderUsername} deu um tapa em ${slapTarget} ${emote}`,
-    `${message.senderUsername} deu um tapa bem forte em ${slapTarget} ${emote}`,
-    `${message.senderUsername} deu um tapa com as costas da mão em ${slapTarget} ${emote}`,
+    `${message.displayName} deu um tapa em ${slapTarget} ${emote}`,
+    `${message.displayName} deu um tapa bem forte em ${slapTarget} ${emote}`,
+    `${message.displayName} deu um tapa com as costas da mão em ${slapTarget} ${emote}`,
   ];
 
   return {

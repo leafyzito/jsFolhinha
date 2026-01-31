@@ -35,7 +35,7 @@ const rafkCommand = async (message) => {
     await fb.db.update(
       "afk",
       { channel: message.channelName, user: message.senderUsername },
-      { $set: { rafk_counter: afkStats.rafk_counter + 1 } }
+      { $set: { rafk_counter: afkStats.rafk_counter + 1 } },
     );
 
     return {
@@ -45,7 +45,7 @@ const rafkCommand = async (message) => {
   }
 
   const afkInfoObject = afkInfoObjects.find((afk) =>
-    afk.alias.includes(afkStats.afk_type)
+    afk.alias.includes(afkStats.afk_type),
   );
   const afkAction = afkInfoObject.rafk;
   const afkEmoji = afkInfoObject.emoji;
@@ -53,12 +53,12 @@ const rafkCommand = async (message) => {
   await fb.db.update(
     "afk",
     { channel: message.channelName, user: message.senderUsername },
-    { $set: { is_afk: true, rafk_counter: afkStats.rafk_counter + 1 } }
+    { $set: { is_afk: true, rafk_counter: afkStats.rafk_counter + 1 } },
   );
 
   return {
     replyType: "reply",
-    reply: `${message.senderUsername} voltou ${afkAction} ${afkEmoji} ${
+    reply: `${message.displayName} voltou ${afkAction} ${afkEmoji} ${
       afkStats.afk_message ? `: ${afkStats.afk_message}` : ""
     }`,
   };

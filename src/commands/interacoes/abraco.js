@@ -18,7 +18,7 @@ const abracoCommand = async (message) => {
     const emote = await fb.emotes.getEmoteFromList(
       message.channelName,
       ["cathug", "dankhug", "hugs"],
-      "peepoHappy 🌹"
+      "peepoHappy 🌹",
     );
     return {
       reply: emote,
@@ -28,16 +28,16 @@ const abracoCommand = async (message) => {
   const emote = await fb.emotes.getEmoteFromList(
     message.channelName,
     ["cathug", "dankhug", "hugs"],
-    "🤗"
+    "🤗",
   );
 
   const hugs = [
-    `${message.senderUsername} abraçou ${hugTarget} bem forte ${emote}`,
-    `${message.senderUsername} deu um abraço bem apertado em ${hugTarget} ${emote}`,
-    `${message.senderUsername} abraçou e quase explodiu ${hugTarget} ${emote}`,
-    `${message.senderUsername} abraçou ${hugTarget} bem forte ${emote}`,
-    `${message.senderUsername} abraçou e esmagou ${hugTarget} ${emote}`,
-    `${message.senderUsername} abraçou ${hugTarget} tão forte que foi parar ao espaço ${emote}`,
+    `${message.displayName} abraçou ${hugTarget} bem forte ${emote}`,
+    `${message.displayName} deu um abraço bem apertado em ${hugTarget} ${emote}`,
+    `${message.displayName} abraçou e quase explodiu ${hugTarget} ${emote}`,
+    `${message.displayName} abraçou ${hugTarget} bem forte ${emote}`,
+    `${message.displayName} abraçou e esmagou ${hugTarget} ${emote}`,
+    `${message.displayName} abraçou ${hugTarget} tão forte que foi parar ao espaço ${emote}`,
   ];
 
   return {

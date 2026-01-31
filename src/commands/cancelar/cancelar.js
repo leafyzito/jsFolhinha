@@ -49,7 +49,7 @@ const cancelarCommand = async (message) => {
     reply: `${
       cancelTarget == message.senderUsername
         ? `${cancelTarget} se auto-cancelou por ${randomCancelamento}`
-        : `${message.senderUsername} cancelou ${cancelTarget} por ${randomCancelamento}`
+        : `${message.displayName} cancelou ${cancelTarget} por ${randomCancelamento}`
     }`,
   };
 };

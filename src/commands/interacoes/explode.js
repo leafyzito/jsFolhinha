@@ -12,7 +12,7 @@ const explodeCommand = async (message) => {
     const emote = await fb.emotes.getEmoteFromList(
       message.channelName,
       ["leledacuca", "biruta", "eeeh", "peepopiolho"],
-      "💥🤨"
+      "💥🤨",
     );
     return {
       reply: `Você explodiu a si mesmo ${emote}`,
@@ -26,10 +26,10 @@ const explodeCommand = async (message) => {
   }
 
   const explosions = [
-    `${message.senderUsername} explodiu ${explodeTarget} 💥`,
-    `${message.senderUsername} explodiu ${explodeTarget} em pedacinhos 💥`,
-    `${message.senderUsername} jogou um bomba em ${explodeTarget} 💣💥`,
-    `${message.senderUsername} jogou uma dinamite em ${explodeTarget} 🧨💥`,
+    `${message.displayName} explodiu ${explodeTarget} 💥`,
+    `${message.displayName} explodiu ${explodeTarget} em pedacinhos 💥`,
+    `${message.displayName} jogou um bomba em ${explodeTarget} 💣💥`,
+    `${message.displayName} jogou uma dinamite em ${explodeTarget} 🧨💥`,
   ];
 
   return {

@@ -30,37 +30,37 @@ const bonkCommand = async (message) => {
     const emote = await fb.emotes.getEmoteFromList(
       message.channelName,
       ["pfff", "pffff", "pfft", "porvalo", "mock", "pointandlaugh"],
-      "🤭"
+      "🤭",
     );
     return {
-      reply: `${message.senderUsername} tentou bonkar ${bonkTarget} mas acabou se auto-nocauteando (impacto de ${bonkStrengh}%) ${emote}`,
+      reply: `${message.displayName} tentou bonkar ${bonkTarget} mas acabou se auto-nocauteando (impacto de ${bonkStrengh}%) ${emote}`,
     };
   } else if (bonkStrengh === 100) {
     const emote = await fb.emotes.getEmoteFromList(
       message.channelName,
       ["peepopoof", "pppoof", "pepepoof"],
-      "💨"
+      "💨",
     );
     return {
-      reply: `${message.senderUsername} deu um bonk com impacto de ${bonkStrengh}% em ${bonkTarget}, sendo apagado da existência ${emote}`,
+      reply: `${message.displayName} deu um bonk com impacto de ${bonkStrengh}% em ${bonkTarget}, sendo apagado da existência ${emote}`,
     };
   } else if (bonkStrengh <= 25) {
     return {
-      reply: `${message.senderUsername} deu um bonk com impacto de ${bonkStrengh}% em ${bonkTarget}, bem fraco 🤭`,
+      reply: `${message.displayName} deu um bonk com impacto de ${bonkStrengh}% em ${bonkTarget}, bem fraco 🤭`,
     };
   } else if (bonkStrengh >= 80) {
     return {
-      reply: `${message.senderUsername} deu um bonk com impacto de ${bonkStrengh}% e nocauteou ${bonkTarget} 💫`,
+      reply: `${message.displayName} deu um bonk com impacto de ${bonkStrengh}% e nocauteou ${bonkTarget} 💫`,
     };
   }
 
   const emote = await fb.emotes.getEmoteFromList(
     message.channelName,
     ["bonking", "yaebonk", "bonked", "bonkcat", "donkbonk"],
-    "BOP"
+    "BOP",
   );
   return {
-    reply: `${message.senderUsername} deu um bonk com impacto de ${bonkStrengh}% em ${bonkTarget} ${emote}`,
+    reply: `${message.displayName} deu um bonk com impacto de ${bonkStrengh}% em ${bonkTarget} ${emote}`,
   };
 };
 

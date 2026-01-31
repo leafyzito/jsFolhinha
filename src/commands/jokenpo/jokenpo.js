@@ -63,7 +63,7 @@ const jokenpoCommand = async (message) => {
         content: ["pedra", "papel", "tesoura"],
       },
     ],
-    30_000
+    30_000,
   );
 
   // Process responses
@@ -78,7 +78,7 @@ const jokenpoCommand = async (message) => {
 
   // Remove players from pending list
   pendingPlayers = pendingPlayers.filter(
-    (player) => player !== message.senderUserID && player !== targetUserId
+    (player) => player !== message.senderUserID && player !== targetUserId,
   );
 
   if (Object.keys(answers).length !== 2) {
@@ -91,7 +91,7 @@ const jokenpoCommand = async (message) => {
     const emote = await fb.emotes.getEmoteFromList(
       message.channelName,
       ["pfff", "pffff", "pfft", "porvalo", "mock", "pointandlaugh", "wajaja"],
-      "🤭"
+      "🤭",
     );
 
     if (Object.keys(answers).length === 1 && playerWhoDidntAnswer) {
@@ -130,11 +130,11 @@ const jokenpoCommand = async (message) => {
   const emojis = { pedra: "🪨", papel: "📄", tesoura: "✂️" };
 
   if (result === 1) {
-    gameResult = `${message.senderUsername} ${emojis[user1Choice]} X ${emojis[user2Choice]} ${gameTarget} - ${message.senderUsername} venceu! 🏆`;
+    gameResult = `${message.displayName} ${emojis[user1Choice]} X ${emojis[user2Choice]} ${gameTarget} - ${message.displayName} venceu! 🏆`;
   } else if (result === -1) {
-    gameResult = `${message.senderUsername} ${emojis[user1Choice]} X ${emojis[user2Choice]} ${gameTarget} - ${gameTarget} venceu! 🏆`;
+    gameResult = `${message.displayName} ${emojis[user1Choice]} X ${emojis[user2Choice]} ${gameTarget} - ${gameTarget} venceu! 🏆`;
   } else {
-    gameResult = `${message.senderUsername} ${emojis[user1Choice]} X ${emojis[user2Choice]} ${gameTarget} - É um empate!`;
+    gameResult = `${message.displayName} ${emojis[user1Choice]} X ${emojis[user2Choice]} ${gameTarget} - É um empate!`;
   }
 
   return {

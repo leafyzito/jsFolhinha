@@ -52,7 +52,7 @@ const replyMentionListener = async (message) => {
         ? fb.utils.randomChoice(channelEmotes)
         : "KonCha";
 
-    fb.log.send(message.channelName, `${message.senderUsername} ${emote}`);
+    fb.log.send(message.channelName, `${message.displayName} ${emote}`);
     updateLastReplyTime(message.channelName, currentTime);
     return;
   }
@@ -66,13 +66,10 @@ const replyMentionListener = async (message) => {
       const emote = await fb.emotes.getEmoteFromList(
         message.channelName,
         GREETING_EMOTES,
-        "KonCha"
+        "KonCha",
       );
 
-      fb.log.send(
-        message.channelName,
-        `Oioi ${message.senderUsername} ${emote}`
-      );
+      fb.log.send(message.channelName, `Oioi ${message.displayName} ${emote}`);
       updateLastReplyTime(message.channelName, currentTime);
       return;
     }
@@ -82,10 +79,10 @@ const replyMentionListener = async (message) => {
     const finalWord = channelEmotes?.some((emote) => emote === otherWord)
       ? otherWord
       : channelEmotes?.length > 0
-      ? fb.utils.randomChoice(channelEmotes)
-      : "KonCha";
+        ? fb.utils.randomChoice(channelEmotes)
+        : "KonCha";
 
-    fb.log.send(message.channelName, `${message.senderUsername} ${finalWord}`);
+    fb.log.send(message.channelName, `${message.displayName} ${finalWord}`);
     updateLastReplyTime(message.channelName, currentTime);
     return;
   }
@@ -103,7 +100,7 @@ const notifyDevMentionListener = async (message) => {
           // Remove any non-alphanumeric characters from both the word and mention
           const cleanWord = word.replace(/[^a-zA-Z0-9]/g, "");
           return cleanWord === mention.toLowerCase();
-        })
+        }),
       )
   ) {
     fb.discord.notifyDevMention(message);
