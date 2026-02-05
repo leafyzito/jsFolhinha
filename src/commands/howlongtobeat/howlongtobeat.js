@@ -6,10 +6,10 @@ const path = require("path");
 async function fetchToken() {
   const now = Date.now();
   const response = await fb.got(
-    `https://howlongtobeat.com/api/search/init?t=${now}`,
+    `https://howlongtobeat.com/api/finder/init?t=${now}`,
     {
       headers: { Referer: "https://howlongtobeat.com/" },
-    }
+    },
   );
 
   if (!response) {
@@ -29,7 +29,7 @@ async function hltbSearch(query) {
     throw new Error("Token not fetched");
   }
 
-  const response = await fb.got(`https://howlongtobeat.com/api/search`, {
+  const response = await fb.got(`https://howlongtobeat.com/api/finder`, {
     method: "POST",
     headers: {
       Referer: "https://howlongtobeat.com/",
