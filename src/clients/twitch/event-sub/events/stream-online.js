@@ -24,18 +24,17 @@ module.exports = async function handleStreamOnline(event, liveChannels) {
       const happyEmote = await fb.emotes.getEmoteFromList(
         broadcasterLogin,
         fb.emotes.happyEmotes,
-        "😊"
+        "😊",
       );
       fb.log.send(
         broadcasterLogin,
-        `🔴 Live começando! Bot pausado para não interferir. Boa live! ${happyEmote}`
+        `🔴 Live começando! Bot pausado para não interferir. Boa live! ${happyEmote}`,
       );
     }
 
-    fb.discord.importantLog(`* ${broadcasterName} went live`);
+    fb.discord.log(`* ${broadcasterName} went live`);
   } catch (error) {
     console.log(error);
     fb.discord.logError(`Error handling stream online event: ${error.message}`);
   }
 };
-
