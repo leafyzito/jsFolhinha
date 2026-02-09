@@ -39,6 +39,9 @@ module.exports = async function onMessage(channel, username, text, message) {
 
   if (message.parentMessageText) {
     message.isReply = true;
+    if (message.messageText.startsWith("@")) {
+      message.messageText = message.messageText.split(" ").slice(1).join(" ");
+    }
     message.messageText = message.messageText + " " + message.parentMessageText;
   }
 
